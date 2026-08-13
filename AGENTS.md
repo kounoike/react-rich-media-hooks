@@ -13,6 +13,14 @@
 - Create a new decision when no existing decision applies. Supersede accepted decisions instead of rewriting their history.
 - Keep design reasoning in the repository; do not rely on chat history as the sole source of architectural context.
 
+## Decision authority
+
+- The user retains final authority over significant product, scope, public API, compatibility, and architecture decisions.
+- Agents may research options and make recommendations, but must present the alternatives, evidence, and tradeoffs before requesting approval.
+- Do not treat a proposal as accepted, record it as an accepted Backlog.md Decision, or begin dependent implementation until the user explicitly approves it.
+- Record the approved decision and its relationship to relevant tasks in the repository.
+- Routine, reversible implementation choices within an already approved scope do not require separate approval.
+
 ## Communication
 
 - Use the user's native language when communicating with the user.
