@@ -8,9 +8,9 @@
 
 ## Architecture and design
 
-- Store architecture decisions in `docs/adr/`.
-- Before making a significant or difficult-to-reverse decision, search existing ADRs.
-- Create an ADR when no existing decision applies. Supersede accepted ADRs instead of rewriting their history.
+- Record significant or difficult-to-reverse architecture decisions with Backlog.md Decisions.
+- Before making a decision, search existing Backlog.md Decisions.
+- Create a new decision when no existing decision applies. Supersede accepted decisions instead of rewriting their history.
 - Keep design reasoning in the repository; do not rely on chat history as the sole source of architectural context.
 
 ## Communication
