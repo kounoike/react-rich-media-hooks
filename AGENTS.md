@@ -42,3 +42,22 @@ Do not edit Backlog task, draft, document, decision, or milestone markdown files
 
 </CRITICAL_INSTRUCTION>
 <!-- BACKLOG.MD GUIDELINES END -->
+
+Significant architectural decisions must be recorded with
+`backlog decision create`.
+
+Before creating a decision, search existing decisions.
+
+Do not modify historical accepted decisions to reflect a new choice.
+
+If a new decision replaces an existing decision, create a new decision
+and explicitly reference the old decision in a "Supersedes" section.
+
+Use the following sections:
+- Context
+- Decision Drivers
+- Considered Options
+- Decision
+- Consequences
+- Related Tasks
+- Supersedes, when applicable
