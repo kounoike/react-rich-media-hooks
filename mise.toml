@@ -1,0 +1,6 @@
+[tools]
+node = "lts"
+pnpm = "latest"
+
+"npm:backlog.md" = "latest"
+"cargo:adrs" = "latest"
