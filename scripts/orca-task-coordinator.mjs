@@ -398,7 +398,7 @@ function workerSpec(task) {
 }
 
 function dispatchNext(run, rows) {
-    const active = rows.filter((row) => row.status === "dispatched");
+    const active = allTaskRows().filter((row) => row.status === "dispatched");
     const capacity = Math.max(0, dispatchSelection.max_tasks - active.length);
     if (capacity === 0) return;
     const existing = new Set([
