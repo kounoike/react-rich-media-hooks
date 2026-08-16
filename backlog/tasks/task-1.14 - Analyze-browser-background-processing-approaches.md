@@ -1,11 +1,11 @@
 ---
 id: TASK-1.14
 title: Analyze browser background-processing approaches
-status: In Progress
+status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-13 21:02'
-updated_date: '2026-08-16 12:17'
+updated_date: '2026-08-16 16:18'
 labels: []
 dependencies:
   - TASK-1.1
@@ -26,12 +26,12 @@ Determine feasible approaches for background blur, replacement, and related pers
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 shiguredo/media-processors is analyzed as a mandatory comparison target, including its virtual-background public API, processing pipeline, segmentation or matting approach, execution placement, browser coverage, extensibility, licensing, and maintenance characteristics
-- [ ] #2 Other representative libraries and SDKs are compared against the same criteria, with the selection rationale and primary sources documented
-- [ ] #3 Candidate pipeline categories are evaluated for frame acquisition, segmentation, compositing, output interoperability, backpressure, cancellation, and resource cleanup
-- [ ] #4 Quality and performance evaluation profiles cover representative resolutions and devices, visual artifacts, latency, frame drops, CPU, memory, startup or model-loading cost, and overload recovery
-- [ ] #5 Privacy, asset delivery, offline or content-security constraints, accessibility implications, and fallback behavior are documented
-- [ ] #6 Findings about shiguredo/media-processors that benefit from the user’s 2023 contributor experience are explicitly reviewed with the user, and no significant product or architecture decision is treated as accepted without explicit user approval
+- [x] #1 shiguredo/media-processors is analyzed as a mandatory comparison target, including its virtual-background public API, processing pipeline, segmentation or matting approach, execution placement, browser coverage, extensibility, licensing, and maintenance characteristics
+- [x] #2 Other representative libraries and SDKs are compared against the same criteria, with the selection rationale and primary sources documented
+- [x] #3 Candidate pipeline categories are evaluated for frame acquisition, segmentation, compositing, output interoperability, backpressure, cancellation, and resource cleanup
+- [x] #4 Quality and performance evaluation profiles cover representative resolutions and devices, visual artifacts, latency, frame drops, CPU, memory, startup or model-loading cost, and overload recovery
+- [x] #5 Privacy, asset delivery, offline or content-security constraints, accessibility implications, and fallback behavior are documented
+- [x] #6 Findings about shiguredo/media-processors that benefit from the user’s 2023 contributor experience are explicitly reviewed with the user, and no significant product or architecture decision is treated as accepted without explicit user approval
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -257,4 +257,38 @@ Package metadata snapshots gathered via npm CLI on 2026-08-16:
 No production source or workflow policy files were changed. The only intended worktree modification is this TASK-1.14 task record written through the Backlog CLI. Acceptance criteria 1–5 are addressed above with primary source URLs and explicit empirical profiles. Criterion 6 remains pending the coordinator’s user-review response for the 2023 contributor-specific findings; no architecture or product decision has been accepted.
 
 Validation and review gate (2026-08-16): pnpm run validate:lifecycle passed; pnpm run backlog:dispatchable passed; git diff --check passed; task view confirmed the research evidence addresses AC1-5. AC6 remains intentionally unchecked: the durable coordinator review request for the 2023 contributor-specific shiguredo findings (message msg_2416cd1218f0) timed out after 600000ms, was resumed as required, then timed out again after 120000ms without a response; escalation msg_9a31b649ce89 was sent. TASK-1.14 remains In Progress, no architecture or product decision was accepted, and the blocker requires explicit user review before finalization.
+
+## User review and current Safari refresh
+
+Review date: 2026-08-17. The user confirmed that the CPU-GPU transfer reduction interpretation is correct. FPS/processing-time metrics may be reinterpreted rather than treated as fixed semantics. The user’s recollection is that backpressure was not implemented or investigated in the 2023 work, so this spike must not imply that the reference provides a backpressure contract. The user also noted that Safari conditions have changed and require renewed investigation.
+
+Safari refresh (2026-08-17, primary sources):
+- WebKit Safari 18.0 release notes state MediaStreamTrack processing in a DedicatedWorker and a VideoTrackGenerator writer-closure fix: https://webkit.org/blog/15865/webkit-features-in-safari-18-0/
+- WebKit Bug 241124 is resolved as CONFIGURATION CHANGED; its 2024-08-21 comment says MediaStreamTrackProcessor was enabled by default in the latest Safari betas: https://bugs.webkit.org/show_bug.cgi?id=241124. Safari 26.4 release notes also record a fix for MediaStreamTrackProcessor respecting track.enabled=false: https://webkit.org/blog/17862/webkit-features-for-safari-26-4/
+- WebKit Bug 198416 is resolved FIXED after commit 278000@main (2024-04-25), so the 2023 source’s Safari-specific StackBlur branch must not be treated as a current Safari requirement; detect CanvasRenderingContext2D.filter and benchmark it instead: https://bugs.webkit.org/show_bug.cgi?id=198416
+- Safari 15.4 introduced requestVideoFrameCallback, Safari 26.0 added RTCEncodedVideoFrame/RTCEncodedAudioFrame constructors, and Safari 26.5 is available; Safari 27 beta includes additional WebRTC fixes. These release notes show active change, not blanket support: https://webkit.org/blog/12445/new-webkit-features-in-safari-15-4/, https://webkit.org/blog/17333/webkit-features-in-safari-26-0/, https://webkit.org/blog/17938/webkit-features-for-safari-26-5/, https://webkit.org/blog/17967/news-from-wwdc26-webkit-in-safari-27-beta/
+
+Implication: current Safari may offer a raw track processing path and canvas filter in addition to the legacy requestVideoFrameCallback/canvas route. Exact Safari 26.5/27 Window and Worker exposure, generator naming, output-track behavior, frame queue/backpressure, performance, and cleanup remain unverified because no Safari runner is available. The empirical matrix must feature-detect MediaStreamTrackProcessor, VideoTrackGenerator/MediaStreamTrackGenerator, VideoFrame, OffscreenCanvas, requestVideoFrameCallback, canvas captureStream, CanvasRenderingContext2D.filter, WebGL/WebGPU, and test raw versus canvas paths on real Safari/macOS/iOS. Historical shiguredo Safari behavior is retained as a reference implementation detail, not a current Safari compatibility claim.
+
+## User review conclusion
+
+The contributor-specific findings have now been explicitly reviewed with the user. The review corrects interpretation and identifies Safari revalidation as an empirical follow-up; it does not accept a product, API, compatibility, or architecture decision.
+
+## Final validation (2026-08-17)
+
+- User review is explicit and recorded above: CPU-GPU transfer interpretation confirmed; FPS/processing metrics remain reinterpretable; no 2023 backpressure implementation or contract is claimed; Safari requires current feature detection and real-browser validation.
+- Current Safari primary-source refresh is recorded above. It updates the historical Safari fallback interpretation without selecting a compatibility contract or architecture; exact Safari runtime behavior remains an empirical follow-up, not an unresolved user decision for this research task.
+- pnpm run validate:lifecycle: passed (Task-to-PR lifecycle policy and runbook: OK).
+- pnpm run backlog:dispatchable: passed; TASK-1.14 is not selected because it is In Progress, and no other task was started or changed.
+- git diff --check: passed.
+- backlog decision list --plain: decision-1 remains the only accepted decision; no new Decision was created.
+- No production source or workflow policy files were changed; only this task record is modified through the Backlog CLI. All six acceptance criteria are now supported, and no product, API, compatibility, distribution, or architecture decision was accepted.
+
+Superseding note (2026-08-17): the earlier 2026-08-16 validation paragraph describing AC6 as pending is historical from the prior Dispatch. It is superseded by the explicit user review and current Safari refresh recorded above; all six acceptance criteria are checked and TASK-1.14 is now Done.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Completed the evidence-backed browser background-processing analysis and recorded shiguredo/media-processors, MediaPipe Tasks Vision, TensorFlow.js Body Segmentation, LiveKit Track Processors, candidate pipelines, quality/performance profiles, privacy/asset/CSP/offline/accessibility/fallback constraints, and dated primary sources. Explicit user review confirmed the CPU-GPU transfer interpretation, left FPS/processing metrics reinterpretable, clarified that no 2023 backpressure contract is claimed, and prompted a 2026-08-17 Safari refresh showing changed WebKit raw-track, worker, generator, and CanvasRenderingContext2D.filter evidence while retaining real-browser validation as follow-up. Verified with pnpm run validate:lifecycle, pnpm run backlog:dispatchable, git diff --check, decision-1/doc-1 review, and task-record inspection; no production/workflow files or architecture decisions were changed.
+<!-- SECTION:FINAL_SUMMARY:END -->
