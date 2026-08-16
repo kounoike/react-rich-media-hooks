@@ -61,6 +61,10 @@ function runObjective() {
     return coordinator.run_objective || "Repository task lifecycle coordinator";
 }
 
+function recoveryObjective() {
+    return `${runObjective()} [recovery ${Date.now()}]`;
+}
+
 function asPath(value) {
     if (!value) return null;
     let path = String(value).replaceAll("\\", "/");
@@ -83,9 +87,11 @@ function runList() {
 
 function ensureRun() {
     const current = orcaJson(["orchestration", "run-current"], { allowFailure: true });
-    if (current?.run?.objective === runObjective()) return current.run;
+    if (current?.run?.objective?.startsWith(runObjective())) return current.run;
 
-    const existing = runList().find((run) => run.objective === runObjective());
+    const existing = runList().find(
+        (run) => run.objective?.startsWith(runObjective()) && !run.coordinator_handle,
+    );
     if (existing) {
         if (existing.coordinator_handle) {
             throw new Error(
@@ -99,11 +105,23 @@ function ensureRun() {
     if (dryRun) {
         return { id: "dry-run", objective: runObjective() };
     }
-    return orcaJson(["orchestration", "run-create", "--objective", runObjective()]).run;
+    return orcaJson(["orchestration", "run-create", "--objective", recoveryObjective()]).run;
 }
 
 function taskRows(runId) {
     return orcaJson(["orchestration", "task-list", "--run", runId, "--brief"]).tasks || [];
+}
+
+function allTaskRows() {
+    const rows = [];
+    for (const run of runList().filter((candidate) => !candidate.legacy)) {
+        try {
+            for (const row of taskRows(run.id)) rows.push({ ...row, runId: run.id });
+        } catch (error) {
+            log(`could not inspect Run ${run.id}: ${error.message}`);
+        }
+    }
+    return rows;
 }
 
 function backlogTaskId(spec) {
@@ -300,10 +318,10 @@ function releaseExactWorker(dispatchId, worktreeId) {
     });
 }
 
-function processCompleted(runId, rows) {
+function processCompleted(rows) {
     for (const row of rows.filter((candidate) => candidate.status === "completed" && candidate.dispatch_id)) {
         try {
-            processCompletedRow(runId, row);
+            processCompletedRow(row.runId, row);
         } catch (error) {
             log(`retaining ${row.id}: ${error.message}`);
         }
@@ -383,7 +401,12 @@ function dispatchNext(run, rows) {
     const active = rows.filter((row) => row.status === "dispatched");
     const capacity = Math.max(0, dispatchSelection.max_tasks - active.length);
     if (capacity === 0) return;
-    const existing = taskIdSet(rows);
+    const existing = new Set([
+        ...taskIdSet(rows),
+        ...taskIdSet(
+            allTaskRows().filter((row) => row.status === "dispatched" || row.status === "completed"),
+        ),
+    ]);
     const listed = command("pnpm", ["run", "backlog:dispatchable"], { cwd: root });
     const candidates = JSON.parse(listed.stdout).selectedTasks || [];
     for (const task of candidates.filter((candidate) => !existing.has(candidate.id)).slice(0, capacity)) {
@@ -445,7 +468,7 @@ function sweep() {
         return;
     }
     const rows = taskRows(run.id);
-    processCompleted(run.id, rows);
+    processCompleted(allTaskRows());
     syncMain();
     dispatchNext(run, taskRows(run.id));
 }

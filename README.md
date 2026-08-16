@@ -25,8 +25,9 @@ parent tasks and reports up to three `selectedTasks` in priority and ordinal
 order for the next bounded parallel batch.
 
 The repository's Orca scheduled coordinator runs every five minutes in the
-main workspace. It executes `pnpm run orchestration:coordinator -- --once`,
-which polls settled `worker_done` results, creates and validates the Draft PR,
+main workspace. It starts `pnpm run orchestration:coordinator -- --loop`; the
+first process holds a single-flight lock and polls settled `worker_done`
+results every five minutes. The loop creates and validates the Draft PR,
 uses the guarded automatic lane when eligible, squash-merges and cleans up the
 exact worker resources, fast-forwards a clean `main`, and starts the next ready
 leaf task batch through `orca orchestration worker-start`. A failed, uncertain,

@@ -62,7 +62,7 @@ expect(
   "coordinator main/task-record ownership rules must be explicit",
 );
 expect(
-  coordinator.loop_command === "pnpm run orchestration:coordinator -- --once" &&
+  coordinator.loop_command === "pnpm run orchestration:coordinator -- --loop" &&
     coordinator.poll_interval_seconds === 300 &&
     coordinator.completion_trigger === "worker_done" &&
     coordinator.worker_start_command === "orca orchestration worker-start" &&
@@ -79,7 +79,9 @@ expect(
     automation.workspace === "repository_main" &&
     automation.workspace_mode === "existing" &&
     automation.session_policy === "fresh_per_run" &&
-    automation.prompt_command === "pnpm run orchestration:coordinator -- --once" &&
+    automation.prompt_command === "pnpm run orchestration:coordinator -- --loop" &&
+    automation.precheck ===
+      'wsl.exe -d Ubuntu-24.04 -- bash -lc "test -f /home/kounoike/ghq/github.com/kounoike/react-rich-media-hooks/.orca/task-pr-lifecycle.json"' &&
     automation.single_flight === true,
   "an idempotent Orca scheduled coordinator must be configured",
 );
