@@ -21,10 +21,12 @@ in its task worktree before the Draft PR; the coordinator's `main` worktree does
 not receive task-completion bookkeeping.
 
 Before dispatching work, run `pnpm run backlog:dispatchable`. It filters ready
-parent tasks and reports the single task that should be selected next.
+parent tasks and reports up to three `selectedTasks` in priority and ordinal
+order for the next bounded parallel batch.
 
-Worktree creation is single-flight. Poll the exact `orca-ide worktree create`
-session until its final JSON result; do not retry after an empty response,
+Worktree creation is single-flight per task. Create and poll each requested
+worktree to its final JSON result before creating the next one; after setup,
+worker sessions may run concurrently. Do not retry after an empty response,
 timeout, or `runtime_unavailable` until both Orca and Git worktree lists confirm
 that the requested target does not already exist.
 

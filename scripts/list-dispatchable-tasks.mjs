@@ -1,4 +1,10 @@
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const policyPath = resolve(root, ".orca/task-pr-lifecycle.json");
 
 const runBacklog = (args) =>
     JSON.parse(
@@ -14,6 +20,8 @@ const priorityRank = new Map([
 ]);
 
 try {
+    const policy = JSON.parse(readFileSync(policyPath, "utf8"));
+    const maxTasks = policy.lifecycle.dispatch_selection.max_tasks;
     const listed = runBacklog([
         "task",
         "list",
@@ -59,6 +67,7 @@ try {
                 schemaVersion: 1,
                 kind: "dispatchable-task-list",
                 selectedTask: tasks[0] ?? null,
+                selectedTasks: tasks.slice(0, maxTasks),
                 tasks,
             },
             null,

@@ -64,10 +64,12 @@ expect(
     dispatchSelection.requires_leaf_task === true &&
     dispatchSelection.reject_if_has_subtasks === true &&
     dispatchSelection.selection_order.join(",") === "priority,ordinal" &&
-    dispatchSelection.max_tasks === 1 &&
+    dispatchSelection.max_tasks === 3 &&
+    dispatchSelection.selection_mode === "priority_ordinal_prefix" &&
+    dispatchSelection.parallel_dispatch === true &&
     dispatchSelection.no_candidate_action ===
       "report_and_stop_before_run_or_dispatch",
-  "dispatch selection must require exactly one ready leaf task",
+  "dispatch selection must require a bounded parallel batch of ready leaf tasks",
 );
 expect(
   worktreeCreation.single_flight === true &&
@@ -100,11 +102,13 @@ expect(
   "automatic completion must be limited to small non-Decision changes",
 );
 expect(
-  packageJson.scripts?.["backlog:dispatchable"] ===
-    "node scripts/list-dispatchable-tasks.mjs" &&
+    packageJson.scripts?.["backlog:dispatchable"] ===
+      "node scripts/list-dispatchable-tasks.mjs" &&
     dispatchScript.includes('"--ready"') &&
-    dispatchScript.includes("subtasks"),
-  "the dispatchable-task script must be installed and filter ready parent tasks",
+    dispatchScript.includes("subtasks") &&
+    dispatchScript.includes("maxTasks") &&
+    dispatchScript.includes("selectedTasks"),
+  "the dispatchable-task script must filter parents and bound the parallel batch",
 );
 expect(
   lifecycle.pull_request.body_encoding_policy === "body_file_or_actual_newlines" &&
@@ -220,6 +224,8 @@ for (const phrase of [
   "Dispatchable task selection is leaf-only",
   "pnpm run backlog:dispatchable",
   "Parent/roll-up tasks must never be dispatched directly",
+  "Select up to three remaining leaf tasks",
+  "worker sessions may run concurrently",
   "do not create a Run, Dispatch, worktree, or worker",
   "artificial dependencies",
   "Worktree creation is single-flight",

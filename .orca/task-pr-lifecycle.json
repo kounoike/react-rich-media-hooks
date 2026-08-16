@@ -27,7 +27,9 @@
       "requires_leaf_task": true,
       "reject_if_has_subtasks": true,
       "selection_order": ["priority", "ordinal"],
-      "max_tasks": 1,
+      "max_tasks": 3,
+      "selection_mode": "priority_ordinal_prefix",
+      "parallel_dispatch": true,
       "no_candidate_action": "report_and_stop_before_run_or_dispatch"
     },
     "worktree_creation": {
