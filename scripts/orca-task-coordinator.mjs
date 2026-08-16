@@ -147,6 +147,8 @@ function taskIdSet(rows) {
     return new Set(rows.map((row) => backlogTaskId(row.spec || row.task_title)).filter(Boolean));
 }
 
+const reservedDispatchStatuses = new Set(["dispatched", "completed", "failed", "blocked"]);
+
 function getWorker(dispatchId) {
     return orcaJson(["orchestration", "worker-show", "--dispatch", dispatchId], {
         allowFailure: true,
@@ -312,14 +314,21 @@ function mergeAutomaticPr(pr, worktreePath) {
     }
     if (pr.state === "MERGED") return true;
     if (pr.isDraft) command("gh", ["pr", "ready", String(pr.number)], { cwd: worktreePath });
-    command("gh", ["pr", "merge", String(pr.number), "--squash", "--delete-branch"], { cwd: worktreePath });
+    const merge = command("gh", ["pr", "merge", String(pr.number), "--squash"], {
+        cwd: worktreePath,
+        allowFailure: true,
+    });
     const after = ghJson(["pr", "view", String(pr.number)], "state,mergedAt", { cwd: worktreePath });
-    return after.state === "MERGED";
+    if (after.state === "MERGED") return true;
+    if (merge.status !== 0) {
+        throw new Error(`PR #${pr.number} merge failed: ${merge.stderr || merge.stdout}`);
+    }
+    return false;
 }
 
-function releaseExactWorker(dispatchId, worktreeId) {
+function releaseExactWorker(dispatchId, worktree) {
     if (dryRun) {
-        log(`dry-run: would release ${dispatchId} and remove ${worktreeId}`);
+        log(`dry-run: would release ${dispatchId} and remove ${worktree.id}`);
         return;
     }
     const released = orcaJson(["orchestration", "worker-release", "--dispatch", dispatchId], {
@@ -328,19 +337,28 @@ function releaseExactWorker(dispatchId, worktreeId) {
     if (!released) {
         throw new Error(`worker-release did not settle ${dispatchId}; retaining artifacts`);
     }
-    orcaJson(["worktree", "rm", "--worktree", `id:${worktreeId}`, "--force"], {
+    orcaJson(["worktree", "rm", "--worktree", `id:${worktree.id}`, "--force"], {
         allowFailure: true,
     });
+    if (worktree.branch) {
+        command("git", ["push", "origin", "--delete", worktree.branch], {
+            cwd: root,
+            allowFailure: true,
+        });
+    }
 }
+
+const completedRowsReleased = new Set();
 
 function processCompleted(rows) {
     for (const row of rows.filter((candidate) => candidate.status === "completed")) {
+        if (completedRowsReleased.has(row.id)) continue;
         if (!row.dispatch_id) {
             log(`retaining ${row.id}: no active or settled Dispatch was found in worker-list`);
             continue;
         }
         try {
-            processCompletedRow(row.runId, row);
+            if (processCompletedRow(row.runId, row)) completedRowsReleased.add(row.id);
         } catch (error) {
             log(`retaining ${row.id}: ${error.message}`);
         }
@@ -352,21 +370,21 @@ function processCompletedRow(runId, row) {
         const worktree = getWorktree(worker);
         if (!worker?.worker || !worktree?.path || !worktree.branch) {
             log(`retaining ${row.id}: settled worker or exact worktree is unavailable`);
-            return;
+            return false;
         }
         const taskId = backlogTaskId(row.spec || row.task_title);
         if (!taskId) {
             log(`retaining ${row.id}: no Backlog task id in spec`);
-            return;
+            return false;
         }
         const task = taskFromWorktree(worktree.path, taskId);
         if (!task || task.status !== "Done") {
             log(`retaining ${taskId}: worker task record is not Done`);
-            return;
+            return false;
         }
         if (gitStatus(worktree.path)) {
             log(`retaining ${taskId}: worker left uncommitted files in ${worktree.branch}`);
-            return;
+            return false;
         }
         command("git", ["-C", worktree.path, "fetch", "origin", "main", "--quiet"]);
         command("git", ["-C", worktree.path, "push", "--set-upstream", "origin", worktree.branch]);
@@ -385,13 +403,14 @@ function processCompletedRow(runId, row) {
         const eligibility = automaticEligibility(task, diff);
         const pr = ensureDraftPr(task, taskId, runId, row.dispatch_id, worktree, diff, completion);
         log(`${taskId}: Draft PR #${pr.number ?? "pending"}; automatic lane=${eligibility.eligible ? "eligible" : `manual (${eligibility.reason})`}`);
-        if (!eligibility.eligible || pr.dryRun) return;
+        if (!eligibility.eligible || pr.dryRun) return false;
         if (!mergeAutomaticPr(pr, worktree.path)) {
             log(`retaining ${taskId}: merge result is unknown or unsuccessful`);
-            return;
+            return false;
         }
-        releaseExactWorker(row.dispatch_id, worktree.id);
+        releaseExactWorker(row.dispatch_id, worktree);
         log(`${taskId}: merged and exact worker/worktree cleanup completed`);
+        return true;
 }
 
 function syncMain() {
@@ -423,7 +442,7 @@ function dispatchNext(run, rows) {
     const existing = new Set([
         ...taskIdSet(rows),
         ...taskIdSet(
-            allTaskRows().filter((row) => row.status === "dispatched" || row.status === "completed"),
+            allTaskRows().filter((row) => reservedDispatchStatuses.has(row.status)),
         ),
     ]);
     const listed = command("pnpm", ["run", "backlog:dispatchable"], { cwd: root });

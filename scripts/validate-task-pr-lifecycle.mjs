@@ -79,7 +79,7 @@ expect(
     automation.timezone === "Asia/Tokyo" &&
     automation.workspace === "repository_main" &&
     automation.workspace_mode === "existing" &&
-    automation.session_policy === "fresh_per_run" &&
+    automation.session_policy === "reuse_session" &&
     automation.prompt_command === "pnpm run orchestration:coordinator -- --loop" &&
     automation.precheck ===
       'wsl.exe -d Ubuntu-24.04 -- bash -lc "test -f /home/kounoike/ghq/github.com/kounoike/react-rich-media-hooks/.orca/task-pr-lifecycle.json"' &&
@@ -146,6 +146,10 @@ expect(
     coordinatorScript.includes('"worker-list"') &&
     coordinatorScript.includes("workerDispatchMap") &&
     coordinatorScript.includes("row.dispatchId") &&
+    coordinatorScript.includes('"--delete"') &&
+    coordinatorScript.includes("completedRowsReleased") &&
+    coordinatorScript.includes("reservedDispatchStatuses") &&
+    coordinatorScript.includes('"failed", "blocked"') &&
     coordinatorScript.includes('"worker-release"') &&
     coordinatorScript.includes('"worktree", "rm"') &&
     coordinatorScript.includes("backlog:dispatchable") &&
