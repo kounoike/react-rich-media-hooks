@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-16 06:29'
-updated_date: '2026-08-16 06:59'
+updated_date: '2026-08-16 07:05'
 labels: []
 dependencies: []
 references:
@@ -88,6 +88,12 @@ author: @codex
 created: 2026-08-16 06:59
 ---
 2026-08-16: Draft PR #3 is ready for explicit user review: https://github.com/kounoike/react-rich-media-hooks/pull/3. The retained worker/worktree must not be released or deleted until approval, required current-head checks, and a verified merge.
+---
+
+author: @codex
+created: 2026-08-16 07:05
+---
+2026-08-16: Applied the user-approved Decision-body capability exception. Restored decision-2 body without changing its accepted metadata or meaning; AGENTS.md now requires CLI-first creation, frontmatter protection, non-empty-section validation, and task evidence.
 ---
 <!-- COMMENTS:END -->
 

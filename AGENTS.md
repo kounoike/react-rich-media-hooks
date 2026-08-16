@@ -46,10 +46,21 @@ Before task lifecycle actions, read the matching detailed guide:
 
 Use `backlog <command> --help` before running unfamiliar commands. Help shows options, fields, and examples.
 
-Do not edit Backlog task, draft, document, decision, or milestone markdown files directly. Use the `backlog` CLI so metadata, relationships, and history stay consistent.
+Do not edit Backlog task, draft, document, decision, or milestone markdown files directly, except for the narrowly scoped Decision-body capability exception below. Use the `backlog` CLI so metadata, relationships, and history stay consistent.
 
 </CRITICAL_INSTRUCTION>
 <!-- BACKLOG.MD GUIDELINES END -->
+
+### Decision-body capability exception
+
+The installed Backlog CLI is the first choice for creating and tracking every Decision. If the installed CLI cannot populate or update Decision body sections, a narrowly scoped direct-edit exception is allowed:
+
+- Confirm the limitation with `backlog --version`, `backlog decision --help`, and `backlog decision create --help`; record the CLI version and limitation in the relevant task notes.
+- Create the Decision and its metadata through `backlog decision create` first. Direct editing is limited to the body sections `Context`, `Decision Drivers`, `Considered Options`, `Decision`, `Consequences`, `Related Tasks`, and `Supersedes`.
+- Preserve the frontmatter exactly: do not change the Decision ID, title, date, status, or other metadata. Do not create a second Decision to hide a correction.
+- A previously accepted Decision must not have its meaning rewritten. A user-approved, one-time restorative fill is allowed only when an accepted Decision's body is empty because the CLI generated a skeleton; record that exception and keep the accepted metadata unchanged.
+- Never use this exception for task, draft, document, or milestone files; those remain CLI-only.
+- Before commit or PR review, verify every required body section is non-empty, confirm the frontmatter is unchanged, run `git diff --check`, and record the validation evidence in the related Backlog task.
 
 Significant architectural decisions must be recorded with
 `backlog decision create`.
