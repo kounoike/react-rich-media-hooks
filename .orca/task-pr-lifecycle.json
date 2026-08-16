@@ -84,7 +84,20 @@
       "poll_command": "pnpm run orchestration:coordinator -- --once",
       "next_task_action": "dispatch_next_ready_leaf_after_successful_merge",
       "unknown_state_action": "retain_artifacts_and_report",
-      "retained_state_action": "report_and_continue_without_retry"
+      "retained_state_action": "report_and_continue_without_retry",
+      "orphan_reconciliation": {
+        "enabled": true,
+        "trigger": "every_poll",
+        "scope": "merged_done_clean_unowned_leaf_worktrees",
+        "requires_merged_pr": true,
+        "requires_done_task": true,
+        "requires_clean_worktree": true,
+        "requires_no_active_worker": true,
+        "close_exact_terminals": true,
+        "remove_exact_worktree": true,
+        "delete_remote_branch": true,
+        "unknown_state_action": "retain_and_report"
+      }
     },
     "automation": {
       "required": true,

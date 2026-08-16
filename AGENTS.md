@@ -84,6 +84,7 @@ The task-to-PR workflow is repository operating policy, not product work. Keep i
 - Build PR bodies with `gh pr create/edit --body-file` containing real newline bytes (or shell ANSI-C quoting such as `$'line 1\nline 2'`); ordinary double-quoted `\n` is sent as a literal backslash-n. After publishing, inspect `gh pr view <number> --json body` and reject any body containing the literal `\n` sequence.
 - In the manual lane, merge only after approval and successful current-head checks; in the automatic lane, merge only after eligibility and the same checks are recorded. Use squash merge. Do not write Backlog task records after merge; the merged PR and Orca Run/Dispatch provide the completion and cleanup evidence. After a successful automatic merge and exact cleanup, the coordinator polls `pnpm run backlog:dispatchable` and starts the next bounded leaf batch automatically.
 - After verified merge, release only the exact Dispatch-owned worker session and remove only its exact worktree and branch. Retain all artifacts for failures, requested changes, rejected approval, interruptions, or unknown outcomes.
+- On every coordinator poll, reconcile only worker-unowned leaf worktrees whose task record is Done, the worktree is clean, and a matching PR is verified MERGED. Close terminals by their exact worktree binding before removing that exact worktree and branch; retain dirty, review-gated, unmerged, active, or otherwise unknown artifacts and report them.
 
 Significant architectural decisions must be recorded with
 `backlog decision create`.

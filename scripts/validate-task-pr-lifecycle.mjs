@@ -48,6 +48,7 @@ const completionModes = lifecycle.completion_modes;
 const automaticCompletion = completionModes.automatic;
 const automaticSuccessPath = lifecycle.states.automatic_success_path;
 const automation = lifecycle.automation;
+const orphanReconciliation = coordinator.orphan_reconciliation;
 
 expect(policy.version === 1, "policy version must be 1");
 expect(lifecycle.id === "task-to-pr-review-cleanup", "lifecycle id is missing");
@@ -62,7 +63,7 @@ expect(
   "coordinator main/task-record ownership rules must be explicit",
 );
 expect(
-    coordinator.loop_command === "pnpm run orchestration:coordinator -- --loop" &&
+  coordinator.loop_command === "pnpm run orchestration:coordinator -- --loop" &&
     coordinator.poll_interval_seconds === 300 &&
     coordinator.completion_trigger === "worker_done" &&
     coordinator.completion_dispatch_source === "worker-list_task_id_join" &&
@@ -72,6 +73,20 @@ expect(
     coordinator.unknown_state_action === "retain_artifacts_and_report" &&
     coordinator.retained_state_action === "report_and_continue_without_retry",
   "the coordinator loop must poll completion and dispatch the next ready leaf task",
+);
+expect(
+  orphanReconciliation?.enabled === true &&
+    orphanReconciliation.trigger === "every_poll" &&
+    orphanReconciliation.scope === "merged_done_clean_unowned_leaf_worktrees" &&
+    orphanReconciliation.requires_merged_pr === true &&
+    orphanReconciliation.requires_done_task === true &&
+    orphanReconciliation.requires_clean_worktree === true &&
+    orphanReconciliation.requires_no_active_worker === true &&
+    orphanReconciliation.close_exact_terminals === true &&
+    orphanReconciliation.remove_exact_worktree === true &&
+    orphanReconciliation.delete_remote_branch === true &&
+    orphanReconciliation.unknown_state_action === "retain_and_report",
+  "orphan reconciliation must be enabled with merged/Done/clean/unowned guards",
 );
 expect(
   automation.required === true &&
@@ -154,6 +169,11 @@ expect(
     coordinatorScript.includes('"failed", "blocked"') &&
     coordinatorScript.includes('"worker-release"') &&
     coordinatorScript.includes('"worktree", "rm"') &&
+    coordinatorScript.includes("reconcileMergedOrphans") &&
+    coordinatorScript.includes("ownedWorktreeIds") &&
+    coordinatorScript.includes("mergedPrForBranch") &&
+    coordinatorScript.includes('"terminal", "close"') &&
+    coordinatorScript.includes("taskForWorktree") &&
     coordinatorScript.includes("backlog:dispatchable") &&
     coordinatorScript.includes("--body-file"),
   "dispatch selection and the coordinator script must be present",

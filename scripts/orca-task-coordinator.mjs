@@ -10,6 +10,7 @@ const coordinator = policy.coordinator;
 const dispatchSelection = policy.dispatch_selection;
 const completionModes = policy.completion_modes;
 const automatic = completionModes.automatic;
+const orphanReconciliation = coordinator.orphan_reconciliation || {};
 const dryRun = process.argv.includes("--dry-run");
 const once = process.argv.includes("--once") || !process.argv.includes("--loop");
 const log = (message) => console.log(`[task-coordinator] ${message}`);
@@ -215,6 +216,169 @@ function automaticEligibility(task, diff) {
 function taskFromWorktree(worktreePath, taskId) {
     const result = backlogJson(["task", "view", taskId], { cwd: worktreePath });
     return result?.task || null;
+}
+
+function backlogTasks() {
+    return backlogJson(["task", "list"], { allowFailure: true })?.tasks || [];
+}
+
+function worktreesForRepository() {
+    const worktrees = orcaJson(["worktree", "list"], { allowFailure: true })?.worktrees || [];
+    const main = worktrees.find((worktree) => worktree.isMainWorktree && asPath(worktree.path) === root);
+    if (!main?.repoId) return [];
+    return worktrees.filter((worktree) => worktree.repoId === main.repoId);
+}
+
+function ownedWorktreeIds() {
+    const result = orcaJson(["orchestration", "worker-list"], { allowFailure: true });
+    const owned = new Set();
+    for (const worker of result?.workers || []) {
+        const worktreeId =
+            worker.resource?.worktreeId ||
+            worker.worker?.worktree_id ||
+            worker.worktreeId ||
+            worker.worktree_id;
+        if (!worktreeId) continue;
+        if (worker.resource?.ownershipState === "owned" || worker.dispatchStatus === "dispatched") {
+            owned.add(worktreeId);
+        }
+    }
+    return owned;
+}
+
+function terminalsForWorktree(worktreeId) {
+    const terminals = orcaJson(["terminal", "list"], { allowFailure: true })?.terminals || [];
+    return terminals.filter((terminal) => terminal.worktreeId === worktreeId);
+}
+
+function taskForWorktree(tasks, worktree) {
+    const values = [worktree.displayName, worktree.branch, worktree.path]
+        .filter(Boolean)
+        .map((value) => String(value).toLowerCase().replaceAll("\\", "/").replace(/^refs\/heads\//, ""));
+    return tasks
+        .filter((task) => {
+            const slug = String(task.id).toLowerCase().replaceAll(".", "-");
+            return values.some(
+                (value) =>
+                    value === slug ||
+                    value.startsWith(`${slug}-`) ||
+                    value.includes(`/${slug}-`),
+            );
+        })
+        .sort((left, right) => right.id.length - left.id.length)[0] || null;
+}
+
+function mergedPrForBranch(branch) {
+    const prs = ghJson(
+        ["pr", "list", "--state", "all", "--head", branch, "--limit", "100"],
+        "number,state,mergedAt,headRefName",
+        { cwd: root, allowFailure: true },
+    );
+    if (!Array.isArray(prs)) return null;
+    return prs.find((pr) => pr.headRefName === branch && pr.state === "MERGED" && pr.mergedAt) || null;
+}
+
+function removeOrphanWorktree(worktree, task, mergedPr) {
+    if (worktree.branch) {
+        const remote = command(
+            "git",
+            ["ls-remote", "--heads", "origin", `refs/heads/${worktree.branch}`],
+            { cwd: root, allowFailure: true },
+        );
+        if (remote.status !== 0) {
+            log(`retaining ${task.id}: could not verify remote branch ${worktree.branch}`);
+            return false;
+        }
+        if (remote.stdout) {
+            const deleted = command("git", ["push", "origin", "--delete", worktree.branch], {
+                cwd: root,
+                allowFailure: true,
+            });
+            if (deleted.status !== 0) {
+                log(`retaining ${task.id}: remote branch deletion was not confirmed`);
+                return false;
+            }
+        }
+    }
+    const terminals = terminalsForWorktree(worktree.id);
+    for (const terminal of terminals) {
+        const closed = orcaJson(["terminal", "close", "--terminal", terminal.handle], {
+            allowFailure: true,
+        });
+        if (!closed) {
+            log(`retaining ${task.id}: could not close terminal ${terminal.handle}`);
+            return false;
+        }
+    }
+    const removed = orcaJson(["worktree", "rm", "--worktree", `id:${worktree.id}`, "--force"], {
+        allowFailure: true,
+    });
+    if (!removed) {
+        log(`retaining ${task.id}: exact worktree removal was not confirmed`);
+        return false;
+    }
+    log(`reclaimed orphan ${task.id}: PR #${mergedPr.number} is merged and exact terminals/worktree/branch are gone`);
+    return true;
+}
+
+function reconcileMergedOrphans() {
+    if (orphanReconciliation.enabled !== true) return;
+    const tasks = backlogTasks();
+    const owned = ownedWorktreeIds();
+    for (const worktree of worktreesForRepository().filter((candidate) => !candidate.isMainWorktree)) {
+        const task = taskForWorktree(tasks, worktree);
+        if (!task) continue;
+        if (owned.has(worktree.id)) {
+            log(`retaining ${task.id}: exact worktree is still owned by a worker`);
+            continue;
+        }
+        const worktreePath = asPath(worktree.path || worktree.git?.path);
+        const branch = String(worktree.branch || worktree.git?.branch || "").replace(/^refs\/heads\//, "");
+        if (!worktreePath || !branch || !existsSync(worktreePath)) {
+            log(`retaining ${task.id}: worktree path or branch is unavailable`);
+            continue;
+        }
+        let taskRecord;
+        try {
+            taskRecord = taskFromWorktree(worktreePath, task.id);
+        } catch (error) {
+            log(`retaining ${task.id}: could not read the worktree task record (${error.message})`);
+            continue;
+        }
+        if (!taskRecord || taskRecord.status !== "Done") {
+            log(`retaining ${task.id}: worktree task record is not Done`);
+            continue;
+        }
+        let status;
+        try {
+            status = gitStatus(worktreePath);
+        } catch (error) {
+            log(`retaining ${task.id}: could not inspect worktree status (${error.message})`);
+            continue;
+        }
+        if (status) {
+            log(`retaining ${task.id}: worktree has uncommitted files`);
+            continue;
+        }
+        const mergedPr = mergedPrForBranch(branch);
+        if (!mergedPr) {
+            log(`retaining ${task.id}: no merged PR was proven for ${branch}`);
+            continue;
+        }
+        if (dryRun) {
+            log(`dry-run: would reclaim orphan ${task.id} after merged PR #${mergedPr.number}`);
+            continue;
+        }
+        try {
+            removeOrphanWorktree(
+                { ...worktree, path: worktreePath, branch },
+                task,
+                mergedPr,
+            );
+        } catch (error) {
+            log(`retaining ${task.id}: orphan cleanup failed (${error.message})`);
+        }
+    }
 }
 
 function checksPass(worktreePath) {
@@ -503,10 +667,12 @@ function sweep() {
     const run = ensureRun();
     if (run.id === "dry-run") {
         log("dry-run: coordinator Run would be created");
+        reconcileMergedOrphans();
         return;
     }
     const rows = taskRows(run.id);
     processCompleted(allTaskRows());
+    reconcileMergedOrphans();
     syncMain();
     dispatchNext(run, taskRows(run.id));
 }
