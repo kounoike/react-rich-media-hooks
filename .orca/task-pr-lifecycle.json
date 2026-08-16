@@ -147,6 +147,11 @@
         "enabled": true,
         "requires_eligibility": true,
         "approval_required": false,
+        "bypasses_manual_approval_gate": true,
+        "bypasses": [
+          "forbid_merge_before_approval",
+          "forbid_cleanup_before_approval_and_merge"
+        ],
         "fallback": "manual_review"
       },
       "approval_must_bind": [
@@ -168,6 +173,7 @@
       "strategy_must_be_explicit": true,
       "allow_automatic_merge": true,
       "automatic_merge_requires_eligibility": true,
+      "automatic_mode_overrides_required_approval": true,
       "unknown_result_policy": "inspect_pr_before_retry_and_retain_artifacts"
     },
     "cleanup": {

@@ -76,7 +76,7 @@ The task-to-PR workflow is repository operating policy, not product work. Keep i
 - The machine policy's `forbid_post_merge_backlog_updates` guard is enabled; merge and cleanup evidence belongs to the merged PR and Orca Run/Dispatch, not a post-merge task edit.
 - Accept completion only from the active Dispatch, validate the task and checks, and publish one Draft PR that contains the worker's task-record changes. Use the automatic lane only after its eligibility evidence is recorded; otherwise pause for explicit user approval bound to the task, Run, Dispatch, PR, and current head SHA.
 - Build PR bodies with `gh pr create/edit --body-file` containing real newline bytes (or shell ANSI-C quoting such as `$'line 1\nline 2'`); ordinary double-quoted `\n` is sent as a literal backslash-n. After publishing, inspect `gh pr view <number> --json body` and reject any body containing the literal `\n` sequence.
-- After approval and successful current-head checks, merge with the repository-approved strategy. Do not write Backlog task records after merge; the merged PR and Orca Run/Dispatch provide the completion and cleanup evidence.
+- In the manual lane, merge only after approval and successful current-head checks; in the automatic lane, merge only after eligibility and the same checks are recorded. Use the repository-approved strategy. Do not write Backlog task records after merge; the merged PR and Orca Run/Dispatch provide the completion and cleanup evidence.
 - After verified merge, release only the exact Dispatch-owned worker session and remove only its exact worktree and branch. Retain all artifacts for failures, requested changes, rejected approval, interruptions, or unknown outcomes.
 
 Significant architectural decisions must be recorded with

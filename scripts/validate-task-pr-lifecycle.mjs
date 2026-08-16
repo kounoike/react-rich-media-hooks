@@ -172,8 +172,11 @@ expect(
   lifecycle.review_gate.automatic_mode.enabled === true &&
     lifecycle.review_gate.automatic_mode.requires_eligibility === true &&
     lifecycle.review_gate.automatic_mode.approval_required === false &&
+    lifecycle.review_gate.automatic_mode.bypasses_manual_approval_gate === true &&
+    lifecycle.review_gate.automatic_mode.bypasses.join(",") ===
+      "forbid_merge_before_approval,forbid_cleanup_before_approval_and_merge" &&
     lifecycle.review_gate.automatic_mode.fallback === "manual_review",
-  "automatic review mode must be eligibility-gated and fall back to manual review",
+  "automatic review mode must explicitly bypass only the manual approval gate",
 );
 expect(
   lifecycle.review_gate.forbid_merge_before_approval === true &&
@@ -189,7 +192,8 @@ expect(
 expect(
   lifecycle.merge.strategy_must_be_explicit === true &&
     lifecycle.merge.allow_automatic_merge === true &&
-    lifecycle.merge.automatic_merge_requires_eligibility === true,
+    lifecycle.merge.automatic_merge_requires_eligibility === true &&
+    lifecycle.merge.automatic_mode_overrides_required_approval === true,
   "merge strategy must be explicit and automatic merge eligibility-gated",
 );
 expect(
