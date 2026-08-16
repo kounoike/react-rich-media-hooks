@@ -62,6 +62,17 @@ The installed Backlog CLI is the first choice for creating and tracking every De
 - Never use this exception for task, draft, document, or milestone files; those remain CLI-only.
 - Before commit or PR review, verify every required body section is non-empty, confirm the frontmatter is unchanged, run `git diff --check`, and record the validation evidence in the related Backlog task.
 
+### Supervised task-to-PR workflow
+
+The task-to-PR workflow is repository operating policy, not product work. Keep its rules in this section and `.orca/task-pr-lifecycle.json`; do not create a Backlog task, Decision, or Backlog document solely to describe or maintain this workflow.
+
+- Start each worker from a tracked Orca Run and Dispatch. The worker owns changes to its Backlog task and records task status, notes, comments, and final summary through the Backlog CLI in the task worktree before opening the Draft PR.
+- The coordinator's repository `main` worktree is read-only for task records. It must not edit Backlog task files, append completion or merge comments, or commit workflow bookkeeping. The coordinator may inspect state, fetch, and fast-forward only when `main` is clean; never overwrite existing user changes.
+- The machine policy's `forbid_post_merge_backlog_updates` guard is enabled; merge and cleanup evidence belongs to the merged PR and Orca Run/Dispatch, not a post-merge task edit.
+- Accept completion only from the active Dispatch, validate the task and checks, and publish one Draft PR that contains the worker's task-record changes. Pause for explicit user approval bound to the task, Run, Dispatch, PR, and current head SHA.
+- After approval and successful current-head checks, merge with the repository-approved strategy. Do not write Backlog task records after merge; the merged PR and Orca Run/Dispatch provide the completion and cleanup evidence.
+- After verified merge, release only the exact Dispatch-owned worker session and remove only its exact worktree and branch. Retain all artifacts for failures, requested changes, rejected approval, interruptions, or unknown outcomes.
+
 Significant architectural decisions must be recorded with
 `backlog decision create`.
 
