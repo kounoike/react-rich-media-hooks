@@ -79,6 +79,7 @@
       "loop_command": "pnpm run orchestration:coordinator -- --loop",
       "poll_interval_seconds": 300,
       "completion_trigger": "worker_done",
+      "completion_dispatch_source": "worker-list_task_id_join",
       "worker_start_command": "orca orchestration worker-start",
       "next_task_action": "dispatch_next_ready_leaf_after_successful_merge",
       "unknown_state_action": "retain_artifacts_and_report"

@@ -62,9 +62,10 @@ expect(
   "coordinator main/task-record ownership rules must be explicit",
 );
 expect(
-  coordinator.loop_command === "pnpm run orchestration:coordinator -- --loop" &&
+    coordinator.loop_command === "pnpm run orchestration:coordinator -- --loop" &&
     coordinator.poll_interval_seconds === 300 &&
     coordinator.completion_trigger === "worker_done" &&
+    coordinator.completion_dispatch_source === "worker-list_task_id_join" &&
     coordinator.worker_start_command === "orca orchestration worker-start" &&
     coordinator.next_task_action === "dispatch_next_ready_leaf_after_successful_merge" &&
     coordinator.unknown_state_action === "retain_artifacts_and_report",
@@ -142,6 +143,9 @@ expect(
     dispatchScript.includes("maxTasks") &&
     dispatchScript.includes("selectedTasks") &&
     coordinatorScript.includes('"worker-start"') &&
+    coordinatorScript.includes('"worker-list"') &&
+    coordinatorScript.includes("workerDispatchMap") &&
+    coordinatorScript.includes("row.dispatchId") &&
     coordinatorScript.includes('"worker-release"') &&
     coordinatorScript.includes('"worktree", "rm"') &&
     coordinatorScript.includes("backlog:dispatchable") &&

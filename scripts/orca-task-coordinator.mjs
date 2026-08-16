@@ -112,11 +112,26 @@ function taskRows(runId) {
     return orcaJson(["orchestration", "task-list", "--run", runId]).tasks || [];
 }
 
+function workerDispatchMap() {
+    const result = orcaJson(["orchestration", "worker-list"], { allowFailure: true });
+    const map = new Map();
+    for (const worker of result?.workers || []) {
+        const taskId = worker.taskId || worker.task_id || worker.task?.id;
+        const dispatchId = worker.dispatchId || worker.dispatch_id || worker.dispatch?.id;
+        if (taskId && dispatchId) map.set(taskId, dispatchId);
+    }
+    return map;
+}
+
 function allTaskRows() {
     const rows = [];
+    const dispatches = workerDispatchMap();
     for (const run of runList().filter((candidate) => !candidate.legacy)) {
         try {
-            for (const row of taskRows(run.id)) rows.push({ ...row, runId: run.id });
+            for (const row of taskRows(run.id)) {
+                const dispatchId = row.dispatch_id || row.dispatchId || dispatches.get(row.id) || null;
+                rows.push({ ...row, runId: run.id, dispatch_id: dispatchId });
+            }
         } catch (error) {
             log(`could not inspect Run ${run.id}: ${error.message}`);
         }
@@ -319,7 +334,11 @@ function releaseExactWorker(dispatchId, worktreeId) {
 }
 
 function processCompleted(rows) {
-    for (const row of rows.filter((candidate) => candidate.status === "completed" && candidate.dispatch_id)) {
+    for (const row of rows.filter((candidate) => candidate.status === "completed")) {
+        if (!row.dispatch_id) {
+            log(`retaining ${row.id}: no active or settled Dispatch was found in worker-list`);
+            continue;
+        }
         try {
             processCompletedRow(row.runId, row);
         } catch (error) {
