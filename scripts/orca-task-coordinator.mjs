@@ -109,7 +109,7 @@ function ensureRun() {
 }
 
 function taskRows(runId) {
-    return orcaJson(["orchestration", "task-list", "--run", runId, "--brief"]).tasks || [];
+    return orcaJson(["orchestration", "task-list", "--run", runId]).tasks || [];
 }
 
 function allTaskRows() {
