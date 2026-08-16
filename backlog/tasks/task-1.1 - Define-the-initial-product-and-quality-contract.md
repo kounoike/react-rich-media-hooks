@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-13 20:31'
-updated_date: '2026-08-14 23:59'
+updated_date: '2026-08-16 07:05'
 labels: []
 dependencies: []
 references:
@@ -156,6 +156,16 @@ The installed Backlog.md 1.50.1 CLI creates Decisions with Context, Decision, an
 
 Final validation passed on 2026-08-15. A read-only Node verification checked doc-1 and decision-1 against every acceptance criterion: all six P0 journeys and observable outcomes; scope and non-goals; React, rendering, and composition assumptions; latency, CPU/memory, bundle/asset, privacy, accessibility, and failure-recovery hypotheses; open questions with required evidence; and explicit approval plus alternatives/tradeoffs. It also verified all required decision-rationale sections and TASK-1.1 links. `git diff --check` passed. `backlog doc list --plain` returned doc-1 and `backlog decision list --plain` returned decision-1 as accepted. No code or other task was changed.
 <!-- SECTION:NOTES:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @codex
+created: 2026-08-16 07:05
+---
+2026-08-16: With explicit user approval, restored the previously empty Decision-1 body using the approved doc-1 contract. Decision frontmatter and accepted meaning were preserved; the installed Backlog CLI 1.50.1 limitation and body-only exception are documented in AGENTS.md on the lifecycle PR.
+---
+<!-- COMMENTS:END -->
 
 ## Final Summary
 
