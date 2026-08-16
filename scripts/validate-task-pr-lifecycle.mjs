@@ -4,10 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const policyPath = resolve(root, ".orca/task-pr-lifecycle.json");
-const runbookPath = resolve(
-  root,
-  "backlog/docs/operations/task-to-pr-review-and-cleanup/doc-2 - Task-to-PR-review-and-cleanup-lifecycle.md",
-);
+const runbookPath = resolve(root, "AGENTS.md");
 
 const failures = [];
 const expect = (condition, message) => {
@@ -27,11 +24,25 @@ try {
 const lifecycle = policy.lifecycle;
 const successPath = lifecycle.states.success_path;
 const retainedStates = lifecycle.states.retained_terminal_states;
+const coordinator = lifecycle.coordinator;
 
 expect(policy.version === 1, "policy version must be 1");
 expect(lifecycle.id === "task-to-pr-review-cleanup", "lifecycle id is missing");
 expect(lifecycle.run.required === true, "a tracked Run is required");
 expect(lifecycle.run.dispatch_required === true, "a tracked Dispatch is required");
+expect(
+  coordinator.main_workspace_policy === "read_only_for_task_records" &&
+    coordinator.require_clean_main_before_dispatch === true &&
+    coordinator.forbid_task_file_writes_from_main === true &&
+    coordinator.forbid_post_merge_backlog_updates === true &&
+    coordinator.task_record_owner === "worker_task_worktree_before_draft_pr",
+  "coordinator main/task-record ownership rules must be explicit",
+);
+expect(
+  lifecycle.pull_request.body_encoding_policy === "body_file_or_actual_newlines" &&
+    lifecycle.pull_request.reject_literal_backslash_n === true,
+  "PR body encoding must use real newlines and reject literal backslash-n",
+);
 expect(
   lifecycle.run.forbid_untracked_full_handoff === true,
   "untracked full handoffs must be forbidden",
@@ -115,30 +126,19 @@ expect(
   "PR, merge, and cleanup retries must be idempotent",
 );
 
-for (const heading of [
-  "## Context",
-  "## Decision Drivers",
-  "## Considered Options",
-  "## Decision",
-  "## Consequences",
-  "## Related Tasks",
-  "## Operating procedure",
-  "## Recovery and idempotency",
-  "## Enforcement boundary and limitation",
-]) {
+for (const heading of ["### Supervised task-to-PR workflow"]) {
   expect(runbook.includes(heading), `runbook heading is missing: ${heading}`);
 }
 for (const phrase of [
   "tracked Orca Run and Dispatch",
+  "worker owns changes to its Backlog task",
+  "coordinator's repository `main` worktree is read-only",
+  "forbid_post_merge_backlog_updates",
   "explicit user approval",
-  "required check",
-  "exact worker session and worktree",
-  "Runtime restart",
-  "Duplicate completion",
-  "PR creation/update failure",
-  "CI/check failure",
-  "Review requested changes",
-  "does not claim that the action happened",
+  "current head SHA",
+  "exact Dispatch-owned worker session",
+  "`gh pr create/edit --body-file`",
+  "literal backslash-n",
 ]) {
   expect(runbook.includes(phrase), `runbook evidence is missing: ${phrase}`);
 }

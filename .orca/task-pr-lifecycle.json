@@ -3,7 +3,7 @@
   "version": 1,
   "lifecycle": {
     "id": "task-to-pr-review-cleanup",
-    "source_of_truth": "backlog-task-and-orca-run",
+    "source_of_truth": "repository-lifecycle-policy-and-orca-run",
     "run": {
       "required": true,
       "dispatch_required": true,
@@ -18,6 +18,14 @@
         "worktree_path",
         "branch"
       ]
+    },
+    "coordinator": {
+      "main_workspace_policy": "read_only_for_task_records",
+      "require_clean_main_before_dispatch": true,
+      "forbid_task_file_writes_from_main": true,
+      "forbid_post_merge_backlog_updates": true,
+      "task_record_owner": "worker_task_worktree_before_draft_pr",
+      "sync_policy": "fetch_or_fast_forward_only_when_main_is_clean"
     },
     "states": {
       "initial": "dispatched",
@@ -73,6 +81,8 @@
         "validation_commands_and_results",
         "recovery_state"
       ],
+      "body_encoding_policy": "body_file_or_actual_newlines",
+      "reject_literal_backslash_n": true,
       "create_failure_policy": "retain_branch_worktree_logs_and_retry_same_marker"
     },
     "review_gate": {
