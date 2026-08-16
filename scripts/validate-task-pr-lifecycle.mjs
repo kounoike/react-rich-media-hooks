@@ -68,7 +68,8 @@ expect(
     coordinator.completion_dispatch_source === "worker-list_task_id_join" &&
     coordinator.worker_start_command === "orca orchestration worker-start" &&
     coordinator.next_task_action === "dispatch_next_ready_leaf_after_successful_merge" &&
-    coordinator.unknown_state_action === "retain_artifacts_and_report",
+    coordinator.unknown_state_action === "retain_artifacts_and_report" &&
+    coordinator.retained_state_action === "report_and_continue_without_retry",
   "the coordinator loop must poll completion and dispatch the next ready leaf task",
 );
 expect(
