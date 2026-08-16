@@ -20,6 +20,9 @@ policy in `.orca/task-pr-lifecycle.json`. A worker-owned task record is updated
 in its task worktree before the Draft PR; the coordinator's `main` worktree does
 not receive task-completion bookkeeping.
 
+Before dispatching work, run `pnpm run backlog:dispatchable`. It filters ready
+parent tasks and reports the single task that should be selected next.
+
 Orca and GitHub integrations enforce the external Run/Dispatch, approval,
 checks, merge, and exact cleanup operations. Failures, interruptions, rejected
 approvals, requested changes, and restarts retain the pull request, branch,

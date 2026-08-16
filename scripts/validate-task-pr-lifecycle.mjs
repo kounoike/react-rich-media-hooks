@@ -5,6 +5,8 @@ import { fileURLToPath } from "node:url";
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const policyPath = resolve(root, ".orca/task-pr-lifecycle.json");
 const runbookPath = resolve(root, "AGENTS.md");
+const packagePath = resolve(root, "package.json");
+const dispatchScriptPath = resolve(root, "scripts/list-dispatchable-tasks.mjs");
 
 const failures = [];
 const expect = (condition, message) => {
@@ -13,11 +15,22 @@ const expect = (condition, message) => {
 
 let policy;
 let runbook;
+let packageJson;
+let dispatchScript;
 try {
-  policy = JSON.parse(await readFile(policyPath, "utf8"));
-  runbook = await readFile(runbookPath, "utf8");
+  const [policyText, runbookText, packageText, dispatchScriptText] =
+    await Promise.all([
+      readFile(policyPath, "utf8"),
+      readFile(runbookPath, "utf8"),
+      readFile(packagePath, "utf8"),
+      readFile(dispatchScriptPath, "utf8"),
+    ]);
+  policy = JSON.parse(policyText);
+  runbook = runbookText;
+  packageJson = JSON.parse(packageText);
+  dispatchScript = dispatchScriptText;
 } catch (error) {
-  console.error(`Unable to read lifecycle policy or runbook: ${error.message}`);
+  console.error(`Unable to read lifecycle policy or dispatch guard: ${error.message}`);
   process.exit(1);
 }
 
@@ -25,6 +38,7 @@ const lifecycle = policy.lifecycle;
 const successPath = lifecycle.states.success_path;
 const retainedStates = lifecycle.states.retained_terminal_states;
 const coordinator = lifecycle.coordinator;
+const dispatchSelection = lifecycle.dispatch_selection;
 
 expect(policy.version === 1, "policy version must be 1");
 expect(lifecycle.id === "task-to-pr-review-cleanup", "lifecycle id is missing");
@@ -37,6 +51,26 @@ expect(
     coordinator.forbid_post_merge_backlog_updates === true &&
     coordinator.task_record_owner === "worker_task_worktree_before_draft_pr",
   "coordinator main/task-record ownership rules must be explicit",
+);
+expect(
+  dispatchSelection.command === "pnpm run backlog:dispatchable" &&
+    dispatchSelection.source_of_truth === "backlog-cli" &&
+    dispatchSelection.required_status === "To Do" &&
+    dispatchSelection.requires_ready === true &&
+    dispatchSelection.requires_leaf_task === true &&
+    dispatchSelection.reject_if_has_subtasks === true &&
+    dispatchSelection.selection_order.join(",") === "priority,ordinal" &&
+    dispatchSelection.max_tasks === 1 &&
+    dispatchSelection.no_candidate_action ===
+      "report_and_stop_before_run_or_dispatch",
+  "dispatch selection must require exactly one ready leaf task",
+);
+expect(
+  packageJson.scripts?.["backlog:dispatchable"] ===
+    "node scripts/list-dispatchable-tasks.mjs" &&
+    dispatchScript.includes('"--ready"') &&
+    dispatchScript.includes("subtasks"),
+  "the dispatchable-task script must be installed and filter ready parent tasks",
 );
 expect(
   lifecycle.pull_request.body_encoding_policy === "body_file_or_actual_newlines" &&
@@ -132,6 +166,11 @@ for (const heading of ["### Supervised task-to-PR workflow"]) {
 for (const phrase of [
   "tracked Orca Run and Dispatch",
   "worker owns changes to its Backlog task",
+  "Dispatchable task selection is leaf-only",
+  "pnpm run backlog:dispatchable",
+  "Parent/roll-up tasks must never be dispatched directly",
+  "do not create a Run, Dispatch, worktree, or worker",
+  "artificial dependencies",
   "coordinator's repository `main` worktree is read-only",
   "forbid_post_merge_backlog_updates",
   "explicit user approval",

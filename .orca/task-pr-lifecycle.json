@@ -19,6 +19,17 @@
         "branch"
       ]
     },
+    "dispatch_selection": {
+      "command": "pnpm run backlog:dispatchable",
+      "source_of_truth": "backlog-cli",
+      "required_status": "To Do",
+      "requires_ready": true,
+      "requires_leaf_task": true,
+      "reject_if_has_subtasks": true,
+      "selection_order": ["priority", "ordinal"],
+      "max_tasks": 1,
+      "no_candidate_action": "report_and_stop_before_run_or_dispatch"
+    },
     "coordinator": {
       "main_workspace_policy": "read_only_for_task_records",
       "require_clean_main_before_dispatch": true,
