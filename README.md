@@ -28,6 +28,13 @@ session until its final JSON result; do not retry after an empty response,
 timeout, or `runtime_unavailable` until both Orca and Git worktree lists confirm
 that the requested target does not already exist.
 
+Small research, maintenance, and implementation changes can use the automatic
+completion lane when they do not change Decisions, public API, compatibility,
+distribution, or protected workflow/dependency/CI/release paths, or require a
+user decision, and remain within the configured diff limits.
+Feature, API, compatibility, distribution, and uncertain changes remain behind
+the explicit review gate.
+
 Orca and GitHub integrations enforce the external Run/Dispatch, approval,
 checks, merge, and exact cleanup operations. Failures, interruptions, rejected
 approvals, requested changes, and restarts retain the pull request, branch,

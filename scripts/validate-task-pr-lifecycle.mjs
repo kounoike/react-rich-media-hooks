@@ -40,6 +40,9 @@ const retainedStates = lifecycle.states.retained_terminal_states;
 const coordinator = lifecycle.coordinator;
 const dispatchSelection = lifecycle.dispatch_selection;
 const worktreeCreation = lifecycle.worktree_creation;
+const completionModes = lifecycle.completion_modes;
+const automaticCompletion = completionModes.automatic;
+const automaticSuccessPath = lifecycle.states.automatic_success_path;
 
 expect(policy.version === 1, "policy version must be 1");
 expect(lifecycle.id === "task-to-pr-review-cleanup", "lifecycle id is missing");
@@ -79,6 +82,24 @@ expect(
   "worktree creation must be single-flight and polled before retry",
 );
 expect(
+  completionModes.default === "manual_review" &&
+    automaticCompletion.enabled === true &&
+    automaticCompletion.task_types.join(",") === "spike,docs,bug,chore,task" &&
+    automaticCompletion.max_changed_files === 10 &&
+    automaticCompletion.max_changed_lines === 300 &&
+    automaticCompletion.requires_no_decision_changes === true &&
+    automaticCompletion.requires_no_user_decision === true &&
+    automaticCompletion.requires_no_public_api_changes === true &&
+    automaticCompletion.requires_no_compatibility_changes === true &&
+    automaticCompletion.requires_no_distribution_changes === true &&
+    automaticCompletion.requires_current_head_checks === true &&
+    automaticCompletion.fallback === "manual_review" &&
+    automaticCompletion.protected_paths.includes("backlog/decisions/**") &&
+    automaticCompletion.protected_paths.includes(".github/**") &&
+    automaticCompletion.protected_paths.includes("package.json"),
+  "automatic completion must be limited to small non-Decision changes",
+);
+expect(
   packageJson.scripts?.["backlog:dispatchable"] ===
     "node scripts/list-dispatchable-tasks.mjs" &&
     dispatchScript.includes('"--ready"') &&
@@ -103,6 +124,11 @@ expect(
   successPath.join(",") ===
     "dispatched,completion_accepted,task_validated,draft_pr_ready,awaiting_user_review,approved,checks_passed,merged,cleanup_pending,completed",
   "success path must pause for review before checks, merge, and cleanup",
+);
+expect(
+  automaticSuccessPath.join(",") ===
+    "dispatched,completion_accepted,task_validated,draft_pr_ready,checks_passed,merged,cleanup_pending,completed",
+  "automatic success path must bypass only the explicit review gate",
 );
 for (const state of [
   "completion_failed",
@@ -143,6 +169,13 @@ expect(
   "the review gate must be an explicit user approval",
 );
 expect(
+  lifecycle.review_gate.automatic_mode.enabled === true &&
+    lifecycle.review_gate.automatic_mode.requires_eligibility === true &&
+    lifecycle.review_gate.automatic_mode.approval_required === false &&
+    lifecycle.review_gate.automatic_mode.fallback === "manual_review",
+  "automatic review mode must be eligibility-gated and fall back to manual review",
+);
+expect(
   lifecycle.review_gate.forbid_merge_before_approval === true &&
     lifecycle.review_gate.forbid_cleanup_before_approval_and_merge === true,
   "merge and cleanup must be blocked before approval",
@@ -155,8 +188,9 @@ expect(
 );
 expect(
   lifecycle.merge.strategy_must_be_explicit === true &&
-    lifecycle.merge.allow_automatic_merge === false,
-  "merge strategy must be explicit and automatic merge disabled",
+    lifecycle.merge.allow_automatic_merge === true &&
+    lifecycle.merge.automatic_merge_requires_eligibility === true,
+  "merge strategy must be explicit and automatic merge eligibility-gated",
 );
 expect(
   lifecycle.cleanup.trigger === "successful_merge_only" &&
@@ -195,6 +229,11 @@ for (const phrase of [
   "exact Dispatch-owned worker session",
   "`gh pr create/edit --body-file`",
   "literal backslash-n",
+  "Lifecycle review has two lanes",
+  "at most 10 files and 300 changed lines",
+  "no unresolved user decision",
+  "fall back to manual review",
+  "Automatic completion still requires",
 ]) {
   expect(runbook.includes(phrase), `runbook evidence is missing: ${phrase}`);
 }

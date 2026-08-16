@@ -38,6 +38,32 @@
       "retry_only_when_target_absent": true,
       "duplicate_policy": "stop_and_reconcile_exact_target"
     },
+    "completion_modes": {
+      "default": "manual_review",
+      "automatic": {
+        "enabled": true,
+        "task_types": ["spike", "docs", "bug", "chore", "task"],
+        "max_changed_files": 10,
+        "max_changed_lines": 300,
+        "requires_no_decision_changes": true,
+        "requires_no_user_decision": true,
+        "requires_no_public_api_changes": true,
+        "requires_no_compatibility_changes": true,
+        "requires_no_distribution_changes": true,
+        "protected_paths": [
+          "AGENTS.md",
+          ".orca/**",
+          ".github/**",
+          "package.json",
+          "pnpm-lock.yaml",
+          "backlog/decisions/**",
+          "CHANGELOG.md",
+          "release/**"
+        ],
+        "requires_current_head_checks": true,
+        "fallback": "manual_review"
+      }
+    },
     "coordinator": {
       "main_workspace_policy": "read_only_for_task_records",
       "require_clean_main_before_dispatch": true,
@@ -55,6 +81,16 @@
         "draft_pr_ready",
         "awaiting_user_review",
         "approved",
+        "checks_passed",
+        "merged",
+        "cleanup_pending",
+        "completed"
+      ],
+      "automatic_success_path": [
+        "dispatched",
+        "completion_accepted",
+        "task_validated",
+        "draft_pr_ready",
         "checks_passed",
         "merged",
         "cleanup_pending",
@@ -107,6 +143,12 @@
     "review_gate": {
       "required": true,
       "kind": "explicit_user_approval",
+      "automatic_mode": {
+        "enabled": true,
+        "requires_eligibility": true,
+        "approval_required": false,
+        "fallback": "manual_review"
+      },
       "approval_must_bind": [
         "task_id",
         "run_id",
@@ -124,7 +166,8 @@
       "checks_must_be_successful_for_current_head": true,
       "strategy": "repository-approved-strategy",
       "strategy_must_be_explicit": true,
-      "allow_automatic_merge": false,
+      "allow_automatic_merge": true,
+      "automatic_merge_requires_eligibility": true,
       "unknown_result_policy": "inspect_pr_before_retry_and_retain_artifacts"
     },
     "cleanup": {
