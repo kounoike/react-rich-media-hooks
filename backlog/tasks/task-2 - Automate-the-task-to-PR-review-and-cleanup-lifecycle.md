@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-16 06:29'
-updated_date: '2026-08-16 06:56'
+updated_date: '2026-08-16 06:59'
 labels: []
 dependencies: []
 references:
@@ -82,6 +82,12 @@ author: @codex
 created: 2026-08-16 06:47
 ---
 2026-08-16: Started under supervised Orca Run run_d76a47e91326 / Dispatch ctx_ad1862ea8051. The worker must complete only TASK-2, send worker_done, and stop; TASK-1.2 remains To Do and is not a follow-up.
+---
+
+author: @codex
+created: 2026-08-16 06:59
+---
+2026-08-16: Draft PR #3 is ready for explicit user review: https://github.com/kounoike/react-rich-media-hooks/pull/3. The retained worker/worktree must not be released or deleted until approval, required current-head checks, and a verified merge.
 ---
 <!-- COMMENTS:END -->
 
