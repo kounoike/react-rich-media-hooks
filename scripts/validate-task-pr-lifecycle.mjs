@@ -39,6 +39,11 @@ expect(
   "coordinator main/task-record ownership rules must be explicit",
 );
 expect(
+  lifecycle.pull_request.body_encoding_policy === "body_file_or_actual_newlines" &&
+    lifecycle.pull_request.reject_literal_backslash_n === true,
+  "PR body encoding must use real newlines and reject literal backslash-n",
+);
+expect(
   lifecycle.run.forbid_untracked_full_handoff === true,
   "untracked full handoffs must be forbidden",
 );
@@ -132,6 +137,8 @@ for (const phrase of [
   "explicit user approval",
   "current head SHA",
   "exact Dispatch-owned worker session",
+  "`gh pr create/edit --body-file`",
+  "literal backslash-n",
 ]) {
   expect(runbook.includes(phrase), `runbook evidence is missing: ${phrase}`);
 }

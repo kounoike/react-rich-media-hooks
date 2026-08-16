@@ -81,6 +81,8 @@
         "validation_commands_and_results",
         "recovery_state"
       ],
+      "body_encoding_policy": "body_file_or_actual_newlines",
+      "reject_literal_backslash_n": true,
       "create_failure_policy": "retain_branch_worktree_logs_and_retry_same_marker"
     },
     "review_gate": {
