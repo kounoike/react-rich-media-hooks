@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Capture lifecycle experiment</title>
+    <style>
+      :root { color-scheme: light dark; font: 16px/1.45 system-ui, sans-serif; }
+      body { margin: 2rem auto; max-width: 60rem; padding: 0 1rem; }
+      button { margin: 0.2rem; }
+      pre { overflow: auto; min-height: 16rem; padding: 1rem; background: CanvasText; color: Canvas; }
+      code { word-break: break-word; }
+    </style>
+  </head>
+  <body>
+    <noscript>This fixture needs JavaScript.</noscript>
+    <div id="root"></div>
+
+    <!-- The fixture intentionally uses development React from a CDN. It is
+         disposable evidence, not a dependency or package entry point. -->
+    <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+    <script>
+      (() => {
+        const { useEffect, useRef, useState } = React;
+        const logElement = document.createElement("pre");
+        const logEntries = [];
+        let nextRequest = 1;
+        let nextStream = 1;
+        let nextTrack = 1;
+        let pending = [];
+        let activeStream;
+
+        function record(actor, event, details = {}) {
+          logEntries.push({ at: logEntries.length + 1, actor, event, ...details });
+          logElement.textContent = logEntries.map((entry) => JSON.stringify(entry)).join("\n");
+        }
+
+        function makeTrack() {
+          const listeners = new Map();
+          const track = {
+            id: `track-${nextTrack++}`,
+            kind: "video",
+            readyState: "live",
+            stop(owner) {
+              if (track.readyState === "ended") return;
+              track.readyState = "ended";
+              record("browser", "browser.track.stop", { trackId: track.id, owner });
+              // Like a browser MediaStreamTrack, stop() does not dispatch
+              // ended. The deviceEnd control below represents external loss.
+            },
+            endExternally() {
+              if (track.readyState === "ended") return;
+              track.readyState = "ended";
+              record("browser", "browser.track.event.ended", { trackId: track.id });
+              for (const listener of listeners.get("ended") || []) listener();
+            },
+            addEventListener(type, listener) {
+              const bucket = listeners.get(type) || new Set();
+              bucket.add(listener);
+              listeners.set(type, bucket);
+            },
+          };
+          return track;
+        }
+
+        function makeStream(label) {
+          return { id: `stream-${nextStream++}`, label, getTracks: () => [makeTrack()] };
+        }
+
+        const fakeMediaDevices = {
+          getUserMedia(constraints) {
+            const requestId = `request-${nextRequest++}`;
+            record("browser", "browser.getUserMedia.request", { requestId, constraints });
+            return new Promise((resolve, reject) => {
+              pending.push({ requestId, resolve, reject });
+            });
+          },
+          resolveOldest() {
+            const request = pending.shift();
+            if (!request) return;
+            const stream = makeStream("resolved");
+            record("browser", "browser.getUserMedia.resolve", { requestId: request.requestId, streamId: stream.id });
+            request.resolve(stream);
+          },
+          resolveLatest() {
+            const request = pending.pop();
+            if (!request) return;
+            const stream = makeStream("resolved-latest");
+            record("browser", "browser.getUserMedia.resolve", { requestId: request.requestId, streamId: stream.id });
+            request.resolve(stream);
+          },
+          rejectLatest(name = "NotAllowedError") {
+            const request = pending.pop();
+            if (!request) return;
+            const error = new DOMException(`simulated ${name}`, name);
+            record("browser", "browser.getUserMedia.reject", { requestId: request.requestId, name });
+            request.reject(error);
+          },
+          endActiveTrack() {
+            activeStream?.getTracks()[0]?.endExternally();
+          },
+          pendingCount() {
+            return pending.length;
+          },
+        };
+
+        function useCapture(version) {
+          const generation = useRef(0);
+          const streamRef = useRef();
+          const [state, setState] = useState("idle");
+
+          useEffect(() => {
+            let cancelled = false;
+            const currentGeneration = ++generation.current;
+            setState("requesting");
+            record("react", "react.effect.setup", { currentGeneration, version });
+            const request = fakeMediaDevices.getUserMedia({ video: { deviceId: `camera-${version}` } });
+            request.then((stream) => {
+              if (cancelled || currentGeneration !== generation.current) {
+                record("library", "library.stale-completion.discarded", { streamId: stream.id, currentGeneration });
+                stream.getTracks().forEach((track) => track.stop("library.stale-completion"));
+                return;
+              }
+              streamRef.current?.getTracks().forEach((track) => track.stop("library.replacement"));
+              streamRef.current = stream;
+              activeStream = stream;
+              setState("active");
+              record("library", "library.capture.attached", { streamId: stream.id, currentGeneration });
+              stream.getTracks()[0].addEventListener("ended", () => {
+                if (streamRef.current === stream) {
+                  setState("ended");
+                  record("library", "library.track.ended-observed", { streamId: stream.id });
+                }
+              });
+            }, (error) => {
+              if (cancelled || currentGeneration !== generation.current) {
+                record("library", "library.stale-error.discarded", { name: error.name, currentGeneration });
+                return;
+              }
+              setState("failed");
+              record("library", "library.capture.failed", { name: error.name, currentGeneration });
+            });
+
+            return () => {
+              cancelled = true;
+              record("react", "react.effect.cleanup", { currentGeneration, version });
+            };
+          }, [version]);
+
+          useEffect(() => () => {
+            streamRef.current?.getTracks().forEach((track) => track.stop("library.unmount"));
+            streamRef.current = undefined;
+            activeStream = undefined;
+            record("library", "library.capture.detached", { reason: "unmount" });
+          }, []);
+
+          return React.createElement("p", null, `consumer state: ${state}`);
+        }
+
+        function App() {
+          const [mounted, setMounted] = useState(true);
+          const [version, setVersion] = useState(1);
+          return React.createElement(
+            "main",
+            null,
+            React.createElement("h1", null, "Capture lifecycle experiment"),
+            React.createElement("p", null, "This page uses a fake MediaDevices object and a real React 18 development Strict Mode root."),
+            React.createElement("p", null, `pending fake requests: ${fakeMediaDevices.pendingCount()}`),
+            React.createElement("button", { onClick: () => setMounted((value) => !value) }, mounted ? "Unmount consumer" : "Mount consumer"),
+            React.createElement("button", { onClick: () => setVersion((value) => value + 1), disabled: !mounted }, "Rerender with new constraints"),
+            React.createElement("button", { onClick: fakeMediaDevices.resolveOldest }, "Resolve oldest request"),
+            React.createElement("button", { onClick: fakeMediaDevices.resolveLatest }, "Resolve latest request"),
+            React.createElement("button", { onClick: () => fakeMediaDevices.rejectLatest("NotAllowedError") }, "Reject latest (permission)"),
+            React.createElement("button", { onClick: () => fakeMediaDevices.rejectLatest("NotFoundError") }, "Reject latest (missing device)"),
+            React.createElement("button", { onClick: fakeMediaDevices.endActiveTrack }, "Simulate device removal"),
+            mounted ? React.createElement("section", { key: "consumer" }, React.createElement(CaptureView, { version })) : React.createElement("p", null, "consumer is unmounted"),
+            React.createElement("h2", null, "Event log"),
+            React.createElement("div", { ref: (node) => { if (node && !node.firstChild) node.append(logElement); } })
+          );
+        }
+
+        function CaptureView({ version }) {
+          return useCapture(version);
+        }
+
+        window.__captureLifecycleProbe = { fakeMediaDevices, logEntries };
+        ReactDOM.createRoot(document.getElementById("root")).render(
+          React.createElement(React.StrictMode, null, React.createElement(App))
+        );
+      })();
+    </script>
+  </body>
+</html>
