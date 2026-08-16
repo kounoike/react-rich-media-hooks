@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": 1,
+  "lifecycle": {
+    "id": "task-to-pr-review-cleanup",
+    "source_of_truth": "backlog-task-and-orca-run",
+    "run": {
+      "required": true,
+      "dispatch_required": true,
+      "tracked_outcomes": ["succeeded", "failed"],
+      "forbid_untracked_full_handoff": true,
+      "persist_identifiers": [
+        "task_id",
+        "run_id",
+        "dispatch_id",
+        "worker_session_id",
+        "worktree_id",
+        "worktree_path",
+        "branch"
+      ]
+    },
+    "states": {
+      "initial": "dispatched",
+      "success_path": [
+        "dispatched",
+        "completion_accepted",
+        "task_validated",
+        "draft_pr_ready",
+        "awaiting_user_review",
+        "approved",
+        "checks_passed",
+        "merged",
+        "cleanup_pending",
+        "completed"
+      ],
+      "retained_terminal_states": [
+        "completion_failed",
+        "pr_failed",
+        "checks_failed",
+        "changes_requested",
+        "approval_rejected",
+        "interrupted",
+        "restart_recovery",
+        "merge_unknown"
+      ],
+      "retained_artifacts": ["pull_request", "branch", "worktree", "logs"]
+    },
+    "completion": {
+      "accepted_only_from_active_dispatch": true,
+      "validate_backlog_task_before_pr": true,
+      "required_task_record": [
+        "completion_id",
+        "outcome",
+        "files_modified",
+        "validation_commands",
+        "validation_results"
+      ],
+      "duplicate_policy": "ignore_exact_replay_and_reconcile_state",
+      "conflicting_replay_policy": "retain_artifacts_and_escalate"
+    },
+    "pull_request": {
+      "draft": true,
+      "one_per_task": true,
+      "idempotency_marker": "<!-- lifecycle-task: {task_id} run: {run_id} -->",
+      "lookup_order": ["idempotency_marker", "task_id_and_head_sha"],
+      "required_body_fields": [
+        "backlog_task",
+        "run_id",
+        "dispatch_id",
+        "worktree_id",
+        "summary",
+        "files_modified",
+        "validation_commands_and_results",
+        "recovery_state"
+      ],
+      "create_failure_policy": "retain_branch_worktree_logs_and_retry_same_marker"
+    },
+    "review_gate": {
+      "required": true,
+      "kind": "explicit_user_approval",
+      "approval_must_bind": [
+        "task_id",
+        "run_id",
+        "dispatch_id",
+        "pull_request_number",
+        "head_sha"
+      ],
+      "pending_or_rejected_policy": "retain_all_review_artifacts",
+      "forbid_merge_before_approval": true,
+      "forbid_cleanup_before_approval_and_merge": true
+    },
+    "merge": {
+      "required_approval": true,
+      "required_checks": true,
+      "checks_must_be_successful_for_current_head": true,
+      "strategy": "repository-approved-strategy",
+      "strategy_must_be_explicit": true,
+      "allow_automatic_merge": false,
+      "unknown_result_policy": "inspect_pr_before_retry_and_retain_artifacts"
+    },
+    "cleanup": {
+      "trigger": "successful_merge_only",
+      "scope": ["exact_worker_session", "exact_owned_worktree"],
+      "require_identity_match": true,
+      "release_operation": "dispatch-scoped-worker-release",
+      "delete_unrelated_resources": false,
+      "failure_or_interruption_policy": "retain_worker_session_worktree_branch_pr_and_logs",
+      "branch_policy": "follow_approved_merge_strategy_only"
+    },
+    "idempotency": {
+      "keys": [
+        "task_id",
+        "run_id",
+        "dispatch_id",
+        "completion_id",
+        "pull_request_idempotency_marker",
+        "head_sha"
+      ],
+      "state_transition_policy": "monotonic_or_explicit_recovery",
+      "duplicate_pr_policy": "update_existing_marked_pr",
+      "duplicate_merge_policy": "treat_already_merged_as_success_after_verification",
+      "duplicate_cleanup_policy": "safe_noop_after_exact_resource_release"
+    },
+    "enforcement": {
+      "repository_files_are": "declarative_policy_and_runbook",
+      "requires_orca_runtime_for": [
+        "run_and_dispatch_tracking",
+        "worker_done_validation",
+        "explicit_review_gate",
+        "exact_worker_release"
+      ],
+      "requires_github_integration_for": [
+        "draft_pr_creation_or_update",
+        "required_check_status",
+        "approved_merge"
+      ],
+      "not_claimed_as_automated": [
+        "branch_protection_configuration",
+        "user_identity_and_approval_authentication",
+        "remote_pr_api_availability",
+        "worktree_deletion_outside_orca"
+      ]
+    }
+  }
+}
