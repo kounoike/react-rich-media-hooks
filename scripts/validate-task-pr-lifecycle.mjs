@@ -7,6 +7,7 @@ const policyPath = resolve(root, ".orca/task-pr-lifecycle.json");
 const runbookPath = resolve(root, "AGENTS.md");
 const packagePath = resolve(root, "package.json");
 const dispatchScriptPath = resolve(root, "scripts/list-dispatchable-tasks.mjs");
+const coordinatorScriptPath = resolve(root, "scripts/orca-task-coordinator.mjs");
 
 const failures = [];
 const expect = (condition, message) => {
@@ -17,18 +18,21 @@ let policy;
 let runbook;
 let packageJson;
 let dispatchScript;
+let coordinatorScript;
 try {
-  const [policyText, runbookText, packageText, dispatchScriptText] =
+  const [policyText, runbookText, packageText, dispatchScriptText, coordinatorScriptText] =
     await Promise.all([
       readFile(policyPath, "utf8"),
       readFile(runbookPath, "utf8"),
       readFile(packagePath, "utf8"),
       readFile(dispatchScriptPath, "utf8"),
+      readFile(coordinatorScriptPath, "utf8"),
     ]);
   policy = JSON.parse(policyText);
   runbook = runbookText;
   packageJson = JSON.parse(packageText);
   dispatchScript = dispatchScriptText;
+  coordinatorScript = coordinatorScriptText;
 } catch (error) {
   console.error(`Unable to read lifecycle policy or dispatch guard: ${error.message}`);
   process.exit(1);
@@ -43,6 +47,7 @@ const worktreeCreation = lifecycle.worktree_creation;
 const completionModes = lifecycle.completion_modes;
 const automaticCompletion = completionModes.automatic;
 const automaticSuccessPath = lifecycle.states.automatic_success_path;
+const automation = lifecycle.automation;
 
 expect(policy.version === 1, "policy version must be 1");
 expect(lifecycle.id === "task-to-pr-review-cleanup", "lifecycle id is missing");
@@ -55,6 +60,28 @@ expect(
     coordinator.forbid_post_merge_backlog_updates === true &&
     coordinator.task_record_owner === "worker_task_worktree_before_draft_pr",
   "coordinator main/task-record ownership rules must be explicit",
+);
+expect(
+  coordinator.loop_command === "pnpm run orchestration:coordinator -- --once" &&
+    coordinator.poll_interval_seconds === 300 &&
+    coordinator.completion_trigger === "worker_done" &&
+    coordinator.worker_start_command === "orca orchestration worker-start" &&
+    coordinator.next_task_action === "dispatch_next_ready_leaf_after_successful_merge" &&
+    coordinator.unknown_state_action === "retain_artifacts_and_report",
+  "the coordinator loop must poll completion and dispatch the next ready leaf task",
+);
+expect(
+  automation.required === true &&
+    automation.kind === "orca_scheduled_prompt" &&
+    automation.provider === "codex" &&
+    automation.trigger === "*/5 * * * *" &&
+    automation.timezone === "Asia/Tokyo" &&
+    automation.workspace === "repository_main" &&
+    automation.workspace_mode === "existing" &&
+    automation.session_policy === "fresh_per_run" &&
+    automation.prompt_command === "pnpm run orchestration:coordinator -- --once" &&
+    automation.single_flight === true,
+  "an idempotent Orca scheduled coordinator must be configured",
 );
 expect(
   dispatchSelection.command === "pnpm run backlog:dispatchable" &&
@@ -98,17 +125,26 @@ expect(
     automaticCompletion.fallback === "manual_review" &&
     automaticCompletion.protected_paths.includes("backlog/decisions/**") &&
     automaticCompletion.protected_paths.includes(".github/**") &&
-    automaticCompletion.protected_paths.includes("package.json"),
+    automaticCompletion.protected_paths.includes("package.json") &&
+    automaticCompletion.protected_paths.includes("scripts/orca-task-coordinator.mjs") &&
+    automaticCompletion.protected_paths.includes("scripts/validate-task-pr-lifecycle.mjs"),
   "automatic completion must be limited to small non-Decision changes",
 );
 expect(
-    packageJson.scripts?.["backlog:dispatchable"] ===
+  packageJson.scripts?.["backlog:dispatchable"] ===
       "node scripts/list-dispatchable-tasks.mjs" &&
+    packageJson.scripts?.["orchestration:coordinator"] ===
+      "node scripts/orca-task-coordinator.mjs" &&
     dispatchScript.includes('"--ready"') &&
     dispatchScript.includes("subtasks") &&
     dispatchScript.includes("maxTasks") &&
-    dispatchScript.includes("selectedTasks"),
-  "the dispatchable-task script must filter parents and bound the parallel batch",
+    dispatchScript.includes("selectedTasks") &&
+    coordinatorScript.includes('"worker-start"') &&
+    coordinatorScript.includes('"worker-release"') &&
+    coordinatorScript.includes('"worktree", "rm"') &&
+    coordinatorScript.includes("backlog:dispatchable") &&
+    coordinatorScript.includes("--body-file"),
+  "dispatch selection and the coordinator script must be present",
 );
 expect(
   lifecycle.pull_request.body_encoding_policy === "body_file_or_actual_newlines" &&
@@ -194,7 +230,8 @@ expect(
   "merge must require approval and current-head checks",
 );
 expect(
-  lifecycle.merge.strategy_must_be_explicit === true &&
+  lifecycle.merge.strategy === "squash" &&
+    lifecycle.merge.strategy_must_be_explicit === true &&
     lifecycle.merge.allow_automatic_merge === true &&
     lifecycle.merge.automatic_merge_requires_eligibility === true &&
     lifecycle.merge.automatic_mode_overrides_required_approval === true,
@@ -233,6 +270,13 @@ for (const phrase of [
   "runtime_unavailable",
   "never issue a second create",
   "coordinator's repository `main` worktree is read-only",
+  "configured Orca scheduled prompt",
+  "worker-start",
+  "worker_done",
+  "polls `pnpm run backlog:dispatchable`",
+  "commit and push",
+  "automatic merge",
+  "squash",
   "forbid_post_merge_backlog_updates",
   "explicit user approval",
   "current head SHA",

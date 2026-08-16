@@ -4,6 +4,7 @@
     "packageManager": "pnpm@11.21.0",
     "scripts": {
         "backlog:dispatchable": "node scripts/list-dispatchable-tasks.mjs",
+        "orchestration:coordinator": "node scripts/orca-task-coordinator.mjs",
         "validate:lifecycle": "node scripts/validate-task-pr-lifecycle.mjs"
     }
 }

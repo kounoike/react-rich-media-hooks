@@ -24,6 +24,14 @@ Before dispatching work, run `pnpm run backlog:dispatchable`. It filters ready
 parent tasks and reports up to three `selectedTasks` in priority and ordinal
 order for the next bounded parallel batch.
 
+The repository's Orca scheduled coordinator runs every five minutes in the
+main workspace. It executes `pnpm run orchestration:coordinator -- --once`,
+which polls settled `worker_done` results, creates and validates the Draft PR,
+uses the guarded automatic lane when eligible, squash-merges and cleans up the
+exact worker resources, fast-forwards a clean `main`, and starts the next ready
+leaf task batch through `orca orchestration worker-start`. A failed, uncertain,
+manual-review, or dirty-branch state is retained instead of being skipped.
+
 Worktree creation is single-flight per task. Create and poll each requested
 worktree to its final JSON result before creating the next one; after setup,
 worker sessions may run concurrently. Do not retry after an empty response,

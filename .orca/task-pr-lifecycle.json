@@ -58,6 +58,8 @@
           ".github/**",
           "package.json",
           "pnpm-lock.yaml",
+          "scripts/orca-task-coordinator.mjs",
+          "scripts/validate-task-pr-lifecycle.mjs",
           "backlog/decisions/**",
           "CHANGELOG.md",
           "release/**"
@@ -72,7 +74,28 @@
       "forbid_task_file_writes_from_main": true,
       "forbid_post_merge_backlog_updates": true,
       "task_record_owner": "worker_task_worktree_before_draft_pr",
-      "sync_policy": "fetch_or_fast_forward_only_when_main_is_clean"
+      "sync_policy": "fetch_or_fast_forward_only_when_main_is_clean",
+      "run_objective": "Repository task lifecycle coordinator",
+      "loop_command": "pnpm run orchestration:coordinator -- --once",
+      "poll_interval_seconds": 300,
+      "completion_trigger": "worker_done",
+      "worker_start_command": "orca orchestration worker-start",
+      "next_task_action": "dispatch_next_ready_leaf_after_successful_merge",
+      "unknown_state_action": "retain_artifacts_and_report"
+    },
+    "automation": {
+      "required": true,
+      "kind": "orca_scheduled_prompt",
+      "provider": "codex",
+      "trigger": "*/5 * * * *",
+      "timezone": "Asia/Tokyo",
+      "workspace": "repository_main",
+      "workspace_mode": "existing",
+      "session_policy": "fresh_per_run",
+      "prompt_command": "pnpm run orchestration:coordinator -- --once",
+      "precheck": "test -f .orca/task-pr-lifecycle.json",
+      "single_flight": true,
+      "no_candidate_action": "report_and_stop"
     },
     "states": {
       "initial": "dispatched",
@@ -171,7 +194,7 @@
       "required_approval": true,
       "required_checks": true,
       "checks_must_be_successful_for_current_head": true,
-      "strategy": "repository-approved-strategy",
+      "strategy": "squash",
       "strategy_must_be_explicit": true,
       "allow_automatic_merge": true,
       "automatic_merge_requires_eligibility": true,
