@@ -279,6 +279,16 @@ function mergedPrForBranch(branch) {
 }
 
 function removeOrphanWorktree(worktree, task, mergedPr) {
+    const terminals = terminalsForWorktree(worktree.id);
+    for (const terminal of terminals) {
+        const closed = orcaJson(["terminal", "close", "--terminal", terminal.handle], {
+            allowFailure: true,
+        });
+        if (!closed) {
+            log(`retaining ${task.id}: could not close terminal ${terminal.handle}`);
+            return false;
+        }
+    }
     if (worktree.branch) {
         const remote = command(
             "git",
@@ -298,16 +308,6 @@ function removeOrphanWorktree(worktree, task, mergedPr) {
                 log(`retaining ${task.id}: remote branch deletion was not confirmed`);
                 return false;
             }
-        }
-    }
-    const terminals = terminalsForWorktree(worktree.id);
-    for (const terminal of terminals) {
-        const closed = orcaJson(["terminal", "close", "--terminal", terminal.handle], {
-            allowFailure: true,
-        });
-        if (!closed) {
-            log(`retaining ${task.id}: could not close terminal ${terminal.handle}`);
-            return false;
         }
     }
     const removed = orcaJson(["worktree", "rm", "--worktree", `id:${worktree.id}`, "--force"], {
