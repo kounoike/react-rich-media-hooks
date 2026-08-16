@@ -67,6 +67,7 @@ expect(
     coordinator.completion_trigger === "worker_done" &&
     coordinator.completion_dispatch_source === "worker-list_task_id_join" &&
     coordinator.worker_start_command === "orca orchestration worker-start" &&
+    coordinator.poll_command === "pnpm run orchestration:coordinator -- --once" &&
     coordinator.next_task_action === "dispatch_next_ready_leaf_after_successful_merge" &&
     coordinator.unknown_state_action === "retain_artifacts_and_report" &&
     coordinator.retained_state_action === "report_and_continue_without_retry",
@@ -81,7 +82,7 @@ expect(
     automation.workspace === "repository_main" &&
     automation.workspace_mode === "existing" &&
     automation.session_policy === "reuse_session" &&
-    automation.prompt_command === "pnpm run orchestration:coordinator -- --loop" &&
+    automation.prompt_command === "pnpm run orchestration:coordinator -- --once" &&
     automation.precheck ===
       'wsl.exe -d Ubuntu-24.04 -- bash -lc "test -f /home/kounoike/ghq/github.com/kounoike/react-rich-media-hooks/.orca/task-pr-lifecycle.json"' &&
     automation.single_flight === true,
