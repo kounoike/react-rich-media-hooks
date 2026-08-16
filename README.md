@@ -23,6 +23,11 @@ not receive task-completion bookkeeping.
 Before dispatching work, run `pnpm run backlog:dispatchable`. It filters ready
 parent tasks and reports the single task that should be selected next.
 
+Worktree creation is single-flight. Poll the exact `orca-ide worktree create`
+session until its final JSON result; do not retry after an empty response,
+timeout, or `runtime_unavailable` until both Orca and Git worktree lists confirm
+that the requested target does not already exist.
+
 Orca and GitHub integrations enforce the external Run/Dispatch, approval,
 checks, merge, and exact cleanup operations. Failures, interruptions, rejected
 approvals, requested changes, and restarts retain the pull request, branch,

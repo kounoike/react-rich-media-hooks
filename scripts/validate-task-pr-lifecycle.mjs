@@ -39,6 +39,7 @@ const successPath = lifecycle.states.success_path;
 const retainedStates = lifecycle.states.retained_terminal_states;
 const coordinator = lifecycle.coordinator;
 const dispatchSelection = lifecycle.dispatch_selection;
+const worktreeCreation = lifecycle.worktree_creation;
 
 expect(policy.version === 1, "policy version must be 1");
 expect(lifecycle.id === "task-to-pr-review-cleanup", "lifecycle id is missing");
@@ -64,6 +65,18 @@ expect(
     dispatchSelection.no_candidate_action ===
       "report_and_stop_before_run_or_dispatch",
   "dispatch selection must require exactly one ready leaf task",
+);
+expect(
+  worktreeCreation.single_flight === true &&
+    worktreeCreation.poll_command_until_exit === true &&
+    worktreeCreation.indeterminate_results.join(",") ===
+      "empty_output,timeout,runtime_unavailable" &&
+    worktreeCreation.before_retry.join(",") ===
+      "orca_worktree_list,git_worktree_list" &&
+    worktreeCreation.retry_only_when_target_absent === true &&
+    worktreeCreation.duplicate_policy ===
+      "stop_and_reconcile_exact_target",
+  "worktree creation must be single-flight and polled before retry",
 );
 expect(
   packageJson.scripts?.["backlog:dispatchable"] ===
@@ -171,6 +184,10 @@ for (const phrase of [
   "Parent/roll-up tasks must never be dispatched directly",
   "do not create a Run, Dispatch, worktree, or worker",
   "artificial dependencies",
+  "Worktree creation is single-flight",
+  "poll that exact command session until it exits",
+  "runtime_unavailable",
+  "never issue a second create",
   "coordinator's repository `main` worktree is read-only",
   "forbid_post_merge_backlog_updates",
   "explicit user approval",

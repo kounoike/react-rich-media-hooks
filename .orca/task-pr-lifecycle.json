@@ -30,6 +30,14 @@
       "max_tasks": 1,
       "no_candidate_action": "report_and_stop_before_run_or_dispatch"
     },
+    "worktree_creation": {
+      "single_flight": true,
+      "poll_command_until_exit": true,
+      "indeterminate_results": ["empty_output", "timeout", "runtime_unavailable"],
+      "before_retry": ["orca_worktree_list", "git_worktree_list"],
+      "retry_only_when_target_absent": true,
+      "duplicate_policy": "stop_and_reconcile_exact_target"
+    },
     "coordinator": {
       "main_workspace_policy": "read_only_for_task_records",
       "require_clean_main_before_dispatch": true,
