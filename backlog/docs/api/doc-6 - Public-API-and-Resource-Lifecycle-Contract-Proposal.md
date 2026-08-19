@@ -3,7 +3,7 @@ id: doc-6
 title: Public API and Resource-Lifecycle Contract Proposal
 type: specification
 created_date: '2026-08-19 02:25'
-updated_date: '2026-08-19 02:29'
+updated_date: '2026-08-19 18:14'
 ---
 # Public API and Resource-Lifecycle Contract Proposal
 
@@ -167,7 +167,7 @@ The snapshot must include enough information for accessible application UI: a st
 | \`requesting\` + permission/device/constraint failure | \`ended\` or \`idle\` with \`denied\`, \`unavailable\`, or \`failed\` evidence | Any provisional or partial resource is cleaned |
 | \`requesting\` + cancel/stop/dispose | \`idle\`, \`ended\`, or \`disposed\` according to action | Late success is stopped/closed and never attached |
 | \`active\` + track \`mute\` | active capture with \`activity = muted\` | The session does not silently replace the device |
-| \`active\` + external track \`ended\` | \`ended\` or \`degraded\` with \`device-ended\` error | Owned resources are released; borrowed resources are only detached |
+| \`active\` + owned track \`ended\` | \`ended\` or \`degraded\` with \`device-ended\` error | Session-owned resources are released |
 | \`active\` + explicit replacement | current output remains active while replacement is \`requesting\` | Old owned input remains live until replacement is ready |
 | replacement succeeds | one output-change transition, new resource active | New resource is published before old owned resource is stopped |
 | replacement fails | current resource remains active when possible; operation error is visible | Failed replacement resources are cleaned; no silent device fallback |
@@ -176,7 +176,7 @@ The snapshot must include enough information for accessible application UI: a st
 | \`active\` + explicit \`stop\` | \`stopping\` then \`idle\`/ \`ended\` | All session-owned tracks and processor resources stop exactly once |
 | any non-disposed state + \`dispose\` | terminal \`disposed\` | Disposal is idempotent and invalidates every pending operation |
 
-A browser \`MediaStreamTrack.stop()\` call does not guarantee an \`ended\` event. The session therefore stops resources it owns directly and separately listens for external \`ended\`/mute changes. Repeated cleanup is harmless. A consumer should treat \`disposed\` as terminal and create a new session rather than reusing it.
+A browser \`MediaStreamTrack.stop()\` call does not guarantee an \`ended\` event. The session therefore stops resources it owns directly and separately listens for browser \`ended\`/mute changes. Repeated cleanup is harmless. A consumer should treat \`disposed\` as terminal and create a new session rather than reusing it.
 
 ### Output identity and replacement
 
@@ -188,13 +188,12 @@ interface MediaOutput {
   readonly track: MediaStreamTrack
   readonly stream: MediaStream
   readonly id: string
-  readonly ownership: 'session-owned' | 'borrowed' | 'application-owned-clone'
+  readonly ownership: 'session-owned' | 'application-owned-clone'
   clone(): MediaOutput
-  release(): Promise<void>
 }
 ~~~
 
-This is a proposal, not a final transfer model. Until the output alternative is approved, the intended safety rule is that attaching \`output.stream\` to a preview, recorder, or sender does not transfer ownership and detaching a consumer does not stop the session. An application needing an independent lifetime uses an explicit clone or an approved transfer operation. The session emits an output-change record whenever the current track changes; applications must reattach a preview or call their transport adapter's replacement operation as appropriate.
+This is a proposal, not a final output-lifetime model. Until the output alternative is approved, the intended safety rule is that attaching \`output.stream\` to a preview, recorder, or sender does not change session ownership and detaching a consumer does not stop the session. An application needing an independent lifetime uses clone(). The session emits an output-change record whenever the current track changes; applications must reattach a preview or call their transport adapter's replacement operation as appropriate.
 
 The core is transport-neutral:
 
@@ -289,19 +288,19 @@ Errors are observable through the snapshot and operation result. The contract sh
 
 ## Ownership, sharing, and cleanup
 
+Capture and processor inputs originate from the session’s own acquisition; applications configure capture through session actions and do not supply tracks directly.
+
 ### Ownership categories
 
 | Resource | Proposed default owner | Consumer rule |
 | --- | --- | --- |
 | Track/stream acquired by \`start()\` | Session | Only session disposal/stop stops it |
-| Input track/stream supplied by application | Application; borrowed by session | Session detaches/listens but never stops it |
-| Explicitly adopted input | Session after an explicit adoption call | Session may stop it after adoption is confirmed |
 | Processor-generated track, stream, canvas, AudioContext, worklet, worker, model/runtime handle | Session or processor instance | Owner closes/stops/releases it exactly once |
-| Output attached to preview, recorder, or sender | Still session-owned unless explicitly cloned/transferred | Consumer detach does not stop the source |
-| Application clone | Application | Application stops/releases its clone |
+| Output attached to preview, recorder, or sender | Session | Consumer detach does not stop the source |
+| Application clone of an output | Application | Application stops/releases its clone |
 | Shared session subscription | Subscriber has no resource ownership | Unsubscribe only removes the observer |
 
-Ownership is not inferred from \`srcObject\`, \`addTrack\`, React mount identity, or whether a track was cloned. A clone gives an independent track lifetime but does not automatically transfer ownership of the source or processing graph.
+Ownership is explicit: the session owns acquired and generated media and processing resources, while a consumer’s React mount or output attachment does not change that ownership. An application clone has an independent track lifetime; stopping it does not stop the session’s source or processing graph.
 
 ### Sharing
 
@@ -344,7 +343,7 @@ Automatic reference counting tied to React subscriptions is not proposed as the 
 - disconnect \`AudioNode\` graphs and close owned \`AudioContext\` objects;
 - terminate workers and release model/runtime resources;
 - revoke object URLs created by the session;
-- leave borrowed application tracks and application-owned clones live;
+- leave application-owned output clones under application control;
 - make late completions harmless after stop/dispose.
 
 The quality contract's inactive-resource invariant is the acceptance test: an inactive session leaves no library-owned live track, context, animation loop, worker, GPU task, or sustained processing.
@@ -558,12 +557,12 @@ The following alternatives are intentionally presented rather than silently reso
 
 | Option | Benefits | Costs and failure modes |
 | --- | --- | --- |
-| Standard current track/stream plus semantic output-change event (recommended for review) | Works with preview, recorder, WebRTC, canvas, and Web Audio; preserves implementation freedom | Consumers must handle replacement and transport-specific gaps; explicit clone/transfer rules are needed |
+| Standard current track/stream plus semantic output-change event (recommended for review) | Works with preview, recorder, WebRTC, canvas, and Web Audio; preserves implementation freedom | Consumers must handle replacement and transport-specific gaps; explicit clone lifetime rules are needed |
 | Opaque effect handle | Maximum internal freedom | Bespoke adapters for every consumer; conflicts with standard-object interop goal |
 | Stable track identity through in-place processing | Fewer reattachments | Not available for every backend/browser; can hide gaps and complicate processor replacement |
 | New track on every replacement | Honest and broadly implementable | Preview/sender/recorder consumers must reattach or replace; may cause gaps |
 
-For ownership, the proposal favors “session owns acquired/created resources; supplied inputs are borrowed; output handoff is not ownership transfer unless explicit.” Automatic cloning/reference counting remains an alternative because it can simplify consumer isolation but risks hidden retention and surprising stop timing.
+For ownership, the proposal favors “the session owns acquired and generated resources; output attachments do not change ownership; explicit application-owned output clones have independent lifetimes.” Automatic cloning/reference counting remains an alternative because it can simplify consumer isolation but risks hidden retention and surprising stop timing.
 
 ### Processor readiness and failure
 
@@ -590,7 +589,7 @@ The implementation must settle every operation deterministically, but the exact 
 The following questions must be answered explicitly before this proposal becomes a public contract or a new accepted Decision:
 
 1. **Primary composition surface:** approve controller core + thin hooks + optional provider, or choose hooks-only/provider-only/controller-only.
-2. **Output ownership:** approve session-owned standard outputs with explicit clone/transfer, or choose a different transfer/default model.
+2. **Output ownership:** approve session-owned standard outputs with explicit clone/lifetime rules, or choose a different default model.
 3. **Track identity:** approve output-change events with potentially new tracks, or require a stable track strategy where feasible.
 4. **Processor failure policy:** choose bypass, buffer, fail-closed, or a per-effect policy as the default.
 5. **Operation settlement:** choose tagged results, typed rejection, or both for cancellation/supersession.
@@ -618,7 +617,7 @@ This proposal should be reviewed against the same deterministic fixtures used by
 - stale acquisition and processor completions after cancel, replacement, unmount, and dispose;
 - Strict Mode setup/cleanup/setup with no stale attachment or leak;
 - one shared session versus deliberately independent sessions;
-- borrowed input preservation and owned output cleanup;
+- session-owned input/output cleanup and application-clone isolation;
 - replacement success/failure with preview, recorder, and sender adapters;
 - independently failing video/audio processors;
 - SSR import, server snapshot, hydration parity, and no browser-global access at module evaluation;
