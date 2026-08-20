@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-13 20:31'
-updated_date: '2026-08-19 18:21'
+updated_date: '2026-08-20 15:08'
 labels: []
 dependencies:
   - TASK-1.3
@@ -15,10 +15,12 @@ dependencies:
   - TASK-1.17
 references:
   - doc-6
+  - decision-2
 modified_files:
+  - backlog/docs/api/doc-6 - Public-API-and-Resource-Lifecycle-Contract.md
   - >-
-    backlog/docs/api/doc-6 -
-    Public-API-and-Resource-Lifecycle-Contract-Proposal.md
+    backlog/decisions/decision-2 -
+    Accept-the-public-API-and-resource-lifecycle-contract.md
 parent_task_id: TASK-1
 priority: high
 type: task
@@ -44,7 +46,7 @@ Turn validated browser and React constraints into a coherent consumer-facing con
 ## Implementation Plan
 
 <!-- SECTION:PLAN:BEGIN -->
-1. Restore the historical structured TASK-1.7 notes/evidence/final sections from parent commit 7105ea0 through the Backlog CLI, preserving unrelated lifecycle evidence and history while superseding only stale caller-input ownership/adoption/transfer wording. 2. Keep the already narrowed doc-6 unchanged, explicitly unapproved, and without a new Decision; verify TASK-1.7 and PR #14 records remain coherent. 3. Run lifecycle, dispatchable, document/decision, whitespace, task-record, and remote checks; finalize only TASK-1.7, commit the corrective record recovery with a Conventional Commit, push, and verify a clean narrow diff.
+1. Record the user's explicit approval against existing decision-1, doc-6, TASK-1.7, and PR #14, and confirm the Backlog CLI limitation for Decision body fields. 2. Create one accepted Decision through the Backlog CLI, fill only its required body sections via the narrowly allowed new-Decision exception while preserving frontmatter exactly, and link it to TASK-1.7/doc-6. 3. Update doc-6 through backlog doc update to make the approved controller, ownership, output, replacement, processor, operation, release-scope, SSR, and approval-residual choices normative while retaining implementation-reviewable exact names and the no-external-input scope. 4. Update TASK-1.7 through the Backlog CLI with the Decision reference, approval and CLI evidence, final summary, acceptance verification, and Done status; run checks, commit the scoped records, push PR #14, and verify clean state without merging.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -798,6 +800,14 @@ No implementation files or production exports are changed by this proposal. The 
 Historical validation continuity: Only accepted decision-1 exists; no new significant API or architecture decision was created. The proposal remains explicitly unapproved pending user review, satisfying the approval boundary rather than inferring acceptance.
 
 Recovery validation 2026-08-20: Restored the parent structured notes/evidence/final sections through the Backlog CLI and compared the resulting task record with 7105ea0; unrelated lifecycle, React, SSR, fixture, and approval-boundary evidence is retained, while the embedded doc-6 content reflects the current narrowed proposal. pnpm run validate:lifecycle, pnpm run backlog:dispatchable, node --check/run experiments/capture-lifecycle/run.mjs (41 assertions), backlog document/decision checks, git diff --check, task-structure checks, and PR #14 metadata checks passed.
+
+Approval and Decision evidence 2026-08-20: The user explicitly approved the narrowed TASK-1.7 recommendations: controller core with thin hooks/optional provider; session-owned acquired/generated resources; standard track/stream outputs with output-change events; application-owned output clones; stable session identity with visible replacement changes; independent video/audio processor domains; bypass-to-original as the recoverable default; tagged cancellation/supersession results; first-party effect factories only; and SSR-safe browser-only activation with Node/React Native out of scope. The no-caller-input, no-borrowed-ownership, and no-input-adoption/transfer boundary remains preserved.
+
+Decision CLI limitation 2026-08-20: backlog --version reports 1.50.1; backlog decision --help and backlog decision create --help expose only Decision title/status creation and no body-section input/update fields. Created accepted decision-2 through the CLI, then used the narrowly allowed direct-edit exception only for its new body sections; frontmatter remained unchanged. Required body sections Context, Decision Drivers, Considered Options, Decision, Consequences, and Related Tasks are non-empty and reference TASK-1.7/doc-6; no Supersedes section applies because decision-1 remains in force.
+
+Validation 2026-08-20: Objective checks passed after recording approval: pnpm run validate:lifecycle (OK); pnpm run backlog:dispatchable (OK; TASK-1.7 is not dispatchable); node --check experiments/capture-lifecycle/run.mjs (OK); node experiments/capture-lifecycle/run.mjs (CAPTURE_LIFECYCLE_EXPERIMENT_PASS; 41 assertions); git diff --check (OK). Document/Decision checks passed: backlog doc list includes doc-6 Public API and Resource-Lifecycle Contract; backlog decision list shows decision-1 and accepted decision-2; decision-2 frontmatter is unchanged and all required body sections are non-empty; doc-6 accepted status, decision-2 reference, implementation-reviewable residuals, and no-external-input boundary are present. backlog doctor reports the pre-existing duplicate doc-5 IDs in unrelated research directories; no unrelated records were changed.
+
+Final wording validation 2026-08-20: Updated doc-6 through backlog doc update to replace residual “remains open” wording with explicit implementation-reviewable language while preserving all accepted semantic choices. Re-ran lifecycle, dispatchable, fixture (41 assertions), document/Decision, frontmatter/body, working-tree and staged git diff checks successfully; TASK-1.7 remains Done and no merge was performed.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
@@ -819,5 +829,5 @@ Applying the user-approved scope narrowing to PR #14: remove only the external-i
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Restored the historical TASK-1.7 structured notes and validation evidence from parent commit 7105ea0 through the Backlog CLI, preserving lifecycle, React, SSR, fixture, and approval-boundary history while keeping the current narrowed doc-6 content. The user-approved narrowing supersedes only the caller-supplied capture-input ownership and adoption/transfer references; the proposal remains explicitly unapproved, standard outputs and processor cleanup remain in scope, and no new Backlog Decision was created. Verified all six acceptance criteria, the restored task evidence, pnpm run validate:lifecycle, pnpm run backlog:dispatchable, node --check and run experiments/capture-lifecycle/run.mjs (41 assertions), backlog document/decision checks, git diff --check, and PR #14 metadata.
+Recorded the user's explicit approval in accepted decision-2 and updated doc-6 to the accepted semantic contract: framework-neutral controller core with thin React hooks/optional provider, session-owned resources, standard outputs and output-change events, independent application-owned clones, replacement-visible identity changes, independent processors with bypass default, tagged cancellation/supersession results, first-party-only effects, and SSR-safe browser activation. Preserved the no-caller-input, no-borrowed-ownership, no-input-adoption/transfer boundary and kept exact exports/types implementation-reviewable; TASK-1.7 references decision-2 and records the CLI body-field limitation and allowed new-Decision body fill. Verified all six acceptance criteria, lifecycle, dispatchable, document/decision, fixture (41 assertions), frontmatter/body, and git diff checks; the duplicate doc-5 diagnostic is pre-existing and unrelated, and PR #14 remains unmerged.
 <!-- SECTION:FINAL_SUMMARY:END -->

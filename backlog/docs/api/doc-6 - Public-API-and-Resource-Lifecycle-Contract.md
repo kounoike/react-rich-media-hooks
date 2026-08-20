@@ -1,21 +1,22 @@
 ---
 id: doc-6
-title: Public API and Resource-Lifecycle Contract Proposal
+title: Public API and Resource-Lifecycle Contract
 type: specification
 created_date: '2026-08-19 02:25'
-updated_date: '2026-08-19 18:14'
+updated_date: '2026-08-20 15:07'
 ---
-# Public API and Resource-Lifecycle Contract Proposal
+# Public API and Resource-Lifecycle Contract
 
-Status: Proposal for explicit user review; not an accepted public API, compatibility contract, or architecture decision.
+Status: Accepted semantic public API and resource-lifecycle contract; exact exports and type spellings remain implementation-reviewable.
 Date: 2026-08-19 (Asia/Tokyo)
 Task: TASK-1.7 — Define the public API and resource-lifecycle contract
+Decision: [decision-2 — Accept the public API and resource-lifecycle contract](../../decisions/decision-2 - Accept-the-public-API-and-resource-lifecycle-contract.md)
 
 ## Authority and evidence boundary
 
 The accepted baseline is decision-1 / [Initial Product and Quality Contract](../product/initial-product-quality-contract/doc-1 - Initial-Product-and-Quality-Contract.md): a headless React library for local camera and microphone capture, first-party video and audio effects, standard browser media interoperability, React 18.2/19, modern evergreen desktop browsers, and SSR-safe imports. That baseline deliberately does not choose the public API shape, processor runtime, worker strategy, acceleration path, output identity, or internal transform order.
 
-This document turns the completed evidence work into a consumer-facing contract proposal. The words “must”, “should”, and “may” below describe the proposal submitted for approval; they do not make a significant API or architecture choice accepted. The proposal is based on:
+This document records the accepted semantic contract for consumers and implementers. The words “must”, “should”, and “may” below describe accepted behavior; exact export names, generic parameters, and type spellings remain implementation-reviewable. The contract is based on:
 
 - doc-2, Public API Ecosystem Prior Art (TASK-1.16);
 - doc-3, Media Output and Transport Interoperability (TASK-1.17);
@@ -24,11 +25,11 @@ This document turns the completed evidence work into a consumer-facing contract 
 - Browser Audio Processing Feasibility (TASK-1.5);
 - the browser and React boundaries accepted in doc-1.
 
-No new Backlog.md Decision is created by this document because the user has not explicitly accepted any of the alternatives below. Once the user chooses a significant option, the choice must be recorded with \`backlog decision create\` before dependent implementation treats it as normative.
+Decision-2 records the user-approved choices below; decision-1 remains the accepted product and quality baseline. Any later material change to this contract must be reviewed and recorded with \`backlog decision create\` before dependent implementation treats it as normative.
 
 ## Contract goals and non-goals
 
-The proposed contract lets an application:
+The accepted contract lets an application:
 
 1. explicitly start, stop, retry, switch, and release local media;
 2. observe capture, processor, output, and error state without inferring it from a video element;
@@ -40,13 +41,13 @@ The proposed contract lets an application:
 
 The contract does not include product UI, WebRTC signaling/rooms, recording/transcoding/storage, cloud processing, React Native, Node-side media processing, arbitrary model tensors, or a guarantee that every browser exposes the same processing backend. Effect implementation order, model/runtime selection, worker placement, and acceleration remain replaceable behind the semantic boundary.
 
-## Proposed consumer model
+## Consumer model
 
 ### Stable session identity outside render
 
-The proposal uses one framework-neutral session/controller as the resource owner. A React hook subscribes to an immutable snapshot; it does not create or acquire media during render.
+The accepted contract uses one framework-neutral session/controller as the resource owner. A React hook subscribes to an immutable snapshot; it does not create or acquire media during render.
 
-Illustrative names and TypeScript shapes are intentionally provisional:
+Illustrative names and TypeScript shapes are implementation-reviewable semantic sketches:
 
 ~~~ts
 type MediaKind = 'video' | 'audio'
@@ -69,7 +70,7 @@ interface MediaSession {
 }
 ~~~
 
-The final names, generic parameters, and exact return types require user approval and implementation-driven type review. The important proposed properties are stable session identity, explicit actions, observable snapshots, standard outputs, and an idempotent terminal \`dispose()\`.
+The semantic choices are accepted; final names, generic parameters, exact return types, and promise signatures remain subject to implementation-driven type review and are not silently final. The accepted properties are stable session identity, explicit actions, observable snapshots, standard outputs, and an idempotent terminal \`dispose()\`.
 
 A session has one explicit owner. Subscribers are observers, not owners: subscribing or unsubscribing never starts or stops capture. The owner decides when the session ends. An optional React provider can make one session available to a subtree, but context is an adapter and not the resource identity.
 
@@ -193,7 +194,7 @@ interface MediaOutput {
 }
 ~~~
 
-This is a proposal, not a final output-lifetime model. Until the output alternative is approved, the intended safety rule is that attaching \`output.stream\` to a preview, recorder, or sender does not change session ownership and detaching a consumer does not stop the session. An application needing an independent lifetime uses clone(). The session emits an output-change record whenever the current track changes; applications must reattach a preview or call their transport adapter's replacement operation as appropriate.
+The accepted output-lifetime rule is that attaching \`output.stream\` to a preview, recorder, or sender does not change session ownership and detaching a consumer does not stop the session. An application needing an independent lifetime uses clone(), which is application-owned and independent. The session emits an output-change record whenever the current track changes; applications must reattach a preview or call their transport adapter's replacement operation as appropriate.
 
 The core is transport-neutral:
 
@@ -229,7 +230,7 @@ controller.abort() // logical cancellation; camera-b may still resolve later
 await pending // resolves as cancelled/superseded or rejects with a stable aborted error
 ~~~
 
-The exact promise settlement convention (resolve with a tagged result versus reject with \`MediaError\`) is an unresolved API choice. Whichever convention is selected, stale operations must not produce unhandled rejections or overwrite a newer snapshot.
+Operation results use tagged cancellation/supersession semantics. Exact result type names and promise signatures remain implementation-reviewable, but stale operations must not produce unhandled rejections or overwrite a newer snapshot.
 
 ### Overlapping requests
 
@@ -284,7 +285,7 @@ interface MediaError {
 
 The category mapping preserves the original \`DOMException.name\` (for example \`NotAllowedError\`, \`NotFoundError\`, \`NotReadableError\`, or \`OverconstrainedError\`) without making browser-specific names the only public contract. Processor/runtime failures preserve an implementation cause for diagnostics but do not require consumers to understand a model, worker, or worklet type. A cancelled or superseded operation does not replace a newer successful snapshot.
 
-Errors are observable through the snapshot and operation result. The contract should also support an optional diagnostic callback/event stream, but the callback shape and logging policy remain open. No telemetry or media upload occurs by default.
+Errors are observable through the snapshot and operation result. The contract should also support an optional diagnostic callback/event stream, but the callback shape and logging policy remain implementation-reviewable. No telemetry or media upload occurs by default.
 
 ## Ownership, sharing, and cleanup
 
@@ -292,7 +293,7 @@ Capture and processor inputs originate from the session’s own acquisition; app
 
 ### Ownership categories
 
-| Resource | Proposed default owner | Consumer rule |
+| Resource | Default owner | Consumer rule |
 | --- | --- | --- |
 | Track/stream acquired by \`start()\` | Session | Only session disposal/stop stops it |
 | Processor-generated track, stream, canvas, AudioContext, worklet, worker, model/runtime handle | Session or processor instance | Owner closes/stops/releases it exactly once |
@@ -329,7 +330,7 @@ function Preview() {
 
 Both consumers observe one acquisition. Unmounting \`Preview\` or \`StatusAnnouncer\` only unsubscribes that consumer. The session remains live until its explicit owner calls \`stop()\` or \`dispose()\`. An application that wants independent capture creates two sessions deliberately; the library must not deduplicate unrelated sessions or prompt twice through accidental per-component hooks.
 
-Automatic reference counting tied to React subscriptions is not proposed as the default because provider remounts and transient Strict Mode subscriptions can retain or stop hardware unexpectedly. A future scoped-lifetime helper may be added only with explicit semantics and leak tests.
+Automatic reference counting tied to React subscriptions is not accepted as the default because provider remounts and transient Strict Mode subscriptions can retain or stop hardware unexpectedly. A future scoped-lifetime helper may be added only with explicit semantics and leak tests.
 
 ### Cleanup requirements
 
@@ -374,7 +375,7 @@ interface AudioProcessor {
 }
 ~~~
 
-These are illustrative extension boundaries, not a decision to expose arbitrary processor classes in the first release. The critical contract is:
+These processor boundaries describe independent session-to-processor lifecycle semantics; the initial release exposes first-party effect factories only rather than arbitrary processor classes. The critical contract is:
 
 - each media kind can load, activate, bypass, fail, retry, replace, and dispose independently;
 - a video processor never owns or stops an audio input, and vice versa;
@@ -389,13 +390,13 @@ An application can therefore enable video effects while audio remains pass-throu
 
 ### Bypass and degraded behavior
 
-A processor's readiness is observable. During loading, the session may expose the original track as \`bypassed\` when continuity is preferred. On unsupported capability or recoverable failure, the application sees \`unsupported\`, \`degraded\`, or \`failed\` plus the error code; it does not receive a silent substitution of another device. Whether bypass is the default for each first-party effect is an explicit approval question because fail-open improves continuity while fail-closed can be required by some products.
+A processor's readiness is observable. During loading, the session may expose the original track as \`bypassed\` when continuity is preferred. On unsupported capability or recoverable failure, the application sees \`unsupported\`, \`degraded\`, or \`failed\` plus the error code; it does not receive a silent substitution of another device. Bypass to the original media is the accepted default for recoverable first-party processor loading/failure because it preserves continuity; effect-specific fail-closed policy remains implementation-reviewable when required by a product.
 
 The contract never promises that a processor can preserve the same underlying track identity. An output-change event is required whenever a generated track replaces the current track.
 
 ## React adapter contract
 
-The proposed React adapter is thin and uses \`useSyncExternalStore\` semantics:
+The accepted React adapter is thin and uses \`useSyncExternalStore\` semantics:
 
 ~~~tsx
 function PreviewAndControls({ session }: { session: MediaSession }) {
@@ -420,7 +421,7 @@ function PreviewAndControls({ session }: { session: MediaSession }) {
 }
 ~~~
 
-The final hook overloads and ref helper are open. The behavioral requirements are normative for review:
+The final hook overloads and ref helper remain implementation-reviewable. The behavioral requirements are normative for review:
 
 - no acquisition, processor initialization, or mutable resource creation during render;
 - stable subscription and server snapshot for SSR;
@@ -481,7 +482,7 @@ async function chooseCamera(deviceId: string, signal: AbortSignal) {
 }
 ~~~
 
-If camera A is active while camera B is pending, camera A remains usable. A later camera C request supersedes B; any late B stream is stopped and never attached. The exact tagged-result versus rejected-promise spelling remains open, but the stale-resource invariant is fixed.
+If camera A is active while camera B is pending, camera A remains usable. A later camera C request supersedes B; any late B stream is stopped and never attached. The exact tagged-result versus rejected-promise spelling remains implementation-reviewable, but the stale-resource invariant is fixed.
 
 #### Multiple consumers
 
@@ -532,7 +533,7 @@ The adapter must tolerate development setup/cleanup/setup. It must not acquire i
 
 The package's public entry points must be import-safe when \`window\`, \`document\`, \`navigator\`, \`MediaStream\`, \`AudioContext\`, \`Worker\`, and \`URL.createObjectURL\` are absent. Module evaluation must not request permissions, touch media devices, create workers/worklets, load model assets, or access browser-only constructors.
 
-Constructing a session on the server is safe if it creates only inert data/controller state. The server snapshot is stable \`idle\` with browser environment marked unavailable; calling \`start()\` server-side returns a stable \`unsupported\`/environment error and creates no media resources. A package may instead reject server-side construction, but that alternative has a larger SSR integration cost and is not the preferred proposal.
+Constructing a session on the server is safe if it creates only inert data/controller state. The server snapshot is stable \`idle\` with browser environment marked unavailable; calling \`start()\` server-side returns a stable \`unsupported\`/environment error and creates no media resources. This SSR-safe behavior is normative for the initial release.
 
 ### Hydration and browser activation
 
@@ -540,9 +541,9 @@ After hydration, capture and processing begin only from an explicit client actio
 
 Secure context, top-level/iframe Permissions Policy, user gesture requirements, browser capability checks, and model/worklet/worker CSP/CORS requirements are surfaced as \`unsupported\`, \`permission-denied\`, or \`asset-load-failed\` evidence. No Node media-processing fallback is implied. Client-only adapter entry points may be offered for bundlers, but the base import must remain safe.
 
-## API alternatives and tradeoffs for explicit user review
+## Accepted choices and implementation-reviewable residuals
 
-The following alternatives are intentionally presented rather than silently resolved.
+The following alternatives record the reviewed tradeoffs. Choices marked accepted are normative semantic direction; exact export/type spellings and backend details remain implementation-reviewable.
 
 ### Composition surface
 
@@ -551,68 +552,68 @@ The following alternatives are intentionally presented rather than silently reso
 | Hooks-only (\`useMediaSession(config)\`) | Minimal JSX and quick adoption | Resource identity follows component lifecycle; hard to share with non-React consumers; Strict Mode and remount races become hook internals |
 | Provider/store only | Natural sharing and selectors | Provider remount can destroy expensive resources; non-React use is awkward; context becomes an accidental ownership contract |
 | Imperative controller only | Clear lifetime, framework-neutral tests, easy non-React use | More boilerplate in React; consumers must wire subscriptions and output attachment |
-| Controller core + thin hooks, optional provider (recommended for review) | Stable ownership outside render, React-friendly subscriptions, shared subtree, future framework adapters | More types and lifecycle documentation; provider ownership/disposal rules must be explicit |
+| Controller core + thin hooks, optional provider (accepted) | Stable ownership outside render, React-friendly subscriptions, shared subtree, future framework adapters | More types and lifecycle documentation; provider ownership/disposal rules must be explicit |
 
 ### Output and ownership
 
 | Option | Benefits | Costs and failure modes |
 | --- | --- | --- |
-| Standard current track/stream plus semantic output-change event (recommended for review) | Works with preview, recorder, WebRTC, canvas, and Web Audio; preserves implementation freedom | Consumers must handle replacement and transport-specific gaps; explicit clone lifetime rules are needed |
+| Standard current track/stream plus semantic output-change event (accepted) | Works with preview, recorder, WebRTC, canvas, and Web Audio; preserves implementation freedom | Consumers must handle replacement and transport-specific gaps; explicit clone lifetime rules are needed |
 | Opaque effect handle | Maximum internal freedom | Bespoke adapters for every consumer; conflicts with standard-object interop goal |
 | Stable track identity through in-place processing | Fewer reattachments | Not available for every backend/browser; can hide gaps and complicate processor replacement |
 | New track on every replacement | Honest and broadly implementable | Preview/sender/recorder consumers must reattach or replace; may cause gaps |
 
-For ownership, the proposal favors “the session owns acquired and generated resources; output attachments do not change ownership; explicit application-owned output clones have independent lifetimes.” Automatic cloning/reference counting remains an alternative because it can simplify consumer isolation but risks hidden retention and surprising stop timing.
+The accepted ownership rule is “the session owns acquired and generated resources; output attachments do not change ownership; explicit application-owned output clones have independent lifetimes.” Automatic cloning/reference counting remains a possible future helper but is not the default because it can introduce hidden retention and surprising stop timing.
 
 ### Processor readiness and failure
 
 | Option | Benefits | Costs and failure modes |
 | --- | --- | --- |
-| Bypass to original media while loading/failing (recommended for review) | Preserves continuity and supports graceful degradation | Briefly exposes unprocessed media; may violate an application's effect-required policy |
+| Bypass to original media while loading/failing (accepted default) | Preserves continuity and supports graceful degradation | Briefly exposes unprocessed media; may violate an application's effect-required policy |
 | Buffer until processed output | Avoids unprocessed exposure | Startup latency, memory pressure, and visible/audio gap |
 | Fail closed (no output/silence/black) | Strongest guarantee that processed output is never bypassed | Poor recovery and can turn a capability gap into an unusable product |
 
-The consumer contract can expose a per-effect policy, but the default requires explicit user approval.
+The bypass-to-original default is accepted; per-effect policy details and fail-closed opt-ins remain implementation-reviewable.
 
 ### Operation settlement
 
 | Option | Benefits | Costs and failure modes |
 | --- | --- | --- |
-| Tagged result for cancellation/supersession (recommended for review) | Normal control flow; avoids expected aborts becoming unhandled errors | More result types and call-site branching |
+| Tagged result for cancellation/supersession (accepted) | Normal control flow; avoids expected aborts becoming unhandled errors | More result types and call-site branching |
 | Reject with typed \`MediaError\` | Familiar async failure shape | Expected overlap/cancel paths can create noisy unhandled rejections; callers must distinguish stale from real failure |
 | Both tagged result and optional rejection | Flexible migration | Duplicated semantics and harder documentation/testing |
 
-The implementation must settle every operation deterministically, but the exact promise spelling is unresolved.
+Tagged cancellation/supersession results are accepted; exact promise spelling and result type names remain implementation-reviewable and must preserve deterministic settlement.
 
-## Open questions and required approval
+## Accepted contract and implementation-reviewable residuals
 
-The following questions must be answered explicitly before this proposal becomes a public contract or a new accepted Decision:
+The following semantic choices are accepted by decision-2 and must guide implementation:
 
-1. **Primary composition surface:** approve controller core + thin hooks + optional provider, or choose hooks-only/provider-only/controller-only.
-2. **Output ownership:** approve session-owned standard outputs with explicit clone/lifetime rules, or choose a different default model.
-3. **Track identity:** approve output-change events with potentially new tracks, or require a stable track strategy where feasible.
-4. **Processor failure policy:** choose bypass, buffer, fail-closed, or a per-effect policy as the default.
-5. **Operation settlement:** choose tagged results, typed rejection, or both for cancellation/supersession.
-6. **First-release extension scope:** confirm whether first-party effect factories only are sufficient, or whether a public custom processor/plugin contract is required now.
-7. **Exact names and type surface:** approve the final exports and state/error discriminants after implementation type review.
-8. **Compatibility declaration:** confirm that SSR-safe import plus browser-only activation is required for the initial package and that Node/React Native remain out of scope.
+1. **Composition surface:** framework-neutral controller core with thin React hooks and an optional provider.
+2. **Ownership and outputs:** the session owns acquired/generated resources; standard track/stream outputs expose output-change events; application-owned output clones have independent lifetimes; no caller-supplied capture input, borrowed ownership, input adoption, or input transfer surface exists.
+3. **Track identity:** session identity remains stable while replacement-visible track changes are reported through output-change events.
+4. **Processor policy:** bypass to original media is the default recoverable behavior, with observable bypassed/degraded/unsupported/failed state and error evidence.
+5. **Operation settlement:** tagged results distinguish cancellation and supersession from failure.
+6. **Initial release scope:** first-party effect factories only; a generic processor/plugin contract is deferred.
+7. **Exact names and type surface:** export names, generic parameters, discriminants, promise signatures, and internal processor interfaces remain implementation-reviewable and are not silently final.
+8. **Compatibility:** SSR-safe import and inert server behavior are required; browser-only activation is explicit; Node and React Native remain out of scope.
 
-Until these are answered, implementation may use disposable internal names in experiments but must not publish them as stable exports. If approval changes scope, create a follow-up task for the changed work rather than silently expanding TASK-1.7.
+Implementation may choose validated backends, worker/runtime placement, transform order, and transport adapters within these semantics. A material change to an accepted choice requires explicit user review and a new or superseding Decision; exact names must be settled through implementation type review before publication.
 
 ## Acceptance-criteria evidence map
 
-| Criterion | Evidence in this proposal |
+| Criterion | Evidence in this contract |
 | --- | --- |
 | #1 States, transitions, cancellation, errors, retries, ownership | Snapshot/state definitions, transition table, generation-based cancellation, typed error categories, explicit retry rules, ownership matrix, sharing and cleanup sections. |
 | #2 React examples | Examples cover composition, stable rerendering, overlapping requests/cancellation, multiple consumers, unmounting, and development Strict Mode. |
 | #3 Independent extension boundaries | Separate video/audio lifecycle contracts, semantic effect configuration, independent failures/retries, standard per-kind outputs, and replaceable backend rules. |
 | #4 SSR/non-browser behavior | Import/constructor/browser-global rules, inert server snapshot, hydration activation, secure-context/Permissions Policy/CSP errors, and no Node fallback. |
-| #5 Decisions and unresolved questions | The only accepted baseline is decision-1; no new significant choice is accepted here. Open questions 1-8 are tracked in this proposal and must be resolved by user approval or follow-up tasks. |
-| #6 Alternatives and approval gate | Composition, output/ownership, processor failure, and operation-settlement alternatives include tradeoffs; status and authority explicitly require user acceptance before this proposal becomes normative. |
+| #5 Decisions and implementation residuals | Decision-1 remains the accepted product baseline and decision-2 records the approved API/lifecycle semantics; exact names and type spellings remain implementation-reviewable residuals. |
+| #6 Alternatives and approval gate | The reviewed alternatives and tradeoffs are retained, decision-2 records explicit user approval, and only exact names/type spellings and implementation details remain implementation-reviewable. |
 
 ## Validation and follow-up
 
-This proposal should be reviewed against the same deterministic fixtures used by TASK-1.3, plus processor/output fixtures from TASK-1.4 and TASK-1.5. Before a final contract is accepted, tests must cover:
+The accepted contract should be validated against the same deterministic fixtures used by TASK-1.3, plus processor/output fixtures from TASK-1.4 and TASK-1.5. Before implementation is released, tests must cover:
 
 - stale acquisition and processor completions after cancel, replacement, unmount, and dispose;
 - Strict Mode setup/cleanup/setup with no stale attachment or leak;
@@ -623,4 +624,4 @@ This proposal should be reviewed against the same deterministic fixtures used by
 - SSR import, server snapshot, hydration parity, and no browser-global access at module evaluation;
 - five start/stop cycles and inactive resource/retained-memory invariants.
 
-No implementation files or production exports are changed by this proposal. The next action is explicit user review; after approval, update TASK-1.7 through the Backlog CLI, create/supersede the required Decision, and then implement only the approved contract.
+No implementation files or production exports are changed by this contract-recording Decision. Implementation may proceed only within the accepted semantics; exact exports/types require implementation review, and any material scope change requires explicit user approval and a follow-up or superseding Decision.
