@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-13 21:15'
-updated_date: '2026-08-30 23:15'
+updated_date: '2026-08-30 23:17'
 labels: []
 dependencies:
   - TASK-1.8
@@ -71,10 +71,12 @@ Follow-up authorized by the user on 2026-08-31: adopt the release/versioning/cha
 Adoption update 2026-08-31: created accepted decision-6 through Backlog CLI after searching current Decisions; filled only its required body sections under the documented new-Decision body exception, preserving decision-6 frontmatter exactly. decision-6 adopts the tagpr-led release/versioning/changelog contract and explicitly supersedes the branch-local proposed release decision-4 without changing mainline decision-4 or accepted decision-5. Created replacement doc-9 through Backlog CLI with the substantive title Release, Versioning, and Changelog Contract, converted proposal wording to adopted-contract wording, and retargeted TASK-1.21 to doc-9/decision-6.
 
 Final validation 2026-08-31: removed only the branch-local `decision-4 - Propose-the-release-versioning-and-changelog-contract.md` after verifying origin/main decision-4 and decision-5 metadata/content; `backlog decision list --plain` now has one decision-4 (mainline), accepted decision-5, and accepted decision-6. `backlog doc view doc-9 --plain`, targeted Decision/doc frontmatter and required-section assertions, and PR body newline/state assertions passed. `backlog doctor` reports only the pre-existing duplicate document IDs (doc-5, doc-6, and historical doc-8); no duplicate decision ID remains. `pnpm run validate:lifecycle`, `pnpm run backlog:dispatchable`, and `git diff --check` passed. PR #18 title/body now propose merging accepted decision-6/doc-9 and remains OPEN Draft.
+
+Scoped document-collision cleanup 2026-08-31: removed only the superseded branch-local release doc-8 proposal after creating and retargeting the adopted contract to doc-9; mainline toolchain doc-8 remains unchanged. The remaining backlog doctor document-ID diagnostics are the pre-existing unrelated doc-5/doc-6 duplicates.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Adopted the release, versioning, and changelog contract through accepted decision-6 and canonical doc-9. Preserved origin/main decision-4/decision-5 and removed only the branch-local colliding release decision-4 artifact; updated TASK-1.21 references and PR #18 to propose merging the accepted records. Verified Decision/document frontmatter and required body sections, Backlog views/list, acceptance evidence, git diff checks, pnpm run validate:lifecycle, pnpm run backlog:dispatchable, and PR body/state assertions. PR #18 remains open as Draft; no release automation was added.
+Adopted the release, versioning, and changelog contract through accepted decision-6 and canonical doc-9. Preserved origin/main decision-4/decision-5 and mainline toolchain doc-8; removed only the branch-local colliding release decision-4 and superseded release doc-8 artifacts. Updated TASK-1.21 references and PR #18 to propose merging the accepted records. Verified Decision/document frontmatter and required body sections, Backlog views/list/doctor diagnostics, acceptance evidence, git diff checks, pnpm run validate:lifecycle, pnpm run backlog:dispatchable, and PR body/state assertions. PR #18 remains open as Draft; no release automation was added.
 <!-- SECTION:FINAL_SUMMARY:END -->
