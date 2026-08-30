@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-13 21:15'
-updated_date: '2026-08-30 22:30'
+updated_date: '2026-08-30 22:37'
 labels: []
 dependencies:
   - TASK-1.6
@@ -63,6 +63,8 @@ Select a maintainable development toolchain that satisfies the approved compatib
 2026-08-31: User-directed revision: make TypeScript 7.0.2 the primary compiler, replace ESLint/typescript-eslint with Oxlint plus oxlint-tsgolint, and replace direct Prettier usage with Oxfmt for native JavaScript/TypeScript/JSX/TSX/JSON/YAML/TOML/CSS formatting. Oxfmt's npm bundled Prettier fallback for Markdown/HTML is excluded from routine formatter globs. Proposal and Decision-4 were revised; implementation remains gated on the compatibility spike and unresolved toolchain choices.
 
 2026-08-31 revised candidate probes: pnpm view resolved TypeScript 7.0.2, Oxlint 1.80.0, oxlint-tsgolint 7.0.2001, and Oxfmt 0.65.0; Oxlint and Oxfmt require Node 20.19+ or 22.12+. pnpm dlx probes passed for tsc Version 7.0.2, oxlint Version 1.80.0, and oxfmt Version 0.65.0. The tsgolint package resolved, but its direct CLI reports that direct invocation is unsupported; type-aware linting must be run through Oxlint as documented.
+
+2026-08-31: User requested a concise document. Replaced the 433-line doc-8 body with a 110-line contract retaining the proposed baseline, compatibility fixtures, alternative tradeoffs, responsibility map, command/config ownership, generated/cache policy, CI cadence, maintenance policy, approval gate, and acceptance-evidence map. Verified required sections/tokens, no literal backslash-n, and git diff --check.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
@@ -78,5 +80,5 @@ User directed the revised TypeScript 7 + Oxlint/tsgolint + Oxfmt direction and r
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Revised doc-8 and proposed decision-4 after the user's direction to make TypeScript 7.0.2 the primary compiler, replace ESLint/typescript-eslint with Oxlint plus oxlint-tsgolint, and replace direct Prettier usage with Oxfmt for native source/configuration formats. Kept TypeScript 5.2 React 18.2/19 consumer fixtures, Vite/Vitest/Playwright/package-validation responsibilities, and approval gates explicit; excluded Markdown/HTML from routine formatting so Oxfmt's bundled Prettier fallback is not executed. Verified Backlog document/Decision integrity, preserved decision-4 frontmatter, ran pnpm run validate:lifecycle, pnpm run backlog:dispatchable, git diff --check, and candidate probes for TypeScript 7.0.2, Oxlint 1.80.0, oxlint-tsgolint 7.0.2001, and Oxfmt 0.65.0. No production dependencies or configuration were added; implementation remains gated on the compatibility spike and remaining choices.
+Condensed doc-8 to a 110-line approval-bound contract while retaining the TypeScript 7 + Oxlint/tsgolint + Oxfmt baseline, React/TypeScript compatibility fixtures, alternatives, tool responsibility boundaries, commands, configuration ownership, generated/cache rules, CI/maintenance policy, approval gates, and acceptance evidence. Verified document integrity and required contract sections plus git diff --check; no production dependencies or configuration were added.
 <!-- SECTION:FINAL_SUMMARY:END -->
