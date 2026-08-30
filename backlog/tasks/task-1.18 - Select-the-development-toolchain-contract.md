@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-13 21:15'
-updated_date: '2026-08-30 22:04'
+updated_date: '2026-08-30 22:30'
 labels: []
 dependencies:
   - TASK-1.6
@@ -59,10 +59,24 @@ Select a maintainable development toolchain that satisfies the approved compatib
 2026-08-31 validation evidence: authoritative candidate command probes passed without modifying the repository: pnpm dlx --package typescript@6.0.2 tsc --version -> Version 6.0.2; pnpm dlx --package typescript@5.9.3 tsc --version -> Version 5.9.3; pnpm dlx --package eslint@10 eslint --version -> v10.9.1; pnpm dlx --package prettier@3 prettier --version -> 3.9.6; pnpm dlx --package vite@8 vite --version -> vite/8.2.2; pnpm dlx --package vitest@4 vitest --version -> vitest/4.1.11 on Node v24.19.0. These probes establish candidate availability only, not acceptance; emitted-type and consumer compatibility remain implementation-time gates in doc-8.
 
 2026-08-31 finalization evidence: backlog doc view doc-8 confirmed ten proposal sections and no literal backslash-n; decision-4 frontmatter was compared byte-for-byte with the CLI-created metadata and all six required body sections were non-empty; accepted decision-1/decision-2 were unchanged. Candidate availability probes passed for TypeScript 6.0.2/5.9.3, ESLint 10, Prettier 3, Vite 8, and Vitest 4; pnpm run validate:lifecycle passed; pnpm run backlog:dispatchable returned only the ready leaf TASK-1.21; git diff --check passed. The approval ask msg_dec03cf106c7 and its required resume both timed out with no coordinator message; escalation msg_3190f24820bb was sent, and no implementation was performed pending explicit user approval.
+
+2026-08-31: User-directed revision: make TypeScript 7.0.2 the primary compiler, replace ESLint/typescript-eslint with Oxlint plus oxlint-tsgolint, and replace direct Prettier usage with Oxfmt for native JavaScript/TypeScript/JSX/TSX/JSON/YAML/TOML/CSS formatting. Oxfmt's npm bundled Prettier fallback for Markdown/HTML is excluded from routine formatter globs. Proposal and Decision-4 were revised; implementation remains gated on the compatibility spike and unresolved toolchain choices.
+
+2026-08-31 revised candidate probes: pnpm view resolved TypeScript 7.0.2, Oxlint 1.80.0, oxlint-tsgolint 7.0.2001, and Oxfmt 0.65.0; Oxlint and Oxfmt require Node 20.19+ or 22.12+. pnpm dlx probes passed for tsc Version 7.0.2, oxlint Version 1.80.0, and oxfmt Version 0.65.0. The tsgolint package resolved, but its direct CLI reports that direct invocation is unsupported; type-aware linting must be run through Oxlint as documented.
 <!-- SECTION:NOTES:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @codex
+created: 2026-08-30 22:29
+---
+User directed the revised TypeScript 7 + Oxlint/tsgolint + Oxfmt direction and removal of the direct Prettier baseline. The proposal remains approval-bound for implementation until the compatibility spike and remaining choices are resolved.
+---
+<!-- COMMENTS:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Created and linked doc-8 as the approval-bound development toolchain contract proposal and proposed decision-4, comparing TypeScript, lint/format, build, unit/browser test, and package-validation alternatives with compatibility, maintenance, ownership, command, cache, and CI/local evidence. Verified all five acceptance criteria plus document/Decision integrity, candidate availability probes, pnpm run validate:lifecycle, pnpm run backlog:dispatchable, and git diff --check; no implementation dependencies or configuration were added because explicit approval is still pending. The proposal and unaccepted Decision are ready for review in the scoped Draft PR.
+Revised doc-8 and proposed decision-4 after the user's direction to make TypeScript 7.0.2 the primary compiler, replace ESLint/typescript-eslint with Oxlint plus oxlint-tsgolint, and replace direct Prettier usage with Oxfmt for native source/configuration formats. Kept TypeScript 5.2 React 18.2/19 consumer fixtures, Vite/Vitest/Playwright/package-validation responsibilities, and approval gates explicit; excluded Markdown/HTML from routine formatting so Oxfmt's bundled Prettier fallback is not executed. Verified Backlog document/Decision integrity, preserved decision-4 frontmatter, ran pnpm run validate:lifecycle, pnpm run backlog:dispatchable, git diff --check, and candidate probes for TypeScript 7.0.2, Oxlint 1.80.0, oxlint-tsgolint 7.0.2001, and Oxfmt 0.65.0. No production dependencies or configuration were added; implementation remains gated on the compatibility spike and remaining choices.
 <!-- SECTION:FINAL_SUMMARY:END -->

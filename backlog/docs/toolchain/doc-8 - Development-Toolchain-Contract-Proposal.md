@@ -3,11 +3,11 @@ id: doc-8
 title: Development Toolchain Contract Proposal
 type: specification
 created_date: '2026-08-30 21:30'
-updated_date: '2026-08-30 21:38'
+updated_date: '2026-08-30 22:28'
 ---
 # Development Toolchain Contract Proposal
 
-Status: approval-bound proposal for TASK-1.18. This document records evaluated alternatives and a recommended contract; it does not accept a dependency, compatibility, distribution, release, public API, or architecture choice. No production source, package metadata, CI workflow, or tool configuration should be implemented from this proposal until the user explicitly approves the recommendation or a revision.
+Status: revised approval-bound proposal for TASK-1.18. Following the user's direction, the leading toolchain is TypeScript 7 + Oxlint/tsgolint + Oxfmt. This document records evaluated alternatives and a recommended contract; it does not accept a dependency, compatibility, distribution, release, public API, or architecture choice. No production source, package metadata, CI workflow, or tool configuration should be implemented from this proposal until the user explicitly approves the revised recommendation and the required implementation spike.
 
 ## 1. Scope and constraints
 
@@ -49,12 +49,12 @@ As inspected on 2026-08-31 at the TASK-1.18 branch:
 
 ### 2.2 Contract evidence
 
-- TypeScript 6.0 is the current bridge release between the 5.9 line and the native 7.0 compiler. The official release announcement says TypeScript 6.0 is API-compatible with 5.9, while the release notes document DOM updates, ESM-oriented defaults, stricter defaults, and deprecations that must be handled deliberately.
+- TypeScript 7.0 is the native compiler line. Its CLI and type-checking are intended to be compatible with TypeScript 6.0, but the current release does not expose the programmatic Compiler API; the official transition guidance documents side-by-side use for tools that still need that API.
 - The TypeScript compiler supports strict checking, JSX emit, declaration emit, isolated modules, and bundler/Node module-resolution modes. TypeScript's declaration documentation describes emitted .d.ts files as the consumer-facing API surface.
 - React's official TypeScript guide requires TypeScript plus React type definitions, and React's 19 upgrade guide requires the modern JSX transform and corresponding React 19 type packages.
-- Current typescript-eslint documentation supports TypeScript versions below 6.1.0, recommends the latest stable tool major, and documents Project Service as the same type-information service model used by editors. This makes a TypeScript 6.0.x development pin viable but requires a guard against TypeScript 7 until parser support is verified.
-- ESLint 9 and later use flat configuration by default; the ESLint migration guide documents the compatibility and migration boundary. The official React Hooks plugin publishes a flat recommended configuration, and eslint-plugin-react publishes React/JSX flat configs.
-- Prettier explicitly recommends using the formatter for formatting and a linter for code-quality checks, with eslint-config-prettier disabling overlapping stylistic rules. Biome provides a fast formatter and linter for TypeScript/TSX/JSX, React-domain rules, editor LSP support, and no formatting rules inside its linter.
+- Oxlint provides built-in TypeScript, React, React Hooks, and JSX-a11y rule families. Its type-aware mode delegates TypeScript program construction and type-aware rules to tsgolint, which is based on the native typescript-go implementation; current rule coverage and diagnostics still require repository fixture validation.
+- ESLint 9 and later use flat configuration by default; ESLint remains an evaluated fallback for plugin-specific cases but is not the revised baseline.
+- Oxfmt natively formats JavaScript, JSX, TypeScript, TSX, JSON, YAML, TOML, and CSS and follows a Prettier-compatible workflow. Its npm package delegates some other formats such as Markdown and HTML to bundled Prettier; the revised contract scopes the formatter gate to native source/configuration globs so Prettier is not a direct dependency or routine formatter.
 - Vite library mode supports multiple library entries and ESM/CJS output while externalizing React. Vite 8 requires Node 20.19+ or 22.12+ and uses Rolldown/Oxc. Its output and Node floor must be tested against the approved compatibility contract.
 - Vitest provides ESM/TypeScript/JSX support, Node plus DOM-mocking environments, coverage, projects, and optional browser mode. Its browser mode can use Playwright, but using it for the cross-browser matrix would duplicate the Playwright responsibility proposed here.
 - Playwright Test runs TypeScript tests but does not type-check them, supports Chromium/Firefox/WebKit and branded-browser projects, and provides retries and trace artifacts. Type checking therefore remains an explicit tsc gate.
@@ -64,11 +64,11 @@ As inspected on 2026-08-31 at the TASK-1.18 branch:
 
 ### 3.1 Recommendation
 
-Use an exact lockfile pin of TypeScript 6.0.2 for repository development and CI, initially paired with React 18.2 and 19 consumer fixtures. The package's proposed minimum consumer compiler is TypeScript 5.2, inherited from the approval-bound compatibility/distribution proposal; it is not accepted until generated declarations compile in the fixture matrix.
+Use an exact lockfile pin of TypeScript 7.0.2 for repository development and CI, initially paired with React 18.2 and 19 consumer fixtures. The package's proposed minimum consumer compiler remains TypeScript 5.2, inherited from the approval-bound compatibility/distribution proposal; it is not accepted until generated declarations compile in the fixture matrix. TypeScript 7 is the primary compiler, while Oxlint/tsgolint owns typed-lint compatibility rather than typescript-eslint.
 
 The repository must not claim that the newest TypeScript major is supported merely because the compiler can parse the source. A candidate update is supported only after:
 
-1. typescript-eslint and the build/declaration path support the version;
+1. TypeScript 7, Oxlint/tsgolint, and the build/declaration path support the version;
 2. source type checking and declaration emit pass;
 3. generated declarations compile for TypeScript 5.2, the latest supported 5.x line, and the pinned compiler;
 4. React 18.2 and React 19 consumer fixtures compile with their matching type packages;
@@ -131,61 +131,55 @@ The evidence threshold is a clean compile with skipLibCheck disabled in consumer
 
 ### 3.4 Supported-version and upgrade policy
 
-- Development/CI uses one exact TypeScript patch version from the lockfile. Contributors use the repository package manager rather than a globally installed compiler.
+- Development/CI uses one exact TypeScript 7 patch version from the lockfile. Contributors use the repository package manager rather than a globally installed compiler.
 - The supported consumer floor is proposed as TypeScript 5.2, with no upper bound in package metadata unless generated declaration evidence shows a reason. typesVersions is added only if a real compatibility split is required.
-- TypeScript patch releases are reviewed monthly. Minor releases are evaluated within 30 days of stable release, after typescript-eslint and build-tool support is available. A new major is evaluated in a scheduled quarterly maintenance window, not merged automatically.
-- A TypeScript update must first pass the matrix in section 3.3 and the full lint/build/unit/browser/package gate. Unsupported versions are reported as unverified, not silently accepted.
-- If TypeScript 7's compiler API is unavailable to a selected linter or declaration tool, keep the TypeScript 6 pin and record the compatibility boundary; do not add a second compiler unless the user approves the added maintenance.
+- A TypeScript patch release is reviewed monthly. Minor releases are evaluated within 30 days of stable release, after Vite, Oxlint/tsgolint, and declaration-tool support is available. A new major is evaluated in a scheduled quarterly maintenance window, not merged automatically.
+- A TypeScript update must first pass the matrix in section 3.3 and the full Oxlint/format/build/unit/browser/package gate. Unsupported versions are reported as unverified, not silently accepted.
+- A TypeScript 6 sidecar is not part of the revised baseline. It may be introduced only if an implementation spike proves that a selected tool still requires the TypeScript 6 API; any such sidecar must be isolated and documented rather than silently changing the compiler used by contributors.
 - React major and matching type-package updates are tested in paired fixtures. React 19 remains a peer-compatibility fixture even when the source uses no React 19-only API.
 
 ### 3.5 TypeScript alternatives
 
 | Option | Benefits | Costs, compatibility, and maintenance implications | Proposal status |
 | --- | --- | --- | --- |
-| TypeScript 6.0.2 exact pin | Current bridge release; API-compatible with 5.9; current typescript-eslint support range includes it; latest DOM and ESM work | TypeScript 6 deprecations require cleanup; 7.0 transition may expose compiler-API gaps; consumer declaration floor still needs fixtures | Leading recommendation; approval required |
+| TypeScript 6.0.2 exact pin | Mature JS compiler API and conservative fallback for tools that have not adopted TypeScript 7 | Gives up native compiler speed and requires a second compiler if used alongside TS7; remains a maintenance fallback only | Conservative fallback; not the revised baseline |
 | TypeScript 5.9.x exact pin | Lower transition risk; mature declaration and tool ecosystem; avoids 6.0 deprecations | Delays current DOM/ESM behavior; shorter runway before support pressure; does not remove the need for React 19 fixture testing | Viable conservative alternative |
-| TypeScript 7 native compiler | Potential build speed and future alignment | Current compiler API is not available for tools that need TypeScript's API; typescript-eslint requires a TypeScript 6 side-by-side arrangement; native preview/support risk is not justified for the first contract | Not recommended initially |
+| TypeScript 7.0.2 native compiler | Native speed and future alignment; works with Oxlint/tsgolint's native type-aware path | Compiler/API and emitted-declaration behavior still need repository fixtures; other third-party tools may still require a TypeScript 6 sidecar | Leading recommendation; approval required |
 | Floating typescript latest | Little manual version maintenance | Non-reproducible CI/editor behavior; silent declaration and lib.d.ts changes; can outrun linter/build support | Rejected |
 
 ## 4. Linting and formatting contract
 
 ### 4.1 Recommendation
 
-Use ESLint flat config for semantic checks and Prettier 3 for formatting, with separate commands and no formatting rules in ESLint. The semantic baseline should include:
+Use Oxlint for semantic checks and Oxfmt for formatting, with separate commands and no ESLint or direct Prettier dependency in the baseline. Enable Oxlint's built-in TypeScript, React, React Hooks, and JSX-a11y plugins. Enable Oxlint type-aware mode through the pinned oxlint-tsgolint dependency for rules that need TypeScript program information.
 
-- ESLint recommended rules.
-- typescript-eslint recommended type-checked rules using Project Service against the same tsconfig files as the editor and tsc.
-- React JSX rules from eslint-plugin-react, including the jsx-runtime preset.
-- Official eslint-plugin-react-hooks recommended rules.
-- JSX accessibility rules from eslint-plugin-jsx-a11y where JSX exists.
-- A small explicit project rule set for import safety, async/resource cleanup hazards, no accidental browser-global access in SSR code, and public declaration annotations when those rules are justified by source.
-- eslint-config-prettier at the end of the config to disable overlapping formatting rules.
+The formatter owns whitespace, quotes, line wrapping, trailing commas, and equivalent presentation choices. Oxfmt natively formats the repository's JavaScript, TypeScript, JSX, TSX, JSON, YAML, TOML, and CSS source/configuration files. Markdown and HTML are outside the initial formatter gate so the npm package's bundled Prettier fallback is not executed as part of routine formatting.
 
-The formatter owns whitespace, quotes, line wrapping, trailing commas, and equivalent presentation choices. ESLint owns correctness, React rules, TypeScript semantic rules, unsafe patterns, and project policy. Neither tool should run the other as a rule plugin in CI.
+Oxlint owns correctness, React rules, TypeScript semantic rules, unsafe patterns, and project policy. Oxfmt does not run as a lint rule plugin, and Oxlint does not become a formatter. Keep the independent pnpm typecheck and declaration pass even when Oxlint type-aware mode is enabled.
 
 ### 4.2 Candidate comparison
 
 | Candidate | TypeScript/React coverage and rule quality | Editor/performance | Maintenance and migration | Proposal status |
 | --- | --- | --- | --- | --- |
-| ESLint 10 + latest typescript-eslint + React plugins + Prettier 3 | Broad ESLint ecosystem; typed TypeScript rules; React JSX, Hooks, and accessibility plugins; precise semantic/format separation | Mature editor integrations; typed linting is approximately a type-check build and can be expensive, mitigated by Project Service and local changed-file runs | More packages and config; flat config is current but plugin compatibility must be verified; Prettier migration is generally mechanical | Leading recommendation |
-| ESLint 9 + matching plugins + Prettier 3 | Same semantic model with flat config; broad ecosystem and a well-documented migration boundary | Similar typed-lint cost; mature editor support | Slightly lower upgrade pressure than v10, but it will require another major migration if v10 is the supported baseline | Viable fallback if v10 plugin compatibility fails |
-| Biome 2.x for lint and format + tsc | One fast Rust-based binary, built-in TS/TSX/React domains, LSP/editor support, and no formatting-vs-lint rule conflicts | Usually much faster for syntax/style checks; project-domain scanner can add measurable cost; no full TypeScript type-aware rule equivalent | Fewer dependencies and simple migration for common Prettier style; rule parity/config migration, React ecosystem depth, and custom typed rules remain gaps | Viable alternative; not selected pending a rule-coverage spike |
-| ESLint plus eslint-plugin-prettier | One visible lint command | Formatting runs through ESLint and can obscure ownership/slow runs | Prettier docs discourage this layering because it mixes formatting and code-quality diagnostics | Rejected |
+| Oxlint + oxlint-tsgolint + Oxfmt | Native TypeScript/JSX parsing; built-in TypeScript, React, React Hooks, and JSX-a11y plugins; type-aware rules through tsgolint; native TS/TSX formatting | Rust-based lint/format path with a native TypeScript type-aware component; editor integration uses local project binaries | Smaller direct dependency surface and one Oxc configuration family; type-aware rule coverage and plugin parity must be validated; Oxfmt has no Prettier plugin compatibility | Revised leading recommendation |
+| ESLint 10 + typescript-eslint + React plugins + Prettier 3 | Broadest existing ESLint ecosystem and typed rule/plugin coverage | Mature editor integrations, but typed linting can approach type-check cost | More packages and configuration; the TypeScript 7 Compiler API gap requires a TypeScript 6 sidecar or unsupported-parser operation | Fallback only |
+| Biome 2.x for lint and format plus tsc | Fast unified Rust-based TypeScript/TSX/React path | Good editor support and fast syntax/style checks | Rule parity, type-aware coverage, and React ecosystem depth require validation; adopting it would be a second Oxc-adjacent toolchain | Viable alternative; not selected |
+| Oxlint JavaScript plugins | Can cover a missing ecosystem rule without retaining all of ESLint | Plugin behavior is close to ESLint but the JS plugin surface is alpha | Plugin API and type-aware JS rules have compatibility limits; use only for a demonstrated gap | Exception path only |
 
 ### 4.3 Lint/format commands and boundaries
 
-- pnpm format:write runs Prettier write mode on owned source/config/docs globs.
-- pnpm format:check runs Prettier check mode and is the only formatting CI gate.
-- pnpm lint runs ESLint with flat config, Project Service, and no fix.
-- pnpm lint:fix is local-only convenience; CI never mutates files.
-- pnpm typecheck is an independent tsc run. A passing ESLint run never substitutes for type checking.
-- Prettier and ESLint ignore dist, coverage, test-results, playwright-report, caches, generated fixtures, and Backlog records unless a specific documentation check is later approved.
+- pnpm format:write runs Oxfmt write mode on owned JavaScript, TypeScript, JSX, TSX, JSON, YAML, TOML, and CSS globs.
+- pnpm format:check runs Oxfmt check mode and is the only formatting CI gate.
+- pnpm lint runs Oxlint with the built-in TypeScript, React, React Hooks, and JSX-a11y plugins plus type-aware mode; it does not apply fixes.
+- pnpm lint:fix is local-only convenience using Oxlint's reviewed fix mode; CI never mutates files.
+- pnpm typecheck is an independent TypeScript 7 tsc run. Oxlint type-aware mode never substitutes for declaration generation or the consumer compiler matrix.
+- Oxfmt and Oxlint ignore dist, coverage, test-results, playwright-report, caches, generated fixtures, and Backlog records unless a specific documentation check is later approved.
 - Lint and format configuration is repository-owned; editor extensions may invoke the same local binaries but must not carry divergent settings.
-- Type-aware linting is required for source and public API code but may be syntax-only for generated/configuration files when Project Service would create an avoidable out-of-project program.
+- No ESLint config, Prettier config, eslint-config-prettier, or Prettier plugin is part of the revised baseline.
 
 ### 4.4 Approval-sensitive rule policy
 
-Rules that can change semantics, require broad autofixes, or encode product architecture remain opt-in until separately reviewed. In particular, do not enable React Compiler experimental rules, unsafe Biome fixes, blanket no-any policies, or custom media-lifecycle rules solely because a tool offers them. Rule additions require a source example, false-positive assessment, editor/CI runtime check, and a task note.
+Rules that can change semantics, require broad autofixes, or encode product architecture remain opt-in until separately reviewed. In particular, do not enable React Compiler experimental rules, unsafe Oxlint/Oxfmt fixes, blanket no-any policies, or custom media-lifecycle rules solely because a tool offers them. Rule additions require a source example, false-positive assessment, editor/CI runtime check, and a task note.
 
 ## 5. Build, unit-test, browser-test, and package-validation responsibilities
 
@@ -193,7 +187,7 @@ Rules that can change semantics, require broad autofixes, or encode product arch
 
 | Responsibility | Proposed owner | Inputs/outputs | Explicit non-overlap |
 | --- | --- | --- | --- |
-| Type check | TypeScript 6.0.2 | Source/config/test type graphs; no emitted files in check mode | Does not bundle, run tests, or replace lint |
+| Type check | TypeScript 7.0.2 | Source/config/test type graphs; no emitted files in check mode | Does not bundle, run tests, or replace semantic lint |
 | Declaration emit | TypeScript build config | Public declarations/maps in dist; source type check must pass first | Does not decide JavaScript bundling or package exports |
 | JavaScript build | Vite 8 library mode (Rolldown) | ESM-first and explicit CJS library entries; React externalized; optional effects remain split | Does not type-check or generate declarations as the source of truth |
 | Unit/contract test | Vitest 4 Node environment, with DOM mocking only where needed | Deterministic controller, lifecycle, failure, SSR, and type/contract fixtures; V8 coverage where supported | Does not claim browser-engine compatibility or run release browser matrix |
@@ -254,10 +248,10 @@ The following names are proposed so contributors and CI have one stable vocabula
 | --- | --- | --- | --- |
 | pnpm install | Resolve dependencies | Allowed | Frozen variant required |
 | pnpm install:frozen | pnpm install --frozen-lockfile | Required clean setup | Every job |
-| pnpm format:write | Apply Prettier | Explicit local action | Never |
-| pnpm format:check | Verify formatting | Pre-commit/push | Pull-request gate |
-| pnpm lint | ESLint semantic checks | Changed/full source | Pull-request gate |
-| pnpm lint:fix | Apply safe reviewed lint fixes | Explicit local action | Never |
+| pnpm format:write | Apply Oxfmt to owned native-format files | Explicit local action | Never |
+| pnpm format:check | Verify Oxfmt formatting | Pre-commit/push | Pull-request gate |
+| pnpm lint | Oxlint semantic and type-aware checks | Changed/full source | Pull-request gate |
+| pnpm lint:fix | Apply safe reviewed Oxlint fixes | Explicit local action | Never |
 | pnpm typecheck | tsc noEmit | Changed/full source | Pull-request gate |
 | pnpm build | Vite library output plus declaration emit | Before package check | Pull-request gate |
 | pnpm test:unit | Vitest deterministic tests | Watch or run | Pull-request gate |
@@ -280,8 +274,8 @@ CI must call the same package scripts contributors use. A matrix job may add a d
 | pnpm-lock.yaml | Exact dependency graph; committed and changed only by pnpm with review |
 | mise.toml | Explicit supported development Node/pnpm range after approval; no floating latest claim in CI |
 | tsconfig.base.json, tsconfig.typecheck.json, tsconfig.build.json, tsconfig.test.json | Type checking/declaration/test compiler boundaries |
-| eslint.config.mjs | Semantic lint files, plugins, rules, ignores, and Project Service settings |
-| prettier.config.mjs and .prettierignore | Formatting policy and owned file boundary |
+| oxlint.config.ts | Semantic lint files, built-in plugins, type-aware mode, rules, and ignores |
+| .oxfmtrc.json or oxfmt.config.ts | Native formatting policy and owned file boundary |
 | vite.config.ts | Library entry points, formats, externals, target, source maps, and output directory |
 | vitest.config.ts | Unit projects, environment, coverage, setup, and deterministic test file ownership |
 | playwright.config.ts | Browser projects, secure-loopback server, virtual media, retries, trace/screenshot policy, and artifact directory |
@@ -308,7 +302,7 @@ Cache keys must include the lockfile hash, Node major/minor, relevant tool major
 
 ### Local development
 
-The default fast loop is format check, lint on changed files, typecheck, and Vitest watch/run. Contributors run build and package check before a task handoff or package metadata change. Browser smoke is explicit because browser binaries and secure-loopback media permissions are heavier. Existing lifecycle checks run before completion.
+The default fast loop is Oxfmt check, Oxlint on changed files, TypeScript 7 typecheck, and Vitest watch/run. Contributors run build and package check before a task handoff or package metadata change. Browser smoke is explicit because browser binaries and secure-loopback media permissions are heavier. Existing lifecycle checks run before completion.
 
 ### Pull request
 
@@ -338,9 +332,9 @@ Run all approved browser rows, consumer fixtures for React 18.2/19 and TypeScrip
 
 - Keep Node development/CI on explicit active LTS lines that satisfy the selected Vite version. The leading Vite 8 proposal requires Node 20.19+ or 22.12+; the exact supported rows are approval-bound and must be reflected in mise.toml, engines, and CI.
 - Review tool patch updates monthly. Group only updates with compatible lockfile/build/test evidence; do not use floating latest in CI.
-- Review TypeScript minor updates within 30 days, ESLint/typescript-eslint/React plugin updates monthly, Prettier patch/minor updates monthly, Vite/Vitest major pairs quarterly, and Playwright/browser binary updates monthly or on a browser refresh.
+- Review TypeScript minor updates within 30 days, Oxlint/oxlint-tsgolint/Oxfmt and React plugin updates monthly, Vite/Vitest major pairs quarterly, and Playwright/browser binary updates monthly or on a browser refresh.
 - Do not automatically merge a major that changes emitted JavaScript, declaration shape, package exports, browser target, test semantics, or config format. Record migration cost and rerun the full matrix.
-- Keep ESLint, typescript-eslint, React plugins, and Prettier versions in a tested compatibility tuple. Current typescript-eslint guidance says older majors are not maintained; staying on an old parser to avoid migration is not a maintenance policy.
+- Keep TypeScript 7, Oxlint, oxlint-tsgolint, React plugins, and Oxfmt versions in a tested compatibility tuple. Type-aware rules must be rechecked when tsgolint or the native TypeScript compiler changes; retaining a TypeScript 6 sidecar is an exception requiring evidence.
 - Keep Vite and Vitest on a compatible major pair. If a Vite upgrade changes the build pipeline, update the build and unit fixtures together and inspect bundle/export output.
 - Keep Playwright package and browser binaries aligned. A browser-channel update changes evidence and must be visible in the matrix report.
 - Dependency updates must preserve pnpm lockfile reproducibility and must not add install scripts that download browsers, models, WASM, or other executable assets without a separate supply-chain/release approval.
@@ -350,15 +344,16 @@ Run all approved browser rows, consumer fixtures for React 18.2/19 and TypeScrip
 
 The user must explicitly approve or revise all of the following before implementation:
 
-1. TypeScript 6.0.2 versus TypeScript 5.9.x, the proposed TS 5.2 consumer floor, and the React 18.2/19 fixture policy.
+1. TypeScript 7.0.2 versus the TypeScript 6.0.2 fallback, the proposed TS 5.2 consumer floor, and the React 18.2/19 fixture policy.
 2. The strict compiler options, Bundler/NodeNext split, declaration-map policy, and whether isolatedDeclarations is enabled after a source spike.
-3. ESLint 10 versus ESLint 9, the React/Hook/accessibility plugin set, typed-linting scope, and the Prettier 3 separation.
-4. Biome as an alternative or a future pilot rather than part of the initial gate.
-5. Vite 8 versus Rollup direct, the Node 20.19+/22.12+ development floor, ESM/CJS output, and separate tsc declaration emit.
-6. Vitest 4 versus Jest/Node test runner, and whether any Vitest Browser Mode tests are justified in addition to Playwright.
-7. Playwright Test as browser owner, the Chrome/Firefox PR smoke, Edge/Safari periodic policy, native Safari/manual boundary, and any future device service.
-8. publint, attw, pack, SSR, and consumer-fixture checks as package-validation gates.
-9. Exact script names, config ownership, generated/cache boundaries, and local/CI cadence.
+3. Oxlint with oxlint-tsgolint versus the ESLint fallback, the React/Hook/accessibility plugin set, and the type-aware rule coverage.
+4. Oxfmt as the formatter, its native-file scope, print-width policy, and the decision to exclude Markdown/HTML from the initial gate rather than execute bundled Prettier fallback.
+5. Biome as an alternative or a future pilot rather than part of the initial gate.
+6. Vite 8 versus Rollup direct, the Node 20.19+/22.12+ development floor, ESM/CJS output, and separate tsc declaration emit.
+7. Vitest 4 versus Jest/Node test runner, and whether any Vitest Browser Mode tests are justified in addition to Playwright.
+8. Playwright Test as browser owner, the Chrome/Firefox PR smoke, Edge/Safari periodic policy, native Safari/manual boundary, and any future device service.
+9. publint, attw, pack, SSR, and consumer-fixture checks as package-validation gates.
+10. Exact script names, config ownership, generated/cache boundaries, and local/CI cadence.
 
 Approval of this proposal authorizes a later implementation task or an explicitly approved continuation to add dependencies/configuration. It does not accept public package exports, browser minimums, React peer ranges, distribution paths, or media architecture. If the approved answer materially differs from proposed decision-4, update the proposed Decision through a new Decision or an explicit superseding Decision; never rewrite decision-1 or decision-2.
 
@@ -385,6 +380,12 @@ Approval of this proposal authorizes a later implementation task or an explicitl
 - [typescript-eslint dependency versions](https://typescript-eslint.io/users/dependency-versions/)
 - [typescript-eslint Project Service](https://typescript-eslint.io/blog/project-service/)
 - [Prettier integration with linters](https://prettier.io/docs/next/integrating-with-linters.html)
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter.html)
+- [Oxlint built-in plugins](https://oxc.rs/docs/guide/usage/linter/plugins)
+- [Oxlint type-aware linting](https://oxc.rs/docs/guide/usage/linter/type-aware.html)
+- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)
+- [Oxfmt language support](https://oxc.rs/docs/guide/usage/formatter/language-support)
+- [Oxfmt migration from Prettier](https://oxc.rs/docs/guide/usage/formatter/migrate-from-prettier.html)
 - [Biome linter](https://biomejs.dev/linter/)
 - [Biome rules](https://biomejs.dev/linter/rules/)
 - [Vite library mode](https://vite.dev/guide/build.html)
