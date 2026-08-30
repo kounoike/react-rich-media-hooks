@@ -5,14 +5,14 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-13 21:15'
-updated_date: '2026-08-30 22:37'
+updated_date: '2026-08-30 22:50'
 labels: []
 dependencies:
   - TASK-1.6
   - TASK-1.8
 references:
   - doc-8
-  - decision-4
+  - decision-5
 documentation:
   - doc-8
 parent_task_id: TASK-1
@@ -65,6 +65,8 @@ Select a maintainable development toolchain that satisfies the approved compatib
 2026-08-31 revised candidate probes: pnpm view resolved TypeScript 7.0.2, Oxlint 1.80.0, oxlint-tsgolint 7.0.2001, and Oxfmt 0.65.0; Oxlint and Oxfmt require Node 20.19+ or 22.12+. pnpm dlx probes passed for tsc Version 7.0.2, oxlint Version 1.80.0, and oxfmt Version 0.65.0. The tsgolint package resolved, but its direct CLI reports that direct invocation is unsupported; type-aware linting must be run through Oxlint as documented.
 
 2026-08-31: User requested a concise document. Replaced the 433-line doc-8 body with a 110-line contract retaining the proposed baseline, compatibility fixtures, alternative tradeoffs, responsibility map, command/config ownership, generated/cache policy, CI cadence, maintenance policy, approval gate, and acceptance-evidence map. Verified required sections/tokens, no literal backslash-n, and git diff --check.
+
+2026-08-31: User clarified that the toolchain should be recorded as a Decision and proposed for merge through the PR. Because Backlog CLI 1.50.1 has no Decision update command, created accepted decision-5 via backlog decision create and recorded decision-4 as superseded without changing its historical frontmatter. Renamed doc-8 title to Development Toolchain Contract, changed its status to accepted contract, and updated TASK-1.18 references from decision-4 to decision-5.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
@@ -80,5 +82,5 @@ User directed the revised TypeScript 7 + Oxlint/tsgolint + Oxfmt direction and r
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Condensed doc-8 to a 110-line approval-bound contract while retaining the TypeScript 7 + Oxlint/tsgolint + Oxfmt baseline, React/TypeScript compatibility fixtures, alternatives, tool responsibility boundaries, commands, configuration ownership, generated/cache rules, CI/maintenance policy, approval gates, and acceptance evidence. Verified document integrity and required contract sections plus git diff --check; no production dependencies or configuration were added.
+Recorded the TypeScript 7.0.2 + Oxlint/tsgolint + Oxfmt toolchain as accepted decision-5, superseding proposed decision-4, and kept the PR as the merge proposal. Condensed doc-8 into the concise Development Toolchain Contract, updated TASK-1.18 references and notes, and preserved the implementation validation gates. No production dependencies or configuration were added.
 <!-- SECTION:FINAL_SUMMARY:END -->

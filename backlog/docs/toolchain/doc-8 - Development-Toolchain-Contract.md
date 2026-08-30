@@ -1,13 +1,13 @@
 ---
 id: doc-8
-title: Development Toolchain Contract Proposal
+title: Development Toolchain Contract
 type: specification
 created_date: '2026-08-30 21:30'
-updated_date: '2026-08-30 22:36'
+updated_date: '2026-08-30 22:49'
 ---
-# Development Toolchain Contract Proposal
+# Development Toolchain Contract
 
-Status: concise, approval-bound proposal for TASK-1.18. The leading baseline is TypeScript 7 + Oxlint/tsgolint + Oxfmt. No production dependency, source, package, CI, or configuration change is authorized until the compatibility spike passes and the user approves the remaining choices.
+Status: concise accepted contract for TASK-1.18. Decision-5 records the TypeScript 7 + Oxlint/tsgolint + Oxfmt baseline; this PR proposes merging that Decision and document. No production dependency, source, package, CI, or configuration change is authorized until the compatibility spike passes.
 
 ## 1. Scope and guardrails
 
@@ -15,7 +15,7 @@ This contract covers contributor tooling for the headless React rich-media libra
 
 It preserves the existing constraints: React 18.2/19 compatibility fixtures, modern JSX, SSR-safe imports, ESM-first explicit entries, optional effects behind explicit actions, no import/install-time media asset activation, and doc-6 browser evidence. Product APIs, browser minimums, peer ranges, media architecture, and distribution policy remain separate approval gates.
 
-## 2. Proposed baseline
+## 2. Accepted baseline
 
 | Responsibility | Tool / policy | Boundary |
 | --- | --- | --- |
@@ -41,7 +41,7 @@ Oxfmt's npm package has a bundled Prettier fallback for formats such as Markdown
 | ssr-node | TS 5.2 and TS 7.0.2; NodeNext | Every approved import is browser-inert |
 | package-consumer | TS 5.2 and TS 7.0.2; NodeNext and Bundler | Every export condition resolves intended JS and declarations |
 
-The consumer floor remains a proposal: TypeScript 5.2. A new compiler is supported only after tsc type checking, declaration emit, Oxlint/tsgolint diagnostics, React 18.2/19 fixtures, package checks, and browser smoke pass. A TypeScript 6 sidecar is not baseline; add one only if a tool demonstrably requires its API.
+The toolchain fixture floor is TypeScript 5.2; this does not by itself set package metadata or peer ranges. TypeScript 7 is validated only after tsc type checking, declaration emit, Oxlint/tsgolint diagnostics, React 18.2/19 fixtures, package checks, and browser smoke pass. A TypeScript 6 sidecar is not baseline; add one only if a tool demonstrably requires its API.
 
 ## 4. Alternatives and rationale
 
@@ -83,15 +83,20 @@ Local fast loop: format check, changed-file Oxlint, TypeScript typecheck, and Vi
 
 Use explicit Node 20.19+ or 22.12+ rows required by Vite/Oxlint/Oxfmt. Review patches monthly, tool minor updates within 30 days, and major tool transitions quarterly. Do not float versions or merge changes that alter emitted JS, declarations, exports, browser targets, or test semantics without the full matrix.
 
-## 8. Approval gate
+## 8. Implementation validation
 
-The following remain explicit approval items before implementation: TS 7.0.2 and TS 5.2 consumer floor; strict compiler options and Bundler/NodeNext split; Oxlint/tsgolint rule coverage; Oxfmt native-file scope and print width; Vite 8 and Node floor; Vitest 4; Playwright matrix; package gates; exact scripts, config ownership, caches, and CI cadence.
+Decision-5 accepts this toolchain baseline. Before adding production dependencies or configuration, the implementation spike must verify:
 
-This proposal does not accept public exports, peer ranges, browser minimums, media architecture, distribution, release automation, or runtime assets. If the approved direction materially changes, record a new or superseding Decision rather than rewriting accepted history.
+- TypeScript 7 declaration output and the TypeScript 5.2 / React 18.2 / React 19 fixture matrix.
+- Oxlint built-in React, Hooks, JSX-a11y, and TypeScript rules plus oxlint-tsgolint diagnostics.
+- Oxfmt output and the native-file scope, including the chosen print width.
+- Vite 8, Vitest 4, Playwright, package checks, SSR imports, and the configured Node floor.
+
+This Decision does not change public exports, peer ranges, browser minimums, media architecture, distribution, release automation, or runtime assets.
 
 ## 9. Acceptance evidence
 
-Criterion 1: sections 2-3 define compiler, config, consumer policy, cadence, React fixtures, and emitted-type evidence. Criterion 2: section 4 compares lint/format coverage, ecosystem, performance, maintenance, migration, and separation. Criterion 3: section 2 assigns non-overlapping build/test/package owners. Criterion 4: sections 5-7 define commands, ownership, generated files, caches, and local/CI duties. Criterion 5: sections 4 and 8 record alternatives and approval gates.
+Criterion 1: sections 2-3 define compiler, config, consumer policy, cadence, React fixtures, and emitted-type evidence. Criterion 2: section 4 compares lint/format coverage, ecosystem, performance, maintenance, migration, and separation. Criterion 3: section 2 assigns non-overlapping build/test/package owners. Criterion 4: sections 5-7 define commands, ownership, generated files, caches, and local/CI duties. Criterion 5: sections 4 and 8 record alternatives, the accepted Decision, and implementation validation gates.
 
 ## References
 
