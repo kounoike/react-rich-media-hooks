@@ -19,6 +19,9 @@
 - Agents may research options and make recommendations, but must present the alternatives, evidence, and tradeoffs before requesting approval.
 - Do not treat a proposal as accepted, record it as an accepted Backlog.md Decision, or begin dependent implementation until the user explicitly approves it.
 - Record the approved decision and its relationship to relevant tasks in the repository.
+- After explicit approval, record the choice as an accepted Backlog.md Decision before proposing its integration. Use a substantive title that names the adopted decision; do not use `Propose ...` or `... Proposal` for an accepted Decision.
+- The integration PR should propose merging the already accepted Decision and its supporting document. PR state (Draft, Ready, or open) is a review/integration state and must not be used to leave an approved Decision in `proposed` status.
+- When a new accepted Decision replaces an earlier one, create the new Decision with a substantive title and a `Supersedes` section; preserve the earlier Decision's history and metadata.
 - Routine, reversible implementation choices within an already approved scope do not require separate approval.
 
 ## Communication
