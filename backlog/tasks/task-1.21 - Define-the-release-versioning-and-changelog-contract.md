@@ -5,15 +5,15 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-13 21:15'
-updated_date: '2026-08-30 21:39'
+updated_date: '2026-08-30 23:15'
 labels: []
 dependencies:
   - TASK-1.8
 references:
-  - doc-8
-  - decision-4
+  - doc-9
+  - decision-6
 documentation:
-  - doc-8
+  - doc-9
 parent_task_id: TASK-1
 priority: high
 type: task
@@ -38,11 +38,11 @@ Define the approved path from merged changes to versions, changelogs, tags, GitH
 ## Implementation Plan
 
 <!-- SECTION:PLAN:BEGIN -->
-1. Review TASK-1.21, dependency TASK-1.8, accepted Decisions, dependent package/CI/maintenance/release tasks, repository metadata, and authoritative release-tool guidance; preserve the approved product/API boundaries.
-2. Compare manual release, Changesets, tagpr with optional Release Drafter, release-please, and semantic-release against source-of-truth ordering, multi-package/assets, reviewability, SemVer/prereleases, least privilege, recovery, and maintenance needs.
-3. Create an approval-bound Backlog release contract proposal and a proposed Decision through the Backlog CLI. Define the version/changelog/tag/GitHub Release/publication ordering, SemVer and stability rules, approvals, ownership, note inputs, idempotency/recovery, and emergency manual procedure without configuring automation.
-4. Present the recommendation and alternatives to the coordinator through orchestration, retain the proposal as unaccepted until explicit user approval, and record approval or blocker in TASK-1.21.
-5. Read task-finalization, objectively verify every acceptance criterion, run repository/Backlog/document checks, commit and push only scoped records, and prepare the required Draft PR handoff without merging.
+1. Synchronize the task branch with origin/main and preserve mainline decision-4/decision-5 history.
+2. Create a fresh accepted release-contract Decision through the Backlog CLI, fill its required body sections under the documented body-only exception, and record the relationship to the superseded TASK-1.21 proposal without changing Decision frontmatter directly.
+3. Rename/update the TASK-1.21 document through the Backlog CLI and update all task/document/Decision references to the adopted contract.
+4. Verify acceptance evidence, task notes, and final summary; run Backlog/document/frontmatter/diff checks and pnpm run validate:lifecycle.
+5. Commit and push only scoped TASK-1.21 records and update PR #18 as an open Draft proposing the already accepted Decision.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -65,10 +65,16 @@ Validation 2026-08-31: `backlog doc view doc-8 --plain` confirmed doc-8 metadata
 Approval evidence 2026-08-31: alternatives and the approval-bound recommendation were presented to the coordinator using `orca-ide orchestration ask`; the request timed out as msg_77e5371f553 and resume was rejected as not belonging to this active Dispatch, so an escalation msg_f311a3675b7f was sent with the complete options and blocker. No user approval was received; decision-4 remains proposed, TASK-1.21 remains In Progress until the coordinator/user accepts or revises the contract. The task may be handed off as a proposal only; no release automation was implemented.
 
 Clarification 2026-08-31: TASK-1.21 is Done because its defined deliverable is the reviewed proposal; the release contract itself remains unaccepted, decision-4 remains proposed, and downstream automation remains blocked pending explicit user approval.
+
+Follow-up authorized by the user on 2026-08-31: adopt the release/versioning/changelog contract, preserve origin/main decision-4 (development toolchain) and decision-5 (accepted toolchain), create a fresh accepted release Decision, rename the release document, and update PR #18 without merging. Branch synchronized onto origin/main before this follow-up.
+
+Adoption update 2026-08-31: created accepted decision-6 through Backlog CLI after searching current Decisions; filled only its required body sections under the documented new-Decision body exception, preserving decision-6 frontmatter exactly. decision-6 adopts the tagpr-led release/versioning/changelog contract and explicitly supersedes the branch-local proposed release decision-4 without changing mainline decision-4 or accepted decision-5. Created replacement doc-9 through Backlog CLI with the substantive title Release, Versioning, and Changelog Contract, converted proposal wording to adopted-contract wording, and retargeted TASK-1.21 to doc-9/decision-6.
+
+Final validation 2026-08-31: removed only the branch-local `decision-4 - Propose-the-release-versioning-and-changelog-contract.md` after verifying origin/main decision-4 and decision-5 metadata/content; `backlog decision list --plain` now has one decision-4 (mainline), accepted decision-5, and accepted decision-6. `backlog doc view doc-9 --plain`, targeted Decision/doc frontmatter and required-section assertions, and PR body newline/state assertions passed. `backlog doctor` reports only the pre-existing duplicate document IDs (doc-5, doc-6, and historical doc-8); no duplicate decision ID remains. `pnpm run validate:lifecycle`, `pnpm run backlog:dispatchable`, and `git diff --check` passed. PR #18 title/body now propose merging accepted decision-6/doc-9 and remains OPEN Draft.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Completed TASK-1.21 as an explicit approval-bound release, versioning, and changelog contract proposal. Created doc-8 and proposed decision-4, covering source-of-truth and ordering from merged PR metadata through release PR, immutable tag, draft/final GitHub Release, and verified package/asset publication; evaluated tagpr, Release Drafter, Changesets, release-please, semantic-release, and manual fallback; defined SemVer/stability, prerelease, experimental, deprecation, multi-package/asset, approvals, ownership, release notes, idempotency, failure recovery, and emergency procedures. Verified all five acceptance criteria with Backlog document/Decision/task views and assertions, plus pnpm run validate:lifecycle, pnpm run backlog:dispatchable, capture lifecycle checks (41 assertions), and git diff --check. The recommendation remains unaccepted pending explicit user approval; decision-4 is proposed and TASK-1.23 must not implement release automation until the approval gate is resolved.
+Adopted the release, versioning, and changelog contract through accepted decision-6 and canonical doc-9. Preserved origin/main decision-4/decision-5 and removed only the branch-local colliding release decision-4 artifact; updated TASK-1.21 references and PR #18 to propose merging the accepted records. Verified Decision/document frontmatter and required body sections, Backlog views/list, acceptance evidence, git diff checks, pnpm run validate:lifecycle, pnpm run backlog:dispatchable, and PR body/state assertions. PR #18 remains open as Draft; no release automation was added.
 <!-- SECTION:FINAL_SUMMARY:END -->
