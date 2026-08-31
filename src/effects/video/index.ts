@@ -18,7 +18,7 @@ export interface AutoFrameOptions {
 
 const effect = (kind: string, options: object): VideoEffect => ({
   kind,
-  options: options as Readonly<Record<string, unknown>>,
+  options: Object.fromEntries(Object.entries(options)),
 });
 
 export const crop = (options: CropOptions = {}): VideoEffect => effect("crop", options);

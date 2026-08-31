@@ -1,5 +1,5 @@
 [tools]
-node = "lts"
-pnpm = "latest"
+node = "24.19.0"
+pnpm = "11.21.0"
 
-"npm:backlog.md" = "latest"
+"npm:backlog.md" = "1.50.1"

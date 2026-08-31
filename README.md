@@ -8,9 +8,54 @@ This project uses:
 
 - Backlog.md for task management
 - Backlog.md Decisions for architectural decisions
-- pnpm for workspace management
+- Node.js 20.19+ (or 22.12+) and pnpm 11.21.0 for the pinned toolchain
+- Oxfmt 0.65.0 and Oxlint 1.80.0 with oxlint-tsgolint 7.0.2001
+- TypeScript 7.0.2, Vitest 4.1.11, and Vite 8.2.2
 
 See `AGENTS.md` before making changes.
+
+## Local quality workflow
+
+Install the exact lockfile dependencies before running checks:
+
+```sh
+pnpm install:frozen
+```
+
+The direct package scripts are the canonical enforcement mechanism. No commit
+hook is required or configured, so every check can be reproduced in a clean
+checkout or CI job:
+
+| Command | Purpose | Writes files? |
+| --- | --- | --- |
+| `pnpm format:check` | Check native JS, JSX, TS, TSX, JSON, TOML, and source configuration formatting with Oxfmt | No |
+| `pnpm format:write` | Apply the Oxfmt formatting policy to those files | Yes, intended |
+| `pnpm lint` | Run Oxlint correctness/suspicious diagnostics plus TypeScript-aware checks | No |
+| `pnpm lint:fix` | Apply Oxlint-safe fixes for reviewed changes | Yes, intended |
+| `pnpm typecheck` | Run the authoritative TypeScript 7 source check | No |
+| `pnpm test:unit` (or `pnpm test`) | Run deterministic Vitest unit/contract tests | Test output only |
+| `pnpm test:unit:coverage` | Run unit tests with V8 coverage output | Coverage output only |
+| `pnpm build` | Emit Vite ESM/CJS files and TypeScript declarations under `dist/` | Build output only |
+| `pnpm package:check` | Build, pack, inspect the tarball, run strict publint/ATTW, and test packed consumers | Build/artifact output only |
+| `pnpm verify` | Run format check, lint, unit tests, package checks, and lifecycle validation | Generated output only |
+
+Validation commands (`format:check`, `lint`, `typecheck`, `test:unit`, and
+`verify`) do not pass write or autofix flags and must not modify tracked source
+files. When a validation check fails, its tool reports the file and diagnostic;
+use the write/fix commands only after reviewing the resulting diff.
+
+Oxfmt intentionally scopes the local formatter to `src/`, `tests/`, and the
+owned tool configuration files. Markdown/HTML, experiments, and supervised
+task-lifecycle scripts retain their existing conventions and are checked by
+their respective repository workflows. The formatter and editor policy are
+kept in `.oxfmtrc.json` and `.editorconfig`; Oxlint's type-aware configuration
+is in `.oxlintrc.json`.
+
+Generated outputs and caches are ignored: `dist/`, `.artifacts/`, `coverage/`,
+`test-results/`, `playwright-report/`, `.playwright/`, `.vitest/`, `.cache/`,
+`.turbo/`, `.vite/`, `.oxlint-cache/`, `*.tsbuildinfo`, `node_modules/`, and
+the pnpm store. Ignoring them does not replace the clean-install, package, or
+test gates.
 
 ## Package foundation
 
@@ -44,9 +89,7 @@ tar -tzf .artifacts/react-rich-media-hooks-0.1.0.tgz
 ```
 
 Only `dist/`, this README, and the package license file are included by the
-package `files` allowlist. The current license boundary is explicitly
-`UNLICENSED` in `package.json` and `LICENSE`; changing it requires a recorded
-project license decision. Backlog records, experiments, tests, development
+package `files` allowlist. Backlog records, experiments, tests, development
 configuration, and local caches remain outside the artifact. The package is
 licensed under MIT; the SPDX identifier is in `package.json` and the complete
 notice is in `LICENSE`.
