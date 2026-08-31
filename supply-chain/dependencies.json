@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "sourceOfTruth": ["package.json", "pnpm-lock.yaml"],
+  "registry": "https://registry.npmjs.org",
+  "owner": "repository maintainers",
+  "entries": [
+    {
+      "name": "@arethetypeswrong/cli",
+      "role": "development package validation",
+      "version": "0.18.5",
+      "license": "MIT",
+      "registryTarball": "https://registry.npmjs.org/@arethetypeswrong/cli/-/cli-0.18.5.tgz",
+      "source": "https://github.com/arethetypeswrong/arethetypeswrong.github.io",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly"
+    },
+    {
+      "name": "@types/node",
+      "role": "development type definitions",
+      "version": "24.3.0",
+      "license": "MIT",
+      "registryTarball": "https://registry.npmjs.org/@types/node/-/node-24.3.0.tgz",
+      "source": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly"
+    },
+    {
+      "name": "@types/react",
+      "role": "development React type definitions",
+      "version": "19.1.12",
+      "license": "MIT",
+      "registryTarball": "https://registry.npmjs.org/@types/react/-/react-19.1.12.tgz",
+      "source": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly"
+    },
+    {
+      "name": "@vitest/coverage-v8",
+      "role": "development test coverage provider",
+      "version": "4.1.11",
+      "license": "MIT",
+      "registryTarball": "https://registry.npmjs.org/@vitest/coverage-v8/-/coverage-v8-4.1.11.tgz",
+      "source": "https://github.com/vitest-dev/vitest",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly"
+    },
+    {
+      "name": "oxfmt",
+      "role": "development source formatter",
+      "version": "0.65.0",
+      "license": "MIT",
+      "registryTarball": "https://registry.npmjs.org/oxfmt/-/oxfmt-0.65.0.tgz",
+      "source": "https://github.com/oxc-project/oxc",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly toolchain tuple review"
+    },
+    {
+      "name": "oxlint",
+      "role": "development semantic linter",
+      "version": "1.80.0",
+      "license": "MIT",
+      "registryTarball": "https://registry.npmjs.org/oxlint/-/oxlint-1.80.0.tgz",
+      "source": "https://github.com/oxc-project/oxc",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly toolchain tuple review"
+    },
+    {
+      "name": "oxlint-tsgolint",
+      "role": "development TypeScript-aware lint rules",
+      "version": "7.0.2001",
+      "license": "MIT",
+      "registryTarball": "https://registry.npmjs.org/oxlint-tsgolint/-/oxlint-tsgolint-7.0.2001.tgz",
+      "source": "https://github.com/oxc-project/tsgolint",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly toolchain tuple review"
+    },
+    {
+      "name": "publint",
+      "role": "development package validation",
+      "version": "0.3.24",
+      "license": "MIT",
+      "registryTarball": "https://registry.npmjs.org/publint/-/publint-0.3.24.tgz",
+      "source": "https://github.com/publint/publint",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly"
+    },
+    {
+      "name": "react",
+      "role": "peer runtime and React 19 development fixture",
+      "version": "19.1.1",
+      "requestedRange": ">=18.2.0 <20.0.0",
+      "license": "MIT",
+      "registryTarball": "https://registry.npmjs.org/react/-/react-19.1.1.tgz",
+      "source": "https://github.com/facebook/react",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly; security updates out-of-band"
+    },
+    {
+      "name": "typescript",
+      "role": "development compiler and declaration emitter",
+      "version": "7.0.2",
+      "license": "Apache-2.0",
+      "registryTarball": "https://registry.npmjs.org/typescript/-/typescript-7.0.2.tgz",
+      "source": "https://github.com/microsoft/TypeScript",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly toolchain tuple review"
+    },
+    {
+      "name": "vite",
+      "role": "development library bundler",
+      "version": "8.2.2",
+      "license": "MIT",
+      "registryTarball": "https://registry.npmjs.org/vite/-/vite-8.2.2.tgz",
+      "source": "https://github.com/vitejs/vite",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly toolchain tuple review"
+    },
+    {
+      "name": "vitest",
+      "role": "development unit and contract test runner",
+      "version": "4.1.11",
+      "license": "MIT",
+      "registryTarball": "https://registry.npmjs.org/vitest/-/vitest-4.1.11.tgz",
+      "source": "https://github.com/vitest-dev/vitest",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly test-tooling review"
+    }
+  ]
+}
