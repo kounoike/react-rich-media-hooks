@@ -47,7 +47,9 @@ Only `dist/`, this README, and the package license file are included by the
 package `files` allowlist. The current license boundary is explicitly
 `UNLICENSED` in `package.json` and `LICENSE`; changing it requires a recorded
 project license decision. Backlog records, experiments, tests, development
-configuration, and local caches remain outside the artifact.
+configuration, and local caches remain outside the artifact. The package is
+licensed under MIT; the SPDX identifier is in `package.json` and the complete
+notice is in `LICENSE`.
 
 ## Supervised task lifecycle
 

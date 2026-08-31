@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-13 20:31'
-updated_date: '2026-08-31 00:09'
+updated_date: '2026-08-31 00:27'
 labels: []
 dependencies:
   - TASK-1.6
@@ -52,10 +52,13 @@ Create the minimum production package foundation needed to build and pack the ap
 2026-08-31: Added exact package validators publint 0.3.24 and @arethetypeswrong/cli 0.18.5. Conditional ESM/CJS type exports now use .d.ts/.d.cts pairs and a typesVersions fallback; publint strict and ATTW strict report all public entries valid across node10, Node16 CJS/ESM, and bundler resolution.
 
 2026-08-31 finalization: Verified every acceptance criterion objectively. AC1: `pnpm run install:frozen` and documented `pnpm build` pass from the clean lockfile/toolchain. AC2: Vite 8 emits root/core/effects video/effects audio ESM and CJS runtime files; TypeScript 7 emits ESM `.d.ts` and CJS `.d.cts`; `sideEffects:false`, no import-time browser work, and no auxiliary assets are validated. AC3: package metadata, React peer range, Node/pnpm engines, exact dev validators, conditional exports, typesVersions, and `files` allowlist pass publint strict, ATTW strict, and tarball allowlist inspection; the license boundary is explicit UNLICENSED with LICENSE because no project license has been approved. AC4: package:check installs the packed artifact into temporary React 18.2 and React 19 consumers, compiles TypeScript 7 NodeNext imports, and runs packed ESM, SSR snapshot, and CJS imports for every public entry. AC5: README documents layout, frozen install, build, pack, validation, tarball inspection, side effects, and artifact boundaries. Final repository checks: `pnpm run verify`, `pnpm install --frozen-lockfile`, Oxfmt 0.65.0 check, `pnpm run backlog:dispatchable`, and `git diff --check` all pass. No Backlog Decision was changed.
+
+2026-08-31 MIT approval follow-up: The user explicitly approved MIT for the package. Updated package.json license metadata from UNLICENSED to MIT and replaced the placeholder LICENSE text with the complete MIT License notice for KOUNOIKE Yuusuke; README now documents MIT and the packed files allowlist remains unchanged.
+2026-08-31 MIT correction validation: `pnpm run package:check` passed TypeScript 7 typecheck, Vite 8 build, strict publint, strict ATTW, tarball allowlist inspection, and packed React 18.2/19 TypeScript/ESM/SSR/CJS consumer imports; `pnpm run validate:lifecycle`, Oxfmt 0.65.0 check, and `git diff --check` also passed. PR #20 body will be updated to record the explicit MIT approval and corrected license evidence.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Implemented the user-authorized installable package foundation with Vite 8 ESM/CJS entry builds, TypeScript 7 declarations, conditional export/type maps, SSR-safe core/React/effect modules, explicit metadata and tarball boundaries, and strict publint/ATTW plus packed consumer validation. Verified clean frozen install, aggregate package/lifecycle checks, React 18.2/19 TypeScript/ESM/SSR/CJS consumers, Oxfmt formatting, dispatchability, and git diff checks; license metadata is explicitly UNLICENSED pending a separately approved project license. No media-processing implementation, Decision change, CI, release, or dependency-maintenance scope was added.
+Implemented the user-authorized installable package foundation with Vite 8 ESM/CJS entry builds, TypeScript 7 declarations, conditional export/type maps, SSR-safe core/React/effect modules, explicit MIT metadata and license notice, narrow tarball boundaries, and strict publint/ATTW plus packed consumer validation. Verified frozen installation, package/lifecycle checks, React 18.2/19 TypeScript/ESM/SSR/CJS consumers, Oxfmt formatting, dispatchability, and git diff checks; the user explicitly approved MIT and package.json, LICENSE, README, task evidence, and PR #20 now record that approval. No media-processing implementation, Decision change, CI, release, or dependency-maintenance scope was added.
 <!-- SECTION:FINAL_SUMMARY:END -->
