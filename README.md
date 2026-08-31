@@ -35,6 +35,9 @@ checkout or CI job:
 | `pnpm typecheck` | Run the authoritative TypeScript 7 source check | No |
 | `pnpm test:unit` (or `pnpm test`) | Run deterministic Vitest unit/contract tests | Test output only |
 | `pnpm test:unit:coverage` | Run unit tests with V8 coverage output | Coverage output only |
+| `pnpm test:browser:smoke` | Run secure-loopback Chromium and Firefox smoke after installing Playwright browsers | Browser report output only |
+| `pnpm test:browser:matrix` | Run the configured Playwright browser projects | Browser report output only |
+| `pnpm test:browser:release` | Run all configured desktop browser projects where their native runners are available | Browser report output only |
 | `pnpm build` | Emit Vite ESM/CJS files and TypeScript declarations under `dist/` | Build output only |
 | `pnpm package:check` | Build, pack, inspect the tarball, run strict publint/ATTW, and test packed consumers | Build/artifact output only |
 | `pnpm verify` | Run format check, lint, unit tests, package checks, and lifecycle validation | Generated output only |
@@ -43,6 +46,11 @@ Validation commands (`format:check`, `lint`, `typecheck`, `test:unit`, and
 `verify`) do not pass write or autofix flags and must not modify tracked source
 files. When a validation check fails, its tool reports the file and diagnostic;
 use the write/fix commands only after reviewing the resulting diff.
+
+The complete CI gate and browser-matrix reproduction guide is in
+[`docs/ci-validation.md`](docs/ci-validation.md). It covers the exact local
+commands, Node/OS/browser matrix, periodic native-browser boundaries, bounded
+retries and timeouts, and diagnostic artifact locations.
 
 Oxfmt intentionally scopes the local formatter to `src/`, `tests/`, and the
 owned tool configuration files. Markdown/HTML, experiments, and supervised

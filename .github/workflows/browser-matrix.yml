@@ -1,0 +1,87 @@
+name: Periodic browser matrix
+
+on:
+  schedule:
+    - cron: "17 2 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: browser-matrix-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser:
+    name: ${{ matrix.browser }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - browser: chromium
+            os: ubuntu-24.04
+          - browser: firefox
+            os: ubuntu-24.04
+          - browser: msedge
+            os: windows-2022
+          - browser: webkit
+            os: macos-14
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js 22.12.0
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.12.0
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Enable the exact package manager
+        shell: bash
+        run: |
+          corepack enable
+          corepack install --global pnpm@11.21.0
+          test "$(pnpm --version)" = "11.21.0"
+
+      - name: Install from the frozen lockfile without lifecycle scripts
+        shell: bash
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Install Playwright browser dependencies
+        if: matrix.browser != 'msedge'
+        shell: bash
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Install Microsoft Edge channel
+        if: matrix.browser == 'msedge'
+        shell: bash
+        run: pnpm exec playwright install msedge
+
+      - name: Build package for the browser fixture
+        shell: bash
+        run: pnpm build
+
+      - name: Run selected browser matrix smoke
+        shell: bash
+        env:
+          BROWSER_PROJECT: ${{ matrix.browser }}
+        run: pnpm test:browser:matrix
+
+      - name: Upload periodic browser diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: browser-matrix-${{ matrix.browser }}-${{ github.run_id }}
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: warn
+          retention-days: 30

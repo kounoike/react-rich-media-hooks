@@ -24,6 +24,7 @@ development inventory is:
 | Package | Version | Role | License | Provenance |
 | --- | --- | --- | --- | --- |
 | `@arethetypeswrong/cli` | 0.18.5 | package validation | MIT | npm registry tarball; [upstream](https://github.com/arethetypeswrong/arethetypeswrong.github.io) |
+| `@playwright/test` | 1.62.1 | browser integration validation | Apache-2.0 | npm registry tarball; [upstream](https://github.com/microsoft/playwright) |
 | `@types/node` | 24.3.0 | Node type definitions | MIT | npm registry tarball; [upstream](https://github.com/DefinitelyTyped/DefinitelyTyped) |
 | `@types/react` | 19.1.12 | React type definitions | MIT | npm registry tarball; [upstream](https://github.com/DefinitelyTyped/DefinitelyTyped) |
 | `@vitest/coverage-v8` | 4.1.11 | test coverage provider | MIT | npm registry tarball; [upstream](https://github.com/vitest-dev/vitest) |
@@ -111,9 +112,12 @@ the same license into a runtime or distributed asset without a fresh review.
 
 ## 4. Third-party build inputs
 
-The supply-chain workflow uses only `actions/checkout` and pins it to the full
-commit `11bd71901bbe5b1630ceea73d27597364c9af683` (v4.2.2). The script rejects
-unrecorded or tag-only action references in all workflow files. New actions
+The workflows use only the reviewed `actions/checkout`, `actions/setup-node`,
+and `actions/upload-artifact` actions. Each is pinned to a full commit SHA:
+`11bd71901bbe5b1630ceea73d27597364c9af683` (checkout v4.2.2),
+`49933ea5288caeca8642d1e84afbd3f7d6820020` (setup-node v4.4.0), and
+`ea165f8d65b6e75b540449e92b4886f43607fa02` (upload-artifact v4.6.2). The
+script rejects unrecorded or tag-only action references in all workflow files. New actions
 require maintainer review of source, release provenance, permissions, and
 maintenance activity, then a monthly update review or an immediate security
 update. The package manager version is exact in `package.json`; npm inputs are
