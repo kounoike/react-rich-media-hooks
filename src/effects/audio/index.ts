@@ -6,7 +6,7 @@ export interface NoiseReductionOptions {
 
 const effect = (kind: string, options: object): AudioEffect => ({
   kind,
-  options: options as Readonly<Record<string, unknown>>,
+  options: Object.fromEntries(Object.entries(options)),
 });
 
 export const noiseReduction = (options: NoiseReductionOptions = {}): AudioEffect =>

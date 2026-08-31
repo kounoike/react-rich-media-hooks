@@ -11,11 +11,16 @@ out/
 
 # Test and coverage output
 coverage/
+test-results/
+playwright-report/
+.playwright/
+.vitest/
 
 # Tool caches
 .cache/
 .turbo/
 .vite/
+.oxlint-cache/
 
 # TypeScript incremental build information
 *.tsbuildinfo
