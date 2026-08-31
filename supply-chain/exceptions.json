@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "vulnerabilityExceptions": [],
+  "licenseExceptions": [
+    {
+      "package": "lightningcss",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "scope": "development-only transitive Vite dependency",
+      "reason": "The package is not shipped; its weak-copyleft license is reviewed and its source and notice remain available in the development environment.",
+      "reviewer": "repository maintainers",
+      "owner": "repository maintainers",
+      "opened": "2026-08-31",
+      "expires": "2027-08-31"
+    },
+    {
+      "package": "lightningcss-linux-x64-gnu",
+      "version": "1.33.0",
+      "license": "MPL-2.0",
+      "scope": "development-only optional Vite platform dependency",
+      "reason": "The package is not shipped; its weak-copyleft license is reviewed and its source and notice remain available in the development environment.",
+      "reviewer": "repository maintainers",
+      "owner": "repository maintainers",
+      "opened": "2026-08-31",
+      "expires": "2027-08-31"
+    },
+    {
+      "package": "lru-cache",
+      "version": "11.5.2",
+      "license": "BlueOak-1.0.0",
+      "scope": "development-only transitive dependency",
+      "reason": "Blue Oak is a permissive license used only by the development toolchain; the package is not shipped and its source and notice remain available.",
+      "reviewer": "repository maintainers",
+      "owner": "repository maintainers",
+      "opened": "2026-08-31",
+      "expires": "2027-08-31"
+    }
+  ]
+}

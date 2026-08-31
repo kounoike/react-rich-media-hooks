@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "owner": "repository maintainers",
+  "lastReviewed": "2026-08-31",
+  "assets": [],
+  "requiredFieldsWhenAdded": [
+    "name",
+    "kind",
+    "version",
+    "source",
+    "sourceRevision",
+    "sha256",
+    "license",
+    "owner",
+    "compatiblePackageVersion"
+  ],
+  "kinds": ["model", "wasm", "worker", "worklet", "other-distributed-asset"],
+  "policy": "No runtime, model, WebAssembly, worker, worklet, or other distributed asset is currently published. Any future asset must be added with immutable source revision, SHA-256, license, compatibility, and update owner before it is loaded or published."
+}

@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schemaVersion": 1,
+  "status": "approved",
+  "effectiveDate": "2026-08-31",
+  "owner": "repository maintainers",
+  "packageManager": {
+    "name": "pnpm",
+    "version": "11.21.0",
+    "registry": "https://registry.npmjs.org",
+    "lockfileVersion": "9.0",
+    "frozenInstallRequired": true,
+    "lifecycleScriptsInUntrustedChecks": "disabled"
+  },
+  "maintenance": {
+    "securityScan": {
+      "pullRequest": true,
+      "protectedBranchPush": true,
+      "weeklyScheduled": true,
+      "productionSeverityBlock": "moderate",
+      "developmentSeverityBlock": "high",
+      "criticalOrHighResponse": "triage within one business day and patch or mitigate immediately",
+      "moderateResponse": "triage within five business days and resolve in the next available update window",
+      "lowResponse": "record and resolve in the next monthly maintenance window"
+    },
+    "updateCadence": {
+      "routine": "monthly",
+      "security": "out-of-band as soon as triage and compatibility evidence are complete",
+      "toolchain": "monthly grouped review, with TypeScript/Oxlint/Oxfmt/Vite compatibility checked as one tuple",
+      "runtimeAndPeer": "monthly review; one compatibility-focused pull request per range change",
+      "asset": "before every asset release and at least quarterly while an asset is supported"
+    },
+    "grouping": [
+      {
+        "name": "toolchain",
+        "members": ["typescript", "vite", "oxfmt", "oxlint", "oxlint-tsgolint", "@arethetypeswrong/cli", "publint"]
+      },
+      {
+        "name": "test-tooling",
+        "members": ["vitest", "@vitest/coverage-v8"]
+      },
+      {
+        "name": "type-definitions",
+        "members": ["@types/node", "@types/react"]
+      },
+      {
+        "name": "runtime-peer-fixtures",
+        "members": ["react"]
+      }
+    ],
+    "lockfile": {
+      "owner": "dependency-change author",
+      "rules": [
+        "Change package.json and pnpm-lock.yaml in the same reviewed change",
+        "Generate lockfile changes with pnpm; never hand-edit resolved versions or integrity values",
+        "CI and release checks use pnpm install --frozen-lockfile",
+        "Every registry resolution must retain an integrity value",
+        "Git, file, and unreviewed URL dependencies require explicit maintainer approval"
+      ]
+    },
+    "compatibilityEvidence": [
+      "pnpm install --frozen-lockfile --ignore-scripts",
+      "pnpm typecheck",
+      "pnpm build",
+      "pnpm package:check",
+      "pnpm run validate:lifecycle",
+      "React 18.2 and React 19 declaration/consumer fixtures when a peer range or React version changes"
+    ],
+    "review": {
+      "routine": "one maintainer reviews the diff, lockfile, provenance, license result, vulnerability result, and compatibility evidence",
+      "securityOrLicense": "the repository maintainer reviews reachability, severity, license obligations, and expiration before merge",
+      "majorOrAsset": "the project owner and a second maintainer review compatibility, asset manifest, and publication impact",
+      "automation": "automation may open bounded update proposals but may not merge, publish, or alter source, policy, or exception records without review"
+    },
+    "automationBounds": {
+      "service": "service-neutral",
+      "allowedChanges": ["package.json", "pnpm-lock.yaml"],
+      "maximumOpenUpdateProposals": 3,
+      "groupingMustFollowPolicy": true,
+      "autoMerge": false,
+      "autoPublish": false,
+      "dependencyUpdateToolSelection": "requires a separately reviewed repository configuration"
+    }
+  },
+  "licenses": {
+    "allowedSpdx": ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "0BSD", "CC0-1.0"],
+    "recordedExceptionsFile": "supply-chain/exceptions.json",
+    "rules": [
+      "Production and distributed dependencies require an SPDX-identifiable license before merge",
+      "Unknown or non-allowlisted licenses fail the automated check unless a current exception names the exact package, version, license, reviewer, reason, and expiry",
+      "A development-only exception does not authorize the same license in a published artifact",
+      "License text and notices must remain available for every distributed dependency"
+    ]
+  },
+  "vulnerabilities": {
+    "exceptionsFile": "supply-chain/exceptions.json",
+    "rules": [
+      "Critical and high production advisories block publication and merge",
+      "Moderate production advisories block merge until fixed or explicitly mitigated",
+      "High and critical development advisories block merge; lower development advisories require a tracked remediation decision",
+      "An exception must be time-bounded, scoped to an advisory and package version, include reachability/false-positive evidence, a reviewer, mitigation, and an owner",
+      "Exceptions are never recorded by suppressing or deleting lockfile entries"
+    ],
+    "falsePositiveReview": [
+      "Confirm the advisory ID, affected version, dependency path, and installed artifact",
+      "Check whether the vulnerable code is reachable in this package and whether a fixed release exists",
+      "Record evidence and compensating controls in the exception entry; obtain maintainer review",
+      "Recheck every scheduled scan and close the exception when the dependency or advisory is resolved"
+    ]
+  },
+  "thirdPartyInputs": {
+    "actions": [
+      {
+        "name": "actions/checkout",
+        "version": "v4.2.2",
+        "sha": "11bd71901bbe5b1630ceea73d27597364c9af683",
+        "source": "https://github.com/actions/checkout",
+        "purpose": "read-only source checkout",
+        "owner": "repository maintainers",
+        "reviewCadence": "monthly and on security advisories"
+      }
+    ],
+    "rules": [
+      "GitHub Actions must use a full 40-character commit SHA, with the human-readable release recorded in policy",
+      "New actions require maintainer review of source, permissions, provenance, and maintenance activity",
+      "Action updates are grouped in the monthly maintenance window or handled out-of-band for security fixes",
+      "Untrusted pull requests receive no publication or deploy credentials",
+      "The lockfile is the integrity source for npm inputs; frozen installation and registry signatures are required"
+    ]
+  },
+  "publication": {
+    "authority": "Release Decision-6 and its protected release workflow",
+    "provenance": "npm trusted publishing/OIDC is preferred and must emit registry provenance for supported packages",
+    "permissions": {
+      "verification": ["contents: read"],
+      "publication": ["contents: read", "id-token: write"],
+      "releaseWrite": "limited to the protected release step and exact tag/release identity"
+    },
+    "credentials": {
+      "normal": "no long-lived npm token; use environment-protected OIDC trusted publishing",
+      "emergency": "a granular package-scoped token is injected only for the publish step, never logged or committed, and revoked/rotated immediately after use",
+      "owner": "project owner",
+      "rotation": "review every 90 days and immediately on maintainer, provider, workflow, or suspected exposure changes",
+      "untrustedCode": "fork and pull-request code cannot access publication credentials"
+    },
+    "verification": [
+      "Match package set, version, tag, merge SHA, and release manifest before publication",
+      "Inspect registry version, tarball digest, and provenance after publication",
+      "Leave a mismatched or partial publication as a draft and stop for maintainer recovery"
+    ]
+  }
+}
