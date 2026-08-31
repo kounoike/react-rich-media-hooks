@@ -1,10 +1,112 @@
 {
-    "name": "react-rich-media-hooks",
-    "private": true,
-    "packageManager": "pnpm@11.21.0",
-    "scripts": {
-        "backlog:dispatchable": "node scripts/list-dispatchable-tasks.mjs",
-        "orchestration:coordinator": "node scripts/orca-task-coordinator.mjs",
-        "validate:lifecycle": "node scripts/validate-task-pr-lifecycle.mjs"
+  "name": "react-rich-media-hooks",
+  "version": "0.1.0",
+  "private": false,
+  "description": "SSR-safe, headless React primitives for local rich-media applications.",
+  "bugs": {
+    "url": "https://github.com/kounoike/react-rich-media-hooks/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kounoike/react-rich-media-hooks.git"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "typesVersions": {
+    "*": {
+      "core": [
+        "dist/core/index.d.ts"
+      ],
+      "effects/video": [
+        "dist/effects/video/index.d.ts"
+      ],
+      "effects/audio": [
+        "dist/effects/audio/index.d.ts"
+      ],
+      "*": [
+        "dist/index.d.ts"
+      ]
     }
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "default": "./dist/index.js"
+    },
+    "./core": {
+      "import": {
+        "types": "./dist/core/index.d.ts",
+        "default": "./dist/core/index.js"
+      },
+      "require": {
+        "types": "./dist/core/index.d.cts",
+        "default": "./dist/core/index.cjs"
+      },
+      "default": "./dist/core/index.js"
+    },
+    "./effects/video": {
+      "import": {
+        "types": "./dist/effects/video/index.d.ts",
+        "default": "./dist/effects/video/index.js"
+      },
+      "require": {
+        "types": "./dist/effects/video/index.d.cts",
+        "default": "./dist/effects/video/index.cjs"
+      },
+      "default": "./dist/effects/video/index.js"
+    },
+    "./effects/audio": {
+      "import": {
+        "types": "./dist/effects/audio/index.d.ts",
+        "default": "./dist/effects/audio/index.js"
+      },
+      "require": {
+        "types": "./dist/effects/audio/index.d.cts",
+        "default": "./dist/effects/audio/index.cjs"
+      },
+      "default": "./dist/effects/audio/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "backlog:dispatchable": "node scripts/list-dispatchable-tasks.mjs",
+    "orchestration:coordinator": "node scripts/orca-task-coordinator.mjs",
+    "validate:lifecycle": "node scripts/validate-task-pr-lifecycle.mjs",
+    "install:frozen": "pnpm install --frozen-lockfile",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "vite build && tsc -p tsconfig.build.json && node scripts/copy-cjs-declarations.mjs",
+    "package:pack": "node scripts/pack-package.mjs",
+    "package:check": "pnpm typecheck && pnpm build && node scripts/validate-package.mjs",
+    "verify": "pnpm typecheck && pnpm build && pnpm package:check && pnpm run validate:lifecycle"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
+    "@types/node": "24.3.0",
+    "@types/react": "19.1.12",
+    "publint": "0.3.24",
+    "react": "19.1.1",
+    "typescript": "7.0.2",
+    "vite": "8.2.2"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0 <20.0.0"
+  },
+  "engines": {
+    "node": ">=20.19.0",
+    "pnpm": ">=11.0.0"
+  },
+  "packageManager": "pnpm@11.21.0"
 }

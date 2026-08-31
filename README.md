@@ -12,6 +12,45 @@ This project uses:
 
 See `AGENTS.md` before making changes.
 
+## Package foundation
+
+The package is ESM-first and exposes a stable root entry, a framework-neutral
+`./core` entry, and explicit optional `./effects/video` and `./effects/audio`
+entries. The root and core modules are browser-inert at import time; media
+permissions, processing resources, and optional runtime assets are not created
+until a later implementation invokes an explicit session action. React is a
+peer dependency of the root entry, while the core entry has no React runtime
+dependency. `sideEffects: false` documents the no-import-work contract and
+keeps optional effect modules tree-shakeable.
+
+Build and inspect the package with the pinned toolchain:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm typecheck
+pnpm build
+pnpm package:check
+```
+
+`pnpm build` writes JavaScript to `dist/` using Vite 8 and declarations using
+TypeScript 7. It emits matching ESM (`.js`) and CommonJS (`.cjs`) files for
+each public entry. `pnpm package:check` verifies those files, resolves every
+public entry in ESM and CommonJS through the export map, checks that the
+package is publishable and side-effect-free, and creates one tarball under
+`.artifacts/`. Inspect the final boundary with:
+
+```sh
+tar -tzf .artifacts/react-rich-media-hooks-0.1.0.tgz
+```
+
+Only `dist/`, this README, and the package license file are included by the
+package `files` allowlist. The current license boundary is explicitly
+`UNLICENSED` in `package.json` and `LICENSE`; changing it requires a recorded
+project license decision. Backlog records, experiments, tests, development
+configuration, and local caches remain outside the artifact. The package is
+licensed under MIT; the SPDX identifier is in `package.json` and the complete
+notice is in `LICENSE`.
+
 ## Supervised task lifecycle
 
 The task-to-PR workflow is repository operating policy rather than a Backlog
