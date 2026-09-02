@@ -1,0 +1,138 @@
+name: CI validation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Quality (Node ${{ matrix.node }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22.23.2, 24.19.0]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.9
+        with:
+          version: 11.21.0
+
+      - name: Set up Node.js ${{ matrix.node }}
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Verify the exact package manager
+        run: test "$(pnpm --version)" = "11.21.0"
+
+      - name: Install from the frozen lockfile without lifecycle scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Run semantic lint
+        run: pnpm lint
+
+      - name: Type-check source and tests
+        run: pnpm typecheck
+
+      - name: Run unit and contract tests with coverage
+        run: pnpm test:unit:coverage
+
+      - name: Build package outputs
+        run: pnpm build
+
+      - name: Validate package integrity and consumers
+        run: pnpm package:check
+
+      - name: Validate task lifecycle policy
+        run: pnpm run validate:lifecycle
+
+      - name: Upload quality diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: quality-node-${{ matrix.node }}-${{ github.run_id }}
+          path: |
+            coverage
+            .artifacts
+            test-results
+          if-no-files-found: warn
+          retention-days: 14
+
+  browser-smoke:
+    name: Browser smoke (${{ matrix.browser }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.9
+        with:
+          version: 11.21.0
+
+      - name: Set up Node.js 22.23.2
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22.23.2
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Verify the exact package manager
+        run: test "$(pnpm --version)" = "11.21.0"
+
+      - name: Install from the frozen lockfile without lifecycle scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Install browser and virtual-media dependencies
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Build package for the browser fixture
+        run: pnpm build
+
+      - name: Run selected browser smoke
+        env:
+          BROWSER_PROJECT: ${{ matrix.browser }}
+        run: pnpm exec playwright test
+
+      - name: Upload browser diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: browser-smoke-${{ matrix.browser }}-${{ github.run_id }}
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: warn
+          retention-days: 14

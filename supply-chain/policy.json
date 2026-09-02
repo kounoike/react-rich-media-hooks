@@ -112,10 +112,37 @@
     "actions": [
       {
         "name": "actions/checkout",
-        "version": "v4.2.2",
-        "sha": "11bd71901bbe5b1630ceea73d27597364c9af683",
+        "version": "v7.0.1",
+        "sha": "3d3c42e5aac5ba805825da76410c181273ba90b1",
         "source": "https://github.com/actions/checkout",
         "purpose": "read-only source checkout",
+        "owner": "repository maintainers",
+        "reviewCadence": "monthly and on security advisories"
+      },
+      {
+        "name": "actions/setup-node",
+        "version": "v7.0.0",
+        "sha": "820762786026740c76f36085b0efc47a31fe5020",
+        "source": "https://github.com/actions/setup-node",
+        "purpose": "exact Node.js runtime and bounded pnpm cache",
+        "owner": "repository maintainers",
+        "reviewCadence": "monthly and on security advisories"
+      },
+      {
+        "name": "pnpm/action-setup",
+        "version": "v6.0.9",
+        "sha": "0977fd99725f1db4007ccb2928dbb4e90d06cc86",
+        "source": "https://github.com/pnpm/action-setup",
+        "purpose": "explicit pnpm executable provisioning before setup-node cache resolution",
+        "owner": "repository maintainers",
+        "reviewCadence": "monthly and on security advisories"
+      },
+      {
+        "name": "actions/upload-artifact",
+        "version": "v7.0.1",
+        "sha": "043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+        "source": "https://github.com/actions/upload-artifact",
+        "purpose": "bounded failure and coverage diagnostics",
         "owner": "repository maintainers",
         "reviewCadence": "monthly and on security advisories"
       }

@@ -16,6 +16,16 @@
       "updateCadence": "monthly"
     },
     {
+      "name": "@playwright/test",
+      "role": "development browser integration test runner",
+      "version": "1.62.1",
+      "license": "Apache-2.0",
+      "registryTarball": "https://registry.npmjs.org/@playwright/test/-/test-1.62.1.tgz",
+      "source": "https://github.com/microsoft/playwright",
+      "owner": "repository maintainers",
+      "updateCadence": "monthly browser-tooling review"
+    },
+    {
       "name": "@types/node",
       "role": "development type definitions",
       "version": "24.3.0",
