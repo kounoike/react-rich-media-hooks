@@ -39,10 +39,20 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Enable the exact package manager
+      - name: Set up pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.9
+        with:
+          version: 11.21.0
+
+      - name: Set up Node.js 22.23.2
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22.23.2
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Verify the exact package manager
         run: |
-          corepack enable
-          corepack install --global pnpm@11.21.0
           test "$(pnpm --version)" = "11.21.0"
 
       - name: Install from the frozen lockfile without lifecycle scripts

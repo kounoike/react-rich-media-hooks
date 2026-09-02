@@ -1,11 +1,11 @@
 ---
 id: TASK-1.20
 title: Establish continuous integration validation
-status: Done
+status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-08-13 21:15'
-updated_date: '2026-08-31 01:07'
+updated_date: '2026-09-02 14:40'
 labels: []
 dependencies:
   - TASK-1.6
@@ -40,6 +40,8 @@ Automate the approved verification gates for pull requests and protected branche
 3. Configure bounded dependency caching, concurrency cancellation, per-job timeouts, narrowly scoped retries, diagnostic logs/artifacts with retention, least-privilege permissions, and full-commit-pinned third-party actions consistent with the supply-chain policy.
 4. Document local reproduction for every CI gate and validate workflow syntax, scripts, policy assertions, lifecycle rules, and repository checks.
 5. Verify every acceptance criterion objectively, record evidence and the authorized one-time automatic-merge exception in TASK-1.20, commit/push the scoped changes, and publish a newline-correct Draft PR.
+
+6. Reproduce the published CI failures, explicitly provision pnpm in each affected workflow job, update the Node.js version strategy for the 2026-09-02 supported runner environment, run local gates, rerun PR #23 CI, and verify every Node Quality plus Chromium/Firefox smoke check before commit/push.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -52,7 +54,27 @@ Automate the approved verification gates for pull requests and protected branche
 2026-08-31 validation so far: pnpm install --frozen-lockfile, pnpm format:check, pnpm lint, pnpm typecheck, pnpm verify, pnpm run supply-chain:check, pnpm run supply-chain:audit, pnpm run supply-chain:signatures, pnpm run validate:lifecycle, git diff --check, YAML parsing, and CI=1 pnpm test:browser:smoke all pass. Browser smoke passed Chromium and Firefox (2 tests); supply-chain checks report 13 direct dependencies, 224 integrity-pinned resolutions, no known vulnerabilities, and 224 verified registry signatures.
 
 2026-08-31 finalization evidence: CI=1 pnpm test:browser:smoke passed Chromium and Firefox (2 tests). pnpm verify passed Oxfmt (17 files), Oxlint, Vitest (1 file/3 tests), TypeScript typecheck including playwright.config.ts, Vite build, package integrity/packed React 18.2 and 19 consumers, and lifecycle validation. pnpm install --frozen-lockfile --ignore-scripts passed; supply-chain:check passed with 13 direct dependencies and 224 integrity-pinned resolutions; supply-chain:audit reported no known production moderate or development high vulnerabilities; supply-chain:signatures verified 224 packages; git diff --check passed; Python YAML parsing and custom workflow assertions passed for all workflows (read-only permissions, cancellation, timeout, retention, and 3 pinned actions).
+
+2026-09-02 resumed after the prior agent terminated abnormally. Initial evidence: branch kounoike/task-1-20-ci-validation and origin are both at d7a32ee; PR #23 is OPEN/DRAFT with old failures in Quality (Node 20.19.0, 22.12.0, 24.19.0) and Browser smoke (chromium, firefox). Worktree is clean. Scope remains CI setup and Node matrix/version alignment only.
+
+2026-09-02 implementation: Added pinned pnpm/action-setup v6.0.9 before every setup-node cache use, verified pnpm 11.21.0, and recorded the action SHA in supply-chain/policy.json. Removed the EOL Node 20 quality row; the CI and browser workflows now use Node 22.23.2 and the runner-cached Node 24.19.0 on Ubuntu 24.04. Updated CI reproduction documentation while leaving the package engine compatibility range unchanged. Local evidence: frozen install, pnpm verify, supply-chain check, signature verification (224 packages), audit (no known vulnerabilities), YAML parse, workflow setup ordering assertions, git diff --check, and Chromium/Firefox smoke (2 passed).
 <!-- SECTION:NOTES:END -->
+
+## Comments
+
+<!-- COMMENTS:BEGIN -->
+author: @codex
+created: 2026-09-02 14:33
+---
+Resumed TASK-1.20 in the existing worktree and branch after abnormal agent termination; PR #23 remains the scoped Draft PR. Investigating pnpm provisioning and current Node runner support before implementation.
+---
+
+author: @codex
+created: 2026-09-02 14:40
+---
+Implementation and local validation passed. Ready to commit/push so PR #23 can run the updated public CI; pending verification of both Node Quality rows and Chromium/Firefox smoke rows on the new head.
+---
+<!-- COMMENTS:END -->
 
 ## Final Summary
 

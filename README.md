@@ -8,7 +8,7 @@ This project uses:
 
 - Backlog.md for task management
 - Backlog.md Decisions for architectural decisions
-- Node.js 20.19+ (or 22.12+) and pnpm 11.21.0 for the pinned toolchain
+- Node.js 22.23.2 or 24.19.0 and pnpm 11.21.0 for the pinned toolchain
 - Oxfmt 0.65.0 and Oxlint 1.80.0 with oxlint-tsgolint 7.0.2001
 - TypeScript 7.0.2, Vitest 4.1.11, and Vite 8.2.2
 

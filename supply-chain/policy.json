@@ -129,6 +129,15 @@
         "reviewCadence": "monthly and on security advisories"
       },
       {
+        "name": "pnpm/action-setup",
+        "version": "v6.0.9",
+        "sha": "0977fd99725f1db4007ccb2928dbb4e90d06cc86",
+        "source": "https://github.com/pnpm/action-setup",
+        "purpose": "explicit pnpm executable provisioning before setup-node cache resolution",
+        "owner": "repository maintainers",
+        "reviewCadence": "monthly and on security advisories"
+      },
+      {
         "name": "actions/upload-artifact",
         "version": "v4.6.2",
         "sha": "ea165f8d65b6e75b540449e92b4886f43607fa02",

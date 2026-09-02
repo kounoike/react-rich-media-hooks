@@ -2,9 +2,9 @@
 
 The repository uses the same frozen package commands locally and in GitHub
 Actions. Pull requests and pushes to the protected `main` branch run
-deterministic quality gates on Node 20.19.0, 22.12.0, and 24.19.0 on Ubuntu
-24.04, plus secure-loopback Playwright smoke on Chromium and Firefox with
-virtual-media launch settings.
+deterministic quality gates on Node 22.23.2 and 24.19.0 on Ubuntu 24.04, plus
+secure-loopback Playwright smoke on Chromium and Firefox with virtual-media
+launch settings.
 
 ## Reproduce the pull-request gates locally
 
@@ -40,10 +40,11 @@ not claim physical-device quality or a production media implementation.
 ## Matrix and cadence
 
 `.github/workflows/ci.yml` is the pull-request and protected-branch workflow.
-Its quality matrix is Node 20.19.0, 22.12.0, and 24.19.0 on Ubuntu 24.04;
-the browser matrix runs Chromium and Firefox on every pull request and main
-branch push. The package manager is enabled at exactly pnpm 11.21.0 and all
-installs use `--frozen-lockfile --ignore-scripts`.
+Its quality matrix is Node 22.23.2 and 24.19.0 on Ubuntu 24.04; the browser
+matrix runs Chromium and Firefox on every pull request and main branch push.
+`pnpm/action-setup` provisions exactly pnpm 11.21.0 before
+`actions/setup-node` resolves its pnpm cache, and all installs use
+`--frozen-lockfile --ignore-scripts`.
 
 `.github/workflows/browser-matrix.yml` runs weekly and on manual dispatch. It
 runs Chromium and Firefox on Ubuntu 24.04, Microsoft Edge on Windows 2022,
