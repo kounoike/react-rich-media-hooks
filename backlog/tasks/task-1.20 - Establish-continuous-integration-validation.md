@@ -1,11 +1,11 @@
 ---
 id: TASK-1.20
 title: Establish continuous integration validation
-status: In Progress
+status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-13 21:15'
-updated_date: '2026-09-02 14:46'
+updated_date: '2026-09-02 14:48'
 labels: []
 dependencies:
   - TASK-1.6
@@ -62,6 +62,8 @@ Automate the approved verification gates for pull requests and protected branche
 2026-09-02 public CI run 33643591808 on head 0060426: pnpm/action-setup, Node 22.23.2/24.19.0 setup, exact pnpm verification, installs, and both Node Quality rows passed; supply-chain run 33643591830 also passed. Chromium and Firefox smoke reached test execution but both failed because BROWSER_PROJECT filtered playwright.config.ts to one project while test:browser:smoke passed both project selectors.
 
 2026-09-02 follow-up: Changed PR smoke workflow execution to pnpm exec playwright test while retaining BROWSER_PROJECT filtering, so each matrix job runs only its selected project. Updated local reproduction documentation accordingly. Also upgraded pinned checkout/setup-node/upload-artifact actions to Node 24-compatible v7 releases and refreshed supply-chain policy SHAs, removing runner Node 20 action-runtime warnings. Local Chromium and Firefox single-project runs passed; YAML, setup-order, supply-chain, lifecycle, and diff checks passed.
+
+2026-09-02 final validation: On PR #23 head c1b345e, CI validation run 33644245916 passed Browser smoke chromium, Browser smoke firefox, Quality Node 22.23.2, and Quality Node 24.19.0. Supply-chain controls run 33644245927 passed verify. gh pr checks 23 reports pass for all five current checks. The public jobs confirmed pnpm setup, Node setup, exact pnpm verification, and selected browser execution. The worktree and origin branch are clean and aligned at c1b345e.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
@@ -95,5 +97,5 @@ The smoke selector fix and Node 24-compatible action pins are locally validated.
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Established CI validation with frozen Node/pnpm quality matrices, PR/protected-main deterministic gates, Chromium/Firefox secure-loopback smoke, weekly/manual Edge and WebKit native-OS coverage, bounded retries/timeouts/concurrency, pnpm caching, retained diagnostics, least-privilege permissions, and full-SHA action policy records. Added Playwright browser scripts/configuration and contributor reproduction documentation while keeping native Safari, mobile, device, accessibility, and performance claims in their documented manual/release boundaries. Verified with pnpm verify, CI=1 pnpm test:browser:smoke, frozen script-disabled install, supply-chain checks/audits/signatures, YAML/workflow assertions, and git diff --check.
+Fixed PR CI by provisioning pnpm 11.21.0 before setup-node cache resolution, using supported runner-aligned Node 22.23.2 and 24.19.0 LTS rows, and upgrading pinned actions to Node 24-compatible v7 releases. Corrected the matrix browser selector so each smoke job executes its selected project, and updated CI reproduction documentation and action provenance. Verified locally with frozen install, pnpm verify, supply-chain checks/signatures/audit, YAML and workflow assertions, git diff --check, and Chromium/Firefox smoke. Verified publicly on PR #23 head c1b345e: Node Quality 22.23.2 and 24.19.0, Chromium smoke, Firefox smoke, and supply-chain verify all passed.
 <!-- SECTION:FINAL_SUMMARY:END -->
