@@ -31,11 +31,13 @@ pnpm test:browser:smoke
 ```
 
 `pnpm test:browser:smoke` runs Chromium and Firefox. To run one project, set
-`BROWSER_PROJECT=chromium` or `BROWSER_PROJECT=firefox`. The browser fixture
-serves the built package over secure loopback, checks secure-context and media
-capability exposure, and verifies that the package remains SSR-safe and
-reports its currently unsupported processing foundation explicitly. It does
-not claim physical-device quality or a production media implementation.
+`BROWSER_PROJECT=chromium` or `BROWSER_PROJECT=firefox` and invoke
+`pnpm exec playwright test`; the config uses that variable to select one
+project. The browser fixture serves the built package over secure loopback,
+checks secure-context and media capability exposure, and verifies that the
+package remains SSR-safe and reports its currently unsupported processing
+foundation explicitly. It does not claim physical-device quality or a
+production media implementation.
 
 ## Matrix and cadence
 

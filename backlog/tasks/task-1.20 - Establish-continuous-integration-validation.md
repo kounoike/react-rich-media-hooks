@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-08-13 21:15'
-updated_date: '2026-09-02 14:40'
+updated_date: '2026-09-02 14:46'
 labels: []
 dependencies:
   - TASK-1.6
@@ -55,9 +55,13 @@ Automate the approved verification gates for pull requests and protected branche
 
 2026-08-31 finalization evidence: CI=1 pnpm test:browser:smoke passed Chromium and Firefox (2 tests). pnpm verify passed Oxfmt (17 files), Oxlint, Vitest (1 file/3 tests), TypeScript typecheck including playwright.config.ts, Vite build, package integrity/packed React 18.2 and 19 consumers, and lifecycle validation. pnpm install --frozen-lockfile --ignore-scripts passed; supply-chain:check passed with 13 direct dependencies and 224 integrity-pinned resolutions; supply-chain:audit reported no known production moderate or development high vulnerabilities; supply-chain:signatures verified 224 packages; git diff --check passed; Python YAML parsing and custom workflow assertions passed for all workflows (read-only permissions, cancellation, timeout, retention, and 3 pinned actions).
 
-2026-09-02 resumed after the prior agent terminated abnormally. Initial evidence: branch kounoike/task-1-20-ci-validation and origin are both at d7a32ee; PR #23 is OPEN/DRAFT with old failures in Quality (Node 20.19.0, 22.12.0, 24.19.0) and Browser smoke (chromium, firefox). Worktree is clean. Scope remains CI setup and Node matrix/version alignment only.
+2026-09-02 resumed after the prior agent terminated abnormally. Initial evidence: branch kounoike/task-1-20-ci-validation and origin were both at d7a32ee; PR #23 was OPEN/DRAFT with old failures in Quality (Node 20.19.0, 22.12.0, 24.19.0) and Browser smoke (chromium, firefox). Worktree was clean. Scope remains CI setup and Node matrix/version alignment only.
 
 2026-09-02 implementation: Added pinned pnpm/action-setup v6.0.9 before every setup-node cache use, verified pnpm 11.21.0, and recorded the action SHA in supply-chain/policy.json. Removed the EOL Node 20 quality row; the CI and browser workflows now use Node 22.23.2 and the runner-cached Node 24.19.0 on Ubuntu 24.04. Updated CI reproduction documentation while leaving the package engine compatibility range unchanged. Local evidence: frozen install, pnpm verify, supply-chain check, signature verification (224 packages), audit (no known vulnerabilities), YAML parse, workflow setup ordering assertions, git diff --check, and Chromium/Firefox smoke (2 passed).
+
+2026-09-02 public CI run 33643591808 on head 0060426: pnpm/action-setup, Node 22.23.2/24.19.0 setup, exact pnpm verification, installs, and both Node Quality rows passed; supply-chain run 33643591830 also passed. Chromium and Firefox smoke reached test execution but both failed because BROWSER_PROJECT filtered playwright.config.ts to one project while test:browser:smoke passed both project selectors.
+
+2026-09-02 follow-up: Changed PR smoke workflow execution to pnpm exec playwright test while retaining BROWSER_PROJECT filtering, so each matrix job runs only its selected project. Updated local reproduction documentation accordingly. Also upgraded pinned checkout/setup-node/upload-artifact actions to Node 24-compatible v7 releases and refreshed supply-chain policy SHAs, removing runner Node 20 action-runtime warnings. Local Chromium and Firefox single-project runs passed; YAML, setup-order, supply-chain, lifecycle, and diff checks passed.
 <!-- SECTION:NOTES:END -->
 
 ## Comments
@@ -73,6 +77,18 @@ author: @codex
 created: 2026-09-02 14:40
 ---
 Implementation and local validation passed. Ready to commit/push so PR #23 can run the updated public CI; pending verification of both Node Quality rows and Chromium/Firefox smoke rows on the new head.
+---
+
+author: @codex
+created: 2026-09-02 14:42
+---
+Public CI confirmed the pnpm provisioning fix and both Node Quality rows. Diagnosed a separate CI smoke selector conflict; applying the minimal workflow-only fix to invoke Playwright with the matrix-selected project while retaining the existing BROWSER_PROJECT config filter.
+---
+
+author: @codex
+created: 2026-09-02 14:45
+---
+The smoke selector fix and Node 24-compatible action pins are locally validated. Committing and pushing the follow-up; public CI must now pass both browser smoke jobs as well as both Node Quality jobs on the resulting head.
 ---
 <!-- COMMENTS:END -->
 
