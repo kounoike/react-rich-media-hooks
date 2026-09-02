@@ -11,6 +11,10 @@
     "type": "git",
     "url": "https://github.com/kounoike/react-rich-media-hooks.git"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "files": [
     "dist",
     "README.md",
@@ -103,6 +107,10 @@
     "build": "vite build && tsc -p tsconfig.build.json && node scripts/copy-cjs-declarations.mjs",
     "package:pack": "node scripts/pack-package.mjs",
     "package:check": "pnpm typecheck && pnpm build && node scripts/validate-package.mjs",
+    "release:manifest": "node scripts/release-manifest.mjs",
+    "release:check": "node scripts/release-check.mjs",
+    "release:dry-run": "pnpm package:check && pnpm pack --dry-run && pnpm release:check -- --dry-run",
+    "release:publish": "node scripts/release-publish.mjs",
     "verify": "pnpm format:check && pnpm lint && pnpm test:unit && pnpm package:check && pnpm run validate:lifecycle"
   },
   "devDependencies": {

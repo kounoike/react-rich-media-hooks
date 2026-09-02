@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "status": "proposed",
+  "version": "0.1.0",
+  "tag": "v0.1.0",
+  "sourceCommit": null,
+  "packages": [
+    {
+      "name": "react-rich-media-hooks",
+      "version": "0.1.0",
+      "registry": "https://registry.npmjs.org/",
+      "distTag": "latest"
+    }
+  ],
+  "artifacts": {
+    "sha256": null,
+    "sha512": null
+  },
+  "provenance": "npm-trusted-publishing-oidc"
+}

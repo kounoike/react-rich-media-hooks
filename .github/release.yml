@@ -1,0 +1,23 @@
+changelog:
+  categories:
+    - title: "Breaking changes"
+      labels:
+        - "release:major"
+    - title: "Added and changed"
+      labels:
+        - "release:minor"
+    - title: "Fixed"
+      labels:
+        - "release:patch"
+    - title: "Security"
+      labels:
+        - "release:security"
+    - title: "Other changes"
+      labels:
+        - "*"
+  exclude:
+    labels:
+      - "release:none"
+      - "tagpr"
+    authors:
+      - "dependabot[bot]"

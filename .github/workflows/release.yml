@@ -1,0 +1,195 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run all non-publishing release checks"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-publishing
+  cancel-in-progress: false
+
+jobs:
+  tagpr:
+    name: Prepare or tag reviewed release
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: read
+    outputs:
+      tag: ${{ steps.tagpr.outputs.tag }}
+    steps:
+      - name: Check out release branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Create or update release PR and tag its approved merge
+        id: tagpr
+        uses: Songmu/tagpr@d1b8138b7a31075141b6cd64103de9485ced7ac9 # v1.20.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-verify:
+    name: Verify tagged package and release metadata
+    needs: tagpr
+    if: needs.tagpr.outputs.tag != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Check out immutable release tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.tagpr.outputs.tag }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.9
+        with:
+          version: 11.21.0
+
+      - name: Set up Node.js 22.23.2
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22.23.2
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Verify the exact package manager
+        run: test "$(pnpm --version)" = "11.21.0"
+
+      - name: Install from the frozen lockfile without lifecycle scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Run non-publishing release gate
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          pnpm format:check
+          pnpm lint
+          pnpm typecheck
+          pnpm test:unit
+          pnpm build
+          pnpm package:check
+          pnpm exec playwright install --with-deps chromium firefox
+          pnpm test:browser:smoke
+          pnpm pack --dry-run
+          pnpm run supply-chain:check
+          pnpm release:check -- --tag "${{ needs.tagpr.outputs.tag }}" --merge-sha "${{ github.sha }}"
+
+      - name: Copy the verified package and checksum to a workflow artifact
+        run: |
+          mkdir -p release-artifacts
+          cp .artifacts/*.tgz release-artifacts/
+          sha256sum release-artifacts/*.tgz > release-artifacts/package.sha256
+
+      - name: Upload immutable release input
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-artifacts-${{ github.run_id }}
+          path: release-artifacts
+          if-no-files-found: error
+          retention-days: 14
+
+  release-publish:
+    name: Publish verified package and GitHub Release
+    needs: [tagpr, release-verify]
+    if: needs.tagpr.outputs.tag != '' && needs.release-verify.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: npm-publish
+    permissions:
+      contents: write
+      actions: read
+      id-token: write
+    steps:
+      - name: Check out immutable release tag
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.tagpr.outputs.tag }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Node.js 22.23.2
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22.23.2
+          registry-url: https://registry.npmjs.org/
+          package-manager-cache: false
+
+      - name: Download the verified package artifact
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh run download "$GITHUB_RUN_ID" --name "release-artifacts-$GITHUB_RUN_ID" --dir release-artifacts
+
+      - name: Reconcile and publish through npm trusted publishing
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          artifact="$(find release-artifacts -type f -name '*.tgz' -print -quit)"
+          test -n "$artifact"
+          node scripts/release-publish.mjs \
+            --mode publish \
+            --tag "${{ needs.tagpr.outputs.tag }}" \
+            --merge-sha "${{ github.sha }}" \
+            --artifact "$artifact" \
+            --evidence release-artifacts/release-evidence.json \
+            --manifest release-artifacts/release-manifest.json
+
+      - name: Attach checksums and release evidence to the draft
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "${{ needs.tagpr.outputs.tag }}" release-artifacts/package.sha256 release-artifacts/release-manifest.json release-artifacts/release-evidence.json --clobber
+
+      - name: Publish the draft only after registry verification
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node scripts/release-publish.mjs --mode finalize --tag "${{ needs.tagpr.outputs.tag }}" --merge-sha "${{ github.sha }}" --evidence release-artifacts/release-evidence.json
+
+  release-dry-run:
+    name: Manual non-publishing release dry run
+    if: github.event_name == 'workflow_dispatch' && inputs.dry_run == true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the requested branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.9
+        with:
+          version: 11.21.0
+
+      - name: Set up Node.js 22.23.2
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22.23.2
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Run the complete non-publishing release dry run
+        run: pnpm release:dry-run
