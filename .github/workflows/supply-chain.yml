@@ -4,17 +4,31 @@ on:
   pull_request:
     paths:
       - ".github/workflows/supply-chain.yml"
+      - ".github/workflows/release.yml"
+      - ".github/release.yml"
+      - ".tagpr"
       - "package.json"
       - "pnpm-lock.yaml"
       - "scripts/check-supply-chain.mjs"
+      - "scripts/release-check.mjs"
+      - "scripts/release-manifest.mjs"
+      - "scripts/release-publish.mjs"
+      - "release-manifest.json"
       - "supply-chain/**"
   push:
     branches: [main]
     paths:
       - ".github/workflows/supply-chain.yml"
+      - ".github/workflows/release.yml"
+      - ".github/release.yml"
+      - ".tagpr"
       - "package.json"
       - "pnpm-lock.yaml"
       - "scripts/check-supply-chain.mjs"
+      - "scripts/release-check.mjs"
+      - "scripts/release-manifest.mjs"
+      - "scripts/release-publish.mjs"
+      - "release-manifest.json"
       - "supply-chain/**"
   schedule:
     - cron: "17 2 * * 1"

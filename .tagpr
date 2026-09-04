@@ -1,0 +1,11 @@
+[tagpr]
+releaseBranch = main
+versionFile = package.json
+vPrefix = true
+changelog = true
+changelogFile = CHANGELOG.md
+releaseYAMLPath = .github/release.yml
+release = draft
+majorLabels = release:major
+minorLabels = release:minor
+postVersionCommand = pnpm release:manifest
