@@ -102,6 +102,96 @@ configuration, and local caches remain outside the artifact. The package is
 licensed under MIT; the SPDX identifier is in `package.json` and the complete
 notice is in `LICENSE`.
 
+## Capture slice
+
+The first capture slice provides an explicit, framework-neutral session owner
+with a thin React subscription adapter. Constructing a session is safe during
+SSR; call `start` from a client event or an application-owned client effect:
+
+```tsx
+import * as React from "react";
+import {
+  createMediaSession,
+  MediaSessionProvider,
+  useMediaOutput,
+  useMediaSession,
+} from "react-rich-media-hooks";
+
+function CameraApp() {
+  const session = React.useMemo(
+    () => createMediaSession({ capture: { video: true, audio: true } }),
+    [],
+  );
+
+  React.useEffect(() => () => void session.dispose(), [session]);
+
+  return (
+    <MediaSessionProvider session={session}>
+      <Preview />
+      <Controls />
+    </MediaSessionProvider>
+  );
+}
+
+function Preview() {
+  const { snapshot } = useMediaSession();
+  const { output } = useMediaOutput("video");
+
+  React.useEffect(() => {
+    const video = document.querySelector("video");
+    if (video !== null && output !== null) video.srcObject = output.stream;
+    return () => {
+      if (video !== null) video.srcObject = null;
+    };
+  }, [output]);
+
+  return <video autoPlay muted playsInline data-phase={snapshot.phase} />;
+}
+
+function Controls() {
+  const { session, snapshot } = useMediaSession();
+  return (
+    <button disabled={snapshot.phase === "requesting"} onClick={() => void session.start()}>
+      {snapshot.phase === "active" ? "Camera active" : "Start camera"}
+    </button>
+  );
+}
+```
+
+Use `refreshDevices()` for an application-owned picker. Before permission, the
+list may be partial and labels may be redacted; display the provided fallback
+label without treating `deviceId` or `groupId` as a durable hardware identity.
+Pass a remembered `deviceId` in `capture` as a best-effort preference: if it is
+gone, capture retries once without that preference. An explicit picker choice
+uses exact matching through `switchDevice` and reports `device-not-found` or
+another typed error instead of silently selecting another device:
+
+```tsx
+await session.refreshDevices();
+const devices = session.getDevices("video");
+const result = await session.switchDevice("video", { deviceId });
+if (result.status === "failed") {
+  // result.error.code is stable; result.error.browserName preserves UA evidence.
+}
+```
+
+Observe `snapshot.phase`, `snapshot.activity`, `snapshot.deviceDiscovery`,
+`snapshot.outputs`, `snapshot.operation`, and `snapshot.error` for accessible
+status and recovery UI. `start`, `switchDevice`, and `retry` return tagged
+results; a cancelled or superseded request never replaces a newer output, and a
+late stream is stopped. A failed replacement preserves the current output when
+possible. Device `mute` and `ended` events update activity and expose a
+retryable `device-ended` error; recovery is explicit through `retry` or a new
+selection.
+
+The session owns tracks acquired by `start` and stops them on `stop` or
+`dispose`; subscription and preview attachment do not own the resource.
+`output.clone()` creates an application-owned track that the application must
+stop independently. Disposal is idempotent, and a disposed session is
+terminal. The public entry is import-safe on the server and returns a tagged
+`unsupported` result when capture or secure-context requirements are absent;
+all browser work starts only after an explicit client action.
+
 ## Supervised task lifecycle
 
 The task-to-PR workflow is repository operating policy rather than a Backlog
