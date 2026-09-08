@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-08-13 20:31'
-updated_date: '2026-09-04 04:13'
+updated_date: '2026-09-08 03:40'
 labels: []
 dependencies:
   - TASK-1.9
@@ -40,6 +40,8 @@ Deliver the smallest supported end-to-end consumer journey for acquiring browser
 3. Preserve approved ownership semantics: session-owned tracks are stopped exactly once, application output clones are independent, output replacement is observable through stable output metadata, disposal is idempotent, and React hooks/provider remain thin useSyncExternalStore adapters.
 4. Add deterministic fake browser-media tests for discovery, constraints, lifecycle races, cleanup, failures, cancellation, switching, fallback, clones, unsupported contexts, rerendering, unmounting, and Strict Mode; add browser-level Chromium/Firefox tests for real secure-loopback capture and device lifecycle behavior.
 5. Update consumer documentation with the minimal capture example, device discovery/selection and fallback guidance, state/error handling, output attachment, clone ownership, SSR/unsupported behavior, and explicit session disposal; run formatting, lint, type, unit, browser, package, lifecycle, and diff checks.
+
+6. Enable devicechange monitoring when device discovery is explicitly requested, so an application-owned pre-capture picker receives automatic device list updates; preserve listener cleanup on stop/dispose and add regression coverage.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -50,10 +52,16 @@ Research 2026-09-04: Read accepted Decision-1 (product/quality), Decision-2 (fra
 Implementation 2026-09-04: Replaced the inert session with a browser-safe capture owner using getUserMedia, immutable snapshots, explicit start/stop/retry/switch actions, generation-tagged cancellation/supersession, owned-track cleanup, standard per-kind outputs, output clone ownership, and track mute/ended observation. Added public refreshDevices/getDevices data with partial/redacted labels, devicechange refresh, remembered device preference fallback, exact explicit switching, selected device evidence, and typed DOMException categories. Kept processor factories, external capture input/adoption, transport, and other product scope unchanged.
 
 Validation evidence 2026-09-04: pnpm verify passed formatting, Oxlint, 8 Vitest tests, package build/packed React 18.2 and 19 ESM/SSR/CJS/TypeScript consumers, and lifecycle policy. pnpm test:browser:smoke passed Chromium and Firefox secure-loopback capture with discovery, video/audio output, stop, and dispose. node --check experiments/capture-lifecycle/run.mjs and node experiments/capture-lifecycle/run.mjs passed CAPTURE_LIFECYCLE_EXPERIMENT_PASS with 5 scenarios and 41 assertions including React Strict Mode, stale completion, cancellation, ownership, removal, replacement, retry, and cleanup. pnpm run backlog:dispatchable returned no remaining tasks; git diff --check passed.
+
+2026-09-08: User requested automatic devicechange monitoring for the application-owned picker before capture starts. Scope remains within TASK-1.10 device discovery lifecycle; no new public picker UI or architecture decision is introduced.
+
+Validation 2026-09-08: refreshDevices() now attaches the devicechange listener before capture starts. The core regression test confirms a pre-capture devicechange updates the device list and stop() removes the listener. pnpm exec vitest run tests/core.test.ts passed (8/8); pnpm verify passed format, lint, unit tests, typecheck, build/package validation, and task-PR lifecycle validation; git diff --check passed.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
 Implemented the first capture-focused vertical slice: browser-safe MediaSession capture with explicit lifecycle actions, generation-safe cancellation and stale-result cleanup, standard outputs and clone ownership, device discovery with redaction/partial state, remembered-preference fallback, exact switching, devicechange reconciliation, track activity/error state, and SSR-safe unsupported behavior. Added deterministic fake-media coverage plus Chromium/Firefox secure-loopback checks and documented the consumer flow in README; pnpm verify, package consumers, capture lifecycle experiment (5 scenarios/41 assertions including Strict Mode), browser smoke, lifecycle policy, dispatchability, and git diff checks passed.
+
+Extended device discovery so an application-owned pre-capture picker automatically observes devicechange after its initial refreshDevices() call, while preserving stop/dispose cleanup. Added a regression test for pre-capture insertion/removal and listener cleanup; targeted core tests and pnpm verify passed.
 <!-- SECTION:FINAL_SUMMARY:END -->

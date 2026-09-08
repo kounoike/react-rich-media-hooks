@@ -306,18 +306,17 @@ describe("createMediaSession", () => {
     expect(currentTrack.stopCount).toBe(0);
   });
 
-  it("refreshes devices after a devicechange event and clears listeners on stop", async () => {
+  it("refreshes devices after a pre-capture devicechange event and clears listeners on stop", async () => {
     const mediaDevices = new FakeMediaDevices();
-    const track = new FakeTrack("video", "camera-a");
-    mediaDevices.getUserMedia.mockResolvedValue(stream(track));
     mediaDevices.enumerateDevices
       .mockResolvedValueOnce([device("videoinput", "camera-a", "A")])
       .mockResolvedValueOnce([device("videoinput", "camera-b", "B")]);
     installBrowser(mediaDevices);
     const session = createMediaSession({ capture: { video: true } });
 
-    await session.start();
-    await new Promise<void>((resolve) => queueMicrotask(resolve));
+    await session.refreshDevices();
+    expect(session.getDevices("video")[0]?.deviceId).toBe("camera-a");
+
     mediaDevices.dispatchEvent(new Event("devicechange"));
     await new Promise<void>((resolve) => queueMicrotask(resolve));
     await new Promise<void>((resolve) => queueMicrotask(resolve));

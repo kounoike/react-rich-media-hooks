@@ -496,6 +496,7 @@ class BrowserMediaSession implements MediaSession {
       const error = createUnsupportedError("session", "discover", this.generation);
       return { status: "unsupported", devices: currentDevices, partial: false, error };
     }
+    this.attachDeviceListener();
     try {
       const entries = await mediaDevices.enumerateDevices();
       if (requestGeneration !== this.deviceGeneration || this.disposed) {
