@@ -1,3 +1,6 @@
+import type { CropOptions } from "../effects/video/index.js";
+import type { VideoCropProcessor } from "../effects/video/runtime.js";
+
 export type MediaKind = "video" | "audio";
 
 export type CapturePhase = "idle" | "requesting" | "active" | "stopping" | "ended" | "disposed";
@@ -121,6 +124,7 @@ export interface MediaSessionOptions {
 
 export interface VideoEffectConfig {
   readonly effects?: readonly VideoEffect[];
+  readonly bypass?: boolean;
 }
 
 export interface AudioEffectConfig {
@@ -187,12 +191,24 @@ type OutputMap = Record<MediaKind, MediaOutput | null>;
 type ActivityMap = Record<MediaKind, Activity>;
 type DeviceMap = Record<MediaKind, readonly MediaDeviceSnapshot[]>;
 type SelectedDeviceMap = Record<MediaKind, string | null>;
+type VideoProcessorFault = { readonly faultKind: string; readonly message: string };
 
 const idleProcessor = (): ProcessorSnapshot => ({ status: "off", effects: [] });
 
 const emptyDevices = (): DeviceMap => ({ video: [], audio: [] });
 
 const emptySelectedDevices = (): SelectedDeviceMap => ({ video: null, audio: null });
+
+const copyVideoEffects = (config: VideoEffectConfig): VideoEffectConfig => ({
+  effects: (config.effects ?? []).map((effect) => ({
+    kind: effect.kind,
+    options: { ...effect.options },
+  })),
+  ...(config.bypass === undefined ? {} : { bypass: config.bypass }),
+});
+
+const videoEffectNames = (config: VideoEffectConfig): readonly string[] =>
+  (config.effects ?? []).map((effect) => effect.kind);
 
 const freezeSnapshot = (snapshot: MediaSnapshot): MediaSnapshot => {
   const devices: DeviceMap = {
@@ -428,6 +444,10 @@ type AcquireResult =
 
 class BrowserMediaSession implements MediaSession {
   private captureConfig: MediaCaptureOptions;
+  private videoEffects: VideoEffectConfig;
+  private videoProcessor: VideoCropProcessor | null = null;
+  private videoSetupController: AbortController | null = null;
+  private videoGeneration = 0;
   private snapshot: MediaSnapshot;
   private generation = 0;
   private operationId = 0;
@@ -437,6 +457,7 @@ class BrowserMediaSession implements MediaSession {
   private readonly listeners = new Set<() => void>();
   private readonly activeTracks: ActiveTracks = { video: null, audio: null };
   private readonly outputs: OutputMap = { video: null, audio: null };
+  private readonly inputStreams = new WeakMap<MediaStreamTrack, MediaStream>();
   private readonly stoppedTracks = new Set<MediaStreamTrack>();
   private readonly trackHandlers = new Map<
     MediaKind,
@@ -450,7 +471,15 @@ class BrowserMediaSession implements MediaSession {
 
   constructor(options: MediaSessionOptions) {
     this.captureConfig = options.capture ?? {};
+    this.videoEffects = copyVideoEffects(options.video ?? {});
     this.snapshot = createSnapshot();
+    const effects = videoEffectNames(this.videoEffects);
+    if (effects.length > 0) {
+      this.snapshot = freezeSnapshot({
+        ...this.snapshot,
+        processors: { ...this.snapshot.processors, video: { status: "off", effects } },
+      });
+    }
   }
 
   getSnapshot(): MediaSnapshot {
@@ -603,6 +632,7 @@ class BrowserMediaSession implements MediaSession {
       "active",
     );
     void this.refreshDevices();
+    this.applyConfiguredVideoEffects();
     return { status: "success", generation };
   }
 
@@ -704,14 +734,291 @@ class BrowserMediaSession implements MediaSession {
       "active-device-changed",
     );
     void this.refreshDevices();
+    this.applyConfiguredVideoEffects();
     return { status: "success", generation };
   }
 
   async setVideoEffects(
-    _effects: VideoEffectConfig,
-    options?: OperationOptions,
+    effects: VideoEffectConfig,
+    options: OperationOptions = {},
   ): Promise<OperationResult> {
-    return this.unsupported("processor", options?.signal);
+    if (this.disposed) return this.disposedResult(++this.generation, "processor");
+    if (options.signal?.aborted) return { status: "cancelled", generation: this.videoGeneration };
+
+    const generation = ++this.videoGeneration;
+    this.cancelPendingVideoSetup();
+    const nextConfig = copyVideoEffects(effects);
+    const selectedEffects = nextConfig.effects ?? [];
+    const previousProcessorSnapshot = this.snapshot.processors.video;
+
+    if (this.activeTracks.video === null) {
+      this.videoEffects = nextConfig;
+      this.publish(
+        {
+          processors: this.videoProcessorSnapshot(
+            nextConfig.bypass ? "bypassed" : "off",
+            nextConfig,
+          ),
+        },
+        "processor",
+        "configured",
+      );
+      return { status: "success", generation };
+    }
+
+    const operation = this.beginOperation("video", "processor", generation);
+
+    if (selectedEffects.length === 0 || nextConfig.bypass === true) {
+      const oldProcessor = this.videoProcessor;
+      this.videoProcessor = null;
+      this.videoEffects = nextConfig;
+      const output = this.createInputVideoOutput();
+      if (output !== null) this.outputs.video = output;
+      const status: ProcessorStatus = selectedEffects.length === 0 ? "off" : "bypassed";
+      this.publish(
+        {
+          processors: this.videoProcessorSnapshot(status, nextConfig),
+          outputs: { ...this.outputs },
+          operation: null,
+          error: null,
+        },
+        "processor",
+        selectedEffects.length === 0 ? "removed" : "bypassed",
+      );
+      oldProcessor?.dispose();
+      return { status: "success", generation };
+    }
+
+    if (selectedEffects.length !== 1 || selectedEffects[0]?.kind !== "crop") {
+      const oldProcessor = this.videoProcessor;
+      this.videoProcessor = null;
+      this.videoEffects = nextConfig;
+      const output = this.createInputVideoOutput();
+      if (output !== null) this.outputs.video = output;
+      const error = createUnsupportedError(
+        "video",
+        "processor",
+        generation,
+        "This release slice supports one fixed camera crop effect.",
+      );
+      this.publish(
+        {
+          processors: this.videoProcessorSnapshot("unsupported", nextConfig),
+          outputs: { ...this.outputs },
+          operation: null,
+          error,
+        },
+        "processor",
+        "unsupported-effect",
+      );
+      oldProcessor?.dispose();
+      return { status: "unsupported", generation, error };
+    }
+
+    const cropEffect = selectedEffects[0];
+    const cropOptions = cropEffect.options as CropOptions;
+    if (this.videoProcessor !== null) {
+      try {
+        const updatedTrack = this.videoProcessor.update(cropOptions);
+        const currentTrack = this.outputs.video?.track;
+        if (updatedTrack !== currentTrack) {
+          const inputTrack = this.activeTracks.video;
+          const inputStream =
+            inputTrack === null
+              ? undefined
+              : (this.inputStreams.get(inputTrack) ?? this.outputs.video?.stream);
+          if (inputStream === undefined) {
+            throw new Error("The active camera output is unavailable for processor handoff.");
+          }
+          this.outputs.video = this.createOutput("video", updatedTrack, inputStream);
+        }
+        this.videoEffects = nextConfig;
+        this.publish(
+          {
+            processors: this.videoProcessorSnapshot("active", nextConfig),
+            ...(updatedTrack === currentTrack ? {} : { outputs: { ...this.outputs } }),
+            operation: null,
+            error: null,
+          },
+          "processor",
+          updatedTrack === currentTrack ? "updated" : "output-replaced",
+        );
+        return { status: "success", generation };
+      } catch (cause) {
+        const oldProcessor = this.videoProcessor;
+        this.videoProcessor = null;
+        this.videoEffects = nextConfig;
+        const output = this.createInputVideoOutput();
+        if (output !== null) this.outputs.video = output;
+        const message = cause instanceof Error ? cause.message : "The crop options are invalid.";
+        const error: MediaError = {
+          code: "processor-failed",
+          kind: "video",
+          operation: "processor",
+          retryable: false,
+          message,
+          generation,
+          cause,
+        };
+        this.publish(
+          {
+            processors: this.videoProcessorSnapshot("failed", nextConfig),
+            outputs: { ...this.outputs },
+            operation: null,
+            error,
+          },
+          "processor",
+          "invalid-effect",
+        );
+        oldProcessor.dispose();
+        return { status: "failed", generation, error };
+      }
+    }
+
+    const inputTrack = this.activeTracks.video;
+    if (inputTrack === null) return { status: "superseded", generation };
+    const controller = new AbortController();
+    this.videoSetupController = controller;
+    const relayAbort = (): void => controller.abort();
+    options.signal?.addEventListener("abort", relayAbort, { once: true });
+    this.publish(
+      {
+        processors: this.videoProcessorSnapshot("loading", nextConfig),
+        operation,
+        error: null,
+      },
+      "processor",
+      "loading",
+    );
+
+    let createdProcessor: VideoCropProcessor | null = null;
+    try {
+      const runtime = await import("../effects/video/runtime.js");
+      if (generation !== this.videoGeneration) {
+        return { status: "superseded", generation };
+      }
+      if (controller.signal.aborted) {
+        this.publish(
+          {
+            processors: { ...this.snapshot.processors, video: previousProcessorSnapshot },
+            operation: null,
+            error: null,
+          },
+          "processor",
+          "cancelled",
+        );
+        return { status: options.signal?.aborted ? "cancelled" : "superseded", generation };
+      }
+      createdProcessor = await runtime.createCanvasCropProcessor(inputTrack, cropOptions, {
+        signal: controller.signal,
+        onFault: (fault) => {
+          if (createdProcessor !== null) this.onVideoProcessorFault(createdProcessor, fault);
+        },
+      });
+      if (generation !== this.videoGeneration || this.disposed) {
+        createdProcessor.dispose();
+        return { status: "superseded", generation };
+      }
+      if (controller.signal.aborted) {
+        createdProcessor.dispose();
+        this.publish(
+          {
+            processors: { ...this.snapshot.processors, video: previousProcessorSnapshot },
+            operation: null,
+            error: null,
+          },
+          "processor",
+          "cancelled",
+        );
+        return { status: options.signal?.aborted ? "cancelled" : "superseded", generation };
+      }
+
+      this.videoProcessor = createdProcessor;
+      this.videoEffects = nextConfig;
+      const inputStream = this.inputStreams.get(inputTrack) ?? this.outputs.video?.stream;
+      if (inputStream === undefined) {
+        createdProcessor.dispose();
+        this.videoProcessor = null;
+        throw new Error("The active camera output is unavailable for processor handoff.");
+      }
+      this.outputs.video = this.createOutput("video", createdProcessor.track, inputStream);
+      this.publish(
+        {
+          processors: this.videoProcessorSnapshot("active", nextConfig),
+          outputs: { ...this.outputs },
+          operation: null,
+          error: null,
+        },
+        "processor",
+        "output-replaced",
+      );
+      return { status: "success", generation };
+    } catch (cause) {
+      if (generation !== this.videoGeneration) {
+        return { status: options.signal?.aborted ? "cancelled" : "superseded", generation };
+      }
+      if (controller.signal.aborted || options.signal?.aborted) {
+        if (this.videoSetupController === controller) this.videoSetupController = null;
+        this.publish(
+          {
+            processors: { ...this.snapshot.processors, video: previousProcessorSnapshot },
+            operation: null,
+            error: null,
+          },
+          "processor",
+          "cancelled",
+        );
+        return { status: options.signal?.aborted ? "cancelled" : "superseded", generation };
+      }
+
+      const faultKind =
+        typeof cause === "object" &&
+        cause !== null &&
+        "faultKind" in cause &&
+        (cause.faultKind === "unsupported" ||
+          cause.faultKind === "failed" ||
+          cause.faultKind === "overload")
+          ? cause.faultKind
+          : "failed";
+      const isUnsupported = faultKind === "unsupported";
+      const isOverload = faultKind === "overload";
+      const error: MediaError = {
+        code: isUnsupported ? "unsupported" : "processor-failed",
+        kind: "video",
+        operation: "processor",
+        retryable: !isUnsupported,
+        message: cause instanceof Error ? cause.message : "The crop processor failed.",
+        generation,
+        cause,
+      };
+      const oldProcessor = this.videoProcessor;
+      this.videoProcessor = null;
+      this.videoEffects = nextConfig;
+      const output = this.createInputVideoOutput();
+      if (output !== null) this.outputs.video = output;
+      this.publish(
+        {
+          processors: this.videoProcessorSnapshot(
+            isUnsupported ? "unsupported" : isOverload ? "degraded" : "failed",
+            nextConfig,
+          ),
+          outputs: { ...this.outputs },
+          operation: null,
+          error,
+        },
+        "processor",
+        isOverload ? "overloaded" : isUnsupported ? "unsupported" : "failed",
+      );
+      oldProcessor?.dispose();
+      return {
+        status: isUnsupported ? "unsupported" : "failed",
+        generation,
+        error,
+      };
+    } finally {
+      options.signal?.removeEventListener("abort", relayAbort);
+      if (this.videoSetupController === controller) this.videoSetupController = null;
+    }
   }
 
   async setAudioEffects(
@@ -754,7 +1061,10 @@ class BrowserMediaSession implements MediaSession {
     const current: OperationSnapshot = { id: ++this.operationId, kind, operation };
     this.publish(
       {
-        phase: operation === "switch" && this.hasActiveTrack() ? "active" : "requesting",
+        phase:
+          this.hasActiveTrack() && (operation === "switch" || operation === "processor")
+            ? "active"
+            : "requesting",
         operation: current,
         error: null,
       },
@@ -844,6 +1154,7 @@ class BrowserMediaSession implements MediaSession {
     for (const track of stream.getTracks()) {
       if (![...tracks.values()].includes(track)) this.stopOwnedTrack(track);
     }
+    if (kinds.includes("video")) this.resetVideoProcessor();
     const oldTracks: MediaStreamTrack[] = [];
     if (operation === "start") {
       for (const kind of ["video", "audio"] as const) {
@@ -858,6 +1169,7 @@ class BrowserMediaSession implements MediaSession {
       const track = tracks.get(kind);
       if (track === undefined) continue;
       this.activeTracks[kind] = track;
+      this.inputStreams.set(track, stream);
       this.outputs[kind] = this.createOutput(kind, track, stream);
     }
     for (const kind of ["video", "audio"] as const) {
@@ -879,7 +1191,19 @@ class BrowserMediaSession implements MediaSession {
     }
     for (const kind of kinds) selectedDevices[kind] = this.readTrackDeviceId(tracks.get(kind));
     this.publish(
-      { activity, selectedDevices, outputs: { ...this.outputs } },
+      {
+        activity,
+        selectedDevices,
+        outputs: { ...this.outputs },
+        ...(kinds.includes("video")
+          ? {
+              processors: this.videoProcessorSnapshot(
+                this.videoEffects.bypass ? "bypassed" : "off",
+                this.videoEffects,
+              ),
+            }
+          : {}),
+      },
       operation,
       "output-replaced",
     );
@@ -940,6 +1264,7 @@ class BrowserMediaSession implements MediaSession {
     };
     const ended = (): void => {
       if (this.activeTracks[kind] !== track || this.disposed) return;
+      if (kind === "video") this.resetVideoProcessor();
       this.detachTrack(kind);
       this.activeTracks[kind] = null;
       this.outputs[kind] = null;
@@ -958,6 +1283,9 @@ class BrowserMediaSession implements MediaSession {
           availability: "unavailable",
           activity,
           outputs: { ...this.outputs },
+          ...(kind === "video"
+            ? { processors: this.videoProcessorSnapshot("failed", this.videoEffects) }
+            : {}),
           operation: null,
           error,
         },
@@ -979,6 +1307,7 @@ class BrowserMediaSession implements MediaSession {
   }
 
   private clearActiveTracks(stop: boolean): void {
+    this.resetVideoProcessor();
     for (const kind of ["video", "audio"] as const) {
       const track = this.activeTracks[kind];
       this.detachTrack(kind);
@@ -986,7 +1315,83 @@ class BrowserMediaSession implements MediaSession {
       this.outputs[kind] = null;
       if (stop && track !== null) this.stopOwnedTrack(track);
     }
-    this.publish({ outputs: { ...this.outputs } }, "stop", "resources-released");
+    this.publish(
+      {
+        outputs: { ...this.outputs },
+        processors: this.videoProcessorSnapshot("off", this.videoEffects),
+      },
+      "stop",
+      "resources-released",
+    );
+  }
+
+  private cancelPendingVideoSetup(): void {
+    const controller = this.videoSetupController;
+    this.videoSetupController = null;
+    controller?.abort();
+  }
+
+  private resetVideoProcessor(): void {
+    this.videoGeneration += 1;
+    this.cancelPendingVideoSetup();
+    const processor = this.videoProcessor;
+    this.videoProcessor = null;
+    processor?.dispose();
+  }
+
+  private createInputVideoOutput(): MediaOutput | null {
+    const track = this.activeTracks.video;
+    if (track === null) return null;
+    const fallbackStream = this.inputStreams.get(track) ?? this.outputs.video?.stream;
+    if (fallbackStream === undefined) return null;
+    return this.createOutput("video", track, fallbackStream);
+  }
+
+  private videoProcessorSnapshot(
+    status: ProcessorStatus,
+    config: VideoEffectConfig = this.videoEffects,
+  ) {
+    return {
+      ...this.snapshot.processors,
+      video: { status, effects: videoEffectNames(config) },
+    };
+  }
+
+  private applyConfiguredVideoEffects(): void {
+    if ((this.videoEffects.effects?.length ?? 0) === 0) return;
+    void this.setVideoEffects(this.videoEffects);
+  }
+
+  private onVideoProcessorFault(processor: VideoCropProcessor, fault: VideoProcessorFault): void {
+    if (this.disposed || this.videoProcessor !== processor) return;
+    this.videoProcessor = null;
+    const output = this.createInputVideoOutput();
+    if (output !== null) this.outputs.video = output;
+    const status: ProcessorStatus =
+      fault.faultKind === "overload"
+        ? "degraded"
+        : fault.faultKind === "unsupported"
+          ? "unsupported"
+          : "failed";
+    const error: MediaError = {
+      code: status === "unsupported" ? "unsupported" : "processor-failed",
+      kind: "video",
+      operation: "processor",
+      retryable: status !== "unsupported",
+      message: fault.message,
+      generation: this.videoGeneration,
+    };
+    this.publish(
+      {
+        processors: this.videoProcessorSnapshot(status),
+        outputs: { ...this.outputs },
+        operation: null,
+        error,
+      },
+      "processor",
+      status === "degraded" ? "overloaded" : status,
+    );
+    processor.dispose();
   }
 
   private stopStreamTracks(stream: MediaStream): void {
