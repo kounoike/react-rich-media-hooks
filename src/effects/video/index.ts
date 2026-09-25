@@ -1,7 +1,17 @@
 import type { VideoEffect } from "../../core/index.js";
 
 export interface CropOptions {
+  /** Normalized source rectangle; each value is between 0 and 1. */
+  readonly region?: CropRegion;
+  /** Optional centered output aspect ratio, applied inside region when supplied. */
   readonly aspectRatio?: number;
+}
+
+export interface CropRegion {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
 }
 
 export interface BackgroundBlurOptions {

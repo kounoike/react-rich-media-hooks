@@ -192,6 +192,50 @@ terminal. The public entry is import-safe on the server and returns a tagged
 `unsupported` result when capture or secure-context requirements are absent;
 all browser work starts only after an explicit client action.
 
+## Video crop processing
+
+The video effects entry currently supports one fixed camera crop. Crop regions
+use normalized source coordinates, so the values below select the centered
+960×720 area from a 1280×720 source without requesting the camera again:
+
+```ts
+import { crop } from "react-rich-media-hooks/effects/video";
+
+const controller = new AbortController();
+const result = await session.setVideoEffects(
+  { effects: [crop({ region: { x: 0.125, y: 0, width: 0.75, height: 1 } })] },
+  { signal: controller.signal },
+);
+
+if (result.status === "failed" || result.status === "unsupported") {
+  // The original camera output remains available; inspect result.error.
+}
+```
+
+Read the processed stream from `session.getOutput("video")` or
+`useMediaOutput("video")` after the operation. Reattach a preview when that
+output changes. Audio stays on the separately owned original audio track. Call
+`setVideoEffects({ effects: [...] })` again to update a crop in place, pass
+`bypass: true` to restore the unprocessed camera output while retaining the
+crop configuration, or pass `effects: []` to remove the crop.
+
+Processing draws one source frame at a time. If processing fails, is
+unsupported, is cancelled, or stays below 95% of a 29 fps-or-faster input for
+two consecutive two-second windows, the session stops the crop resources and
+restores the original video output. `snapshot.processors.video` reports
+`active`, `bypassed`, `degraded`, `unsupported`, or `failed`; inspect
+`snapshot.error` and retry by explicitly applying the crop again. `stop` and
+`dispose` release the processor and its canvas output track. This slice does
+not yet compose crop with background effects or auto-framing. If a local
+benchmark misses the 30 fps or 50 ms p95 target, set `bypass: true` to keep the
+original camera output active while the application handles the shortfall.
+
+`tests/browser/video-crop.spec.ts` measures a synthetic 1280×720 at 30 fps
+source in three capture-only, pass-through, and crop runs per browser engine.
+The task record and `docs/video-crop-benchmark.md` record the observed results,
+known browser/device gaps, and the fallback used when the accepted frame-rate
+or latency budgets are missed.
+
 ## Supervised task lifecycle
 
 The task-to-PR workflow is repository operating policy rather than a Backlog
