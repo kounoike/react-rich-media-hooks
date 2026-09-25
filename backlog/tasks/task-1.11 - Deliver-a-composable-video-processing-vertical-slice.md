@@ -1,10 +1,11 @@
 ---
 id: TASK-1.11
 title: Deliver a composable video-processing vertical slice
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@codex'
 created_date: '2026-08-13 20:31'
-updated_date: '2026-08-19 02:11'
+updated_date: '2026-09-25 08:44'
 labels: []
 dependencies:
   - TASK-1.4
@@ -40,10 +41,16 @@ Deliver the smallest end-to-end consumer journey for a user-approved representat
 3. Run the baseline measurements on the supported browser/device matrix and attribute the dominant bottlenecks across capture, transfer, processing, and output.
 4. Apply only targeted optimizations justified by the measurements, record each experiment and result, and split unresolved work into a follow-up task rather than expanding scope silently.
 5. Run the required checks, update the task with evidence, and request explicit approval before accepting any significant architecture, dependency, compatibility, or public API choice.
+
+6. Before implementation, verify the explicitly approved representative transformation and applicable TASK-1.6 budget; pause for coordinator evidence/approval if either is missing.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 User approved the baseline-first implementation/evaluation approach on 2026-08-19. This task now owns the first thin slice and evidence-backed iteration; it does not pre-commit to a broad optimization strategy.
+
+Research (2026-09-25): accepted decision-1/doc-1 includes manual camera crop, background blur, still-image replacement, and auto-framing in the first-release video scope, but does not designate one as TASK-1.11's representative scenario. Accepted decision-2/doc-6 defines the semantic lifecycle boundary: independent video processor lifecycle, default bypass to original media during recoverable loading/failure, tagged cancellation/supersession, and deterministic cleanup. TASK-1.6/doc-6 labels the performance/browser policy provisional, and TASK-1.6 notes say those policies remain pending explicit user approval; decision list contains no later accepted performance-budget decision. The specific scenario and approved budget are therefore not evidenced yet; implementation is paused pending coordinator confirmation.
+
+Coordinator communication blocker (2026-09-25): the supplied orchestration ask and escalation commands were attempted with the provided worker handle and Task/Dispatch IDs; Orca rejected both before enqueue with “The Dispatch capability is missing. Pass --dispatch-capability <token> from your dispatch preamble.” The version-matched worker contract requires that capability, but it is absent from the preamble; no alternate credential was guessed or used, and no coordinator question was recorded.
 <!-- SECTION:NOTES:END -->
