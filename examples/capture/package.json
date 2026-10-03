@@ -1,0 +1,28 @@
+{
+  "name": "capture-react-example",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.21.0",
+  "engines": {
+    "node": ">=20.19.0",
+    "pnpm": ">=11.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --dir ../.. build && vite --host 127.0.0.1",
+    "typecheck": "pnpm --dir ../.. build && tsc --noEmit -p tsconfig.json",
+    "build": "pnpm --dir ../.. build && tsc --noEmit -p tsconfig.json && vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "react-rich-media-hooks": "link:../.."
+  },
+  "devDependencies": {
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
+    "typescript": "7.0.2",
+    "vite": "8.2.2"
+  }
+}
