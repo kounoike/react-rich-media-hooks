@@ -104,6 +104,7 @@
     "test:browser:smoke": "playwright test --project=chromium --project=firefox",
     "test:browser:matrix": "playwright test",
     "test:browser:release": "playwright test --project=chromium --project=firefox --project=msedge --project=webkit",
+    "video-crop:benchmark": "pnpm build && vite --host 127.0.0.1 --port 4173 --strictPort",
     "build": "vite build && tsc -p tsconfig.build.json && node scripts/copy-cjs-declarations.mjs",
     "package:pack": "node scripts/pack-package.mjs",
     "package:check": "pnpm typecheck && pnpm build && node scripts/validate-package.mjs",

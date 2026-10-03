@@ -22,6 +22,50 @@ The adopted TASK-1.6/doc-6 targets are:
   desktop engines plus reference devices run at release. Mobile is feasibility
   or manual coverage.
 
+## User-operated physical reference-device flow
+
+From the repository root, start the local page with:
+
+```sh
+pnpm run video-crop:benchmark
+```
+
+Open `http://127.0.0.1:4173/tests/browser/video-crop-benchmark.html`, enter the
+full benchmark commit SHA, host OS/device model, Node and package-manager
+versions, and camera description. For an integrated camera, open the
+synchronized marker window on an external display in the same browser and aim
+the camera at it. The main page also shows a marker for cameras that can see its
+display. The page requests the default camera only after **Start camera** is
+clicked. **Run measurements** performs three
+independent trials of capture-only, no-op pass-through, and fixed crop; each
+stage warms for one second and measures for two seconds. It then records five
+warm crop add/update/bypass/remove cycles and five camera stop/start retention
+cycles. Capture is released when the run ends or when **Stop and release camera**
+is selected.
+
+The downloaded JSON records browser user agent and client hints where available,
+the user-entered host/runtime details, requested and negotiated camera settings,
+commit SHA, crop and capture frame rates, presented-frame callback gaps, first
+usable frame, crop setup time, marker-to-preview p50/p95/maximum latency, heap
+measurements where exposed, budget comparisons, effect/session lifecycle results,
+and track cleanup. The page keeps the result locally until the user downloads it
+and does not serialize camera device IDs.
+
+The optical latency sampler decodes the changing marker captured by the camera
+and measures from its animation-frame update to the preview-frame callback. The
+separate marker window synchronizes timestamps to the main page over a
+same-origin `BroadcastChannel`; it does not request media or send data over the
+network. Keep the same marker display and camera framing for comparisons. This
+includes the display-to-camera optical path. `presentedFrameGapPercent` counts gaps reported
+by `requestVideoFrameCallback`; browsers do not expose the exact count of camera
+frames that were never delivered, so that source-loss quantity remains unknown.
+When the marker cannot be decoded, latency is recorded as unknown. `performance.memory`
+is browser-specific and is not forced through garbage collection.
+
+The `?test=1` page mode and Playwright coverage use synthetic input with shortened
+durations to verify the flow. Those runs are tooling checks and do not count as
+physical-device acceptance evidence.
+
 ## Protocol
 
 The browser test uses a deterministic canvas media source configured as
@@ -111,6 +155,72 @@ does not expose `performance.memory` in this fixture, so its heap budget
 remains unknown.
 
 ## Baseline comparison and experiments
+
+### Repeat synthetic canvas run (2026-10-03 UTC)
+
+I reran the Playwright baseline on the same WSL2 Linux x86_64 host (Microsoft
+WSL2 kernel 6.18.40.1, 24 logical CPUs) with Chrome 151.0.7922.34 and Firefox
+153.0. The Playwright desktop profiles reported a Windows user agent while the
+browser platform was Linux x86_64. The fixture generated a changing 1280×720
+canvas at 30 fps and returned its `canvas.captureStream(30)` track from an
+overridden `getUserMedia`; it did not access a camera device. Each browser ran
+three independent two-second capture-only, pass-through, and crop stages in
+separate sessions, followed by five warm effect add/update/bypass/remove
+cycles and five session stop/start cycles per session. The library session,
+crop processor, output tracks, and preview were exercised in the real browser
+engine. The synthetic fixture supplies no evidence about sensor capture,
+camera drivers, device thermals, or physical-device throughput.
+
+| Browser | Run | Capture fps | Pass-through fps | Crop fps | Crop p95 ms | Capture first frame ms | Crop first frame ms | Preview callback gaps |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Chrome 151 | 1 | 29.82 | 29.64 | 29.12 | 34.60 | 59.03 | 78.60 | 0 |
+| Chrome 151 | 2 | 29.86 | 29.81 | 29.67 | 33.70 | 72.50 | 86.30 | 0 |
+| Chrome 151 | 3 | 30.18 | 29.84 | 29.03 | 27.90 | 69.93 | 84.60 | 0 |
+| Firefox 153 | 1 | 15.98 | 16.21 | 14.45 | 47.76 | 68.94 | 149.30 | 0 |
+| Firefox 153 | 2 | 15.63 | 16.01 | 14.84 | 48.24 | 58.36 | 83.24 | 0 |
+| Firefox 153 | 3 | 16.31 | 16.26 | 14.17 | 48.30 | 71.76 | 116.14 | 0 |
+
+The attached `video-crop-baseline.json` recorded these exact two-second-stage
+counts as preview callbacks / source canvas paints / latency samples:
+
+| Browser | Run | Capture-only | Pass-through | Fixed crop |
+| --- | ---: | ---: | ---: | ---: |
+| Chrome 151 | 1 | 60 / 60 / 7 | 60 / 60 / 9 | 59 / 59 / 59 |
+| Chrome 151 | 2 | 61 / 60 / 10 | 61 / 60 / 11 | 60 / 61 / 60 |
+| Chrome 151 | 3 | 61 / 61 / 11 | 61 / 60 / 9 | 59 / 61 / 59 |
+| Firefox 153 | 1 | 33 / 60 / 33 | 33 / 60 / 33 | 29 / 60 / 29 |
+| Firefox 153 | 2 | 32 / 60 / 32 | 33 / 60 / 33 | 30 / 60 / 30 |
+| Firefox 153 | 3 | 33 / 59 / 33 | 33 / 61 / 33 | 29 / 59 / 29 |
+
+The crop p95 values therefore use 59–60 matched samples in Chromium and 29–30
+in Firefox. Chromium's capture-only and pass-through color matcher produced
+only 7–11 latency samples per run; those control-path p95 values are not used
+for the crop comparison. The separate `?test=1` UI test uses 250 ms stages
+and only about 4–9 frames, so it verifies the benchmark page's flow, cleanup,
+and export behavior and contributes no performance values to these tables.
+
+The source track reported 1280×720 at 30 fps in Chromium; Firefox reported its
+1280×720 dimensions but omitted `frameRate` from `getSettings()`. Both engines
+reported a 960×720 crop output. There were zero missing indices in the
+preview's `requestVideoFrameCallback` `presentedFrames` sequence, but this
+does not count source frames that the browser never delivered, so exact source
+frame loss remains unknown. The capture first-frame values are below the
+500 ms budget, and every crop p95 is at or below 50 ms in this run. Chromium
+crop sustained 29.03–29.67 fps; Firefox capture-only was already 15.63–16.31
+fps and crop was 14.17–14.84 fps. These synthetic results cannot attribute a
+physical-device bottleneck and did not motivate an optimization. The Firefox
+overload fallback and explicit bypass/removal paths passed; Chromium did not
+cross the automatic watchdog threshold, and explicit bypass/removal passed.
+
+All five effect cycles released their processor tracks, and all five session
+stop/start cycles ended their input tracks in each measured session.
+Chromium's exposed JS heap stayed at 10,000,000 bytes from the inactive
+pre-cycle reading through the five cycles; this coarse reading excludes native
+and graphics memory. Firefox does not expose `performance.memory`, so its
+retained heap remains unknown. The browser checks also passed the synthetic
+on-demand benchmark page's start/stop and JSON-export paths. No physical
+camera was requested. Accordingly, the repeat run adds software-pipeline
+evidence only; physical-reference criteria #1–#3 remain open.
 
 The capture-only and pass-through controls show that most of Firefox's
 30-fps miss is present before crop processing in this synthetic environment.
