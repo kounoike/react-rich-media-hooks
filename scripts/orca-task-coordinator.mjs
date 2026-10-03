@@ -113,12 +113,16 @@ function taskRows(runId) {
     return orcaJson(["orchestration", "task-list", "--run", runId]).tasks || [];
 }
 
-function workerDispatchMap() {
-    const result = orcaJson(["orchestration", "worker-list"], { allowFailure: true });
+function workerDispatchMap(runId) {
+    const result = orcaJson(
+        ["orchestration", "worker-list", "--run", runId, "--include-remote"],
+        { allowFailure: true },
+    );
     const map = new Map();
     for (const worker of result?.workers || []) {
-        const taskId = worker.taskId || worker.task_id || worker.task?.id;
-        const dispatchId = worker.dispatchId || worker.dispatch_id || worker.dispatch?.id;
+        const taskId = worker.taskId || worker.task_id || worker.task?.id || worker.projection?.taskId;
+        const dispatchId =
+            worker.dispatchId || worker.dispatch_id || worker.dispatch?.id || worker.projection?.dispatchId;
         if (taskId && dispatchId) map.set(taskId, dispatchId);
     }
     return map;
@@ -126,9 +130,9 @@ function workerDispatchMap() {
 
 function allTaskRows() {
     const rows = [];
-    const dispatches = workerDispatchMap();
     for (const run of runList().filter((candidate) => !candidate.legacy)) {
         try {
+            const dispatches = workerDispatchMap(run.id);
             for (const row of taskRows(run.id)) {
                 const dispatchId = row.dispatch_id || row.dispatchId || dispatches.get(row.id) || null;
                 rows.push({ ...row, runId: run.id, dispatch_id: dispatchId });
@@ -157,7 +161,7 @@ function getWorker(dispatchId) {
 }
 
 function getWorktree(worker) {
-    const id = worker?.worker?.worktree_id;
+    const id = worker?.worker?.worktreeId || worker?.worker?.worktree_id;
     if (!id) return null;
     const shown = orcaJson(["worktree", "show", "--worktree", `id:${id}`], {
         allowFailure: true,
@@ -230,17 +234,24 @@ function worktreesForRepository() {
 }
 
 function ownedWorktreeIds() {
-    const result = orcaJson(["orchestration", "worker-list"], { allowFailure: true });
     const owned = new Set();
-    for (const worker of result?.workers || []) {
-        const worktreeId =
-            worker.resource?.worktreeId ||
-            worker.worker?.worktree_id ||
-            worker.worktreeId ||
-            worker.worktree_id;
-        if (!worktreeId) continue;
-        if (worker.resource?.ownershipState === "owned" || worker.dispatchStatus === "dispatched") {
-            owned.add(worktreeId);
+    for (const run of runList().filter((candidate) => !candidate.legacy)) {
+        const result = orcaJson(
+            ["orchestration", "worker-list", "--run", run.id, "--include-remote"],
+            { allowFailure: true },
+        );
+        for (const worker of result?.workers || []) {
+            const worktreeId =
+                worker.resource?.worktreeId ||
+                worker.worker?.worktreeId ||
+                worker.worker?.worktree_id ||
+                worker.worktreeId ||
+                worker.worktree_id ||
+                worker.projection?.workspace?.id;
+            if (!worktreeId) continue;
+            if (worker.resource?.ownershipState === "owned" || worker.dispatchStatus === "dispatched") {
+                owned.add(worktreeId);
+            }
         }
     }
     return owned;
@@ -630,8 +641,7 @@ function dispatchNext(run, rows) {
             "--worktree", "new-child", "--name", name, "--agent", "codex",
             "--setup", "run", "--run", run.id,
         ]);
-        if (!started?.ready) throw new Error(`worker-start for ${task.id} did not become ready`);
-        log(`started ${task.id} as ${orchestrationTask.id}/${started.dispatch?.id || "dispatch"}`);
+        log(`started ${task.id} as ${orchestrationTask.id}/${started.dispatch?.id || "ready"}`);
         existing.add(task.id);
     }
 }
