@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-09-25 10:53'
-updated_date: '2026-10-03 14:39'
+updated_date: '2026-10-03 17:32'
 labels: []
 dependencies:
   - TASK-1.11
@@ -47,11 +47,11 @@ Close the measured verification gaps left by TASK-1.11 for the approved fixed ca
 ## Implementation Plan
 
 <!-- SECTION:PLAN:BEGIN -->
-1. Inspect TASK-1.25 notes, accepted decision-7/doc-6 budgets, and the current crop benchmark and consumer API.
-2. Implement a local on-demand browser measurement flow that opens the camera only after explicit start, guides three capture-only/pass-through/fixed-crop runs and five warm effect cycles, records the adopted metrics plus browser/device/runtime metadata, and downloads JSON.
-3. Validate the flow using synthetic/fake camera input, including start/stop, fallback, and cleanup; do not open physical camera or start a dev server during implementation.
-4. Run pnpm verify and Chromium/Firefox crop browser checks; update benchmark and consumer guidance with tool use and known physical-device gaps.
-5. Audit acceptance criteria against evidence, preserve unknown physical rows, record the final summary through Backlog CLI, and mark Done only if all required criteria are satisfied.
+1. Reconfirm decision-7 and verification/doc-6 budgets and inspect the existing synthetic browser benchmark and measurement artifacts.
+2. Run the real crop pipeline from a reproducible 1280x720/30 software-generated video source in Chromium and Firefox, collecting three capture-only/pass-through/fixed-crop runs plus five warm effect cycles and five session retention cycles.
+3. Record browser/runtime versions, negotiated source settings, fps, callback gaps, first-frame time, source-to-preview p95 latency, available heap, and cleanup evidence; keep physical-device criteria #1-#3 unknown.
+4. Update the benchmark report and this task with the synthetic measurements, limitations, and user-operated physical-device follow-up.
+5. Run pnpm verify and the relevant browser benchmark/crop checks, audit acceptance criteria, then commit and push all scoped work.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -72,10 +72,20 @@ User-approved scope (coordinator follow-up, 2026-10-03): implement a local user-
 Final verification: pnpm verify passed format, lint, 14 unit tests, typecheck/build, ESM/SSR/CJS/package consumer checks for React 18.2.0 and 19.1.1, and task-to-PR lifecycle validation. pnpm exec playwright test tests/browser/video-crop-benchmark.spec.ts tests/browser/video-crop.spec.ts --project=chromium --project=firefox passed all 6 tests, including synthetic measurement/export, explicit stop during a run, the existing crop baseline, and track cleanup. The Playwright-configured webServer ran only for these fake-input checks; no physical camera was requested. The synthetic tool test confirmed zero camera requests before Start, six session starts across the profile journey and retention cycles, five effect cycles, and ended tracks after completion.
 
 The active runtime is WSL2 and exposes no /dev/video character device; v4l2-ctl is absent. The approved decision-7/doc-6 budgets and cadence remain unchanged. Acceptance criteria #1-#3 remain unchecked because physical reference-camera runs and device budget comparisons are still absent; no physical bottleneck is confirmed, so no speculative optimization or before/after claim was made. The existing synthetic Chrome/Firefox results and fallback are documented in docs/video-crop-benchmark.md; exact source-frame loss and Firefox retained heap remain unknown. Criteria #4 and #5 remain checked based on existing unit/browser coverage and the approved Edge/Safari/mobile cadence. No public API, compatibility, or architecture decision was made.
+
+Coordinator follow-up (2026-10-03): the user explicitly directed a synthetic-camera evaluation in this Dispatch. Do not open or expose a physical camera or occupy a Windows desktop. Exercise the actual crop measurement flow with a reproducible software-generated 1280x720@30 source, report metrics and lifecycle cleanup with exact runtime details, clearly label results as software-pipeline evidence, and keep TASK-1.25 In Progress with criteria #1-#3 unclaimed. No public API or contract changes are authorized.
+
+Synthetic canvas repeat (2026-10-03 UTC): pnpm verify passed formatting, lint, all 14 unit tests, typecheck/build, ESM/SSR/CJS and React 18.2.0/19.1.1 consumer validation, and task-to-PR lifecycle validation. The six relevant Playwright checks passed in Chrome 151.0.7922.34 and Firefox 153.0. The baseline runner returned a deterministic changing 1280x720 canvas.captureStream(30) track through its getUserMedia override; it exercised the library session and crop output without accessing a physical camera. Runtime was WSL2 Linux x86_64 (kernel 6.18.40.1, 24 logical CPUs), Node v24.19.0, pnpm 11.21.0; desktop profiles advertised Windows UA while reporting Linux platform.
+
+Fresh three-run results are recorded in docs/video-crop-benchmark.md. Chrome capture/pass-through/crop ranges were 29.82-30.18 / 29.64-29.84 / 29.03-29.67 fps; crop p95 27.90-34.60 ms; first capture frame 59.03-72.50 ms and first crop frame 78.60-86.30 ms. Firefox ranges were 15.63-16.31 / 16.01-16.26 / 14.17-14.84 fps; crop p95 47.76-48.30 ms; first capture frame 58.36-71.76 ms and first crop frame 83.24-149.30 ms. Both reported zero presented-frame callback gaps, which does not measure source frames never delivered. Each session passed five warm effect add/update/bypass/remove cycles and five stop/start cycles with processor/input tracks ended. Chromium exposed an unchanged 10,000,000-byte JS heap reading; Firefox retained heap remains unavailable. Firefox automatic original-video fallback and explicit bypass/removal passed; Chromium did not trigger its automatic threshold, and explicit bypass/removal passed.
+
+This is software-pipeline evidence only. The synthetic source cannot establish physical camera/device frame rate, exact source-frame loss, thermal behavior, or a reference-device bottleneck. No optimization or public contract change was made. Acceptance criteria #1-#3 remain unchecked and unknown pending user-operated physical reference-camera runs; TASK-1.25 remains In Progress.
+
+Measurement-count clarification: the performance table uses only the full-duration video-crop.spec.ts attachment (three two-second stages per profile/browser), not the separate ?test=1 UI artifact. Crop p95 used 59, 60, 59 matched latency samples for Chromium runs 1-3 and 29, 30, 29 for Firefox; exact preview callback/source canvas paint/latency sample counts for each capture-only, pass-through, and crop stage are in docs/video-crop-benchmark.md. Chromium control-path latency matching had only 7-11 samples per run. The ?test=1 page test uses 250 ms stages and about 4-9 frames and is used only for flow, lifecycle, and export verification.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Added a local, user-operated camera benchmark with synchronized optical latency marker, three capture-only/pass-through/crop trials, five effect cycles, five retention cycles, JSON export, and explicit cleanup. pnpm verify and six Chromium/Firefox browser tests passed using synthetic input. Physical reference-device measurements remain unavailable in this WSL2 workspace, so acceptance criteria #1-#3 stay unchecked and TASK-1.25 remains In Progress pending user-operated reference-camera evidence.
+Reran the fixed-crop pipeline with a deterministic 1280x720/30 canvas source in Chrome 151.0.7922.34 and Firefox 153.0, documented per-run throughput, p95 latency, first-frame and cleanup results, and verified the synthetic benchmark UI. pnpm verify and all six Chromium/Firefox browser checks passed. This software-only run cannot satisfy physical-reference criteria #1-#3, so TASK-1.25 remains In Progress pending user-operated physical-device evidence.
 <!-- SECTION:FINAL_SUMMARY:END -->
