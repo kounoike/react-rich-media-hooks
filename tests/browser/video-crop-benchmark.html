@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="On-demand local reference-device measurements for the fixed camera crop."
+    />
+    <title>Fixed camera crop benchmark</title>
+    <link rel="stylesheet" href="/tests/browser/video-crop-benchmark.css" />
+    <script type="module" src="/tests/browser/video-crop-benchmark.ts"></script>
+  </head>
+  <body>
+    <main>
+      <header class="page-header">
+        <p class="eyebrow">TASK-1.25 · decision-7</p>
+        <h1>Fixed camera crop benchmark</h1>
+        <p>
+          Run the approved 1280×720 at 30 fps capture-only, pass-through, and fixed-crop
+          measurements on a reference camera. Results stay in this browser until you download them.
+        </p>
+      </header>
+
+      <section class="panel" aria-labelledby="setup-heading">
+        <h2 id="setup-heading">Reference device details</h2>
+        <form id="setup-form" class="fields">
+          <label>
+            Benchmark commit SHA
+            <input
+              id="commit-sha"
+              name="commit-sha"
+              required
+              autocomplete="off"
+              pattern="[0-9a-fA-F]{40}"
+              title="Enter the full 40-character commit SHA."
+              placeholder="40-character commit SHA"
+            />
+          </label>
+          <label>
+            Host OS and reference device model
+            <input
+              id="host-description"
+              name="host-description"
+              required
+              autocomplete="off"
+              placeholder="Windows 11 24H2 · Dell XPS 13 9340"
+            />
+          </label>
+          <label>
+            Node and package-manager versions
+            <input
+              id="runtime-description"
+              name="runtime-description"
+              required
+              autocomplete="off"
+              placeholder="Node 22.16.0 · pnpm 11.21.0"
+            />
+          </label>
+          <label>
+            Camera model or identifier
+            <input
+              id="camera-description"
+              name="camera-description"
+              autocomplete="off"
+              placeholder="Integrated webcam, model if known"
+            />
+          </label>
+        </form>
+        <p class="privacy-note">
+          The camera is requested only when you start it. The run uses your default camera and
+          releases all session tracks when it finishes or when you stop. No camera IDs or media are
+          uploaded; JSON is saved only when you download it.
+        </p>
+        <p class="setup-note">
+          For latency measurement, center the animated marker in the camera view. Use an external
+          display for an integrated camera, or open the synchronized marker window below. The final
+          retention phase briefly stops and restarts capture five times.
+        </p>
+        <p class="setup-note">
+          <a href="/tests/browser/video-crop-latency-marker.html" target="_blank" rel="noreferrer">
+            Open synchronized marker window
+          </a>
+          on another display in this browser. That page has no camera access.
+        </p>
+        <div class="actions">
+          <button id="start-camera" type="button">Start camera</button>
+          <button id="run-measurements" type="button" disabled>Run measurements</button>
+          <button id="stop-camera" type="button" class="secondary" disabled>
+            Stop and release camera
+          </button>
+          <button id="download-results" type="button" class="secondary" disabled>
+            Download results JSON
+          </button>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite">
+          Camera is off. No camera permission has been requested.
+        </p>
+      </section>
+
+      <section class="media-layout" aria-label="Camera preview and latency marker">
+        <figure class="panel preview-panel">
+          <video id="preview" autoplay muted playsinline aria-label="Camera output preview"></video>
+          <figcaption>Live output preview</figcaption>
+        </figure>
+        <figure class="panel marker-panel">
+          <canvas
+            id="latency-marker"
+            width="4"
+            height="4"
+            role="img"
+            aria-label="Animated 4 by 4 black and white latency marker"
+          ></canvas>
+          <figcaption>Center this marker in the camera view</figcaption>
+        </figure>
+      </section>
+
+      <section class="panel" aria-labelledby="protocol-heading">
+        <h2 id="protocol-heading">Run protocol</h2>
+        <ol>
+          <li>Enter the commit SHA, host/device description, and Node/package-manager versions.</li>
+          <li>Start the camera, grant permission, and frame the marker in the preview.</li>
+          <li>Run three warmed trials of capture-only, pass-through, and fixed crop.</li>
+          <li>Run five warm crop add/update/bypass/remove cycles and five session stop/start cycles.</li>
+          <li>Review the JSON, download it, and keep the physical-device evidence with TASK-1.25.</li>
+        </ol>
+        <p>
+          The marker-to-preview samples provide an optical source-to-preview latency measurement.
+          A run with too few decoded marker samples records latency as unknown. Presented-frame gaps
+          describe frames missed by the browser's video-frame callback; they do not detect source
+          frames the camera never delivered.
+        </p>
+      </section>
+
+      <section class="panel" aria-labelledby="results-heading">
+        <h2 id="results-heading">Latest results</h2>
+        <pre id="results-json" aria-live="polite">No results yet.</pre>
+      </section>
+    </main>
+  </body>
+</html>

@@ -236,6 +236,16 @@ The task record and `docs/video-crop-benchmark.md` record the observed results,
 known browser/device gaps, and the fallback used when the accepted frame-rate
 or latency budgets are missed.
 
+For a user-operated physical reference-device run, start the local benchmark page
+with `pnpm run video-crop:benchmark` and open
+`http://127.0.0.1:4173/tests/browser/video-crop-benchmark.html`. Enter the commit,
+host/device, and runtime versions. For an integrated camera, open the synchronized
+marker window on an external display in the same browser. Then select **Start
+camera** and **Run measurements**. The page requests camera access only after
+Start, downloads JSON only when asked, and stops its tracks at the end of the run
+or when stopped. See `docs/video-crop-benchmark.md` for the protocol and
+interpretation of callback gaps and optical-marker latency.
+
 ## Supervised task lifecycle
 
 The task-to-PR workflow is repository operating policy rather than a Backlog

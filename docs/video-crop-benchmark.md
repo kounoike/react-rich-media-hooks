@@ -22,6 +22,50 @@ The adopted TASK-1.6/doc-6 targets are:
   desktop engines plus reference devices run at release. Mobile is feasibility
   or manual coverage.
 
+## User-operated physical reference-device flow
+
+From the repository root, start the local page with:
+
+```sh
+pnpm run video-crop:benchmark
+```
+
+Open `http://127.0.0.1:4173/tests/browser/video-crop-benchmark.html`, enter the
+full benchmark commit SHA, host OS/device model, Node and package-manager
+versions, and camera description. For an integrated camera, open the
+synchronized marker window on an external display in the same browser and aim
+the camera at it. The main page also shows a marker for cameras that can see its
+display. The page requests the default camera only after **Start camera** is
+clicked. **Run measurements** performs three
+independent trials of capture-only, no-op pass-through, and fixed crop; each
+stage warms for one second and measures for two seconds. It then records five
+warm crop add/update/bypass/remove cycles and five camera stop/start retention
+cycles. Capture is released when the run ends or when **Stop and release camera**
+is selected.
+
+The downloaded JSON records browser user agent and client hints where available,
+the user-entered host/runtime details, requested and negotiated camera settings,
+commit SHA, crop and capture frame rates, presented-frame callback gaps, first
+usable frame, crop setup time, marker-to-preview p50/p95/maximum latency, heap
+measurements where exposed, budget comparisons, effect/session lifecycle results,
+and track cleanup. The page keeps the result locally until the user downloads it
+and does not serialize camera device IDs.
+
+The optical latency sampler decodes the changing marker captured by the camera
+and measures from its animation-frame update to the preview-frame callback. The
+separate marker window synchronizes timestamps to the main page over a
+same-origin `BroadcastChannel`; it does not request media or send data over the
+network. Keep the same marker display and camera framing for comparisons. This
+includes the display-to-camera optical path. `presentedFrameGapPercent` counts gaps reported
+by `requestVideoFrameCallback`; browsers do not expose the exact count of camera
+frames that were never delivered, so that source-loss quantity remains unknown.
+When the marker cannot be decoded, latency is recorded as unknown. `performance.memory`
+is browser-specific and is not forced through garbage collection.
+
+The `?test=1` page mode and Playwright coverage use synthetic input with shortened
+durations to verify the flow. Those runs are tooling checks and do not count as
+physical-device acceptance evidence.
+
 ## Protocol
 
 The browser test uses a deterministic canvas media source configured as
