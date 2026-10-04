@@ -268,6 +268,16 @@ When no leaf candidate is available it reports that state without creating a
 Run or Dispatch. Retained or user-gated states remain available for recovery,
 and unchanged blockers are reported only once until their state changes.
 
+If a task exposes concrete repository friction or a defect directly related to
+the assigned work, the worker makes a small, reversible improvement in the same
+task branch and Draft PR without advance approval just to prepare the PR. This
+includes narrowly scoped edits to protected workflow paths; those PRs still
+require manual review before merge. The completion report lists each
+improvement, its reason, and changed paths, or explicitly says `none`. Broader
+changes and significant product, API, compatibility, distribution, or
+architecture decisions remain outside that authorization and require the
+existing approval process.
+
 Worktree creation is single-flight per task. Create and poll each requested
 worktree to its final JSON result before creating the next one; after setup,
 worker sessions may run concurrently. Do not retry after an empty response,

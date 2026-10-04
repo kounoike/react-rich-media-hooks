@@ -160,6 +160,17 @@
       "validate_backlog_task_before_pr": true,
       "allow_in_progress_draft_pr": true,
       "coordinator_may_push_worker_branch": false,
+      "task_execution_improvements": {
+        "enabled": true,
+        "trigger": "concrete_friction_or_defect_directly_related_to_assigned_task",
+        "action": "include_small_reversible_fix_in_same_task_branch_and_draft_pr",
+        "advance_approval_for_draft_pr_creation": false,
+        "allow_protected_paths_in_draft_pr": true,
+        "protected_paths_merge_lane": "manual_review",
+        "requires_reason_and_changed_paths": true,
+        "entry_format": ["Improvement", "Reason", "Changed paths"],
+        "report_none_explicitly": true
+      },
       "automatic_lane_evidence": [
         "Unresolved user decision",
         "Decision changes",
@@ -175,7 +186,8 @@
         "validation_commands",
         "validation_results",
         "acceptance_criteria_remaining",
-        "unresolved_user_decision"
+        "unresolved_user_decision",
+        "task_execution_improvements"
       ],
       "duplicate_policy": "ignore_exact_replay_and_reconcile_state",
       "conflicting_replay_policy": "retain_artifacts_and_escalate"
@@ -193,6 +205,7 @@
         "task_status_at_report",
         "acceptance_criteria_status",
         "summary",
+        "task_execution_improvements",
         "files_modified",
         "validation_commands_and_results",
         "recovery_state"

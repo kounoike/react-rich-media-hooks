@@ -157,6 +157,16 @@ expect(
   "automatic completion must require a Done task and be limited to small eligible changes",
 );
 expect(
+  lifecycle.completion.task_execution_improvements.enabled === true &&
+    lifecycle.completion.task_execution_improvements.advance_approval_for_draft_pr_creation === false &&
+    lifecycle.completion.task_execution_improvements.allow_protected_paths_in_draft_pr === true &&
+    lifecycle.completion.task_execution_improvements.protected_paths_merge_lane === "manual_review" &&
+    lifecycle.completion.task_execution_improvements.requires_reason_and_changed_paths === true &&
+    lifecycle.completion.task_execution_improvements.entry_format.join(",") === "Improvement,Reason,Changed paths" &&
+    lifecycle.completion.task_execution_improvements.report_none_explicitly === true,
+  "task-relevant improvements may be included in the same Draft PR without advance approval, while protected paths retain manual merge review",
+);
+expect(
   lifecycle.completion.allow_in_progress_draft_pr === true &&
     lifecycle.completion.coordinator_may_push_worker_branch === false &&
     lifecycle.completion.required_task_record.includes("completion_id") &&
@@ -166,6 +176,7 @@ expect(
     lifecycle.completion.required_task_record.includes("validation_results") &&
     lifecycle.completion.required_task_record.includes("acceptance_criteria_remaining") &&
     lifecycle.completion.required_task_record.includes("unresolved_user_decision") &&
+    lifecycle.completion.required_task_record.includes("task_execution_improvements") &&
     lifecycle.completion.automatic_lane_evidence.join(",") ===
       "Unresolved user decision,Decision changes,Public API changes,Compatibility changes,Distribution changes",
   "successful scoped work may publish an In Progress Draft PR with explicit automatic-lane evidence",
@@ -201,6 +212,9 @@ expect(
     coordinatorScript.includes("start-reserved:") &&
     coordinatorScript.includes("persistReportState();") &&
     coordinatorScript.includes("Acceptance criteria remaining") &&
+    coordinatorScript.includes("## Task execution improvements") &&
+    coordinatorScript.includes("do not ask for advance approval just to prepare that PR") &&
+    coordinatorScript.includes("task execution improvement reasons and changed paths") &&
     coordinatorScript.includes("Unresolved user decision") &&
     coordinatorScript.includes("Public API changes") &&
     coordinatorScript.includes("completionEvidenceIssues") &&
@@ -210,7 +224,8 @@ expect(
   "dispatch selection and the coordinator script must be present",
 );
 expect(
-  lifecycle.pull_request.body_encoding_policy === "body_file_or_actual_newlines" &&
+    lifecycle.pull_request.body_encoding_policy === "body_file_or_actual_newlines" &&
+    lifecycle.pull_request.required_body_fields.includes("task_execution_improvements") &&
     lifecycle.pull_request.reject_literal_backslash_n === true,
   "PR body encoding must use real newlines and reject literal backslash-n",
 );
@@ -352,6 +367,9 @@ for (const phrase of [
   "`gh pr create/edit --body-file`",
   "literal backslash-n",
   "Lifecycle review has two lanes",
+  "small, reversible improvement in the same task branch and Draft PR",
+  "Do not omit such an improvement solely because its path requires manual review",
+  "Significant product, scope, public API, compatibility, distribution, or architecture decisions still require explicit user approval",
   "at most 10 files and 300 changed lines",
   "no unresolved user decision",
   "fall back to manual review",

@@ -611,6 +611,7 @@ function prBodyComplete(body, taskId, runId) {
         text.includes("Head SHA:") &&
         text.includes("Backlog status at report:") &&
         text.includes("## Summary") &&
+        text.includes("## Task execution improvements") &&
         text.includes("## Acceptance criteria status") &&
         text.includes("## Files modified") &&
         text.includes("## Validation commands and results") &&
@@ -640,6 +641,7 @@ function writePrBody(task, taskId, runId, dispatchId, worktree, diff, completion
     const marker = `<!-- lifecycle-task: ${taskId} run: ${runId} -->`;
     const report = String(completion.body || "Worker completion report did not include a summary.");
     const summary = completion.summary || reportSection(report, "## Summary") || report;
+    const taskImprovements = reportSection(report, "## Task execution improvements");
     const workerValidation = reportSection(report, "## Validation commands and results");
     const validationCommands = completion.validationCommands || completion.validation_commands || [];
     const validationResults = completion.validationResults || completion.validation_results || [];
@@ -676,6 +678,9 @@ function writePrBody(task, taskId, runId, dispatchId, worktree, diff, completion
         "",
         "## Summary",
         summary,
+        "",
+        "## Task execution improvements",
+        taskImprovements,
         "",
         "## Acceptance criteria status",
         `- Backlog status: ${task.status}`,
@@ -865,6 +870,19 @@ function completionEvidenceIssues(completion, diff) {
 
     const report = String(completion.body || "");
     if (!(completion.summary || reportSection(report, "## Summary"))) issues.push("summary");
+    const improvements = reportSection(report, "## Task execution improvements");
+    if (!improvements) {
+        issues.push("task execution improvements (or explicit none)");
+    } else if (!/^none\s*$/i.test(improvements)) {
+        const entries = improvements.trim().split(/(?=^[ \t]*-[ \t]*Improvement:)/m);
+        const completeEntries = entries.length > 0 && entries.every((entry) => {
+            const lines = entry.split(/\r?\n/).map((line) => line.trim());
+            return /^-\s*Improvement:\s*\S/.test(lines[0] || "") &&
+                lines.some((line) => /^-\s*Reason:\s*\S/.test(line)) &&
+                lines.some((line) => /^-\s*Changed paths:\s*\S/.test(line));
+        });
+        if (!completeEntries) issues.push("task execution improvement reasons and changed paths");
+    }
     const files = completion.filesModified || completion.files_modified;
     const fileSection = reportSection(report, "## Files modified");
     const reportedFiles = Array.isArray(files)
@@ -1051,10 +1069,11 @@ function workerSpec(task) {
         "Inspect relevant Backlog decisions and docs before making recommendations or changes.",
         "Use the Backlog CLI for task status, assignee, plan, notes, acceptance criteria, and final summary; do not edit task markdown directly.",
         "Run the required repository checks. For research or small automatic-lane work, do not accept a significant product, API, compatibility, distribution, or architecture decision without user approval.",
+        "When this task exposes a concrete repository friction or defect directly related to the assigned work, make a small, reversible fix in this same task branch and Draft PR; do not ask for advance approval just to prepare that PR. This includes narrowly scoped docs, scripts, or workflow-policy improvements in protected paths, which remain in the manual review lane for merge. Do not expand into unrelated cleanup or implement a significant product, scope, public API, compatibility, distribution, or architecture decision without explicit user approval.",
         "Verify every acceptance criterion. Mark this Backlog task Done only when every criterion is fully proven; otherwise keep it In Progress and list each remaining criterion. Do not mark Done just to trigger a PR.",
         "Before completion, record the task update and final summary through the Backlog CLI, commit all scoped work and the task record on this branch with an English Conventional Commit, and push it to origin so the coordinator can publish a Draft PR. A successful scoped result may be reported while the task remains In Progress if external or unverified acceptance criteria remain.",
-        "The completion report must include a substantive `## Summary`; a `## Files modified` section listing every changed path; a `## Validation commands and results` section with exact commands and passed/failed results; `Acceptance criteria remaining: none | <items>`; `Unresolved user decision: none | <decision>`; `Decision changes: none | <changes>`; `Public API changes: none | <changes>`; `Compatibility changes: none | <changes>`; and `Distribution changes: none | <changes>`. Use `none` only when verified.",
-        "Send exactly one worker_done with outcome succeeded only when the scoped assigned work succeeded (even if explicitly listed acceptance criteria remain); use failed when it did not. Use the injected task and dispatch IDs, then stop. Do not start another Backlog task, edit workflow policy, or keep working after worker_done.",
+        "The completion report must include a substantive `## Summary`; `## Task execution improvements` with exactly `none` or one block per improvement using `- Improvement: ...`, `  - Reason: ...`, and `  - Changed paths: ...`; a `## Files modified` section listing every changed path; a `## Validation commands and results` section with exact commands and passed/failed results; `Acceptance criteria remaining: none | <items>`; `Unresolved user decision: none | <decision>`; `Decision changes: none | <changes>`; `Public API changes: none | <changes>`; `Compatibility changes: none | <changes>`; and `Distribution changes: none | <changes>`. Use `none` only when verified.",
+        "Send exactly one worker_done with outcome succeeded only when the scoped assigned work succeeded (even if explicitly listed acceptance criteria remain); use failed when it did not. Use the injected task and dispatch IDs, then stop. Do not start another Backlog task or keep working after worker_done.",
         `Selected task: ${task.id} — ${task.title}`,
     ].join("\n");
 }
