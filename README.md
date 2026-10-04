@@ -268,15 +268,19 @@ When no leaf candidate is available it reports that state without creating a
 Run or Dispatch. Retained or user-gated states remain available for recovery,
 and unchanged blockers are reported only once until their state changes.
 
-If a task exposes concrete repository friction or a defect directly related to
-the assigned work, the worker makes a small, reversible improvement in the same
-task branch and Draft PR without advance approval just to prepare the PR. This
-includes narrowly scoped edits to protected workflow paths; those PRs still
-require manual review before merge. The completion report lists each
-improvement, its reason, and changed paths, or explicitly says `none`. Broader
-changes and significant product, API, compatibility, distribution, or
-architecture decisions remain outside that authorization and require the
-existing approval process.
+If a task exposes an improvement to agent instructions, Orca coordination,
+validation, or the repository's agent workflow, the worker prepares it in a
+separate staging worktree and `agent-improvement/<run-id>-<slug>` branch from
+`origin/main`, then opens a standalone Draft PR. It does not mix those changes
+into the assigned task branch or task PR. The improvement PR references its
+source task, Run, and Dispatch, and is reviewed and merged independently. It
+reuses the active worker and creates no separate Backlog task, Run, or Dispatch.
+The worker reports its URL and head SHA, or explicitly reports `none`,
+`Deferred:`, or `Blocked:`. Creating the PR does not need advance approval;
+protected workflow changes still require manual review before merge. This flow
+covers agent/workflow improvements, while ordinary product fixes stay in the
+assigned task process. Significant product, API, compatibility, distribution,
+or architecture decisions remain subject to the existing approval process.
 
 Worktree creation is single-flight per task. Create and poll each requested
 worktree to its final JSON result before creating the next one; after setup,

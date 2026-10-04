@@ -9,6 +9,7 @@ const policy = JSON.parse(readFileSync(policyPath, "utf8")).lifecycle;
 const coordinator = policy.coordinator;
 const dispatchSelection = policy.dispatch_selection;
 const completionModes = policy.completion_modes;
+const agentImprovement = policy.completion.agent_improvement_pr;
 const automatic = completionModes.automatic;
 const orphanReconciliation = coordinator.orphan_reconciliation || {};
 const dryRun = process.argv.includes("--dry-run");
@@ -410,6 +411,7 @@ function taskForWorktree(tasks, worktree) {
     const values = [worktree.displayName, worktree.branch, worktree.path]
         .filter(Boolean)
         .map((value) => String(value).toLowerCase().replaceAll("\\", "/").replace(/^refs\/heads\//, ""));
+    if (values.some((value) => value.startsWith(agentImprovement.branch_prefix))) return null;
     return tasks
         .filter((task) => {
             const slug = String(task.id).toLowerCase().replaceAll(".", "-");
@@ -611,7 +613,7 @@ function prBodyComplete(body, taskId, runId) {
         text.includes("Head SHA:") &&
         text.includes("Backlog status at report:") &&
         text.includes("## Summary") &&
-        text.includes("## Task execution improvements") &&
+        text.includes("## Agent improvement PR") &&
         text.includes("## Acceptance criteria status") &&
         text.includes("## Files modified") &&
         text.includes("## Validation commands and results") &&
@@ -641,7 +643,7 @@ function writePrBody(task, taskId, runId, dispatchId, worktree, diff, completion
     const marker = `<!-- lifecycle-task: ${taskId} run: ${runId} -->`;
     const report = String(completion.body || "Worker completion report did not include a summary.");
     const summary = completion.summary || reportSection(report, "## Summary") || report;
-    const taskImprovements = reportSection(report, "## Task execution improvements");
+    const agentImprovementPr = reportSection(report, "## Agent improvement PR");
     const workerValidation = reportSection(report, "## Validation commands and results");
     const validationCommands = completion.validationCommands || completion.validation_commands || [];
     const validationResults = completion.validationResults || completion.validation_results || [];
@@ -679,8 +681,8 @@ function writePrBody(task, taskId, runId, dispatchId, worktree, diff, completion
         "## Summary",
         summary,
         "",
-        "## Task execution improvements",
-        taskImprovements,
+        "## Agent improvement PR",
+        agentImprovementPr,
         "",
         "## Acceptance criteria status",
         `- Backlog status: ${task.status}`,
@@ -870,18 +872,14 @@ function completionEvidenceIssues(completion, diff) {
 
     const report = String(completion.body || "");
     if (!(completion.summary || reportSection(report, "## Summary"))) issues.push("summary");
-    const improvements = reportSection(report, "## Task execution improvements");
-    if (!improvements) {
-        issues.push("task execution improvements (or explicit none)");
-    } else if (!/^none\s*$/i.test(improvements)) {
-        const entries = improvements.trim().split(/(?=^[ \t]*-[ \t]*Improvement:)/m);
-        const completeEntries = entries.length > 0 && entries.every((entry) => {
-            const lines = entry.split(/\r?\n/).map((line) => line.trim());
-            return /^-\s*Improvement:\s*\S/.test(lines[0] || "") &&
-                lines.some((line) => /^-\s*Reason:\s*\S/.test(line)) &&
-                lines.some((line) => /^-\s*Changed paths:\s*\S/.test(line));
-        });
-        if (!completeEntries) issues.push("task execution improvement reasons and changed paths");
+    const agentImprovementPr = reportSection(report, "## Agent improvement PR");
+    const reportedNone = /^none\s*$/i.test(agentImprovementPr);
+    const reportedPr = /^URL:\s*https?:\/\/\S+\/pull\/\d+\s*$/im.test(agentImprovementPr) &&
+        /^Branch:\s*agent-improvement\/\S+\s*$/im.test(agentImprovementPr) &&
+        /^Head SHA:\s*[0-9a-f]{7,40}\s*$/im.test(agentImprovementPr);
+    const reportedException = /^(?:Deferred|Blocked):\s*\S/im.test(agentImprovementPr);
+    if (!agentImprovementPr || (!reportedNone && !reportedPr && !reportedException)) {
+        issues.push("agent improvement PR status (none, PR URL/branch/head, Deferred, or Blocked)");
     }
     const files = completion.filesModified || completion.files_modified;
     const fileSection = reportSection(report, "## Files modified");
@@ -1064,15 +1062,18 @@ function syncMain() {
 
 function workerSpec(task) {
     return [
-        `Work only on Backlog task ${task.id}: ${task.title}.`,
+        `Your assigned task is Backlog task ${task.id}: ${task.title}. Keep its branch limited to that task; use the standalone agent-improvement flow only for agent/workflow issues discovered while doing it.`,
         "Read AGENTS.md first, then run `backlog instructions overview` and read the task-execution guide plus the selected task.",
         "Inspect relevant Backlog decisions and docs before making recommendations or changes.",
         "Use the Backlog CLI for task status, assignee, plan, notes, acceptance criteria, and final summary; do not edit task markdown directly.",
         "Run the required repository checks. For research or small automatic-lane work, do not accept a significant product, API, compatibility, distribution, or architecture decision without user approval.",
-        "When this task exposes a concrete repository friction or defect directly related to the assigned work, make a small, reversible fix in this same task branch and Draft PR; do not ask for advance approval just to prepare that PR. This includes narrowly scoped docs, scripts, or workflow-policy improvements in protected paths, which remain in the manual review lane for merge. Do not expand into unrelated cleanup or implement a significant product, scope, public API, compatibility, distribution, or architecture decision without explicit user approval.",
+        "Keep the assigned task branch and its Draft PR limited to the task, task record, and acceptance criteria. Do not put agent/workflow improvement changes on that branch.",
+        "When this task exposes a concrete improvement to agent instructions, Orca coordination, validation, or repository agent workflow, create one focused standalone Draft PR for related improvements from this Run. Fetch origin/main from the task worktree, then use `git worktree add -b agent-improvement/<run-id>-<slug> <unique-path> origin/main` for a separate staging worktree. Include only changes independent of unmerged task commits; if the improvement depends on task code, report it as Deferred with the reason. Keep the branch and unique staging path free of the source task ID so task-worktree reconciliation cannot mistake them for task artifacts. Do not use the task worktree or main checkout, and do not create another Backlog task, Run, Dispatch, or worker. This PR is auxiliary work under the active worker supervision.",
+        "Open the agent-improvement PR without advance approval just to prepare it. Its body must include rationale, changed files, validation evidence, `Source task:`, `Run:`, `Dispatch:`, and marker `<!-- agent-improvement: task <task-id> run <run-id> dispatch <dispatch-id> -->`; do not include a `lifecycle-task` marker or `Backlog task:` field. Target main, keep it Draft and in manual review, verify the remote branch and PR head, and ensure the staging worktree is clean before removing only that exact worktree and local branch. Retain and report staging artifacts if creation or verification is uncertain. Do not let the task coordinator auto-merge this standalone PR.",
+        "Use this flow only for agent/workflow/tooling improvements, not ordinary product bugs or features. Do not implement a significant product, scope, public API, compatibility, distribution, or architecture decision without explicit user approval.",
         "Verify every acceptance criterion. Mark this Backlog task Done only when every criterion is fully proven; otherwise keep it In Progress and list each remaining criterion. Do not mark Done just to trigger a PR.",
         "Before completion, record the task update and final summary through the Backlog CLI, commit all scoped work and the task record on this branch with an English Conventional Commit, and push it to origin so the coordinator can publish a Draft PR. A successful scoped result may be reported while the task remains In Progress if external or unverified acceptance criteria remain.",
-        "The completion report must include a substantive `## Summary`; `## Task execution improvements` with exactly `none` or one block per improvement using `- Improvement: ...`, `  - Reason: ...`, and `  - Changed paths: ...`; a `## Files modified` section listing every changed path; a `## Validation commands and results` section with exact commands and passed/failed results; `Acceptance criteria remaining: none | <items>`; `Unresolved user decision: none | <decision>`; `Decision changes: none | <changes>`; `Public API changes: none | <changes>`; `Compatibility changes: none | <changes>`; and `Distribution changes: none | <changes>`. Use `none` only when verified.",
+        "The completion report must include a substantive `## Summary`; `## Agent improvement PR` with exactly `none`, or `URL: <pull URL>`, `Branch: agent-improvement/<...>`, `Head SHA: <sha>`, or an explicit `Deferred: <reason>`/`Blocked: <reason>`; a `## Files modified` section listing every path on the task branch; a `## Validation commands and results` section with exact task-check commands and passed/failed results; `Acceptance criteria remaining: none | <items>`; `Unresolved user decision: none | <decision>`; `Decision changes: none | <changes>`; `Public API changes: none | <changes>`; `Compatibility changes: none | <changes>`; and `Distribution changes: none | <changes>`. Use `none` only when verified.",
         "Send exactly one worker_done with outcome succeeded only when the scoped assigned work succeeded (even if explicitly listed acceptance criteria remain); use failed when it did not. Use the injected task and dispatch IDs, then stop. Do not start another Backlog task or keep working after worker_done.",
         `Selected task: ${task.id} — ${task.title}`,
     ].join("\n");
