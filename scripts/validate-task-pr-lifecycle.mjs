@@ -71,8 +71,9 @@ expect(
     coordinator.poll_command === "pnpm run orchestration:coordinator -- --once" &&
     coordinator.next_task_action === "dispatch_next_ready_leaf_after_successful_merge" &&
     coordinator.unknown_state_action === "retain_artifacts_and_report" &&
-    coordinator.retained_state_action === "report_and_continue_without_retry",
-  "the coordinator loop must poll completion and dispatch the next ready leaf task",
+    coordinator.retained_state_action === "report_on_first_detection_or_change_without_retry" &&
+    coordinator.failed_start_action === "persist_task_reservation_and_report_effects_without_retry",
+  "the coordinator must continue past retained work and suppress unchanged reports",
 );
 expect(
   orphanReconciliation?.enabled === true &&
@@ -92,12 +93,15 @@ expect(
   automation.required === true &&
     automation.kind === "orca_scheduled_prompt" &&
     automation.provider === "codex" &&
+    automation.activation_policy === "explicit_user_control" &&
     automation.trigger === "*/5 * * * *" &&
     automation.timezone === "Asia/Tokyo" &&
     automation.workspace === "repository_main" &&
     automation.workspace_mode === "existing" &&
     automation.session_policy === "reuse_session" &&
     automation.prompt_command === "pnpm run orchestration:coordinator -- --once" &&
+    automation.report_policy === "new_or_changed_lifecycle_state_only" &&
+    automation.no_change_action === "exit_without_user_report" &&
     automation.precheck ===
       'wsl.exe -d Ubuntu-24.04 -- bash -lc "test -f /home/kounoike/ghq/github.com/kounoike/react-rich-media-hooks/.orca/task-pr-lifecycle.json"' &&
     automation.single_flight === true,
@@ -136,11 +140,13 @@ expect(
     automaticCompletion.task_types.join(",") === "spike,docs,bug,chore,task" &&
     automaticCompletion.max_changed_files === 10 &&
     automaticCompletion.max_changed_lines === 300 &&
+    automaticCompletion.requires_task_status_done === true &&
     automaticCompletion.requires_no_decision_changes === true &&
     automaticCompletion.requires_no_user_decision === true &&
     automaticCompletion.requires_no_public_api_changes === true &&
     automaticCompletion.requires_no_compatibility_changes === true &&
     automaticCompletion.requires_no_distribution_changes === true &&
+    automaticCompletion.requires_worker_validation_success === true &&
     automaticCompletion.requires_current_head_checks === true &&
     automaticCompletion.fallback === "manual_review" &&
     automaticCompletion.protected_paths.includes("backlog/decisions/**") &&
@@ -148,7 +154,21 @@ expect(
     automaticCompletion.protected_paths.includes("package.json") &&
     automaticCompletion.protected_paths.includes("scripts/orca-task-coordinator.mjs") &&
     automaticCompletion.protected_paths.includes("scripts/validate-task-pr-lifecycle.mjs"),
-  "automatic completion must be limited to small non-Decision changes",
+  "automatic completion must require a Done task and be limited to small eligible changes",
+);
+expect(
+  lifecycle.completion.allow_in_progress_draft_pr === true &&
+    lifecycle.completion.coordinator_may_push_worker_branch === false &&
+    lifecycle.completion.required_task_record.includes("completion_id") &&
+    lifecycle.completion.required_task_record.includes("summary") &&
+    lifecycle.completion.required_task_record.includes("files_modified") &&
+    lifecycle.completion.required_task_record.includes("validation_commands") &&
+    lifecycle.completion.required_task_record.includes("validation_results") &&
+    lifecycle.completion.required_task_record.includes("acceptance_criteria_remaining") &&
+    lifecycle.completion.required_task_record.includes("unresolved_user_decision") &&
+    lifecycle.completion.automatic_lane_evidence.join(",") ===
+      "Unresolved user decision,Decision changes,Public API changes,Compatibility changes,Distribution changes",
+  "successful scoped work may publish an In Progress Draft PR with explicit automatic-lane evidence",
 );
 expect(
   packageJson.scripts?.["backlog:dispatchable"] ===
@@ -175,6 +195,17 @@ expect(
     coordinatorScript.includes('"terminal", "close"') &&
     coordinatorScript.includes("taskForWorktree") &&
     coordinatorScript.includes("backlog:dispatchable") &&
+    coordinatorScript.includes("dispatchableSelection") &&
+    coordinatorScript.includes("no dispatchable leaf task exists; no Run or Dispatch was created") &&
+    coordinatorScript.includes("reserveFailedStart") &&
+    coordinatorScript.includes("start-reserved:") &&
+    coordinatorScript.includes("persistReportState();") &&
+    coordinatorScript.includes("Acceptance criteria remaining") &&
+    coordinatorScript.includes("Unresolved user decision") &&
+    coordinatorScript.includes("Public API changes") &&
+    coordinatorScript.includes("completionEvidenceIssues") &&
+    coordinatorScript.includes("is not already published at validated HEAD") &&
+    !coordinatorScript.includes('"push", "--set-upstream"') &&
     coordinatorScript.includes("--body-file"),
   "dispatch selection and the coordinator script must be present",
 );
@@ -230,6 +261,11 @@ expect(
 );
 expect(lifecycle.pull_request.draft === true, "the first PR must be a draft");
 expect(lifecycle.pull_request.one_per_task === true, "one PR per task is required");
+expect(
+  lifecycle.pull_request.required_body_fields.includes("task_status_at_report") &&
+    lifecycle.pull_request.required_body_fields.includes("acceptance_criteria_status"),
+  "Draft PRs must record the task status and remaining acceptance criteria",
+);
 expect(
   lifecycle.pull_request.idempotency_marker.includes("{task_id}") &&
     lifecycle.pull_request.idempotency_marker.includes("{run_id}"),

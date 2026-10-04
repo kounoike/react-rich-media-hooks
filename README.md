@@ -248,14 +248,25 @@ Before dispatching work, run `pnpm run backlog:dispatchable`. It filters ready
 parent tasks and reports up to three `selectedTasks` in priority and ordinal
 order for the next bounded parallel batch.
 
-The repository's Orca scheduled coordinator runs every five minutes in the
-main workspace. It starts `pnpm run orchestration:coordinator -- --loop`; the
-first process holds a single-flight lock and polls settled `worker_done`
-results every five minutes. The loop creates and validates the Draft PR,
-uses the guarded automatic lane when eligible, squash-merges and cleans up the
-exact worker resources, fast-forwards a clean `main`, and starts the next ready
-leaf task batch through `orca orchestration worker-start`. A failed, uncertain,
-manual-review, or dirty-branch state is retained instead of being skipped.
+The repository's Orca scheduled coordinator is configured for every five
+minutes in the main workspace and remains disabled until the user enables it.
+When enabled, each scheduled prompt runs exactly one
+`pnpm run orchestration:coordinator -- --once` sweep in the reused workspace
+session and exits; the schedule is the poller. Scheduled prompts must never use
+`--loop` or start overlapping coordinator sessions. The coordinator creates
+and validates a Draft PR for successful scoped work from a clean, pushed branch,
+including work whose Backlog task remains `In Progress`; the worker lists any
+acceptance criteria that remain, and only a fully proven task may be marked
+`Done`. An `In Progress` task stays in manual review. The guarded automatic lane
+requires a `Done` task; explicit evidence that no user decision remains and
+that decision, public API, compatibility, and distribution changes are absent;
+successful validation by the worker; and passing checks for the current head.
+Eligible PRs are squash-merged with exact worker/worktree/branch cleanup. After
+a successful automatic merge the coordinator fast-forwards a clean `main` and
+starts the next ready leaf batch through `orca orchestration worker-start`.
+When no leaf candidate is available it reports that state without creating a
+Run or Dispatch. Retained or user-gated states remain available for recovery,
+and unchanged blockers are reported only once until their state changes.
 
 Worktree creation is single-flight per task. Create and poll each requested
 worktree to its final JSON result before creating the next one; after setup,

@@ -47,11 +47,13 @@
         "task_types": ["spike", "docs", "bug", "chore", "task"],
         "max_changed_files": 10,
         "max_changed_lines": 300,
+        "requires_task_status_done": true,
         "requires_no_decision_changes": true,
         "requires_no_user_decision": true,
         "requires_no_public_api_changes": true,
         "requires_no_compatibility_changes": true,
         "requires_no_distribution_changes": true,
+        "requires_worker_validation_success": true,
         "protected_paths": [
           "AGENTS.md",
           ".orca/**",
@@ -84,7 +86,8 @@
       "poll_command": "pnpm run orchestration:coordinator -- --once",
       "next_task_action": "dispatch_next_ready_leaf_after_successful_merge",
       "unknown_state_action": "retain_artifacts_and_report",
-      "retained_state_action": "report_and_continue_without_retry",
+      "retained_state_action": "report_on_first_detection_or_change_without_retry",
+      "failed_start_action": "persist_task_reservation_and_report_effects_without_retry",
       "orphan_reconciliation": {
         "enabled": true,
         "trigger": "every_poll",
@@ -103,12 +106,15 @@
       "required": true,
       "kind": "orca_scheduled_prompt",
       "provider": "codex",
+      "activation_policy": "explicit_user_control",
       "trigger": "*/5 * * * *",
       "timezone": "Asia/Tokyo",
       "workspace": "repository_main",
       "workspace_mode": "existing",
       "session_policy": "reuse_session",
       "prompt_command": "pnpm run orchestration:coordinator -- --once",
+      "report_policy": "new_or_changed_lifecycle_state_only",
+      "no_change_action": "exit_without_user_report",
       "precheck": "wsl.exe -d Ubuntu-24.04 -- bash -lc \"test -f /home/kounoike/ghq/github.com/kounoike/react-rich-media-hooks/.orca/task-pr-lifecycle.json\"",
       "single_flight": true,
       "no_candidate_action": "report_and_stop"
@@ -152,12 +158,24 @@
     "completion": {
       "accepted_only_from_active_dispatch": true,
       "validate_backlog_task_before_pr": true,
+      "allow_in_progress_draft_pr": true,
+      "coordinator_may_push_worker_branch": false,
+      "automatic_lane_evidence": [
+        "Unresolved user decision",
+        "Decision changes",
+        "Public API changes",
+        "Compatibility changes",
+        "Distribution changes"
+      ],
       "required_task_record": [
         "completion_id",
         "outcome",
+        "summary",
         "files_modified",
         "validation_commands",
-        "validation_results"
+        "validation_results",
+        "acceptance_criteria_remaining",
+        "unresolved_user_decision"
       ],
       "duplicate_policy": "ignore_exact_replay_and_reconcile_state",
       "conflicting_replay_policy": "retain_artifacts_and_escalate"
@@ -172,6 +190,8 @@
         "run_id",
         "dispatch_id",
         "worktree_id",
+        "task_status_at_report",
+        "acceptance_criteria_status",
         "summary",
         "files_modified",
         "validation_commands_and_results",
