@@ -215,7 +215,7 @@ expect(
     coordinatorScript.includes('"worker-release"') &&
     coordinatorScript.includes('"worktree", "rm"') &&
     coordinatorScript.includes("reconcileMergedOrphans") &&
-    coordinatorScript.includes("values.some((value) => value.startsWith(agentImprovement.branch_prefix)) return null") &&
+    coordinatorScript.includes("values.some((value) => value.startsWith(agentImprovement.branch_prefix))) return null") &&
     coordinatorScript.includes("ownedWorktreeIds") &&
     coordinatorScript.includes("mergedPrForBranch") &&
     coordinatorScript.includes('"terminal", "close"') &&
@@ -233,7 +233,7 @@ expect(
     coordinatorScript.includes("Source task:") &&
     coordinatorScript.includes("<!-- agent-improvement: task <task-id> run <run-id> dispatch <dispatch-id> -->") &&
     coordinatorScript.includes("do not include a `lifecycle-task` marker or `Backlog task:` field") &&
-    coordinatorScript.includes("agent-improvement PR status") &&
+    coordinatorScript.includes("agent improvement PR status") &&
     coordinatorScript.includes("Unresolved user decision") &&
     coordinatorScript.includes("Public API changes") &&
     coordinatorScript.includes("completionEvidenceIssues") &&
