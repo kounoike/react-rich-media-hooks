@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-09-25 10:53'
-updated_date: '2026-10-03 17:32'
+updated_date: '2026-10-05 20:22'
 labels: []
 dependencies:
   - TASK-1.11
@@ -82,6 +82,10 @@ Fresh three-run results are recorded in docs/video-crop-benchmark.md. Chrome cap
 This is software-pipeline evidence only. The synthetic source cannot establish physical camera/device frame rate, exact source-frame loss, thermal behavior, or a reference-device bottleneck. No optimization or public contract change was made. Acceptance criteria #1-#3 remain unchecked and unknown pending user-operated physical reference-camera runs; TASK-1.25 remains In Progress.
 
 Measurement-count clarification: the performance table uses only the full-duration video-crop.spec.ts attachment (three two-second stages per profile/browser), not the separate ?test=1 UI artifact. Crop p95 used 59, 60, 59 matched latency samples for Chromium runs 1-3 and 29, 30, 29 for Firefox; exact preview callback/source canvas paint/latency sample counts for each capture-only, pass-through, and crop stage are in docs/video-crop-benchmark.md. Chromium control-path latency matching had only 7-11 samples per run. The ?test=1 page test uses 250 ms stages and about 4-9 frames and is used only for flow, lifecycle, and export verification.
+
+Physical-device browser smoke (2026-10-06): Orca app 1.4.220, default profile, Chrome 150.0.7871.250 on Win32. getUserMedia for c922 Pro Stream Webcam (046d:085c) negotiated 1280x720 at 30 fps. With a visible video element appended to the DOM, requestVideoFrameCallback fired for a 1280x720 frame while document.visibilityState was visible and document.hasFocus was false. An earlier callback timeout used a detached video element, so tab inactivity is not established as the cause. This is smoke evidence only, not sustained fps or acceptance evidence; acceptance criteria #1-#3 remain open.
+
+Measurement-page readiness review (2026-10-06): Inspected the existing page in the Orca built-in browser at http://127.0.0.1:4173/tests/browser/video-crop-benchmark.html (default profile). The page reports camera off/no permission requested, Start camera enabled, Run measurements disabled, and no results, so it is ready for the user-operated run and no benchmark was collected in this dispatch. Before starting, replace the benchmark SHA after this task-note commit, populate the physical host/device field, and replace the prefilled WSL2 Node/pnpm entry with values from the physical runtime; camera identifier field currently says c922. The existing PR #28 is OPEN/Draft on this same branch; its current body contains synthetic evidence but identifies the previous dispatch, so update its body/evidence through the coordinator normal completion flow after this task-record commit is pushed. No PR edit was made in this dispatch. Keep TASK-1.25 In Progress and criteria #1-#3 unchecked.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
