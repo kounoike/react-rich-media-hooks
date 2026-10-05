@@ -9,7 +9,9 @@ The crop region is `{ x: 0.125, y: 0, width: 0.75, height: 1 }`, yielding a
 
 The adopted TASK-1.6/doc-6 targets are:
 
-- Capture first usable frame within 500 ms after the capture request.
+- Capture first usable frame within 500 ms after the browser resolves
+  `getUserMedia`; permission-prompt and stream-acquisition duration is recorded
+  separately.
 - Crop output sustains 30 fps with source-to-preview p95 latency at or below
   50 ms.
 - Warm effect setup completes within 1 second after local code/assets are
@@ -46,7 +48,8 @@ is selected.
 The downloaded JSON records browser user agent and client hints where available,
 the user-entered host/runtime details, requested and negotiated camera settings,
 commit SHA, crop and capture frame rates, presented-frame callback gaps, first
-usable frame, crop setup time, marker-to-preview p50/p95/maximum latency, heap
+usable frame measured from `getUserMedia` resolution, time from the `getUserMedia`
+request to stream resolution, crop setup time, marker-to-preview p50/p95/maximum latency, heap
 measurements where exposed, budget comparisons, effect/session lifecycle results,
 and track cleanup. The page keeps the result locally until the user downloads it
 and does not serialize camera device IDs.
@@ -61,6 +64,46 @@ by `requestVideoFrameCallback`; browsers do not expose the exact count of camera
 frames that were never delivered, so that source-loss quantity remains unknown.
 When the marker cannot be decoded, latency is recorded as unknown. `performance.memory`
 is browser-specific and is not forced through garbage collection.
+
+## Initial physical reference-camera result
+
+The first user-operated run used Chrome 154.0.8037.98 on Windows 25H2 with a
+C922 Pro Stream Webcam (046d:085c), negotiated at 1280×720 and 30 fps. The
+reported host entry omitted the PC model. The Vite page was served by Node
+v24.19.0 and pnpm 11.21.0 in WSL2 Ubuntu 24.04; the browser itself ran on
+Windows. The benchmark commit was
+`a9343566ac1d6a530c462b7166f7be91a4a8d086`.
+
+| Run | Capture-only fps | Pass-through fps | Fixed-crop fps | Crop setup ms | Crop callback gaps |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 1 | 30.16 | 29.81 | 26.01 | 58.4 | 0% |
+| 2 | 29.78 | 29.91 | 27.13 | 43.4 | 0% |
+| 3 | 29.76 | 29.85 | 29.10 | 72.9 | 0% |
+
+This run shows lower throughput in the crop path than in pass-through, with the
+largest gap in run 1. All crop p95 values are unknown because the optical marker
+produced zero samples. Browser-reported presented-frame gaps were zero; exact
+camera frames never delivered remain unobservable. Five session retention
+cycles completed, all observed tracks ended after disposal, and retained heap
+decreased from 8,068,358 to 7,820,386 bytes. Crop setup met the one-second
+budget in every run.
+
+The 9,654.5 ms first-frame value in this report was measured from before
+`MediaSession.start()` and includes the OS permission prompt, so it cannot be
+compared to the 500 ms budget. The next benchmark version measures first frame
+from `getUserMedia` resolution and reports request-to-stream time separately.
+The five `removeRestoredInput` false values came from the benchmark comparing
+the restored camera track with the cropped output track left active by the
+previous profile. The measurement now retains the original capture track for
+that identity comparison. The lifecycle operations themselves returned
+success, bypass restored the input, and effect tracks ended in all five cycles.
+
+This baseline confirms a crop-specific throughput gap but does not complete
+criteria #1-#3: latency is missing and the startup timing is not comparable to
+the approved budget. The canvas crop path now requests each output frame
+explicitly when `CanvasCaptureMediaStreamTrack.requestFrame()` is available and
+uses the existing timed 30 fps capture path otherwise. That change still needs
+a user-operated before/after run; no improvement is claimed yet.
 
 The `?test=1` page mode and Playwright coverage use synthetic input with shortened
 durations to verify the flow. Those runs are tooling checks and do not count as

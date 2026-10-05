@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-09-25 10:53'
-updated_date: '2026-10-05 21:12'
+updated_date: '2026-10-05 21:43'
 labels: []
 dependencies:
   - TASK-1.11
@@ -23,6 +23,7 @@ modified_files:
   - tests/browser/video-crop-benchmark.ts
   - tests/browser/video-crop-latency-marker.html
   - tests/browser/video-crop-latency-marker.ts
+  - src/effects/video/runtime.ts
 parent_task_id: TASK-1
 priority: medium
 type: task
@@ -47,11 +48,11 @@ Close the measured verification gaps left by TASK-1.11 for the approved fixed ca
 ## Implementation Plan
 
 <!-- SECTION:PLAN:BEGIN -->
-1. Reconfirm decision-7 and verification/doc-6 budgets and inspect the existing synthetic browser benchmark and measurement artifacts.
-2. Run the real crop pipeline from a reproducible 1280x720/30 software-generated video source in Chromium and Firefox, collecting three capture-only/pass-through/fixed-crop runs plus five warm effect cycles and five session retention cycles.
-3. Record browser/runtime versions, negotiated source settings, fps, callback gaps, first-frame time, source-to-preview p95 latency, available heap, and cleanup evidence; keep physical-device criteria #1-#3 unknown.
-4. Update the benchmark report and this task with the synthetic measurements, limitations, and user-operated physical-device follow-up.
-5. Run pnpm verify and the relevant browser benchmark/crop checks, audit acceptance criteria, then commit and push all scoped work.
+1. Reconfirm decision-7 and doc-6 budgets and review the existing synthetic and physical-device evidence.
+2. Correct benchmark-only attribution errors for restored source-track identity and measure first usable frame after getUserMedia resolves.
+3. Attribute the reproduced Chrome reference-device crop throughput loss within the approved fixed-crop path and make only a scoped, measurement-supported optimization.
+4. Prepare the benchmark to measure marker-to-preview p95 and collect user-operated before/after physical-device evidence.
+5. Keep criteria #1-#3 open until valid reference-device frame-rate, latency, startup, and lifecycle evidence is recorded; update the task and Draft PR.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -88,6 +89,12 @@ Physical-device browser smoke (2026-10-06): Orca app 1.4.220, default profile, C
 Measurement-page readiness review (2026-10-06): Inspected the existing page in the Orca built-in browser at http://127.0.0.1:4173/tests/browser/video-crop-benchmark.html (default profile). The page reports camera off/no permission requested, Start camera enabled, Run measurements disabled, and no results, so it is ready for the user-operated run and no benchmark was collected in this dispatch. Before starting, replace the benchmark SHA after this task-note commit, populate the physical host/device field, and replace the prefilled WSL2 Node/pnpm entry with values from the physical runtime; camera identifier field currently says c922. The existing PR #28 is OPEN/Draft on this same branch; its current body contains synthetic evidence but identifies the previous dispatch, so update its body/evidence through the coordinator normal completion flow after this task-record commit is pushed. No PR edit was made in this dispatch. Keep TASK-1.25 In Progress and criteria #1-#3 unchecked.
 
 Added an in-page physical-run verdict panel to the local benchmark. It shows OK, NG, incomplete, or excluded status per input, trial coverage, performance budgets, and track cleanup; a required physical-camera attestation prevents synthetic Playwright input from being counted as device evidence. Acceptance criteria #1-#3 remain open until user-operated physical-device results are reviewed.
+
+User-operated physical reference-camera run (Chrome 154.0.8037.98 on Windows 25H2, C922 Pro Stream Webcam 046d:085c, negotiated 1280x720@30; report commit a9343566ac1d6a530c462b7166f7be91a4a8d086): three capture-only trials measured 30.16/29.78/29.76 fps, pass-through 29.81/29.91/29.85 fps, and fixed crop 26.01/27.13/29.10 fps. All presented-frame callback gap percentages were 0%; exact source frames never delivered are not observable. Crop setup was 43.4-72.9 ms. All three crop p95 latency fields are null because the optical marker yielded zero samples. Five session start/stop cycles and cleanup passed (19 tracks observed, zero live after dispose); heap decreased from 8,068,358 to 7,820,386 bytes and stayed within budget. All five effect cycles reported successful add/update/bypass/remove, bypass restored the original, and prior effect tracks ended. The reported removeRestoredInput=false is a benchmark identity-comparison error: runProfiles leaves the final crop applied, then runEffectCycles stores that crop output as inputTrack before clearing it, and later compares the restored camera track against the crop track. The implementation and existing browser coverage compare removal against the original capture track. The 9,654.5 ms first-frame value was timed from before MediaSession.start(), therefore includes the OS camera permission prompt; it cannot be compared to the decision-7 500 ms budget, which begins after permission resolution. Missing host make/model remains a metadata gap. This physical run confirms a crop-specific throughput miss relative to pass-through, but does not yet complete criteria #1-#3 because latency is unmeasured and startup timing is confounded.
+
+Follow-up to the first physical run: fixed the benchmark's remove-restoration comparison by retaining the original source track from camera startup instead of sampling the active crop output after the performance profiles. First-frame timing now begins at the instrumented getUserMedia stream-resolution time; getUserMedia request-to-stream duration is reported separately, including any user permission wait. Added a scoped crop scheduling experiment inside the approved canvas path: use captureStream(0) plus requestFrame() after each source-frame draw when supported, and retain the existing cadence-based capture as fallback. No after-result is available yet; the physical before/after comparison is required before claiming a performance improvement or closing criteria #1-#3. Updated the reference benchmark report and user instructions. Validation: pnpm build passed (Vite production build, build TypeScript compilation, and CJS declarations); git diff --check passed. Automated tests were not run.
+
+Additional static check after formatting: pnpm typecheck passed, including the updated benchmark page TypeScript. No automated test suite was run in this follow-up.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

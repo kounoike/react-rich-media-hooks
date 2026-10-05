@@ -113,6 +113,7 @@ interface BenchmarkRecord {
   heapBeforeSessionCyclesBytes: number | null;
   heapAfterSessionCyclesBytes: number | null;
   retainedHeapGrowthWithinBudget: boolean | null;
+  getUserMediaRequestToStreamMs: number | null;
   cleanup: Record<string, unknown> | null;
   summary: Record<string, unknown> | null;
   issues: string[];
@@ -280,16 +281,18 @@ const runCoverageCheck = (record: BenchmarkRecord): VerdictCheck => {
   const enoughTrials = profiles.every((profile) => profileStages(record, profile).length >= 3);
   const effectCyclesComplete =
     record.effectCycles.length >= 5 &&
-    record.effectCycles.slice(0, 5).every(
-      (cycle) =>
-        cycle.addStatus === "success" &&
-        cycle.updateStatus === "success" &&
-        cycle.bypassStatus === "success" &&
-        cycle.removeStatus === "success" &&
-        cycle.bypassRestoredInput &&
-        cycle.removeRestoredInput &&
-        cycle.oldTracksEnded,
-    );
+    record.effectCycles
+      .slice(0, 5)
+      .every(
+        (cycle) =>
+          cycle.addStatus === "success" &&
+          cycle.updateStatus === "success" &&
+          cycle.bypassStatus === "success" &&
+          cycle.removeStatus === "success" &&
+          cycle.bypassRestoredInput &&
+          cycle.removeRestoredInput &&
+          cycle.oldTracksEnded,
+      );
   const sessionCyclesComplete =
     record.sessionCycles.length >= 5 &&
     record.sessionCycles
@@ -305,7 +308,9 @@ const runCoverageCheck = (record: BenchmarkRecord): VerdictCheck => {
     label: "3モード×3回と反復操作",
     detail: `${profiles
       .map((profile) => `${profile}: ${profileStages(record, profile).length}/3`)
-      .join(" · ")}; エフェクト ${record.effectCycles.length}/5; 再起動 ${record.sessionCycles.length}/5`,
+      .join(
+        " · ",
+      )}; エフェクト ${record.effectCycles.length}/5; 再起動 ${record.sessionCycles.length}/5`,
     state,
   };
 };
@@ -357,9 +362,9 @@ const performanceCheck = (record: BenchmarkRecord): VerdictCheck => {
   const average = (stages: readonly StageMetric[]): string =>
     stages.length === 0
       ? "—"
-      : `${(
-          stages.reduce((sum, stage) => sum + stage.frameRateFps, 0) / stages.length
-        ).toFixed(1)} fps`;
+      : `${(stages.reduce((sum, stage) => sum + stage.frameRateFps, 0) / stages.length).toFixed(
+          1,
+        )} fps`;
   const heapText =
     heapCheck === null
       ? heapUnavailable
@@ -712,6 +717,7 @@ const makeRecord = (): BenchmarkRecord => ({
   heapBeforeSessionCyclesBytes: null,
   heapAfterSessionCyclesBytes: null,
   retainedHeapGrowthWithinBudget: null,
+  getUserMediaRequestToStreamMs: null,
   cleanup: null,
   summary: null,
   issues: [],
@@ -722,6 +728,7 @@ let record: BenchmarkRecord | null = null;
 let startupController: AbortController | null = null;
 let runController: AbortController | null = null;
 let running = false;
+let sourceVideoTrack: MediaStreamTrack | null = null;
 const knownTracks = new Set<MediaStreamTrack>();
 
 const addOutputTrack = (activeSession: MediaSession): MediaStreamTrack | null => {
@@ -1000,7 +1007,8 @@ const runEffectCycles = async (
   signal: AbortSignal,
 ): Promise<void> => {
   if (record === null) throw new Error("The benchmark record is unavailable.");
-  const inputTrack = addOutputTrack(activeSession);
+  const inputTrack = sourceVideoTrack;
+  if (inputTrack === null) throw new Error("The original camera track is unavailable.");
   const initialCrop = videoEffects.crop({ region: EFFECT_REGION });
   const updatedCrop = videoEffects.crop({ region: UPDATED_REGION });
 
@@ -1033,7 +1041,7 @@ const runEffectCycles = async (
       bypassStatus: bypassed.status,
       removeStatus: removed.status,
       bypassRestoredInput: baseTrack !== null && bypassTrack === baseTrack,
-      removeRestoredInput: inputTrack !== null && removeTrack === inputTrack,
+      removeRestoredInput: removeTrack === inputTrack,
       oldTracksEnded:
         addedTrack !== null &&
         updatedTrack !== null &&
@@ -1094,6 +1102,7 @@ const runSessionCycles = async (
     sessionTracksReleased: record.sessionCycles.every((cycle) => cycle.trackEndedAfterStop),
   };
   session = null;
+  sourceVideoTrack = null;
   preview.srcObject = null;
   updateRecord();
 };
@@ -1149,12 +1158,52 @@ const startCamera = async (): Promise<void> => {
   stopButton.disabled = false;
   physicalCameraInput.disabled = true;
   setStatus("Requesting the default camera after your explicit start.");
-  const requestStartedAt = performance.now();
   record.sessionStartCalls += 1;
+  sourceVideoTrack = null;
+  const mediaDevices = navigator.mediaDevices;
+  const originalGetUserMedia = mediaDevices.getUserMedia;
+  const originalGetUserMediaDescriptor = Object.getOwnPropertyDescriptor(
+    mediaDevices,
+    "getUserMedia",
+  );
+  let getUserMediaRequestedAt: number | null = null;
+  let mediaStreamResolvedAt: number | null = null;
+  let captureTimingInstrumented = false;
+  let getUserMediaRestored = false;
+  const restoreGetUserMedia = (): void => {
+    if (!captureTimingInstrumented || getUserMediaRestored) return;
+    getUserMediaRestored = true;
+    if (originalGetUserMediaDescriptor === undefined) {
+      Reflect.deleteProperty(mediaDevices, "getUserMedia");
+    } else {
+      Object.defineProperty(mediaDevices, "getUserMedia", originalGetUserMediaDescriptor);
+    }
+  };
+  try {
+    const timedGetUserMedia: typeof mediaDevices.getUserMedia = function (
+      this: MediaDevices,
+      constraints: MediaStreamConstraints,
+    ): Promise<MediaStream> {
+      getUserMediaRequestedAt ??= performance.now();
+      return originalGetUserMedia.call(this, constraints).then((stream) => {
+        mediaStreamResolvedAt ??= performance.now();
+        return stream;
+      });
+    };
+    Object.defineProperty(mediaDevices, "getUserMedia", {
+      configurable: true,
+      writable: true,
+      value: timedGetUserMedia,
+    });
+    captureTimingInstrumented = true;
+  } catch {
+    record.issues.push("getUserMedia timing is unavailable in this browser.");
+  }
   try {
     const started = await activeSession.start({
       signal: startupController.signal,
     });
+    restoreGetUserMedia();
     if (started.status !== "success") {
       record.status = "failed";
       record.issues.push(
@@ -1164,12 +1213,15 @@ const startCamera = async (): Promise<void> => {
       );
       await activeSession.dispose();
       session = null;
+      sourceVideoTrack = null;
       record.finishedAt = new Date().toISOString();
       showRecord(record);
       setStatus(`Camera start ${started.status}. Review the result and retry if appropriate.`);
       return;
     }
     const inputTrack = addOutputTrack(activeSession);
+    sourceVideoTrack = inputTrack;
+    if (inputTrack === null) throw new Error("The camera session has no video output track.");
     const settings = safeTrackSettings(inputTrack);
     const trackSettings = inputTrack?.getSettings();
     const label = await getCameraLabel(trackSettings?.deviceId);
@@ -1186,13 +1238,22 @@ const startCamera = async (): Promise<void> => {
     };
     await attachOutput(activeSession);
     const firstFrameAt = await waitForNextFrame(preview, startupController.signal);
-    record.firstUsableFrameMs = firstFrameAt - requestStartedAt;
+    record.getUserMediaRequestToStreamMs =
+      getUserMediaRequestedAt === null || mediaStreamResolvedAt === null
+        ? null
+        : mediaStreamResolvedAt - getUserMediaRequestedAt;
+    record.firstUsableFrameMs =
+      mediaStreamResolvedAt === null ? null : firstFrameAt - mediaStreamResolvedAt;
+    if (captureTimingInstrumented && mediaStreamResolvedAt === null) {
+      record.issues.push("getUserMedia completed without a measurable stream-resolution time.");
+    }
     updateRecord();
     runButton.disabled = false;
     setStatus(
       "Camera is active. Center the marker in the preview, then run the three measurements.",
     );
   } catch (error) {
+    restoreGetUserMedia();
     record.status = startupController.signal.aborted ? "stopped" : "failed";
     record.issues.push(error instanceof Error ? error.message : String(error));
     record.finishedAt = new Date().toISOString();
@@ -1203,6 +1264,7 @@ const startCamera = async (): Promise<void> => {
       record.issues.push("Camera cleanup could not be confirmed after startup failure.");
     }
     session = null;
+    sourceVideoTrack = null;
     preview.srcObject = null;
     showRecord(record);
     setStatus("Camera startup did not complete; review the report or retry.");
@@ -1256,6 +1318,7 @@ const runMeasurements = async (): Promise<void> => {
         currentRecord.issues.push("Camera cleanup could not be confirmed after stop.");
       }
       session = null;
+      sourceVideoTrack = null;
       preview.srcObject = null;
       currentRecord.cleanup = {
         cameraStopped: [...knownTracks].every((track) => track.readyState === "ended"),
@@ -1294,6 +1357,7 @@ const stopCamera = async (): Promise<void> => {
     await activeSession.stop();
     await activeSession.dispose();
     session = null;
+    sourceVideoTrack = null;
     preview.srcObject = null;
     if (record !== null) {
       record.status = record.status === "completed" ? "completed" : "stopped";

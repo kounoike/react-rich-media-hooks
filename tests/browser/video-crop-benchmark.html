@@ -146,7 +146,11 @@
         </p>
         <p class="setup-note">
           For latency measurement, center the animated marker in the camera view. Use an external
-          display for an integrated camera, or open the synchronized marker window below. The final
+          display for an integrated camera, or open the synchronized marker window below. Confirm
+          the marker appears in the live preview before starting; if the report has zero marker
+          samples, source-to-preview latency is unknown. First-frame timing starts when
+          <code>getUserMedia</code> resolves, and its request-to-stream duration is reported
+          separately so the permission prompt is excluded from the 500 ms budget. The final
           retention phase briefly stops and restarts capture five times.
         </p>
         <p class="setup-note">
