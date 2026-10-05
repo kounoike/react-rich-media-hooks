@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-09-25 10:53'
-updated_date: '2026-10-05 21:43'
+updated_date: '2026-10-05 21:58'
 labels: []
 dependencies:
   - TASK-1.11
@@ -48,11 +48,11 @@ Close the measured verification gaps left by TASK-1.11 for the approved fixed ca
 ## Implementation Plan
 
 <!-- SECTION:PLAN:BEGIN -->
-1. Reconfirm decision-7 and doc-6 budgets and review the existing synthetic and physical-device evidence.
-2. Correct benchmark-only attribution errors for restored source-track identity and measure first usable frame after getUserMedia resolves.
-3. Attribute the reproduced Chrome reference-device crop throughput loss within the approved fixed-crop path and make only a scoped, measurement-supported optimization.
-4. Prepare the benchmark to measure marker-to-preview p95 and collect user-operated before/after physical-device evidence.
-5. Keep criteria #1-#3 open until valid reference-device frame-rate, latency, startup, and lifecycle evidence is recorded; update the task and Draft PR.
+1. Reconfirm decision-7/doc-6 budgets and review the physical reference-device results.
+2. Correct the benchmark source-track comparison and separate getUserMedia request duration from first-frame time.
+3. Evaluate the requestFrame scheduling candidate against the measured baseline; retain it only if it improves throughput, otherwise record the result and use the accepted original-video bypass fallback.
+4. Make marker timing reject stale samples, report sample quality, and collect a user-operated run with a live marker on the current implementation.
+5. Keep criteria #1-#3 open until valid p95, frame-rate, startup, and lifecycle evidence is complete; request an accepted Decision before any material processing-architecture change.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -95,6 +95,12 @@ User-operated physical reference-camera run (Chrome 154.0.8037.98 on Windows 25H
 Follow-up to the first physical run: fixed the benchmark's remove-restoration comparison by retaining the original source track from camera startup instead of sampling the active crop output after the performance profiles. First-frame timing now begins at the instrumented getUserMedia stream-resolution time; getUserMedia request-to-stream duration is reported separately, including any user permission wait. Added a scoped crop scheduling experiment inside the approved canvas path: use captureStream(0) plus requestFrame() after each source-frame draw when supported, and retain the existing cadence-based capture as fallback. No after-result is available yet; the physical before/after comparison is required before claiming a performance improvement or closing criteria #1-#3. Updated the reference benchmark report and user instructions. Validation: pnpm build passed (Vite production build, build TypeScript compilation, and CJS declarations); git diff --check passed. Automated tests were not run.
 
 Additional static check after formatting: pnpm typecheck passed, including the updated benchmark page TypeScript. No automated test suite was run in this follow-up.
+
+Second user-operated physical run (commit 269f3fccf4a316832115ce8b3a68ef505ac660c5; Chrome 154.0.8037.98, Windows 11 25H2, C922 046d:085c, 1280x720@30): getUserMedia request-to-stream resolution took 743.1 ms, and first usable frame after stream resolution took 62.4 ms. Capture-only measured 29.65/29.90/29.94 fps, pass-through 29.77/30.20/30.15 fps, and fixed crop 26.85/25.50/26.93 fps; crop setup was 58.8-60.0 ms and callback gaps were 0%. The requestFrame experiment did not demonstrate a consistent improvement over the previous fixed-crop range of 26.01-29.10 fps. All five effect cycles restored the original track on bypass and removal; old effect tracks ended. All five session cycles passed; 19 tracks were observed and zero remained live after dispose. Heap decreased from 7,893,077 to 7,725,369 bytes. The first three marker p95 values were 1.9 s, 9.8 s, and 2.4 s, then remaining stages had no samples. Code review found the decoder could match marker IDs retained for up to 15 seconds without checking freshness, so those large values are not accepted as source-to-preview latency evidence. The benchmark now rejects samples older than one second, reports used/stale sample counts, and applies the 50 ms budget only to fixed-crop, matching decision-7. Criteria #1-#3 remain open; a fresh-marker run is still needed. Updated HTML and benchmark documentation with the marker visibility requirement. Validation after these changes: pnpm build, pnpm typecheck, and git diff --check passed; automated tests were not run.
+
+Evaluation of the requestFrame candidate: the baseline fixed-crop trials on commit a934356 averaged 27.41 fps (26.01/27.13/29.10); the candidate trials on commit 269f3fc averaged 26.43 fps (26.85/25.50/26.93). These were separate short runs rather than a controlled paired experiment, but show no consistent gain, so the candidate was removed and the fixed-cadence canvas capture implementation restored. The physical run did verify explicit bypass/removal restores the camera track and cleanup succeeds; do not claim the automatic overload fallback was exercised because each crop stage was too short to establish two consecutive slow windows.
+
+The requestFrame candidate was removed after the user-operated result showed no repeatable gain. The fresh-marker guard now excludes decoded timestamps older than one second, exposes adopted/stale sample counts per stage, and keeps the 50 ms p95 budget scoped to fixed crop. The trial table and instructions require the synchronized marker window to remain visible and active. Final follow-up validation passed pnpm build, pnpm typecheck, oxfmt --check on edited TypeScript, and git diff --check; automated tests were not run. Criteria #1-#3 remain open pending a fresh-marker run on the restored fixed-cadence implementation.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -62,8 +62,11 @@ network. Keep the same marker display and camera framing for comparisons. This
 includes the display-to-camera optical path. `presentedFrameGapPercent` counts gaps reported
 by `requestVideoFrameCallback`; browsers do not expose the exact count of camera
 frames that were never delivered, so that source-loss quantity remains unknown.
-When the marker cannot be decoded, latency is recorded as unknown. `performance.memory`
-is browser-specific and is not forced through garbage collection.
+Keep the synchronized marker window visible and active during the full run.
+Marker codes older than one second are excluded as stale and counted separately;
+when too few fresh marker samples remain, latency is recorded as unknown.
+`performance.memory` is browser-specific and is not forced through garbage
+collection.
 
 ## Initial physical reference-camera result
 
@@ -100,10 +103,32 @@ success, bypass restored the input, and effect tracks ended in all five cycles.
 
 This baseline confirms a crop-specific throughput gap but does not complete
 criteria #1-#3: latency is missing and the startup timing is not comparable to
-the approved budget. The canvas crop path now requests each output frame
-explicitly when `CanvasCaptureMediaStreamTrack.requestFrame()` is available and
-uses the existing timed 30 fps capture path otherwise. That change still needs
-a user-operated before/after run; no improvement is claimed yet.
+the approved budget. An optional
+`CanvasCaptureMediaStreamTrack.requestFrame()` scheduling candidate was tried
+on the follow-up run below, then removed after it showed no consistent
+throughput improvement. The fixed-cadence `canvas.captureStream(30)` path
+remains in use.
+
+The follow-up run on commit `269f3fccf4a316832115ce8b3a68ef505ac660c5` used the
+same browser, camera, and negotiated settings. First usable frame was 62.4 ms
+after `getUserMedia` resolution; request-to-stream resolution took 743.1 ms.
+Capture-only measured 29.65/29.90/29.94 fps, pass-through 29.77/30.20/30.15
+fps, and fixed crop 26.85/25.50/26.93 fps. Crop setup took 58.8-60.0 ms and
+presented-frame callback gaps remained zero. All five effect cycles restored
+the original track after bypass and removal, all effect tracks ended, all five
+session cycles passed, and cleanup left zero live tracks. Retained heap fell
+from 7,893,077 to 7,725,369 bytes.
+
+The first three latency values from that run were 1.9 s, 9.8 s, and 2.4 s;
+the remaining stages had no marker samples. These samples are not accepted as
+latency evidence: the decoder could accept matching marker codes retained for up
+to 15 seconds, even if the marker animation had stopped. The benchmark now
+excludes codes older than one second, reports fresh and stale sample counts,
+and applies the 50 ms budget only to fixed crop, as specified by decision-7.
+The request-frame experiment did not show a consistent throughput improvement;
+fixed crop remains below 30 fps. That candidate has been removed. Criteria
+#1-#3 remain open pending fresh marker evidence and a supported follow-up for
+the crop throughput miss.
 
 The `?test=1` page mode and Playwright coverage use synthetic input with shortened
 durations to verify the flow. Those runs are tooling checks and do not count as

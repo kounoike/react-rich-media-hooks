@@ -62,13 +62,14 @@
                   <th scope="col">回</th>
                   <th scope="col">fps (≥30)</th>
                   <th scope="col">frame gaps (≤1%)</th>
-                  <th scope="col">遅延 p95 (≤50 ms)</th>
+                  <th scope="col">遅延 p95 (crop ≤50 ms)</th>
+                  <th scope="col">マーカー標本 (採用 / 古い)</th>
                   <th scope="col">crop setup (≤1 s)</th>
                 </tr>
               </thead>
               <tbody id="trial-results-body">
                 <tr>
-                  <td colspan="6" class="empty-row">計測結果はまだありません。</td>
+                  <td colspan="7" class="empty-row">計測結果はまだありません。</td>
                 </tr>
               </tbody>
             </table>
@@ -78,6 +79,7 @@
           OKはこのページに記載した計測予算を満たした意味です。NGは少なくとも1項目の未達です。
           必須データが不足している場合は未完了、疑似入力の場合は実機判定対象外になります。
           カメラが一度も送出しなかったフレーム数はブラウザから取得できないため、この判定には含まれません。
+          1秒より古いマーカー標本は遅延計算から除外し、採用数と合わせて表示します。
         </p>
       </section>
 
@@ -157,7 +159,9 @@
           <a href="/tests/browser/video-crop-latency-marker.html" target="_blank" rel="noreferrer">
             Open synchronized marker window
           </a>
-          on another display in this browser. That page has no camera access.
+          on another display in this browser. Keep that window visible and active throughout the
+          run; a background or minimized window may pause marker animation. That page has no camera
+          access.
         </p>
         <div class="actions">
           <button id="start-camera" type="button">Start camera</button>

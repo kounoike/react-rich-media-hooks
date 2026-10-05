@@ -41,10 +41,6 @@ type VideoElementWithFrameCallbacks = HTMLVideoElement & {
   ) => number;
 };
 
-type CanvasCaptureTrack = MediaStreamTrack & {
-  requestFrame?: () => void;
-};
-
 const abortError = (): Error => {
   const error = new Error("Video processing was cancelled.");
   error.name = "AbortError";
@@ -206,7 +202,6 @@ export const createCanvasCropProcessor = async (
 
   let outputStream: MediaStream | null = null;
   let outputTrack: MediaStreamTrack | null = null;
-  let requestOutputFrame: (() => void) | null = null;
   let callbackHandle: number | null = null;
   let callbackKind: "video" | "animation" | null = null;
   let disposed = false;
@@ -306,33 +301,8 @@ export const createCanvasCropProcessor = async (
       throw new VideoCropProcessorError("unsupported", "Canvas capture is unavailable.");
     }
 
-    let nextStream: MediaStream;
-    let nextTrack: MediaStreamTrack | null;
-    let nextRequestFrame: (() => void) | null = null;
-    let manualStream: MediaStream | null = null;
-    try {
-      manualStream = captureStream.call(canvasWithCapture, 0);
-      const manualTrack = manualStream.getVideoTracks()[0] as CanvasCaptureTrack | undefined;
-      if (manualTrack !== undefined && typeof manualTrack.requestFrame === "function") {
-        nextStream = manualStream;
-        nextTrack = manualTrack;
-        nextRequestFrame = () => manualTrack.requestFrame?.();
-        manualStream = null;
-      } else {
-        for (const track of manualStream.getTracks()) {
-          if (track.readyState !== "ended") track.stop();
-        }
-        manualStream = null;
-        nextStream = captureStream.call(canvasWithCapture, sourceFrameRate);
-        nextTrack = nextStream.getVideoTracks()[0] ?? null;
-      }
-    } catch {
-      for (const track of manualStream?.getTracks() ?? []) {
-        if (track.readyState !== "ended") track.stop();
-      }
-      nextStream = captureStream.call(canvasWithCapture, sourceFrameRate);
-      nextTrack = nextStream.getVideoTracks()[0] ?? null;
-    }
+    const nextStream = captureStream.call(canvasWithCapture, sourceFrameRate);
+    const nextTrack = nextStream.getVideoTracks()[0] ?? null;
     if (nextTrack === null) {
       for (const track of nextStream.getTracks()) {
         if (track.readyState !== "ended") track.stop();
@@ -345,7 +315,6 @@ export const createCanvasCropProcessor = async (
     nextTrack.addEventListener("ended", onOutputEnded);
     outputStream = nextStream;
     outputTrack = nextTrack;
-    requestOutputFrame = nextRequestFrame;
     if (previousTrack !== null) {
       previousTrack.removeEventListener("ended", onOutputEnded);
       if (previousTrack.readyState !== "ended") previousTrack.stop();
@@ -382,7 +351,6 @@ export const createCanvasCropProcessor = async (
         canvas.width,
         canvas.height,
       );
-      requestOutputFrame?.();
     } catch (cause) {
       fail(
         cause instanceof VideoCropProcessorError

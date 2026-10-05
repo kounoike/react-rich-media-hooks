@@ -42,6 +42,7 @@ interface StageMetric {
   readonly sourceToPreviewP95Ms: number | null;
   readonly sourceToPreviewMaxMs: number | null;
   readonly latencySamples: number;
+  readonly staleMarkerSamples: number;
   readonly latencyMethod: "animated-optical-marker";
   readonly cropSetupMs: number | null;
   readonly budgetChecks: {
@@ -129,6 +130,7 @@ const TEST_MODE = new URLSearchParams(window.location.search).get("test") === "1
 const WARMUP_MS = TEST_MODE ? 50 : 1000;
 const MEASURE_MS = TEST_MODE ? 250 : 2000;
 const SETTLE_MS = TEST_MODE ? 25 : 500;
+const MAX_MARKER_SAMPLE_AGE_MS = 1000;
 const EFFECT_REGION: CropOptions["region"] = { x: 0.125, y: 0, width: 0.75, height: 1 };
 const UPDATED_REGION: CropOptions["region"] = { x: 0.25, y: 0, width: 0.5, height: 1 };
 
@@ -326,14 +328,14 @@ const performanceCheck = (record: BenchmarkRecord): VerdictCheck => {
   const captures = profileStages(record, "capture-only");
   const passThrough = profileStages(record, "pass-through");
   const crops = profileStages(record, "fixed-crop");
+  const allStages = [...captures, ...passThrough, ...crops];
+  const latencyDataComplete = allStages.every((stage) => stage.sourceToPreviewP95Ms !== null);
   const checks: (boolean | null | undefined)[] = [
     record.firstUsableFrameMs === null ? null : record.firstUsableFrameMs <= 500,
     ...captures.map((stage) => stage.budgetChecks.frameRateAtLeast30),
     ...captures.map((stage) => stage.budgetChecks.presentedFrameGapAtMost1Percent),
-    ...captures.map((stage) => stage.budgetChecks.sourceToPreviewP95AtMost50Ms),
     ...passThrough.map((stage) => stage.budgetChecks.frameRateAtLeast30),
     ...passThrough.map((stage) => stage.budgetChecks.presentedFrameGapAtMost1Percent),
-    ...passThrough.map((stage) => stage.budgetChecks.sourceToPreviewP95AtMost50Ms),
     ...crops.map((stage) => stage.budgetChecks.frameRateAtLeast30),
     ...crops.map((stage) => stage.budgetChecks.presentedFrameGapAtMost1Percent),
     ...crops.map((stage) => stage.budgetChecks.sourceToPreviewP95AtMost50Ms),
@@ -344,6 +346,7 @@ const performanceCheck = (record: BenchmarkRecord): VerdictCheck => {
     captures.length >= 3 &&
     passThrough.length >= 3 &&
     crops.length >= 3 &&
+    latencyDataComplete &&
     checks.every((value) => value !== null && value !== undefined);
   const knownFailure = checks.some((value) => value === false);
   const heapCheck = record.retainedHeapGrowthWithinBudget;
@@ -427,7 +430,7 @@ const renderTrialResults = (record: BenchmarkRecord): void => {
   if (record.stages.length === 0) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 6;
+    cell.colSpan = 7;
     cell.className = "empty-row";
     cell.textContent = "計測結果はまだありません。";
     row.append(cell);
@@ -453,8 +456,13 @@ const renderTrialResults = (record: BenchmarkRecord): void => {
     row.append(gapsCell);
     const latencyCell = document.createElement("td");
     latencyCell.textContent = formatMetric(stage.sourceToPreviewP95Ms, "ms");
-    latencyCell.dataset.state = stateForMetric(stage.budgetChecks.sourceToPreviewP95AtMost50Ms);
+    if (stage.profile === "fixed-crop") {
+      latencyCell.dataset.state = stateForMetric(stage.budgetChecks.sourceToPreviewP95AtMost50Ms);
+    }
     row.append(latencyCell);
+    const markerCell = document.createElement("td");
+    markerCell.textContent = `${stage.latencySamples} / ${stage.staleMarkerSamples}`;
+    row.append(markerCell);
     const setupCell = document.createElement("td");
     setupCell.textContent = formatMetric(stage.cropSetupMs, "ms");
     if (stage.profile === "fixed-crop") {
@@ -767,6 +775,7 @@ const collectStage = async (
   let presentedFrameGaps = 0;
   let previousPresentedFrames: number | null = null;
   const latencySamples: number[] = [];
+  let staleMarkerSamples = 0;
 
   const measuredMs = await new Promise<number>((resolve, reject) => {
     let handle: number | null = null;
@@ -794,7 +803,11 @@ const collectStage = async (
       }
       const marker = decodeMarker(preview);
       const markerAt = marker === null ? undefined : markerTimes.get(marker);
-      if (markerAt !== undefined && now >= markerAt) latencySamples.push(now - markerAt);
+      if (markerAt !== undefined && now >= markerAt) {
+        const sampleAge = now - markerAt;
+        if (sampleAge <= MAX_MARKER_SAMPLE_AGE_MS) latencySamples.push(sampleAge);
+        else staleMarkerSamples += 1;
+      }
       if (now >= endAt) finish();
       else handle = preview.requestVideoFrameCallback?.(onFrame) ?? null;
     };
@@ -826,6 +839,7 @@ const collectStage = async (
     sourceToPreviewP95Ms: quantile(latencySamples, 0.95),
     sourceToPreviewMaxMs: latencySamples.length === 0 ? null : Math.max(...latencySamples),
     latencySamples: latencySamples.length,
+    staleMarkerSamples,
     latencyMethod: "animated-optical-marker",
     cropSetupMs: stage.cropSetupMs,
     budgetChecks: {
@@ -833,7 +847,7 @@ const collectStage = async (
       presentedFrameGapAtMost1Percent:
         totalObserved === 0 || presentedFrameGaps / totalObserved <= 0.01,
       sourceToPreviewP95AtMost50Ms:
-        quantile(latencySamples, 0.95) === null
+        stage.profile !== "fixed-crop" || quantile(latencySamples, 0.95) === null
           ? null
           : (quantile(latencySamples, 0.95) ?? Number.POSITIVE_INFINITY) <= 50,
       cropSetupWithin1Second: stage.cropSetupMs === null ? null : stage.cropSetupMs <= 1000,
