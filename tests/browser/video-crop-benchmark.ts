@@ -138,10 +138,17 @@ const downloadButton = document.querySelector<HTMLButtonElement>("#download-resu
 const statusElement = document.querySelector<HTMLParagraphElement>("#status")!;
 const preview = document.querySelector<VideoWithFrameCallbacks>("#preview")!;
 const resultsElement = document.querySelector<HTMLPreElement>("#results-json")!;
+const verdictBanner = document.querySelector<HTMLDivElement>("#verdict-banner")!;
+const verdictOverall = document.querySelector<HTMLElement>("#verdict-overall")!;
+const verdictMessage = document.querySelector<HTMLParagraphElement>("#verdict-message")!;
+const verdictChecks = document.querySelector<HTMLUListElement>("#verdict-checks")!;
+const trialResultsBody = document.querySelector<HTMLTableSectionElement>("#trial-results-body")!;
 const commitInput = document.querySelector<HTMLInputElement>("#commit-sha")!;
 const hostInput = document.querySelector<HTMLInputElement>("#host-description")!;
 const runtimeInput = document.querySelector<HTMLInputElement>("#runtime-description")!;
 const cameraInput = document.querySelector<HTMLInputElement>("#camera-description")!;
+const physicalCameraInput = document.querySelector<HTMLInputElement>("#physical-camera-confirm")!;
+physicalCameraInput.required = !TEST_MODE;
 const markerCanvas = document.querySelector<HTMLCanvasElement>("#latency-marker")!;
 const markerContext = markerCanvas.getContext("2d", { alpha: false })!;
 const sampleCanvas = document.createElement("canvas");
@@ -202,9 +209,304 @@ const setStatus = (message: string): void => {
   statusElement.textContent = message;
 };
 
+type VerdictState = "ok" | "ng" | "pending" | "excluded";
+
+interface VerdictCheck {
+  readonly label: string;
+  readonly detail: string;
+  readonly state: VerdictState;
+}
+
+const verdictLabel = (state: VerdictState): string =>
+  ({ ok: "OK", ng: "NG", pending: "未完了", excluded: "対象外" })[state];
+
+const cameraSourceCheck = (record: BenchmarkRecord): VerdictCheck => {
+  if (record.browser.toolMode === "synthetic Playwright timing") {
+    return {
+      label: "実機と入力解像度",
+      detail: "疑似カメラ入力です。実機結果には使えません。",
+      state: "excluded",
+    };
+  }
+  const camera = record.camera;
+  if (camera === null) {
+    return {
+      label: "実機と入力解像度",
+      detail: "カメラを開始して設定を取得してください。",
+      state: "pending",
+    };
+  }
+  if (camera.physicalDeviceResult !== "user-confirmed physical reference camera") {
+    return {
+      label: "実機と入力解像度",
+      detail: "実カメラの確認がありません。チェック欄を確認して新しい計測を開始してください。",
+      state: "pending",
+    };
+  }
+  const { width, height, frameRate } = camera.settings;
+  if (typeof width !== "number" || typeof height !== "number" || typeof frameRate !== "number") {
+    return {
+      label: "実機と入力解像度",
+      detail: "カメラの幅・高さ・fps設定を取得できませんでした。",
+      state: "pending",
+    };
+  }
+  const matchesTarget = width === 1280 && height === 720 && Math.abs(frameRate - 30) <= 0.5;
+  const deviceName = camera.cameraLabel?.trim() || record.cameraDescription.trim();
+  const hasVersionDetails =
+    record.hostDescription.trim().length > 0 &&
+    record.runtimeDescription.trim().length > 0 &&
+    deviceName.trim().length > 0 &&
+    typeof record.browser.userAgent === "string";
+  const state: VerdictState = matchesTarget ? (hasVersionDetails ? "ok" : "pending") : "ng";
+  const detail = `${deviceName || "カメラ名なし"}: ${width}×${height} @ ${frameRate.toFixed(2)} fps; ${
+    hasVersionDetails ? "OS・機種・ブラウザ情報あり" : "OS・機種・ブラウザ情報が不足"
+  }`;
+  return { label: "実機と入力解像度", detail, state };
+};
+
+const profileStages = (record: BenchmarkRecord, profile: Profile): StageMetric[] =>
+  record.stages.filter((stage) => stage.profile === profile);
+
+const runCoverageCheck = (record: BenchmarkRecord): VerdictCheck => {
+  if (record.browser.toolMode === "synthetic Playwright timing") {
+    return {
+      label: "3モード×3回と反復操作",
+      detail: "疑似入力の自動試験結果であり、実機の受け入れ判定には含めません。",
+      state: "excluded",
+    };
+  }
+  const profiles: Profile[] = ["capture-only", "pass-through", "fixed-crop"];
+  const enoughTrials = profiles.every((profile) => profileStages(record, profile).length >= 3);
+  const effectCyclesComplete =
+    record.effectCycles.length >= 5 &&
+    record.effectCycles.slice(0, 5).every(
+      (cycle) =>
+        cycle.addStatus === "success" &&
+        cycle.updateStatus === "success" &&
+        cycle.bypassStatus === "success" &&
+        cycle.removeStatus === "success" &&
+        cycle.bypassRestoredInput &&
+        cycle.removeRestoredInput &&
+        cycle.oldTracksEnded,
+    );
+  const sessionCyclesComplete =
+    record.sessionCycles.length >= 5 &&
+    record.sessionCycles
+      .slice(0, 5)
+      .every((cycle) => cycle.startStatus === "success" && cycle.trackEndedAfterStop);
+  const state =
+    enoughTrials && effectCyclesComplete && sessionCyclesComplete
+      ? "ok"
+      : record.status === "completed"
+        ? "ng"
+        : "pending";
+  return {
+    label: "3モード×3回と反復操作",
+    detail: `${profiles
+      .map((profile) => `${profile}: ${profileStages(record, profile).length}/3`)
+      .join(" · ")}; エフェクト ${record.effectCycles.length}/5; 再起動 ${record.sessionCycles.length}/5`,
+    state,
+  };
+};
+
+const performanceCheck = (record: BenchmarkRecord): VerdictCheck => {
+  if (record.browser.toolMode === "synthetic Playwright timing") {
+    return {
+      label: "計測予算",
+      detail: "合成入力の数値は参考表示のみで、実機判定には使いません。",
+      state: "excluded",
+    };
+  }
+  const captures = profileStages(record, "capture-only");
+  const passThrough = profileStages(record, "pass-through");
+  const crops = profileStages(record, "fixed-crop");
+  const checks: (boolean | null | undefined)[] = [
+    record.firstUsableFrameMs === null ? null : record.firstUsableFrameMs <= 500,
+    ...captures.map((stage) => stage.budgetChecks.frameRateAtLeast30),
+    ...captures.map((stage) => stage.budgetChecks.presentedFrameGapAtMost1Percent),
+    ...captures.map((stage) => stage.budgetChecks.sourceToPreviewP95AtMost50Ms),
+    ...passThrough.map((stage) => stage.budgetChecks.frameRateAtLeast30),
+    ...passThrough.map((stage) => stage.budgetChecks.presentedFrameGapAtMost1Percent),
+    ...passThrough.map((stage) => stage.budgetChecks.sourceToPreviewP95AtMost50Ms),
+    ...crops.map((stage) => stage.budgetChecks.frameRateAtLeast30),
+    ...crops.map((stage) => stage.budgetChecks.presentedFrameGapAtMost1Percent),
+    ...crops.map((stage) => stage.budgetChecks.sourceToPreviewP95AtMost50Ms),
+    ...crops.map((stage) => stage.budgetChecks.cropSetupWithin1Second),
+  ];
+  const enoughData =
+    record.firstUsableFrameMs !== null &&
+    captures.length >= 3 &&
+    passThrough.length >= 3 &&
+    crops.length >= 3 &&
+    checks.every((value) => value !== null && value !== undefined);
+  const knownFailure = checks.some((value) => value === false);
+  const heapCheck = record.retainedHeapGrowthWithinBudget;
+  const heapUnavailable =
+    heapCheck === null &&
+    record.sessionCycles.length >= 5 &&
+    record.heapBeforeSessionCyclesBytes === null &&
+    record.heapAfterSessionCyclesBytes === null;
+  const failedHeap = heapCheck === false;
+  const state: VerdictState =
+    knownFailure || failedHeap
+      ? "ng"
+      : enoughData && (heapCheck === true || heapUnavailable)
+        ? "ok"
+        : "pending";
+  const average = (stages: readonly StageMetric[]): string =>
+    stages.length === 0
+      ? "—"
+      : `${(
+          stages.reduce((sum, stage) => sum + stage.frameRateFps, 0) / stages.length
+        ).toFixed(1)} fps`;
+  const heapText =
+    heapCheck === null
+      ? heapUnavailable
+        ? "heap: N/A"
+        : "heap: 未計測"
+      : `heap: ${heapCheck ? "OK" : "NG"}`;
+  const firstFrame =
+    record.firstUsableFrameMs === null
+      ? "—"
+      : `${record.firstUsableFrameMs.toFixed(0)}/500 ms ${record.firstUsableFrameMs <= 500 ? "OK" : "NG"}`;
+  const detail = `初回 ${firstFrame} · capture-only ${average(captures)} · pass-through ${average(
+    passThrough,
+  )} · fixed-crop ${average(crops)} · ${heapText}`;
+  return { label: "計測予算", detail, state };
+};
+
+const cleanupCheck = (record: BenchmarkRecord): VerdictCheck => {
+  if (record.browser.toolMode === "synthetic Playwright timing") {
+    return {
+      label: "トラック解放",
+      detail: "合成入力テストでは解放確認済みですが、実機判定には含めません。",
+      state: "excluded",
+    };
+  }
+  const cleanup = record.cleanup;
+  if (cleanup === null) {
+    return {
+      label: "トラック解放",
+      detail: "測定完了後のカメラ・エフェクト・セッショントラック解放を待っています。",
+      state: "pending",
+    };
+  }
+  const values = [
+    cleanup.cameraStopped,
+    cleanup.effectTracksReleased,
+    cleanup.sessionTracksReleased,
+  ];
+  const state: VerdictState = values.every((value) => value === true)
+    ? "ok"
+    : values.some((value) => value === false)
+      ? "ng"
+      : "pending";
+  return {
+    label: "トラック解放",
+    detail: `camera ${cleanup.cameraStopped === true ? "ended" : "未確認"} · effect ${
+      cleanup.effectTracksReleased === true ? "released" : "未確認"
+    } · session ${cleanup.sessionTracksReleased === true ? "released" : "未確認"}`,
+    state,
+  };
+};
+
+const stateForMetric = (passed: boolean | null | undefined): VerdictState =>
+  passed === true ? "ok" : passed === false ? "ng" : "pending";
+
+const formatMetric = (value: number | null, unit: string, digits = 1): string =>
+  value === null ? "—" : `${value.toFixed(digits)} ${unit}`;
+
+const renderTrialResults = (record: BenchmarkRecord): void => {
+  trialResultsBody.replaceChildren();
+  if (record.stages.length === 0) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 6;
+    cell.className = "empty-row";
+    cell.textContent = "計測結果はまだありません。";
+    row.append(cell);
+    trialResultsBody.append(row);
+    return;
+  }
+  for (const stage of record.stages) {
+    const row = document.createElement("tr");
+    const mode = document.createElement("th");
+    mode.scope = "row";
+    mode.textContent = stage.profile;
+    row.append(mode);
+    const runCell = document.createElement("td");
+    runCell.textContent = String(stage.run);
+    row.append(runCell);
+    const fpsCell = document.createElement("td");
+    fpsCell.textContent = formatMetric(stage.frameRateFps, "fps");
+    fpsCell.dataset.state = stateForMetric(stage.budgetChecks.frameRateAtLeast30);
+    row.append(fpsCell);
+    const gapsCell = document.createElement("td");
+    gapsCell.textContent = formatMetric(stage.presentedFrameGapPercent, "%", 2);
+    gapsCell.dataset.state = stateForMetric(stage.budgetChecks.presentedFrameGapAtMost1Percent);
+    row.append(gapsCell);
+    const latencyCell = document.createElement("td");
+    latencyCell.textContent = formatMetric(stage.sourceToPreviewP95Ms, "ms");
+    latencyCell.dataset.state = stateForMetric(stage.budgetChecks.sourceToPreviewP95AtMost50Ms);
+    row.append(latencyCell);
+    const setupCell = document.createElement("td");
+    setupCell.textContent = formatMetric(stage.cropSetupMs, "ms");
+    if (stage.profile === "fixed-crop") {
+      setupCell.dataset.state = stateForMetric(stage.budgetChecks.cropSetupWithin1Second);
+    }
+    row.append(setupCell);
+    trialResultsBody.append(row);
+  }
+};
+
+const renderVerdict = (record: BenchmarkRecord): void => {
+  const checks = [
+    cameraSourceCheck(record),
+    runCoverageCheck(record),
+    performanceCheck(record),
+    cleanupCheck(record),
+  ];
+  const isSynthetic = record.browser.toolMode === "synthetic Playwright timing";
+  const hasFailure = checks.some((check) => check.state === "ng") || record.status === "failed";
+  const isReady = checks.every((check) => check.state === "ok" || check.state === "excluded");
+  const overallState: VerdictState = isSynthetic
+    ? "excluded"
+    : hasFailure
+      ? "ng"
+      : isReady && record.status === "completed" && record.issues.length === 0
+        ? "ok"
+        : "pending";
+
+  verdictBanner.dataset.state = overallState;
+  verdictOverall.textContent = verdictLabel(overallState);
+  verdictMessage.textContent =
+    overallState === "ok"
+      ? "必須の実機計測とリソース解放を確認し、すべての判定可能な予算を満たしました。"
+      : overallState === "ng"
+        ? "予算未達または計測エラーがあります。赤い項目とJSONのissuesを確認してください。"
+        : overallState === "excluded"
+          ? "これは疑似入力の結果です。実機のOK/NG判定には使えません。"
+          : "計測または必須情報が不足しています。未完了の項目を確認してください。";
+
+  verdictChecks.replaceChildren();
+  for (const check of checks) {
+    const item = document.createElement("li");
+    item.dataset.state = check.state;
+    const label = document.createElement("span");
+    label.textContent = `${check.label} — ${check.detail}`;
+    const status = document.createElement("strong");
+    status.textContent = verdictLabel(check.state);
+    item.append(label, status);
+    verdictChecks.append(item);
+  }
+  renderTrialResults(record);
+};
+
 const showRecord = (record: BenchmarkRecord): void => {
   window.videoCropBenchmarkRecord = record;
   resultsElement.textContent = JSON.stringify(record, null, 2);
+  renderVerdict(record);
   downloadButton.disabled = false;
 };
 
@@ -797,10 +1099,8 @@ const runSessionCycles = async (
 };
 
 const startCamera = async (): Promise<void> => {
-  if (!commitInput.value.trim() || !hostInput.value.trim() || !runtimeInput.value.trim()) {
-    document.querySelector<HTMLFormElement>("#setup-form")?.reportValidity();
-    return;
-  }
+  const setupForm = document.querySelector<HTMLFormElement>("#setup-form");
+  if (setupForm === null || !setupForm.reportValidity()) return;
   if (!window.isSecureContext || navigator.mediaDevices?.getUserMedia === undefined) {
     setStatus("Camera capture requires a secure localhost or HTTPS page in a supported browser.");
     return;
@@ -847,6 +1147,7 @@ const startCamera = async (): Promise<void> => {
   startupController = new AbortController();
   startButton.disabled = true;
   stopButton.disabled = false;
+  physicalCameraInput.disabled = true;
   setStatus("Requesting the default camera after your explicit start.");
   const requestStartedAt = performance.now();
   record.sessionStartCalls += 1;
@@ -877,7 +1178,11 @@ const startCamera = async (): Promise<void> => {
       settings,
       cameraLabel: label,
       mediaTrackState: inputTrack?.readyState ?? "unavailable",
-      physicalDeviceResult: "not measured by automated runs; this session is user-operated",
+      physicalDeviceResult: TEST_MODE
+        ? "synthetic Playwright input; physical device not confirmed"
+        : physicalCameraInput.checked
+          ? "user-confirmed physical reference camera"
+          : "physical reference camera not confirmed",
     };
     await attachOutput(activeSession);
     const firstFrameAt = await waitForNextFrame(preview, startupController.signal);
@@ -905,6 +1210,7 @@ const startCamera = async (): Promise<void> => {
     startupController = null;
     startButton.disabled = false;
     stopButton.disabled = session === null;
+    physicalCameraInput.disabled = session !== null;
   }
 };
 
@@ -972,6 +1278,7 @@ const runMeasurements = async (): Promise<void> => {
     runButton.disabled = session === null || record?.status !== "running";
     startButton.disabled = session !== null;
     stopButton.disabled = session === null;
+    physicalCameraInput.disabled = session !== null;
   }
 };
 
@@ -1013,6 +1320,7 @@ const stopCamera = async (): Promise<void> => {
     startButton.disabled = false;
     runButton.disabled = true;
     stopButton.disabled = true;
+    physicalCameraInput.disabled = false;
   }
 };
 

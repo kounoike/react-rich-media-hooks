@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-09-25 10:53'
-updated_date: '2026-10-05 20:22'
+updated_date: '2026-10-05 21:12'
 labels: []
 dependencies:
   - TASK-1.11
@@ -86,6 +86,8 @@ Measurement-count clarification: the performance table uses only the full-durati
 Physical-device browser smoke (2026-10-06): Orca app 1.4.220, default profile, Chrome 150.0.7871.250 on Win32. getUserMedia for c922 Pro Stream Webcam (046d:085c) negotiated 1280x720 at 30 fps. With a visible video element appended to the DOM, requestVideoFrameCallback fired for a 1280x720 frame while document.visibilityState was visible and document.hasFocus was false. An earlier callback timeout used a detached video element, so tab inactivity is not established as the cause. This is smoke evidence only, not sustained fps or acceptance evidence; acceptance criteria #1-#3 remain open.
 
 Measurement-page readiness review (2026-10-06): Inspected the existing page in the Orca built-in browser at http://127.0.0.1:4173/tests/browser/video-crop-benchmark.html (default profile). The page reports camera off/no permission requested, Start camera enabled, Run measurements disabled, and no results, so it is ready for the user-operated run and no benchmark was collected in this dispatch. Before starting, replace the benchmark SHA after this task-note commit, populate the physical host/device field, and replace the prefilled WSL2 Node/pnpm entry with values from the physical runtime; camera identifier field currently says c922. The existing PR #28 is OPEN/Draft on this same branch; its current body contains synthetic evidence but identifies the previous dispatch, so update its body/evidence through the coordinator normal completion flow after this task-record commit is pushed. No PR edit was made in this dispatch. Keep TASK-1.25 In Progress and criteria #1-#3 unchecked.
+
+Added an in-page physical-run verdict panel to the local benchmark. It shows OK, NG, incomplete, or excluded status per input, trial coverage, performance budgets, and track cleanup; a required physical-camera attestation prevents synthetic Playwright input from being counted as device evidence. Acceptance criteria #1-#3 remain open until user-operated physical-device results are reviewed.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

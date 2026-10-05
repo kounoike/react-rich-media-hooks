@@ -22,6 +22,65 @@
         </p>
       </header>
 
+      <section class="panel verdict-panel" aria-labelledby="verdict-heading">
+        <div
+          id="verdict-banner"
+          class="verdict-banner"
+          data-state="pending"
+          role="status"
+          aria-live="polite"
+        >
+          <div>
+            <h2 id="verdict-heading">実機計測の判定 / Physical run verdict</h2>
+            <p id="verdict-message">
+              まだ計測していません。完了後、基準を満たした項目をOK、未達をNGで表示します。
+            </p>
+          </div>
+          <strong id="verdict-overall">未計測</strong>
+        </div>
+        <ul id="verdict-checks" class="verdict-checks" aria-label="Acceptance checks">
+          <li data-state="pending">
+            <span>実機・1280×720・30 fps</span><strong>未計測</strong>
+          </li>
+          <li data-state="pending">
+            <span>3モード×3回と計測条件</span><strong>未計測</strong>
+          </li>
+          <li data-state="pending">
+            <span>フレームレート・遅延・ドロップ予算</span><strong>未計測</strong>
+          </li>
+          <li data-state="pending">
+            <span>エフェクト／セッションの反復と解放</span><strong>未計測</strong>
+          </li>
+        </ul>
+        <div class="trial-results">
+          <h3>各試行 / Trial results</h3>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">モード</th>
+                  <th scope="col">回</th>
+                  <th scope="col">fps (≥30)</th>
+                  <th scope="col">frame gaps (≤1%)</th>
+                  <th scope="col">遅延 p95 (≤50 ms)</th>
+                  <th scope="col">crop setup (≤1 s)</th>
+                </tr>
+              </thead>
+              <tbody id="trial-results-body">
+                <tr>
+                  <td colspan="6" class="empty-row">計測結果はまだありません。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="verdict-legend">
+          OKはこのページに記載した計測予算を満たした意味です。NGは少なくとも1項目の未達です。
+          必須データが不足している場合は未完了、疑似入力の場合は実機判定対象外になります。
+          カメラが一度も送出しなかったフレーム数はブラウザから取得できないため、この判定には含まれません。
+        </p>
+      </section>
+
       <section class="panel" aria-labelledby="setup-heading">
         <h2 id="setup-heading">Reference device details</h2>
         <form id="setup-form" class="fields">
@@ -62,15 +121,28 @@
             <input
               id="camera-description"
               name="camera-description"
+              required
               autocomplete="off"
               placeholder="Integrated webcam, model if known"
             />
           </label>
+          <label class="attestation-field">
+            <input
+              id="physical-camera-confirm"
+              name="physical-camera-confirm"
+              type="checkbox"
+              required
+            />
+            <span>
+              I confirm this is the physical reference camera, not synthetic or virtual input.
+            </span>
+          </label>
         </form>
         <p class="privacy-note">
-          The camera is requested only when you start it. The run uses your default camera and
-          releases all session tracks when it finishes or when you stop. No camera IDs or media are
-          uploaded; JSON is saved only when you download it.
+          The browser cannot reliably distinguish a physical camera from a virtual camera; confirm
+          the source above yourself. The camera is requested only when you start it. The run uses
+          your default camera and releases all session tracks when it finishes or when you stop. No
+          camera IDs or media are uploaded; JSON is saved only when you download it.
         </p>
         <p class="setup-note">
           For latency measurement, center the animated marker in the camera view. Use an external
