@@ -40,10 +40,24 @@ the camera at it. The main page also shows a marker for cameras that can see its
 display. The page requests the default camera only after **Start camera** is
 clicked. **Run measurements** performs three
 independent trials of capture-only, no-op pass-through, and fixed crop; each
-stage warms for one second and measures for two seconds. It then records five
-warm crop add/update/bypass/remove cycles and five camera stop/start retention
-cycles. Capture is released when the run ends or when **Stop and release camera**
-is selected.
+stage warms for one second and measures for two seconds. It then measures the
+same live crop processor with its input video detached and connected to the DOM
+in three paired comparisons. The order alternates detached-connected,
+connected-detached, detached-connected. Each state warms for one second and
+measures for two seconds; the connected input appears as a small raw preview
+beside the crop output. This changes only DOM attachment, not the media track,
+crop, or capture session. The source video is detached again before lifecycle
+checks. The page then records five warm crop add/update/bypass/remove cycles and
+five camera stop/start retention cycles. Capture is released when the run ends
+or when **Stop and release camera** is selected.
+
+The downloaded stages label these rows `crop-dom-detached` and
+`crop-dom-connected`; their paired preview, input, draw, and callback rates are
+also summarized in `cropDomAttachmentComparisonByRun`. They are diagnostic
+comparison rows and do not replace or inflate the three default `fixed-crop`
+acceptance trials. The attached state is a visible 320×180 raw camera preview;
+the comparison therefore tests DOM connection with normal rendering, not an
+invisible or `display:none` video element.
 
 For each fixed-crop stage, the page also counts the processor input video
 `requestVideoFrameCallback` callbacks and their `presentedFrames` gaps, the
@@ -170,9 +184,12 @@ runtime versions and host model remain missing from this run.
 The crop output stayed about 3.8–5.3 fps below its paired capture-only result.
 This confirms a repeatable output-throughput shortfall, but the run did not
 count internal input callbacks or canvas draw calls, so it cannot identify the
-stage responsible. The next benchmark adds those same-window counters before
-any runtime scheduling or DOM attachment experiment is selected. Keep criteria
-#1–#3 open until that attribution and valid latency evidence are recorded.
+stage responsible. The next benchmark adds those same-window counters and a
+paired detached-versus-connected measurement of the same live processor. The
+user reported a roughly 3 fps association with detached input video; treat that
+as a hypothesis until the paired values are reviewed. No runtime scheduling or
+DOM behavior has been changed. Keep criteria #1–#3 open until that attribution
+and valid latency evidence are recorded.
 
 The `?test=1` page mode and Playwright coverage use synthetic input with shortened
 durations to verify the flow. Those runs are tooling checks and do not count as

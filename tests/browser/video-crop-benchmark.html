@@ -18,7 +18,8 @@
         <h1>Fixed camera crop benchmark</h1>
         <p>
           Run the approved 1280×720 at 30 fps capture-only, pass-through, and fixed-crop
-          measurements on a reference camera. Results stay in this browser until you download them.
+          measurements on a reference camera, followed by a paired source-video DOM comparison.
+          Results stay in this browser until you download them.
         </p>
       </header>
 
@@ -188,6 +189,9 @@
         <figure class="panel preview-panel">
           <video id="preview" autoplay muted playsinline aria-label="Camera output preview"></video>
           <figcaption>Live output preview</figcaption>
+          <div id="processor-input-video-slot" class="processor-input-video-slot" hidden>
+            <p>Raw processor input preview (DOM-connected comparison stage)</p>
+          </div>
         </figure>
         <figure class="panel marker-panel">
           <canvas

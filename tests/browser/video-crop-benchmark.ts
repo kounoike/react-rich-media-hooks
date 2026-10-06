@@ -1,8 +1,16 @@
 import type { MediaSession, OperationResult, VideoEffectConfig } from "../../src/core/index.js";
 import type { CropOptions } from "../../src/effects/video/index.js";
 
-type Profile = "capture-only" | "pass-through" | "fixed-crop";
+type Profile =
+  | "capture-only"
+  | "pass-through"
+  | "fixed-crop"
+  | "crop-dom-detached"
+  | "crop-dom-connected";
 type OperationStatus = OperationResult["status"];
+
+const isCropProfile = (profile: Profile): boolean =>
+  profile === "fixed-crop" || profile === "crop-dom-detached" || profile === "crop-dom-connected";
 
 interface FrameMetadataLike {
   readonly presentedFrames?: number;
@@ -148,6 +156,9 @@ const stopButton = document.querySelector<HTMLButtonElement>("#stop-camera")!;
 const downloadButton = document.querySelector<HTMLButtonElement>("#download-results")!;
 const statusElement = document.querySelector<HTMLParagraphElement>("#status")!;
 const preview = document.querySelector<VideoWithFrameCallbacks>("#preview")!;
+const processorInputVideoSlot = document.querySelector<HTMLDivElement>(
+  "#processor-input-video-slot",
+)!;
 const resultsElement = document.querySelector<HTMLPreElement>("#results-json")!;
 const verdictBanner = document.querySelector<HTMLDivElement>("#verdict-banner")!;
 const verdictOverall = document.querySelector<HTMLElement>("#verdict-overall")!;
@@ -785,10 +796,19 @@ interface PipelineCounters {
   cropCallbackDurationsMs: number[];
 }
 
+interface PipelineInstrumentation {
+  readonly getProcessorInputVideo: () => HTMLVideoElement | null;
+  readonly restore: () => void;
+}
+
 let activePipelineCounters: PipelineCounters | null = null;
 
-const installPipelineInstrumentation = (): (() => void) => {
+const installPipelineInstrumentation = (): PipelineInstrumentation => {
   const videoPrototype = HTMLVideoElement.prototype;
+  let processorInputVideo: HTMLVideoElement | null = null;
+  const rememberProcessorInputVideo = (video: HTMLVideoElement): void => {
+    if (video !== preview) processorInputVideo = video;
+  };
   const originalRequestVideoFrameCallback = Reflect.get(
     videoPrototype,
     "requestVideoFrameCallback",
@@ -796,6 +816,7 @@ const installPipelineInstrumentation = (): (() => void) => {
   const wrappedRequestVideoFrameCallback =
     typeof originalRequestVideoFrameCallback === "function"
       ? function (this: HTMLVideoElement, callback: VideoFrameRequestCallback): number {
+          rememberProcessorInputVideo(this);
           const handle: unknown = Reflect.apply(originalRequestVideoFrameCallback, this, [
             (now: number, metadata: VideoFrameCallbackMetadata) => {
               if (this === preview) {
@@ -875,7 +896,7 @@ const installPipelineInstrumentation = (): (() => void) => {
     throw new Error("Could not install canvas draw diagnostics.");
   }
 
-  return () => {
+  const restore = (): void => {
     activePipelineCounters = null;
     if (
       videoWrapperInstalled &&
@@ -887,6 +908,7 @@ const installPipelineInstrumentation = (): (() => void) => {
       Reflect.set(contextPrototype, "drawImage", originalDrawImage);
     }
   };
+  return { getProcessorInputVideo: () => processorInputVideo, restore };
 };
 
 const addOutputTrack = (activeSession: MediaSession): MediaStreamTrack | null => {
@@ -926,19 +948,18 @@ const collectStage = async (
   let previousPresentedFrames: number | null = null;
   const latencySamples: number[] = [];
   let staleMarkerSamples = 0;
-  const pipelineCounters: PipelineCounters | null =
-    stage.profile === "fixed-crop"
-      ? {
-          processorInputVideoFrameCallbacks: 0,
-          processorInputPresentedFrameGaps: 0,
-          previousPresentedFrames: null,
-          processorInputVideoConnected: null,
-          cropDrawImageCalls: 0,
-          cropDrawImageFailures: 0,
-          cropDrawImageDurationsMs: [],
-          cropCallbackDurationsMs: [],
-        }
-      : null;
+  const pipelineCounters: PipelineCounters | null = isCropProfile(stage.profile)
+    ? {
+        processorInputVideoFrameCallbacks: 0,
+        processorInputPresentedFrameGaps: 0,
+        previousPresentedFrames: null,
+        processorInputVideoConnected: null,
+        cropDrawImageCalls: 0,
+        cropDrawImageFailures: 0,
+        cropDrawImageDurationsMs: [],
+        cropCallbackDurationsMs: [],
+      }
+    : null;
   activePipelineCounters = pipelineCounters;
 
   let measuredMs: number;
@@ -1062,6 +1083,19 @@ const isVideoEffectsModule = (value: unknown): value is VideoEffectsModule =>
   "crop" in value &&
   typeof value.crop === "function";
 
+const domComparisonValues = (stage: StageMetric | undefined) =>
+  stage === undefined
+    ? null
+    : {
+        previewFrameRateFps: stage.frameRateFps,
+        inputFrameRateFps: stage.processorInputVideoFrameRateFps,
+        inputPresentedFrameGaps: stage.processorInputPresentedFrameGaps,
+        drawImageRateFps: stage.cropDrawImageRateFps,
+        drawImageDurationP95Ms: stage.cropDrawImageDurationP95Ms,
+        processorCallbackDurationP95Ms: stage.cropCallbackDurationP95Ms,
+        processorInputVideoConnected: stage.processorInputVideoConnected,
+      };
+
 const updateRecord = (): void => {
   if (record === null) return;
   const rowsByProfile = (profile: Profile): StageMetric[] =>
@@ -1069,6 +1103,8 @@ const updateRecord = (): void => {
   const captures = rowsByProfile("capture-only");
   const passThrough = rowsByProfile("pass-through");
   const crops = rowsByProfile("fixed-crop");
+  const domDetachedCrops = rowsByProfile("crop-dom-detached");
+  const domConnectedCrops = rowsByProfile("crop-dom-connected");
   const captureFpsByRun = new Map(captures.map((stage) => [stage.run, stage.frameRateFps]));
   const cropFpsByRun = new Map(crops.map((stage) => [stage.run, stage.frameRateFps]));
   record.summary = {
@@ -1101,6 +1137,26 @@ const updateRecord = (): void => {
       run: stage.run,
       value: stage.cropDrawImageDurationP95Ms,
     })),
+    cropDomAttachmentComparisonByRun: [1, 2, 3].map((run) => {
+      const detached = domDetachedCrops.find((stage) => stage.run === run);
+      const connected = domConnectedCrops.find((stage) => stage.run === run);
+      return {
+        run,
+        detached: domComparisonValues(detached),
+        connected: domComparisonValues(connected),
+        connectedMinusDetachedPreviewFps:
+          detached === undefined || connected === undefined
+            ? null
+            : connected.frameRateFps - detached.frameRateFps,
+        connectedMinusDetachedInputFps:
+          detached?.processorInputVideoFrameRateFps === null ||
+          detached?.processorInputVideoFrameRateFps === undefined ||
+          connected?.processorInputVideoFrameRateFps === null ||
+          connected?.processorInputVideoFrameRateFps === undefined
+            ? null
+            : connected.processorInputVideoFrameRateFps - detached.processorInputVideoFrameRateFps,
+      };
+    }),
     firstUsableFrameMs: record.firstUsableFrameMs,
     firstUsableFrameWithin500Ms:
       record.firstUsableFrameMs === null ? null : record.firstUsableFrameMs <= 500,
@@ -1143,7 +1199,7 @@ const runProfiles = async (
   if (record === null) throw new Error("The benchmark record is unavailable.");
   const firstSessionStartCount = record.sessionStartCalls;
   const cropEffect = videoEffects.crop({ region: EFFECT_REGION });
-  const restorePipelineInstrumentation = installPipelineInstrumentation();
+  const instrumentation = installPipelineInstrumentation();
 
   try {
     for (let run = 1; run <= 3; run += 1) {
@@ -1213,13 +1269,57 @@ const runProfiles = async (
       updateRecord();
     }
 
+    const processorInputVideo = instrumentation.getProcessorInputVideo();
+    if (processorInputVideo === null) {
+      recordIssue(
+        "The processor input video could not be captured for the DOM connection comparison.",
+      );
+    } else {
+      for (let run = 1; run <= 3; run += 1) {
+        const conditions: readonly ("detached" | "connected")[] =
+          run % 2 === 0 ? ["connected", "detached"] : ["detached", "connected"];
+        for (const condition of conditions) {
+          const connected = condition === "connected";
+          if (connected) {
+            processorInputVideoSlot.hidden = false;
+            if (processorInputVideo.parentElement !== processorInputVideoSlot) {
+              processorInputVideoSlot.append(processorInputVideo);
+            }
+          } else {
+            processorInputVideo.remove();
+            processorInputVideoSlot.hidden = true;
+          }
+
+          setStatus(
+            `DOM comparison ${run} of 3: processor input ${condition}; warming for measurement.`,
+          );
+          await attachOutput(activeSession);
+          const comparison = await collectStage(
+            activeSession,
+            {
+              run,
+              profile: connected ? "crop-dom-connected" : "crop-dom-detached",
+              operationStatus: "not-applied",
+              warmupMs: WARMUP_MS,
+              cropSetupMs: null,
+            },
+            signal,
+          );
+          record.stages.push(comparison);
+          updateRecord();
+        }
+      }
+    }
+
     record.profileSessionStartCalls = record.sessionStartCalls - firstSessionStartCount;
     if (record.profileSessionStartCalls !== 0) {
-      recordIssue("Capture was reacquired during the nine profile measurements.");
+      recordIssue("Capture was reacquired during profile or DOM comparison measurements.");
     }
     updateRecord();
   } finally {
-    restorePipelineInstrumentation();
+    instrumentation.getProcessorInputVideo()?.remove();
+    processorInputVideoSlot.hidden = true;
+    instrumentation.restore();
   }
 };
 

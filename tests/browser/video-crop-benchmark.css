@@ -336,6 +336,31 @@ button:disabled {
   object-fit: contain;
 }
 
+.processor-input-video-slot {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+}
+
+.processor-input-video-slot[hidden] {
+  display: none;
+}
+
+.processor-input-video-slot p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.processor-input-video-slot video {
+  display: block;
+  width: min(100%, 20rem);
+  aspect-ratio: 16 / 9;
+  border-radius: 0.45rem;
+  background: #070b10;
+  object-fit: contain;
+}
+
 .marker-panel {
   justify-items: center;
 }
