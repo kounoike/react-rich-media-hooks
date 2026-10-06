@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-09-25 10:53'
-updated_date: '2026-10-05 21:58'
+updated_date: '2026-10-06 20:20'
 labels: []
 dependencies:
   - TASK-1.11
@@ -48,11 +48,7 @@ Close the measured verification gaps left by TASK-1.11 for the approved fixed ca
 ## Implementation Plan
 
 <!-- SECTION:PLAN:BEGIN -->
-1. Reconfirm decision-7/doc-6 budgets and review the physical reference-device results.
-2. Correct the benchmark source-track comparison and separate getUserMedia request duration from first-frame time.
-3. Evaluate the requestFrame scheduling candidate against the measured baseline; retain it only if it improves throughput, otherwise record the result and use the accepted original-video bypass fallback.
-4. Make marker timing reject stale samples, report sample quality, and collect a user-operated run with a live marker on the current implementation.
-5. Keep criteria #1-#3 open until valid p95, frame-rate, startup, and lifecycle evidence is complete; request an accepted Decision before any material processing-architecture change.
+1. Reconfirm decision-7/doc-6 budgets and record the latest physical run without treating completed status as a passing verdict. 2. Add benchmark-only counters for the crop input video-frame callbacks, presented-frame gaps, source drawImage calls and duration, and visible preview output frames, all over the same measurement interval. 3. Use these measurements to distinguish source delivery, crop drawing, and canvas-output pacing before changing the runtime. 4. If the measured evidence isolates a runtime bottleneck, run a controlled, repeatable comparison within the approved fixed-crop scope; otherwise report the remaining uncertainty and request any needed decision. 5. Keep criteria #1-#3 open until valid physical evidence satisfies them.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -101,6 +97,10 @@ Second user-operated physical run (commit 269f3fccf4a316832115ce8b3a68ef505ac660
 Evaluation of the requestFrame candidate: the baseline fixed-crop trials on commit a934356 averaged 27.41 fps (26.01/27.13/29.10); the candidate trials on commit 269f3fc averaged 26.43 fps (26.85/25.50/26.93). These were separate short runs rather than a controlled paired experiment, but show no consistent gain, so the candidate was removed and the fixed-cadence canvas capture implementation restored. The physical run did verify explicit bypass/removal restores the camera track and cleanup succeeds; do not claim the automatic overload fallback was exercised because each crop stage was too short to establish two consecutive slow windows.
 
 The requestFrame candidate was removed after the user-operated result showed no repeatable gain. The fresh-marker guard now excludes decoded timestamps older than one second, exposes adopted/stale sample counts per stage, and keeps the 50 ms p95 budget scoped to fixed crop. The trial table and instructions require the synchronized marker window to remain visible and active. Final follow-up validation passed pnpm build, pnpm typecheck, oxfmt --check on edited TypeScript, and git diff --check; automated tests were not run. Criteria #1-#3 remain open pending a fresh-marker run on the restored fixed-cadence implementation.
+
+Latest physical result from commit 76f097062aaebd8fc6ce72dd61836630626e8af3 (Chrome 154.0.8037.98, Windows 11 25H2, C922, 1280x720 at 30 fps) again measured fixed-crop output at 25.94, 25.44, and 24.88 fps, below capture-only 29.76, 30.19, and 30.17 fps and pass-through 30.30, 29.87, and 29.82 fps. Output preview callback gaps were 0%, but that does not identify where crop throughput is lost. First usable frame was 69.7 ms after stream resolution; crop setup was 61.8-62 ms. Fresh marker latency was 783.3 ms for 28 samples, 650 ms for 48 samples, and unavailable for run 3; those values need source-stage attribution before they can be accepted as camera-processing latency. Lifecycle cleanup passed. The JSON reports runtimeDescription Node and cameraDescription Camera even though the browser track identifies the C922; record complete runtime, host model, and camera metadata on the next run. New diagnostic plan: instrument source-video requestVideoFrameCallback delivery, metadata presented-frame gaps, source-to-canvas drawImage count and duration, and preview-output callbacks during identical stage windows. This will locate the throughput loss without inferring it from the final preview fps. Do not change runtime scheduling or source element attachment until the counters establish which stage is limiting.
+
+Implemented benchmark-only, same-window attribution counters for fixed-crop trials: processor input requestVideoFrameCallback count/rate and presented-frame gaps; source video DOM connection; source-video drawImage call rate/failures and synchronous call-duration p95; and total processor callback-duration p95. The stage JSON and on-page trial table now keep these separate from final preview fps and preview callback gaps. Summary arrays expose input and draw rates by run. Updated docs with what each counter can and cannot establish, including that browser observation still cannot count sensor frames never delivered and JavaScript timing does not measure deferred GPU completion. Existing user result on commit 76f097062aaebd8fc6ce72dd61836630626e8af3 remains evidence of a repeated 3.8-5.3 fps crop output shortfall, but it has no source-stage counters, so the root cause remains unlocated. No runtime scheduling or DOM attachment was changed. Validation: pnpm typecheck passed; oxfmt --check on the benchmark TypeScript passed; git diff --check passed. No automated browser or physical-device run was performed. Criteria #1-#3 remain open pending the next user-operated physical run with complete runtime and device metadata.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

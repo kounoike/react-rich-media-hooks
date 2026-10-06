@@ -60,8 +60,13 @@
                 <tr>
                   <th scope="col">モード</th>
                   <th scope="col">回</th>
-                  <th scope="col">fps (≥30)</th>
-                  <th scope="col">frame gaps (≤1%)</th>
+                  <th scope="col">preview fps (≥30)</th>
+                  <th scope="col">preview gaps (≤1%)</th>
+                  <th scope="col">crop input fps / gaps</th>
+                  <th scope="col">drawImage fps / failures</th>
+                  <th scope="col">drawImage call p95 (ms)</th>
+                  <th scope="col">processor callback p95 (ms)</th>
+                  <th scope="col">input video in DOM</th>
                   <th scope="col">遅延 p95 (crop ≤50 ms)</th>
                   <th scope="col">マーカー標本 (採用 / 古い)</th>
                   <th scope="col">crop setup (≤1 s)</th>
@@ -69,7 +74,7 @@
               </thead>
               <tbody id="trial-results-body">
                 <tr>
-                  <td colspan="7" class="empty-row">計測結果はまだありません。</td>
+                  <td colspan="12" class="empty-row">計測結果はまだありません。</td>
                 </tr>
               </tbody>
             </table>
@@ -80,6 +85,7 @@
           必須データが不足している場合は未完了、疑似入力の場合は実機判定対象外になります。
           カメラが一度も送出しなかったフレーム数はブラウザから取得できないため、この判定には含まれません。
           1秒より古いマーカー標本は遅延計算から除外し、採用数と合わせて表示します。
+          crop の入力 callback、drawImage、出力 preview は同じ測定窓で数えます。入力の presented-frame gap もカメラ未送出フレーム数ではありません。
         </p>
       </section>
 

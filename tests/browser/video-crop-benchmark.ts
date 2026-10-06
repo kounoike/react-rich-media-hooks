@@ -9,7 +9,6 @@ interface FrameMetadataLike {
 }
 
 type VideoWithFrameCallbacks = HTMLVideoElement;
-
 interface NavigatorUserAgentData {
   readonly brands?: readonly { readonly brand: string; readonly version: string }[];
   readonly mobile?: boolean;
@@ -43,6 +42,15 @@ interface StageMetric {
   readonly sourceToPreviewMaxMs: number | null;
   readonly latencySamples: number;
   readonly staleMarkerSamples: number;
+  readonly processorInputVideoFrameCallbacks: number | null;
+  readonly processorInputVideoFrameRateFps: number | null;
+  readonly processorInputPresentedFrameGaps: number | null;
+  readonly processorInputVideoConnected: boolean | null;
+  readonly cropDrawImageCalls: number | null;
+  readonly cropDrawImageFailures: number | null;
+  readonly cropDrawImageRateFps: number | null;
+  readonly cropDrawImageDurationP95Ms: number | null;
+  readonly cropCallbackDurationP95Ms: number | null;
   readonly latencyMethod: "animated-optical-marker";
   readonly cropSetupMs: number | null;
   readonly budgetChecks: {
@@ -271,6 +279,13 @@ const cameraSourceCheck = (record: BenchmarkRecord): VerdictCheck => {
 const profileStages = (record: BenchmarkRecord, profile: Profile): StageMetric[] =>
   record.stages.filter((stage) => stage.profile === profile);
 
+const averageFrameRate = (stages: readonly StageMetric[]): string =>
+  stages.length === 0
+    ? "—"
+    : `${(stages.reduce((sum, stage) => sum + stage.frameRateFps, 0) / stages.length).toFixed(
+        1,
+      )} fps`;
+
 const runCoverageCheck = (record: BenchmarkRecord): VerdictCheck => {
   if (record.browser.toolMode === "synthetic Playwright timing") {
     return {
@@ -362,12 +377,6 @@ const performanceCheck = (record: BenchmarkRecord): VerdictCheck => {
       : enoughData && (heapCheck === true || heapUnavailable)
         ? "ok"
         : "pending";
-  const average = (stages: readonly StageMetric[]): string =>
-    stages.length === 0
-      ? "—"
-      : `${(stages.reduce((sum, stage) => sum + stage.frameRateFps, 0) / stages.length).toFixed(
-          1,
-        )} fps`;
   const heapText =
     heapCheck === null
       ? heapUnavailable
@@ -378,9 +387,9 @@ const performanceCheck = (record: BenchmarkRecord): VerdictCheck => {
     record.firstUsableFrameMs === null
       ? "—"
       : `${record.firstUsableFrameMs.toFixed(0)}/500 ms ${record.firstUsableFrameMs <= 500 ? "OK" : "NG"}`;
-  const detail = `初回 ${firstFrame} · capture-only ${average(captures)} · pass-through ${average(
+  const detail = `初回 ${firstFrame} · capture-only ${averageFrameRate(captures)} · pass-through ${averageFrameRate(
     passThrough,
-  )} · fixed-crop ${average(crops)} · ${heapText}`;
+  )} · fixed-crop ${averageFrameRate(crops)} · ${heapText}`;
   return { label: "計測予算", detail, state };
 };
 
@@ -430,7 +439,7 @@ const renderTrialResults = (record: BenchmarkRecord): void => {
   if (record.stages.length === 0) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 7;
+    cell.colSpan = 12;
     cell.className = "empty-row";
     cell.textContent = "計測結果はまだありません。";
     row.append(cell);
@@ -454,6 +463,32 @@ const renderTrialResults = (record: BenchmarkRecord): void => {
     gapsCell.textContent = formatMetric(stage.presentedFrameGapPercent, "%", 2);
     gapsCell.dataset.state = stateForMetric(stage.budgetChecks.presentedFrameGapAtMost1Percent);
     row.append(gapsCell);
+    const inputCell = document.createElement("td");
+    inputCell.textContent =
+      stage.processorInputVideoFrameRateFps === null
+        ? "—"
+        : `${formatMetric(stage.processorInputVideoFrameRateFps, "fps")} / ${stage.processorInputPresentedFrameGaps ?? "—"}`;
+    row.append(inputCell);
+    const drawCell = document.createElement("td");
+    drawCell.textContent =
+      stage.cropDrawImageRateFps === null
+        ? "—"
+        : `${formatMetric(stage.cropDrawImageRateFps, "fps")} / ${stage.cropDrawImageFailures ?? "—"}`;
+    row.append(drawCell);
+    const drawP95Cell = document.createElement("td");
+    drawP95Cell.textContent = formatMetric(stage.cropDrawImageDurationP95Ms, "ms");
+    row.append(drawP95Cell);
+    const callbackP95Cell = document.createElement("td");
+    callbackP95Cell.textContent = formatMetric(stage.cropCallbackDurationP95Ms, "ms");
+    row.append(callbackP95Cell);
+    const sourceVideoCell = document.createElement("td");
+    sourceVideoCell.textContent =
+      stage.processorInputVideoConnected === null
+        ? "—"
+        : stage.processorInputVideoConnected
+          ? "connected"
+          : "detached";
+    row.append(sourceVideoCell);
     const latencyCell = document.createElement("td");
     latencyCell.textContent = formatMetric(stage.sourceToPreviewP95Ms, "ms");
     if (stage.profile === "fixed-crop") {
@@ -739,6 +774,121 @@ let running = false;
 let sourceVideoTrack: MediaStreamTrack | null = null;
 const knownTracks = new Set<MediaStreamTrack>();
 
+interface PipelineCounters {
+  processorInputVideoFrameCallbacks: number;
+  processorInputPresentedFrameGaps: number;
+  previousPresentedFrames: number | null;
+  processorInputVideoConnected: boolean | null;
+  cropDrawImageCalls: number;
+  cropDrawImageFailures: number;
+  cropDrawImageDurationsMs: number[];
+  cropCallbackDurationsMs: number[];
+}
+
+let activePipelineCounters: PipelineCounters | null = null;
+
+const installPipelineInstrumentation = (): (() => void) => {
+  const videoPrototype = HTMLVideoElement.prototype;
+  const originalRequestVideoFrameCallback = Reflect.get(
+    videoPrototype,
+    "requestVideoFrameCallback",
+  );
+  const wrappedRequestVideoFrameCallback =
+    typeof originalRequestVideoFrameCallback === "function"
+      ? function (this: HTMLVideoElement, callback: VideoFrameRequestCallback): number {
+          const handle: unknown = Reflect.apply(originalRequestVideoFrameCallback, this, [
+            (now: number, metadata: VideoFrameCallbackMetadata) => {
+              if (this === preview) {
+                callback(now, metadata);
+                return;
+              }
+
+              const counters = activePipelineCounters;
+              if (counters === null) {
+                callback(now, metadata);
+                return;
+              }
+
+              counters.processorInputVideoFrameCallbacks += 1;
+              counters.processorInputVideoConnected ??= this.isConnected;
+              if (
+                counters.previousPresentedFrames !== null &&
+                metadata.presentedFrames > counters.previousPresentedFrames + 1
+              ) {
+                counters.processorInputPresentedFrameGaps +=
+                  metadata.presentedFrames - counters.previousPresentedFrames - 1;
+              }
+              counters.previousPresentedFrames = metadata.presentedFrames;
+
+              const callbackStartedAt = performance.now();
+              try {
+                callback(now, metadata);
+              } finally {
+                counters.cropCallbackDurationsMs.push(performance.now() - callbackStartedAt);
+              }
+            },
+          ]);
+          if (typeof handle !== "number") {
+            throw new Error("requestVideoFrameCallback returned a non-numeric handle.");
+          }
+          return handle;
+        }
+      : undefined;
+
+  const contextPrototype = CanvasRenderingContext2D.prototype;
+  const originalDrawImage = Reflect.get(contextPrototype, "drawImage");
+  if (typeof originalDrawImage !== "function") {
+    throw new Error("CanvasRenderingContext2D.drawImage is unavailable.");
+  }
+  const wrappedDrawImage = function (
+    this: CanvasRenderingContext2D,
+    source: CanvasImageSource,
+    ...args: number[]
+  ): void {
+    const counters = activePipelineCounters;
+    if (counters === null || source === preview || !(source instanceof HTMLVideoElement)) {
+      Reflect.apply(originalDrawImage, this, [source, ...args]);
+      return;
+    }
+
+    counters.cropDrawImageCalls += 1;
+    const drawStartedAt = performance.now();
+    try {
+      Reflect.apply(originalDrawImage, this, [source, ...args]);
+    } catch (error) {
+      counters.cropDrawImageFailures += 1;
+      throw error;
+    } finally {
+      counters.cropDrawImageDurationsMs.push(performance.now() - drawStartedAt);
+    }
+  };
+  const videoWrapperInstalled =
+    wrappedRequestVideoFrameCallback !== undefined &&
+    Reflect.set(videoPrototype, "requestVideoFrameCallback", wrappedRequestVideoFrameCallback);
+  if (wrappedRequestVideoFrameCallback !== undefined && !videoWrapperInstalled) {
+    throw new Error("Could not install video-frame callback diagnostics.");
+  }
+  if (!Reflect.set(contextPrototype, "drawImage", wrappedDrawImage)) {
+    if (videoWrapperInstalled) {
+      Reflect.set(videoPrototype, "requestVideoFrameCallback", originalRequestVideoFrameCallback);
+    }
+    throw new Error("Could not install canvas draw diagnostics.");
+  }
+
+  return () => {
+    activePipelineCounters = null;
+    if (
+      videoWrapperInstalled &&
+      Reflect.get(videoPrototype, "requestVideoFrameCallback") === wrappedRequestVideoFrameCallback
+    ) {
+      Reflect.set(videoPrototype, "requestVideoFrameCallback", originalRequestVideoFrameCallback);
+    }
+    if (Reflect.get(contextPrototype, "drawImage") === wrappedDrawImage) {
+      Reflect.set(contextPrototype, "drawImage", originalDrawImage);
+    }
+  };
+};
+
 const addOutputTrack = (activeSession: MediaSession): MediaStreamTrack | null => {
   const outputTrack = activeSession.getOutput("video")?.track ?? null;
   if (outputTrack !== null) knownTracks.add(outputTrack);
@@ -776,52 +926,77 @@ const collectStage = async (
   let previousPresentedFrames: number | null = null;
   const latencySamples: number[] = [];
   let staleMarkerSamples = 0;
+  const pipelineCounters: PipelineCounters | null =
+    stage.profile === "fixed-crop"
+      ? {
+          processorInputVideoFrameCallbacks: 0,
+          processorInputPresentedFrameGaps: 0,
+          previousPresentedFrames: null,
+          processorInputVideoConnected: null,
+          cropDrawImageCalls: 0,
+          cropDrawImageFailures: 0,
+          cropDrawImageDurationsMs: [],
+          cropCallbackDurationsMs: [],
+        }
+      : null;
+  activePipelineCounters = pipelineCounters;
 
-  const measuredMs = await new Promise<number>((resolve, reject) => {
-    let handle: number | null = null;
-    const finish = (error?: Error): void => {
-      signal.removeEventListener("abort", onAbort);
-      if (handle !== null) preview.cancelVideoFrameCallback?.(handle);
-      if (error !== undefined) reject(error);
-      else resolve(performance.now() - start);
-    };
-    const onAbort = (): void => finish(abortError());
-    const onFrame = (now: number, metadata: FrameMetadataLike): void => {
-      if (signal.aborted) {
-        finish(abortError());
+  let measuredMs: number;
+  try {
+    measuredMs = await new Promise<number>((resolve, reject) => {
+      let handle: number | null = null;
+      const finish = (error?: Error): void => {
+        signal.removeEventListener("abort", onAbort);
+        if (handle !== null) preview.cancelVideoFrameCallback?.(handle);
+        if (error !== undefined) reject(error);
+        else resolve(performance.now() - start);
+      };
+      const onAbort = (): void => finish(abortError());
+      const onFrame = (now: number, metadata: FrameMetadataLike): void => {
+        if (signal.aborted) {
+          finish(abortError());
+          return;
+        }
+        frames += 1;
+        if (typeof metadata.presentedFrames === "number") {
+          if (
+            previousPresentedFrames !== null &&
+            metadata.presentedFrames > previousPresentedFrames + 1
+          ) {
+            presentedFrameGaps += metadata.presentedFrames - previousPresentedFrames - 1;
+          }
+          previousPresentedFrames = metadata.presentedFrames;
+        }
+        const marker = decodeMarker(preview);
+        const markerAt = marker === null ? undefined : markerTimes.get(marker);
+        if (markerAt !== undefined && now >= markerAt) {
+          const sampleAge = now - markerAt;
+          if (sampleAge <= MAX_MARKER_SAMPLE_AGE_MS) latencySamples.push(sampleAge);
+          else staleMarkerSamples += 1;
+        }
+        if (now >= endAt) finish();
+        else handle = preview.requestVideoFrameCallback?.(onFrame) ?? null;
+      };
+
+      if (preview.requestVideoFrameCallback === undefined) {
+        reject(new Error("This browser does not provide requestVideoFrameCallback()."));
         return;
       }
-      frames += 1;
-      if (typeof metadata.presentedFrames === "number") {
-        if (
-          previousPresentedFrames !== null &&
-          metadata.presentedFrames > previousPresentedFrames + 1
-        ) {
-          presentedFrameGaps += metadata.presentedFrames - previousPresentedFrames - 1;
-        }
-        previousPresentedFrames = metadata.presentedFrames;
-      }
-      const marker = decodeMarker(preview);
-      const markerAt = marker === null ? undefined : markerTimes.get(marker);
-      if (markerAt !== undefined && now >= markerAt) {
-        const sampleAge = now - markerAt;
-        if (sampleAge <= MAX_MARKER_SAMPLE_AGE_MS) latencySamples.push(sampleAge);
-        else staleMarkerSamples += 1;
-      }
-      if (now >= endAt) finish();
-      else handle = preview.requestVideoFrameCallback?.(onFrame) ?? null;
-    };
-
-    if (preview.requestVideoFrameCallback === undefined) {
-      reject(new Error("This browser does not provide requestVideoFrameCallback()."));
-      return;
-    }
-    signal.addEventListener("abort", onAbort, { once: true });
-    handle = preview.requestVideoFrameCallback(onFrame);
-  });
+      signal.addEventListener("abort", onAbort, { once: true });
+      handle = preview.requestVideoFrameCallback(onFrame);
+    });
+  } finally {
+    if (activePipelineCounters === pipelineCounters) activePipelineCounters = null;
+  }
 
   const totalObserved = frames + presentedFrameGaps;
   const processorStatus = activeSession.getSnapshot().processors.video.status;
+  const processorInputFrameRateFps =
+    pipelineCounters === null
+      ? null
+      : (pipelineCounters.processorInputVideoFrameCallbacks * 1000) / measuredMs;
+  const cropDrawImageRateFps =
+    pipelineCounters === null ? null : (pipelineCounters.cropDrawImageCalls * 1000) / measuredMs;
   return {
     run: stage.run,
     profile: stage.profile,
@@ -840,6 +1015,17 @@ const collectStage = async (
     sourceToPreviewMaxMs: latencySamples.length === 0 ? null : Math.max(...latencySamples),
     latencySamples: latencySamples.length,
     staleMarkerSamples,
+    processorInputVideoFrameCallbacks: pipelineCounters?.processorInputVideoFrameCallbacks ?? null,
+    processorInputVideoFrameRateFps: processorInputFrameRateFps,
+    processorInputPresentedFrameGaps: pipelineCounters?.processorInputPresentedFrameGaps ?? null,
+    processorInputVideoConnected: pipelineCounters?.processorInputVideoConnected ?? null,
+    cropDrawImageCalls: pipelineCounters?.cropDrawImageCalls ?? null,
+    cropDrawImageFailures: pipelineCounters?.cropDrawImageFailures ?? null,
+    cropDrawImageRateFps,
+    cropDrawImageDurationP95Ms:
+      pipelineCounters === null ? null : quantile(pipelineCounters.cropDrawImageDurationsMs, 0.95),
+    cropCallbackDurationP95Ms:
+      pipelineCounters === null ? null : quantile(pipelineCounters.cropCallbackDurationsMs, 0.95),
     latencyMethod: "animated-optical-marker",
     cropSetupMs: stage.cropSetupMs,
     budgetChecks: {
@@ -899,6 +1085,22 @@ const updateRecord = (): void => {
       run: stage.run,
       value: stage.sourceToPreviewP95Ms,
     })),
+    processorInputFrameRateFpsByRun: crops.map((stage) => ({
+      run: stage.run,
+      value: stage.processorInputVideoFrameRateFps,
+    })),
+    processorInputPresentedFrameGapsByRun: crops.map((stage) => ({
+      run: stage.run,
+      value: stage.processorInputPresentedFrameGaps,
+    })),
+    cropDrawImageRateFpsByRun: crops.map((stage) => ({
+      run: stage.run,
+      value: stage.cropDrawImageRateFps,
+    })),
+    cropDrawImageDurationP95MsByRun: crops.map((stage) => ({
+      run: stage.run,
+      value: stage.cropDrawImageDurationP95Ms,
+    })),
     firstUsableFrameMs: record.firstUsableFrameMs,
     firstUsableFrameWithin500Ms:
       record.firstUsableFrameMs === null ? null : record.firstUsableFrameMs <= 500,
@@ -941,78 +1143,84 @@ const runProfiles = async (
   if (record === null) throw new Error("The benchmark record is unavailable.");
   const firstSessionStartCount = record.sessionStartCalls;
   const cropEffect = videoEffects.crop({ region: EFFECT_REGION });
+  const restorePipelineInstrumentation = installPipelineInstrumentation();
 
-  for (let run = 1; run <= 3; run += 1) {
-    assertNotAborted(signal);
-    const priorProcessor = activeSession.getSnapshot().processors.video.status;
-    if (priorProcessor !== "off") {
-      const removed = await applyEffects(activeSession, { effects: [] }, signal);
-      if (removed.status === "cancelled" || removed.status === "superseded") throw abortError();
+  try {
+    for (let run = 1; run <= 3; run += 1) {
+      assertNotAborted(signal);
+      const priorProcessor = activeSession.getSnapshot().processors.video.status;
+      if (priorProcessor !== "off") {
+        const removed = await applyEffects(activeSession, { effects: [] }, signal);
+        if (removed.status === "cancelled" || removed.status === "superseded") throw abortError();
+        await attachOutput(activeSession);
+      }
+
+      setStatus(`Trial ${run} of 3: warming capture-only output.`);
+      const captureOnlyTrack = await attachOutput(activeSession);
+      const captureOnly = await collectStage(
+        activeSession,
+        {
+          run,
+          profile: "capture-only",
+          operationStatus: "not-applied",
+          warmupMs: WARMUP_MS,
+          cropSetupMs: null,
+        },
+        signal,
+      );
+      record.stages.push({ ...captureOnly, outputSettings: safeTrackSettings(captureOnlyTrack) });
+      updateRecord();
+
+      setStatus(`Trial ${run} of 3: applying pass-through.`);
+      const passThroughResult = await applyEffects(activeSession, { effects: [] }, signal);
+      if (passThroughResult.status === "cancelled" || passThroughResult.status === "superseded") {
+        throw abortError();
+      }
       await attachOutput(activeSession);
+      const passThrough = await collectStage(
+        activeSession,
+        {
+          run,
+          profile: "pass-through",
+          operationStatus: passThroughResult.status,
+          warmupMs: WARMUP_MS,
+          cropSetupMs: null,
+        },
+        signal,
+      );
+      record.stages.push(passThrough);
+      updateRecord();
+
+      setStatus(`Trial ${run} of 3: applying the fixed crop.`);
+      const cropStartedAt = performance.now();
+      const cropResult = await applyEffects(activeSession, { effects: [cropEffect] }, signal);
+      if (cropResult.status === "cancelled" || cropResult.status === "superseded")
+        throw abortError();
+      const cropSetupMs = performance.now() - cropStartedAt;
+      await attachOutput(activeSession);
+      const crop = await collectStage(
+        activeSession,
+        {
+          run,
+          profile: "fixed-crop",
+          operationStatus: cropResult.status,
+          warmupMs: WARMUP_MS,
+          cropSetupMs,
+        },
+        signal,
+      );
+      record.stages.push(crop);
+      updateRecord();
     }
 
-    setStatus(`Trial ${run} of 3: warming capture-only output.`);
-    const captureOnlyTrack = await attachOutput(activeSession);
-    const captureOnly = await collectStage(
-      activeSession,
-      {
-        run,
-        profile: "capture-only",
-        operationStatus: "not-applied",
-        warmupMs: WARMUP_MS,
-        cropSetupMs: null,
-      },
-      signal,
-    );
-    record.stages.push({ ...captureOnly, outputSettings: safeTrackSettings(captureOnlyTrack) });
-    updateRecord();
-
-    setStatus(`Trial ${run} of 3: applying pass-through.`);
-    const passThroughResult = await applyEffects(activeSession, { effects: [] }, signal);
-    if (passThroughResult.status === "cancelled" || passThroughResult.status === "superseded") {
-      throw abortError();
+    record.profileSessionStartCalls = record.sessionStartCalls - firstSessionStartCount;
+    if (record.profileSessionStartCalls !== 0) {
+      recordIssue("Capture was reacquired during the nine profile measurements.");
     }
-    await attachOutput(activeSession);
-    const passThrough = await collectStage(
-      activeSession,
-      {
-        run,
-        profile: "pass-through",
-        operationStatus: passThroughResult.status,
-        warmupMs: WARMUP_MS,
-        cropSetupMs: null,
-      },
-      signal,
-    );
-    record.stages.push(passThrough);
     updateRecord();
-
-    setStatus(`Trial ${run} of 3: applying the fixed crop.`);
-    const cropStartedAt = performance.now();
-    const cropResult = await applyEffects(activeSession, { effects: [cropEffect] }, signal);
-    if (cropResult.status === "cancelled" || cropResult.status === "superseded") throw abortError();
-    const cropSetupMs = performance.now() - cropStartedAt;
-    await attachOutput(activeSession);
-    const crop = await collectStage(
-      activeSession,
-      {
-        run,
-        profile: "fixed-crop",
-        operationStatus: cropResult.status,
-        warmupMs: WARMUP_MS,
-        cropSetupMs,
-      },
-      signal,
-    );
-    record.stages.push(crop);
-    updateRecord();
+  } finally {
+    restorePipelineInstrumentation();
   }
-
-  record.profileSessionStartCalls = record.sessionStartCalls - firstSessionStartCount;
-  if (record.profileSessionStartCalls !== 0) {
-    recordIssue("Capture was reacquired during the nine profile measurements.");
-  }
-  updateRecord();
 };
 
 const runEffectCycles = async (
@@ -1175,7 +1383,7 @@ const startCamera = async (): Promise<void> => {
   record.sessionStartCalls += 1;
   sourceVideoTrack = null;
   const mediaDevices = navigator.mediaDevices;
-  const originalGetUserMedia = mediaDevices.getUserMedia;
+  const originalGetUserMedia = mediaDevices.getUserMedia.bind(mediaDevices);
   const originalGetUserMediaDescriptor = Object.getOwnPropertyDescriptor(
     mediaDevices,
     "getUserMedia",
@@ -1199,7 +1407,7 @@ const startCamera = async (): Promise<void> => {
       constraints: MediaStreamConstraints,
     ): Promise<MediaStream> {
       getUserMediaRequestedAt ??= performance.now();
-      return originalGetUserMedia.call(this, constraints).then((stream) => {
+      return originalGetUserMedia(constraints).then((stream) => {
         mediaStreamResolvedAt ??= performance.now();
         return stream;
       });

@@ -45,6 +45,22 @@ warm crop add/update/bypass/remove cycles and five camera stop/start retention
 cycles. Capture is released when the run ends or when **Stop and release camera**
 is selected.
 
+For each fixed-crop stage, the page also counts the processor input video
+`requestVideoFrameCallback` callbacks and their `presentedFrames` gaps, the
+processor's source-video `drawImage` calls, failures and p95 call duration, and
+the final preview callbacks. These values use the same two-second measurement
+window. The report records whether the processor input video is connected to the
+document. This separates source-video presentation, crop drawing, and output
+preview cadence. The draw duration is the synchronous JavaScript call duration;
+the processor callback p95 also includes the surrounding callback work. Neither
+measures deferred GPU completion. A low input callback rate with a higher
+configured camera rate locates the loss before drawing; matching input and draw
+rates with lower preview output locates it after drawing. Draw duration helps
+identify expensive drawing.
+These browser counters still cannot observe camera frames never delivered to
+the video element. They also add lightweight callback instrumentation, so
+compare runs with the same benchmark build and browser settings.
+
 The downloaded JSON records browser user agent and client hints where available,
 the user-entered host/runtime details, requested and negotiated camera settings,
 commit SHA, crop and capture frame rates, presented-frame callback gaps, first
@@ -129,6 +145,34 @@ The request-frame experiment did not show a consistent throughput improvement;
 fixed crop remains below 30 fps. That candidate has been removed. Criteria
 #1-#3 remain open pending fresh marker evidence and a supported follow-up for
 the crop throughput miss.
+
+## Third physical reference-camera run (2026-10-06)
+
+The latest user-operated run used Chrome 154.0.8037.98 on Windows 11 25H2 with
+the C922 Pro Stream Webcam (046d:085c), negotiated at 1280×720 and 30 fps, on
+benchmark commit `76f097062aaebd8fc6ce72dd61836630626e8af3`. The page measured
+first usable frame at 69.7 ms after `getUserMedia` resolved and crop setup at
+61.8–62.0 ms.
+
+| Run | Capture-only fps | Pass-through fps | Fixed-crop fps | Crop marker p95 ms | Crop marker samples | Crop setup ms |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 29.76 | 30.30 | 25.94 | 783.3 | 28 | 61.9 |
+| 2 | 30.19 | 29.87 | 25.44 | 650.0 | 48 | 62.0 |
+| 3 | 30.17 | 29.82 | 24.88 | unknown | 0 | 61.8 |
+
+All preview callback gap percentages were zero. The five effect cycles restored
+the original track on bypass and removal; the five session cycles completed,
+all 19 observed tracks were ended after cleanup, and no live tracks remained.
+The report marked retained heap growth within budget. Its metadata fields for
+runtime and camera were entered only as `Node` and `Camera`, so exact server
+runtime versions and host model remain missing from this run.
+
+The crop output stayed about 3.8–5.3 fps below its paired capture-only result.
+This confirms a repeatable output-throughput shortfall, but the run did not
+count internal input callbacks or canvas draw calls, so it cannot identify the
+stage responsible. The next benchmark adds those same-window counters before
+any runtime scheduling or DOM attachment experiment is selected. Keep criteria
+#1–#3 open until that attribution and valid latency evidence are recorded.
 
 The `?test=1` page mode and Playwright coverage use synthetic input with shortened
 durations to verify the flow. Those runs are tooling checks and do not count as
