@@ -175,13 +175,13 @@ test("missing preview frames fail with a timeout instead of hanging", async ({ p
     result?.issues.some((issue) => issue.includes("no complete measurement was collected")),
   ).toBe(true);
 
-  await page.getByRole("button", { name: "Stop and release camera" }).click();
   await expect
     .poll(
       () => page.evaluate(() => window.videoCropBenchmarkRecord?.cleanup?.cameraStopped ?? false),
       { timeout: 15_000 },
     )
     .toBe(true);
+  expect(result?.cleanup?.liveTracksAfterStop).toBe(0);
   await page.evaluate(() => {
     for (const cleanup of window.manualBenchmarkHarness?.cleanups ?? []) cleanup();
   });
@@ -238,6 +238,127 @@ test("retained heap is judged only at controlled post-GC boundaries", async ({
   expect(result?.cleanup?.liveTracksAfterDispose).toBe(0);
   await testInfo.attach("retained-heap-post-gc.json", {
     body: JSON.stringify(result, null, 2),
+    contentType: "application/json",
+  });
+  await page.evaluate(() => {
+    for (const cleanup of window.manualBenchmarkHarness?.cleanups ?? []) cleanup();
+  });
+});
+
+test("timing readback errors preserve crop FPS and release the camera", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(30000);
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await installSyntheticCamera(page);
+  await page.addInitScript(() => {
+    const original = Reflect.get(CanvasRenderingContext2D.prototype, "getImageData");
+    if (typeof original !== "function") throw new Error("Synthetic readback hook unavailable.");
+    CanvasRenderingContext2D.prototype.getImageData = function (...args) {
+      if (this.canvas.width === 6 && this.canvas.height === 4) {
+        throw new Error("Injected timing-readback failure");
+      }
+      return Reflect.apply(original, this, args);
+    };
+  });
+  await page.goto("/tests/browser/video-crop-benchmark.html?test=1");
+  await fillReferenceDetails(page);
+  await page.getByRole("button", { name: "Start camera" }).click();
+  await expect(page.locator("#status")).toContainText("Camera is active");
+  await page.getByRole("button", { name: "Run measurements" }).click();
+  await expect(page.locator("#status")).toContainText("The run stopped with an error", {
+    timeout: 10000,
+  });
+  const result = await page.evaluate(() => window.videoCropBenchmarkRecord);
+  await testInfo.attach("readback-failure.json", {
+    body: JSON.stringify({ result, pageErrors }, null, 2),
+    contentType: "application/json",
+  });
+  expect(result?.stages.filter((stage) => stage.profile === "fixed-crop")).toHaveLength(1);
+  expect(result?.issues.join(" ")).toContain("Injected timing-readback failure");
+  expect(pageErrors).toEqual([]);
+  expect(result?.cleanup?.cameraStopped).toBe(true);
+  expect(result?.cleanup?.liveTracksAfterStop).toBe(0);
+  await expect(page.getByRole("button", { name: "Start camera" })).toBeEnabled();
+  await page.evaluate(() => {
+    for (const cleanup of window.manualBenchmarkHarness?.cleanups ?? []) cleanup();
+  });
+});
+
+test("missing latency callbacks preserve FPS and export pipeline diagnostics", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(30000);
+  await installSyntheticCamera(page);
+  await page.addInitScript(() => {
+    const original = Reflect.get(HTMLVideoElement.prototype, "requestVideoFrameCallback");
+    if (typeof original !== "function") throw new Error("Synthetic frame hook unavailable.");
+    HTMLVideoElement.prototype.requestVideoFrameCallback = function (callback) {
+      const missing =
+        this.id === "preview" &&
+        document.querySelector("#status")?.textContent?.includes("measuring processing latency");
+      return original.call(this, missing ? () => {} : callback);
+    };
+  });
+  await page.goto("/tests/browser/video-crop-benchmark.html?test=1");
+  await fillReferenceDetails(page);
+  await page.getByRole("button", { name: "Start camera" }).click();
+  await expect(page.locator("#status")).toContainText("Camera is active");
+  await page.getByRole("button", { name: "Run measurements" }).click();
+  await expect(page.locator("#status")).toContainText("processing-latency timeout", {
+    timeout: 10000,
+  });
+  const result = await page.evaluate(() => window.videoCropBenchmarkRecord);
+  const crop = result?.stages.find((stage) => stage.profile === "fixed-crop");
+  expect(crop?.frames).toBeGreaterThan(0);
+  expect(crop?.latencyDiagnostics?.status).toBe("failed");
+  expect(crop?.latencyDiagnostics?.previewCallbacks).toBe(0);
+  expect(crop?.latencyDiagnostics?.inputCallbacks).toBeGreaterThan(0);
+  expect(crop?.latencyDiagnostics?.cropDrawCalls).toBeGreaterThan(0);
+  expect(crop?.latencyDiagnostics?.readbackAttempts).toBe(0);
+  expect(crop?.latencyDiagnostics?.outputTrackState).toBe("live");
+  expect(result?.cleanup?.liveTracksAfterStop).toBe(0);
+  await testInfo.attach("latency-callback-timeout.json", {
+    body: JSON.stringify(result, null, 2),
+    contentType: "application/json",
+  });
+  await page.evaluate(() => {
+    for (const cleanup of window.manualBenchmarkHarness?.cleanups ?? []) cleanup();
+  });
+});
+
+test("normal-duration timing windows collect enough matched samples without camera access", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(120000);
+  await installSyntheticCamera(page);
+  await page.goto("/tests/browser/video-crop-benchmark.html");
+  await fillReferenceDetails(page);
+  // Input remains the isolated synthetic canvas; this checkbox only opens the normal UI path.
+  await page.locator("#physical-camera-confirm").check();
+  await page.getByRole("button", { name: "Start camera" }).click();
+  await expect(page.locator("#status")).toContainText("Camera is active");
+  await page.getByRole("button", { name: "Run measurements" }).click();
+  await expect(page.locator("#status")).toContainText("Measurements complete", { timeout: 110000 });
+  const result = await page.evaluate(() => window.videoCropBenchmarkRecord);
+  expect(result?.stages).toHaveLength(9);
+  for (const stage of result?.stages ?? []) {
+    expect(stage.frameWindow.first).not.toBeNull();
+    expect(stage.frameWindow.last).not.toBeNull();
+    if (stage.profile !== "fixed-crop") continue;
+    expect(stage.latencyDiagnostics?.status).toBe("complete");
+    expect(stage.latencyMeasuredMs).toBeGreaterThanOrEqual(6000);
+    expect(stage.latencySamples).toBeGreaterThanOrEqual(20);
+    expect(stage.latencyDiagnostics?.readbackAttempts).toBeLessThanOrEqual(32);
+  }
+  expect(result?.cleanup?.liveTracksAfterDispose).toBe(0);
+  await testInfo.attach("normal-window-synthetic.json", {
+    body: JSON.stringify(
+      { scope: "Synthetic input at normal durations; not physical acceptance", result },
+      null,
+      2,
+    ),
     contentType: "application/json",
   });
   await page.evaluate(() => {

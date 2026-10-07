@@ -14,6 +14,7 @@ const isCropProfile = (profile: Profile): boolean =>
 
 interface FrameMetadataLike {
   readonly presentedFrames?: number;
+  readonly mediaTime?: number;
 }
 
 type VideoWithFrameCallbacks = HTMLVideoElement;
@@ -30,6 +31,40 @@ interface NavigatorWithUserAgentData extends Navigator {
 
 interface ExtendedPerformance extends Performance {
   readonly memory?: { readonly usedJSHeapSize: number };
+}
+
+interface LatencyDiagnostics {
+  readonly status: "complete" | "insufficient-samples" | "failed";
+  readonly measuredMs: number;
+  readonly previewCallbacks: number;
+  readonly inputCallbacks: number;
+  readonly cropDrawCalls: number;
+  readonly readbackAttempts: number;
+  readonly matchedSamples: number;
+  readonly rejectedSamples: number;
+  readonly error: string | null;
+  readonly documentVisibility: DocumentVisibilityState;
+  readonly documentHasFocus: boolean;
+  readonly processorStatus: string;
+  readonly outputTrackState: string;
+  readonly preview: {
+    readonly readyState: number;
+    readonly paused: boolean;
+    readonly currentTime: number;
+  };
+  readonly processorInput: {
+    readonly connected: boolean;
+    readonly readyState: number;
+    readonly paused: boolean;
+    readonly currentTime: number;
+  } | null;
+}
+
+interface FrameObservation {
+  readonly callbackAtMs: number;
+  readonly receivedAtMs: number;
+  readonly mediaTimeSeconds: number | null;
+  readonly presentedFrames: number | null;
 }
 
 interface StageMetric {
@@ -50,6 +85,13 @@ interface StageMetric {
   readonly sourceToPreviewMaxMs: number | null;
   readonly latencySamples: number;
   readonly latencyMeasuredMs: number | null;
+  readonly latencyDiagnostics: LatencyDiagnostics | null;
+  readonly frameWindow: {
+    readonly first: FrameObservation | null;
+    readonly last: FrameObservation | null;
+    readonly documentVisibility: DocumentVisibilityState;
+    readonly documentHasFocus: boolean;
+  };
   readonly staleMarkerSamples: number;
   readonly processorInputVideoFrameCallbacks: number | null;
   readonly processorInputVideoFrameRateFps: number | null;
@@ -197,6 +239,8 @@ sampleCanvas.height = 4;
 sampleContext.imageSmoothingEnabled = false;
 interface ProcessingLatencyProbe {
   sequence: number;
+  inputCallbacks: number;
+  drawCalls: number;
   readonly startedAt: Map<number, number>;
 }
 let activeLatencyProbe: ProcessingLatencyProbe | null = null;
@@ -205,6 +249,7 @@ const checksum = (sequence: number): number => (sequence ^ (sequence >> 8) ^ 0xa
 const paintTimingToken = (context: CanvasRenderingContext2D, startedAt: number): void => {
   const probe = activeLatencyProbe;
   if (probe === null) return;
+  probe.drawCalls += 1;
   probe.sequence = (probe.sequence + 1) & 0xffff;
   if (probe.sequence === 0) probe.sequence = 1;
   probe.startedAt.set(probe.sequence, startedAt);
@@ -344,8 +389,7 @@ const performanceCheck = (record: BenchmarkRecord): VerdictCheck => {
   const captures = profileStages(record, "capture-only");
   const passThrough = profileStages(record, "pass-through");
   const crops = profileStages(record, "fixed-crop");
-  const allStages = [...captures, ...passThrough, ...crops];
-  const latencyDataComplete = allStages.every((stage) => stage.sourceToPreviewP95Ms !== null);
+  const latencyDataComplete = crops.every((stage) => stage.sourceToPreviewP95Ms !== null);
   const checks: (boolean | null | undefined)[] = [
     record.firstUsableFrameMs === null ? null : record.firstUsableFrameMs <= 500,
     ...captures.map((stage) => stage.budgetChecks.frameRateAtLeast30),
@@ -487,7 +531,11 @@ const renderTrialResults = (record: BenchmarkRecord): void => {
           : "detached";
     row.append(sourceVideoCell);
     const latencyCell = document.createElement("td");
-    latencyCell.textContent = formatMetric(stage.sourceToPreviewP95Ms, "ms");
+    latencyCell.textContent =
+      stage.latencyDiagnostics?.status === "failed"
+        ? "計測エラー"
+        : formatMetric(stage.sourceToPreviewP95Ms, "ms");
+    latencyCell.title = stage.latencyDiagnostics?.error ?? "";
     if (stage.profile === "fixed-crop") {
       latencyCell.dataset.state = stateForMetric(stage.budgetChecks.sourceToPreviewP95AtMost50Ms);
     }
@@ -824,6 +872,7 @@ const installPipelineInstrumentation = (): PipelineInstrumentation => {
 
               const counters = activePipelineCounters;
               if (counters === null) {
+                if (activeLatencyProbe !== null) activeLatencyProbe.inputCallbacks += 1;
                 processorCallbackStartedAt = activeLatencyProbe === null ? null : performance.now();
                 try {
                   callback(now, metadata);
@@ -953,6 +1002,8 @@ const collectStage = async (
   let frames = 0;
   let presentedFrameGaps = 0;
   let previousPresentedFrames: number | null = null;
+  let firstFrame: FrameObservation | null = null;
+  let lastFrame: FrameObservation | null = null;
   const latencySamples: number[] = [];
   const staleMarkerSamples = 0;
   const pipelineCounters: PipelineCounters | null = isCropProfile(stage.profile)
@@ -989,6 +1040,13 @@ const collectStage = async (
           return;
         }
         frames += 1;
+        lastFrame = {
+          callbackAtMs: now,
+          receivedAtMs: performance.now(),
+          mediaTimeSeconds: metadata.mediaTime ?? null,
+          presentedFrames: metadata.presentedFrames ?? null,
+        };
+        firstFrame ??= lastFrame;
         if (now - lastProgressAt >= 500) {
           lastProgressAt = now;
           setStatus(
@@ -1054,6 +1112,13 @@ const collectStage = async (
     sourceToPreviewMaxMs: latencySamples.length === 0 ? null : Math.max(...latencySamples),
     latencySamples: latencySamples.length,
     latencyMeasuredMs: null,
+    latencyDiagnostics: null,
+    frameWindow: {
+      first: firstFrame,
+      last: lastFrame,
+      documentVisibility: document.visibilityState,
+      documentHasFocus: document.hasFocus(),
+    },
     staleMarkerSamples,
     processorInputVideoFrameCallbacks: pipelineCounters?.processorInputVideoFrameCallbacks ?? null,
     processorInputVideoFrameRateFps: processorInputFrameRateFps,
@@ -1213,7 +1278,19 @@ const recordIssue = (message: string): void => {
   updateRecord();
 };
 
+class ProcessingLatencyError extends Error {
+  constructor(
+    message: string,
+    readonly diagnostics: LatencyDiagnostics,
+  ) {
+    super(message);
+    this.name = "ProcessingLatencyError";
+  }
+}
+
 const collectProcessingLatency = async (
+  activeSession: MediaSession,
+  inputVideo: HTMLVideoElement | null,
   label: string,
   signal: AbortSignal,
 ): Promise<
@@ -1224,61 +1301,125 @@ const collectProcessingLatency = async (
     | "sourceToPreviewMaxMs"
     | "latencySamples"
     | "latencyMeasuredMs"
+    | "latencyDiagnostics"
     | "staleMarkerSamples"
   >
 > => {
-  const probe: ProcessingLatencyProbe = { sequence: 0, startedAt: new Map() };
+  const probe: ProcessingLatencyProbe = {
+    sequence: 0,
+    inputCallbacks: 0,
+    drawCalls: 0,
+    startedAt: new Map(),
+  };
   const samples: number[] = [];
+  let previewCallbacks = 0;
+  let readbackAttempts = 0;
+  let rejectedSamples = 0;
   let measuredMs = 0;
+  const diagnostics = (
+    status: LatencyDiagnostics["status"],
+    error: string | null,
+  ): LatencyDiagnostics => ({
+    status,
+    measuredMs,
+    previewCallbacks,
+    inputCallbacks: probe.inputCallbacks,
+    cropDrawCalls: probe.drawCalls,
+    readbackAttempts,
+    matchedSamples: samples.length,
+    rejectedSamples,
+    error,
+    documentVisibility: document.visibilityState,
+    documentHasFocus: document.hasFocus(),
+    processorStatus: activeSession.getSnapshot().processors.video.status,
+    outputTrackState: activeSession.getOutput("video")?.track.readyState ?? "missing",
+    preview: {
+      readyState: preview.readyState,
+      paused: preview.paused,
+      currentTime: preview.currentTime,
+    },
+    processorInput:
+      inputVideo === null
+        ? null
+        : {
+            connected: inputVideo.isConnected,
+            readyState: inputVideo.readyState,
+            paused: inputVideo.paused,
+            currentTime: inputVideo.currentTime,
+          },
+  });
   activeLatencyProbe = probe;
   let handle: number | null = null;
   try {
     setStatus(`${label}: processing-latency warm-up; no camera marker alignment is needed.`);
     await wait(TEST_MODE ? 50 : 1000, signal);
+    assertNotAborted(signal);
+    probe.inputCallbacks = 0;
+    probe.drawCalls = 0;
     setStatus(`${label}: measuring processing latency separately from FPS.`);
     const start = performance.now();
     let lastSampleAt = -Infinity;
     await new Promise<void>((resolve, reject) => {
+      let settled = false;
       const finish = (error?: Error): void => {
+        if (settled) return;
+        settled = true;
+        measuredMs = performance.now() - start;
         window.clearTimeout(timer);
         signal.removeEventListener("abort", abort);
         if (handle !== null) preview.cancelVideoFrameCallback(handle);
-        if (error !== undefined) reject(error);
-        else resolve();
+        if (error !== undefined) {
+          if (signal.aborted) reject(error);
+          else
+            reject(new ProcessingLatencyError(error.message, diagnostics("failed", error.message)));
+        } else resolve();
       };
       const abort = (): void => finish(abortError());
       const timer = window.setTimeout(
         () =>
           finish(
-            new PreviewFrameTimeoutError(
-              "No complete processing-latency measurement was collected.",
+            new Error(
+              `${label}: processing-latency timeout after ${LATENCY_MEASURE_MS + MEASUREMENT_FRAME_TIMEOUT_MS} ms ` +
+                `(preview callbacks=${previewCallbacks}, input callbacks=${probe.inputCallbacks}, draws=${probe.drawCalls}, readbacks=${readbackAttempts}, visibility=${document.visibilityState}); no complete processing-latency measurement was collected.`,
             ),
           ),
         LATENCY_MEASURE_MS + MEASUREMENT_FRAME_TIMEOUT_MS,
       );
       const onFrame = (): void => {
         const observedAt = performance.now(); // Record receipt before pixel readback.
+        if (settled) return;
         if (signal.aborted) {
           abort();
           return;
         }
-        if (TEST_MODE || observedAt - lastSampleAt >= 200) {
-          lastSampleAt = observedAt;
-          const token = decodeTimingToken(preview);
-          const sourceAt = token === null ? undefined : probe.startedAt.get(token);
-          if (sourceAt !== undefined && observedAt >= sourceAt) {
-            samples.push(observedAt - sourceAt);
-            if (token !== null) probe.startedAt.delete(token);
+        previewCallbacks += 1;
+        try {
+          if (TEST_MODE || observedAt - lastSampleAt >= 200) {
+            lastSampleAt = observedAt;
+            readbackAttempts += 1;
+            const token = decodeTimingToken(preview);
+            const sourceAt = token === null ? undefined : probe.startedAt.get(token);
+            if (sourceAt !== undefined && observedAt >= sourceAt) {
+              samples.push(observedAt - sourceAt);
+              if (token !== null) probe.startedAt.delete(token);
+            } else rejectedSamples += 1;
           }
+          if (observedAt - start >= LATENCY_MEASURE_MS) finish();
+          else handle = preview.requestVideoFrameCallback(onFrame);
+        } catch (error) {
+          const detail = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+          finish(new Error(`${label}: processing-latency sampling failed: ${detail}`));
         }
-        if (observedAt - start >= LATENCY_MEASURE_MS) {
-          measuredMs = observedAt - start;
-          finish();
-        } else handle = preview.requestVideoFrameCallback(onFrame);
       };
       signal.addEventListener("abort", abort, { once: true });
       if (signal.aborted) abort();
-      else handle = preview.requestVideoFrameCallback(onFrame);
+      else {
+        try {
+          handle = preview.requestVideoFrameCallback(onFrame);
+        } catch (error) {
+          finish(error instanceof Error ? error : new Error(String(error)));
+        }
+      }
     });
   } finally {
     activeLatencyProbe = null;
@@ -1292,7 +1433,8 @@ const collectProcessingLatency = async (
     sourceToPreviewMaxMs: enough ? Math.max(...samples) : null,
     latencySamples: samples.length,
     latencyMeasuredMs: measuredMs,
-    staleMarkerSamples: 0,
+    latencyDiagnostics: diagnostics(enough ? "complete" : "insufficient-samples", null),
+    staleMarkerSamples: rejectedSamples,
   };
 };
 
@@ -1373,8 +1515,30 @@ const runProfiles = async (
         },
         signal,
       );
-      const latency = await collectProcessingLatency(`Trial ${run} of 3`, signal);
-      record.stages.push({
+      const cropIndex = record.stages.push(crop) - 1;
+      updateRecord(); // Preserve completed FPS even if the separate timing probe fails.
+      let latency: Awaited<ReturnType<typeof collectProcessingLatency>>;
+      try {
+        latency = await collectProcessingLatency(
+          activeSession,
+          instrumentation.getProcessorInputVideo(),
+          `Trial ${run} of 3`,
+          signal,
+        );
+      } catch (error) {
+        if (error instanceof ProcessingLatencyError) {
+          record.stages[cropIndex] = {
+            ...crop,
+            latencyDiagnostics: error.diagnostics,
+            latencyMeasuredMs: error.diagnostics.measuredMs,
+            latencySamples: error.diagnostics.matchedSamples,
+            staleMarkerSamples: error.diagnostics.rejectedSamples,
+          };
+          updateRecord();
+        }
+        throw error;
+      }
+      record.stages[cropIndex] = {
         ...crop,
         ...latency,
         budgetChecks: {
@@ -1382,7 +1546,7 @@ const runProfiles = async (
           sourceToPreviewP95AtMost50Ms:
             latency.sourceToPreviewP95Ms === null ? null : latency.sourceToPreviewP95Ms <= 50,
         },
-      });
+      };
       updateRecord();
     }
 
@@ -1813,30 +1977,37 @@ const runMeasurements = async (): Promise<void> => {
     }
     currentRecord.finishedAt = new Date().toISOString();
     currentRecord.issues.push(errorMessage);
-    if (runController.signal.aborted) {
-      try {
-        await activeSession.stop();
-        await activeSession.dispose();
-      } catch {
-        currentRecord.issues.push("Camera cleanup could not be confirmed after stop.");
-      }
+    try {
+      await activeSession.stop();
+    } catch {
+      currentRecord.issues.push("Session stop failed during failed-run cleanup.");
+    }
+    try {
+      await activeSession.dispose();
+    } catch {
+      currentRecord.issues.push("Session disposal failed during failed-run cleanup.");
+    }
+    currentRecord.cleanup = {
+      cameraStopped: [...knownTracks].every((track) => track.readyState === "ended"),
+      tracksObserved: knownTracks.size,
+      liveTracksAfterStop: [...knownTracks].filter((track) => track.readyState !== "ended").length,
+      effectCyclesCompleted: currentRecord.effectCycles.length,
+      sessionCyclesCompleted: currentRecord.sessionCycles.length,
+    };
+    if (currentRecord.cleanup?.cameraStopped === true) {
       session = null;
       sourceVideoTrack = null;
       preview.srcObject = null;
-      currentRecord.cleanup = {
-        cameraStopped: [...knownTracks].every((track) => track.readyState === "ended"),
-        tracksObserved: knownTracks.size,
-        liveTracksAfterStop: [...knownTracks].filter((track) => track.readyState !== "ended")
-          .length,
-        effectCyclesCompleted: currentRecord.effectCycles.length,
-        sessionCyclesCompleted: currentRecord.sessionCycles.length,
-      };
     }
     updateRecord();
+    const cleanupMessage =
+      currentRecord.cleanup?.cameraStopped === true
+        ? "The camera was released."
+        : "Camera cleanup is unconfirmed; stop and release it before retrying.";
     setStatus(
       runController.signal.aborted
-        ? "The run was stopped and the camera was released. Partial results are available."
-        : `The run stopped with an error: ${errorMessage} Review the partial report; stop and release the camera before retrying.`,
+        ? `The run was stopped. ${cleanupMessage} Partial results are available.`
+        : `The run stopped with an error: ${errorMessage} ${cleanupMessage} Review the partial report before retrying.`,
     );
   } finally {
     runController = null;

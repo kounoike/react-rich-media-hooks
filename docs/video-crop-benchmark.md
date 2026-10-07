@@ -420,3 +420,42 @@ physical measurement starts only when the user selects camera input and starts t
 See [the controlled throughput investigation](video-crop-throughput.md) for the protocol,
 raw before/after reports, and the timer scheduling fix. This diagnostic does not replace
 the reference-device acceptance protocol above.
+
+## Processing-latency failure recovery
+
+The user reported another failed run declaring benchmark commit
+`5a849dbd8dbcfc322e3dc42a548a4b71bb4427a5`, with capture-only 15.0 fps and
+pass-through 17.9 fps, followed by a processing-latency timeout. Those baseline
+rates do not establish a crop-specific slowdown. The full physical report and
+actual stopping cause remain unconfirmed.
+
+An [injected `getImageData` exception](measurements/crop-benchmark-readback-failure-regression.json)
+reproduced the page's failure pattern:
+it escaped the frame callback, the report later showed only a generic timeout,
+completed crop FPS was absent, and camera cleanup was absent. The collector now
+catches that exception immediately, records the actual error, and saves FPS
+before starting the separate latency probe. Latency diagnostics preserve input,
+draw, output callback and readback counts, matching/rejected token counts,
+visibility/focus, video state, processor state, and output track state. FPS rows
+also preserve first/last callback timestamps, media times, presented-frame
+counters, and visibility/focus. Every failed run attempts both stop and dispose;
+unconfirmed cleanup retains the session for explicit release.
+
+Regression coverage includes an injected readback exception, suppressed timing
+callbacks with input/draw still running, and the normal six-second window with
+five-Hz sampling and at least 20 matched tokens. This closes the earlier gap
+where only shortened timing windows were exercised. Required latency coverage
+applies only to fixed-crop rows; capture and pass-through controls intentionally
+perform no timing probe. The reproduction confirms a collector defect, not that
+this exception caused the user's physical timeout.
+
+An isolated, headless Windows Chrome 154.0.8037.98 run of the corrected page used
+only a 1280×720/30 synthetic canvas and the normal windows. It completed all
+three trials: crop preview 30.106/30.453/30.436 fps, processing p95 16.8 ms in
+all trials, 29 matched samples per trial, no runtime errors, and all 19 observed
+tracks ended. The [complete native synthetic report](measurements/crop-benchmark-native-chrome154-normal-window.json)
+is fixture evidence, not physical acceptance. Its zero commit SHA is explicitly
+a fixture value; the browser module fields identify the compiled runtime, and
+the benchmark was the working copy after 5a849db. Physical capture cadence and
+the user's timeout cause must still be measured rather than inferred from this
+successful synthetic run.
