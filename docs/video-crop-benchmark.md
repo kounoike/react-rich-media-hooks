@@ -459,3 +459,57 @@ a fixture value; the browser module fields identify the compiled runtime, and
 the benchmark was the working copy after 5a849db. Physical capture cadence and
 the user's timeout cause must still be measured rather than inferred from this
 successful synthetic run.
+
+## Completed physical C922 run at a40114c
+
+The user-operated run from 2026-10-07T22:37:37.021Z to
+2026-10-07T22:38:38.333Z completed with no issues, declaring commit
+`a40114c3c08100f146199e6a1e30d01654d2764a`. The automatically reported camera
+was C922 (046d:085c), negotiated at 1280×720/30; output was 960×720/30;
+Chrome was 154.0.8037.98 on Windows. The reported uniquely queried core entry's
+SHA-256 was independently matched against the server response, and it referred
+to the fixed `runtime-B1MYy2hy.js`. The
+[selected-field summary and endpoint calculations](measurements/crop-acceptance-c922-a40114c-summary.json)
+are explicitly not the full original JSON. Host/runtime/camera text was
+`w`/`n`/`c`; missing PC model and runtime details are not inferred.
+
+| Run | Reported capture fps | Reported crop fps | Crop presentation endpoint fps | Crop processing p95 ms | Matched timing samples |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 1 | 29.934 | 30.149 | 30.000000 | 16.8 | 28 |
+| 2 | 30.194 | 29.657 | 30.000498 | 17.7 | 28 |
+| 3 | 29.982 | 29.888 | 30.001505 | 18.8 | 29 |
+
+Input callback, draw call, and output callback counts were identical within
+each crop FPS window (61/60/60). No input or output presented-frame gaps or draw
+failures were observed; the input video remained detached. Draw p95 was
+0.3–0.4 ms. All three timing windows collected at least 20 matched tokens,
+without rejected samples or errors. This run shows no additional crop frame
+loss at the measured presentation stages; it does not count sensor frames
+never delivered to the browser or prove that the earlier failed run had the
+same cause as the injected-error reproduction.
+
+The page's existing FPS field counts callbacks over the complete measurement
+window, including the wait before the first callback. Recalculating cadence
+uses `delta presentedFrames * 1000 / delta callback timestamp`. For crop trial
+2, 59 frame intervals span 1,966.634 ms, yielding 30.000498 fps rather than the
+reported 60 callbacks / 2,023.1 ms = 29.657456 fps. No new camera run is needed
+for this calculation. This is a separately labeled derived rate, not a rewrite
+of the original report or its strict 30 fps checks. Capture/pass-through trial
+1 also had an extra presentation interval at the endpoints (29.753 fps), while
+its media timeline was approximately 30 fps; those clock domains are kept
+separate. The formal capture/crop FPS summary flags remain false in the
+original report, and no tolerance or budget change was adopted.
+
+First usable frame was 105.684 ms after stream resolution (budget 500 ms);
+stream acquisition itself was 881.4 ms. Crop setup was 100.5/66.9/100.0 ms
+(budget 1,000 ms). All five add/update/bypass/remove cycles succeeded and
+restored the original input; all five camera restart cycles succeeded. No
+capture was reacquired during profiles. All 19 observed tracks ended after
+disposal. Physical collection/lifecycle evidence is now present.
+
+Uncollected used heap grew by 78,042 bytes across the effect cycles and fell by
+699 bytes across the camera cycles. These approximate allocated-heap values
+meet the raw growth thresholds but cannot prove retained-memory compliance;
+`retainedHeapGrowthWithinBudget` remains null. Strict FPS interpretation and
+controlled physical post-GC retention remain open. No further physical camera
+access or code changes were made to review this report.
