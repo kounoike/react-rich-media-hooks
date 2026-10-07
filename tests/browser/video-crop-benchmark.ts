@@ -49,6 +49,7 @@ interface StageMetric {
   readonly sourceToPreviewP95Ms: number | null;
   readonly sourceToPreviewMaxMs: number | null;
   readonly latencySamples: number;
+  readonly latencyMeasuredMs: number | null;
   readonly staleMarkerSamples: number;
   readonly processorInputVideoFrameCallbacks: number | null;
   readonly processorInputVideoFrameRateFps: number | null;
@@ -59,7 +60,7 @@ interface StageMetric {
   readonly cropDrawImageRateFps: number | null;
   readonly cropDrawImageDurationP95Ms: number | null;
   readonly cropCallbackDurationP95Ms: number | null;
-  readonly latencyMethod: "animated-optical-marker";
+  readonly latencyMethod: "processor-sideband-id-v1";
   readonly cropSetupMs: number | null;
   readonly budgetChecks: {
     readonly frameRateAtLeast30: boolean;
@@ -127,8 +128,13 @@ interface BenchmarkRecord {
   sessionCycles: SessionCycle[];
   sessionStartCalls: number;
   profileSessionStartCalls: number | null;
+  heapBeforeEffectCyclesBytes: number | null;
+  heapAfterEffectCyclesBytes: number | null;
+  heapEffectGrowthWithinBudget: boolean | null;
   heapBeforeSessionCyclesBytes: number | null;
   heapAfterSessionCyclesBytes: number | null;
+  heapMeasurementMethod: "approximate-uncollected-used-js-heap" | "controlled-post-gc-used-js-heap";
+  heapGrowthWithinBudget: boolean | null;
   retainedHeapGrowthWithinBudget: boolean | null;
   getUserMediaRequestToStreamMs: number | null;
   cleanup: Record<string, unknown> | null;
@@ -139,15 +145,18 @@ interface BenchmarkRecord {
 declare global {
   interface Window {
     videoCropBenchmarkRecord?: BenchmarkRecord;
+    /** Automation hook: collect garbage and return the isolated renderer's used heap. */
+    videoCropBenchmarkCollectGarbage?: () => Promise<number>;
   }
 }
 
 const TEST_MODE = new URLSearchParams(window.location.search).get("test") === "1";
 const WARMUP_MS = TEST_MODE ? 50 : 1000;
 const MEASURE_MS = TEST_MODE ? 250 : 2000;
+const LATENCY_MEASURE_MS = TEST_MODE ? 500 : 6000;
+const RUN_DOM_COMPARISON = new URLSearchParams(window.location.search).get("dom") === "1";
 const MEASUREMENT_FRAME_TIMEOUT_MS = TEST_MODE ? 1500 : 10_000;
 const SETTLE_MS = TEST_MODE ? 25 : 500;
-const MAX_MARKER_SAMPLE_AGE_MS = 1000;
 const EFFECT_REGION: CropOptions["region"] = { x: 0.125, y: 0, width: 0.75, height: 1 };
 const UPDATED_REGION: CropOptions["region"] = { x: 0.25, y: 0, width: 0.5, height: 1 };
 
@@ -180,53 +189,33 @@ sampleCanvas.height = 4;
 const sampleContext = sampleCanvas.getContext("2d", { willReadFrequently: true })!;
 sampleContext.imageSmoothingEnabled = false;
 
-let markerSequence = 0;
-const markerTimes = new Map<number, number>();
-const markerChannelName = "task-1-25-video-crop-latency-marker-v1";
-const markerChannel =
-  typeof BroadcastChannel === "undefined" ? null : new BroadcastChannel(markerChannelName);
-
-interface SynchronizedMarkerMessage {
-  readonly sequence: number;
-  readonly timestamp: number;
+// Static source fixture; processing latency no longer requires photographing a display.
+markerContext.fillStyle = "#ffffff";
+markerContext.fillRect(0, 0, 4, 4);
+sampleCanvas.width = 6;
+sampleCanvas.height = 4;
+sampleContext.imageSmoothingEnabled = false;
+interface ProcessingLatencyProbe {
+  sequence: number;
+  readonly startedAt: Map<number, number>;
 }
-
-if (markerChannel !== null) {
-  markerChannel.addEventListener("message", (event: MessageEvent<SynchronizedMarkerMessage>) => {
-    const { sequence, timestamp } = event.data;
-    const localTimestamp = timestamp - performance.timeOrigin;
-    const now = performance.now();
-    if (
-      Number.isInteger(sequence) &&
-      sequence >= 0x8000 &&
-      sequence <= 0xffff &&
-      localTimestamp <= now + 1000 &&
-      localTimestamp >= now - 15_000
-    ) {
-      markerTimes.set(sequence, localTimestamp);
-    }
-  });
-}
-
-const drawMarker = (now: number): void => {
-  markerSequence = (markerSequence + 1) & 0x7fff;
-  if (markerSequence === 0) markerSequence = 1;
-  markerContext.fillStyle = "#000000";
-  markerContext.fillRect(0, 0, 4, 4);
-  for (let bit = 0; bit < 16; bit += 1) {
-    if (((markerSequence >> bit) & 1) === 0) continue;
-    const x = bit % 4;
-    const y = Math.floor(bit / 4);
-    markerContext.fillStyle = "#ffffff";
-    markerContext.fillRect(x, y, 1, 1);
+let activeLatencyProbe: ProcessingLatencyProbe | null = null;
+let processorCallbackStartedAt: number | null = null;
+const checksum = (sequence: number): number => (sequence ^ (sequence >> 8) ^ 0xa7) & 0xff;
+const paintTimingToken = (context: CanvasRenderingContext2D, startedAt: number): void => {
+  const probe = activeLatencyProbe;
+  if (probe === null) return;
+  probe.sequence = (probe.sequence + 1) & 0xffff;
+  if (probe.sequence === 0) probe.sequence = 1;
+  probe.startedAt.set(probe.sequence, startedAt);
+  const token = probe.sequence | (checksum(probe.sequence) << 16);
+  const fill = context.fillStyle;
+  for (let bit = 0; bit < 24; bit += 1) {
+    context.fillStyle = ((token >> bit) & 1) === 1 ? "#ffffff" : "#000000";
+    context.fillRect((bit % 6) * 4, Math.floor(bit / 6) * 4, 4, 4);
   }
-  markerTimes.set(markerSequence, now);
-  for (const [sequence, paintedAt] of markerTimes) {
-    if (now - paintedAt > 15_000) markerTimes.delete(sequence);
-  }
-  window.requestAnimationFrame(drawMarker);
+  context.fillStyle = fill;
 };
-window.requestAnimationFrame(drawMarker);
 
 const setStatus = (message: string): void => {
   statusElement.textContent = message;
@@ -384,16 +373,12 @@ const performanceCheck = (record: BenchmarkRecord): VerdictCheck => {
     record.heapAfterSessionCyclesBytes === null;
   const failedHeap = heapCheck === false;
   const state: VerdictState =
-    knownFailure || failedHeap
-      ? "ng"
-      : enoughData && (heapCheck === true || heapUnavailable)
-        ? "ok"
-        : "pending";
+    knownFailure || failedHeap ? "ng" : enoughData && heapCheck === true ? "ok" : "pending";
   const heapText =
     heapCheck === null
       ? heapUnavailable
         ? "heap: N/A"
-        : "heap: 未計測"
+        : "heap: GC後の計測が必要"
       : `heap: ${heapCheck ? "OK" : "NG"}`;
   const firstFrame =
     record.firstUsableFrameMs === null
@@ -641,23 +626,22 @@ const quantile = (values: readonly number[], percentile: number): number | null 
   }, null);
 };
 
-const decodeMarker = (video: VideoWithFrameCallbacks): number | null => {
-  const side = Math.min(video.videoWidth, video.videoHeight);
-  if (side < 4 || video.videoWidth === 0 || video.videoHeight === 0) return null;
-  const sourceX = (video.videoWidth - side) / 2;
-  sampleContext.drawImage(video, sourceX, 0, side, side, 0, 0, 4, 4);
-  const pixels = sampleContext.getImageData(0, 0, 4, 4).data;
-  let sequence = 0;
-  for (let bit = 0; bit < 16; bit += 1) {
+const decodeTimingToken = (video: VideoWithFrameCallbacks): number | null => {
+  if (video.videoWidth < 24 || video.videoHeight < 16) return null;
+  sampleContext.drawImage(video, 0, 0, 24, 16, 0, 0, 6, 4);
+  const pixels = sampleContext.getImageData(0, 0, 6, 4).data;
+  let token = 0;
+  for (let bit = 0; bit < 24; bit += 1) {
     const pixelOffset = bit * 4;
     const red = pixels[pixelOffset] ?? 0;
     const green = pixels[pixelOffset + 1] ?? 0;
     const blue = pixels[pixelOffset + 2] ?? 0;
     if (red * 0.2126 + green * 0.7152 + blue * 0.0722 >= 128) {
-      sequence |= 1 << bit;
+      token |= 1 << bit;
     }
   }
-  return markerTimes.has(sequence) ? sequence : null;
+  const sequence = token & 0xffff;
+  return sequence > 0 && token >> 16 === checksum(sequence) ? sequence : null;
 };
 
 const safeTrackSettings = (
@@ -723,9 +707,10 @@ const getBrowserMetadata = async (): Promise<Record<string, unknown>> => {
     consumerRuntime: "direct browser page; no React application is mounted",
     nodeAndPackageManager: runtimeInput.value.trim(),
     toolMode: TEST_MODE ? "synthetic Playwright timing" : "local reference-device page",
-    latencyFixture: "animated 4x4 optical marker v1",
-    latencyMarkerSync:
-      markerChannel === null ? "embedded marker only" : "same-origin BroadcastChannel",
+    latencyFixture: "processor-sideband-id-v1; 24x16 output patch in a separate timing window",
+    latencyMeasurementDomain: "processor input callback to matching output preview callback",
+    latencySamplingHz: TEST_MODE ? "every delivered frame" : 5,
+    domComparisonEnabled: RUN_DOM_COMPARISON,
     hardwareConcurrency: navigator.hardwareConcurrency,
     devicePixelRatio: window.devicePixelRatio,
     viewport: { width: window.innerWidth, height: window.innerHeight },
@@ -776,8 +761,13 @@ const makeRecord = (): BenchmarkRecord => ({
   sessionCycles: [],
   sessionStartCalls: 0,
   profileSessionStartCalls: null,
+  heapBeforeEffectCyclesBytes: null,
+  heapAfterEffectCyclesBytes: null,
+  heapEffectGrowthWithinBudget: null,
   heapBeforeSessionCyclesBytes: null,
   heapAfterSessionCyclesBytes: null,
+  heapMeasurementMethod: "approximate-uncollected-used-js-heap",
+  heapGrowthWithinBudget: null,
   retainedHeapGrowthWithinBudget: null,
   getUserMediaRequestToStreamMs: null,
   cleanup: null,
@@ -834,7 +824,12 @@ const installPipelineInstrumentation = (): PipelineInstrumentation => {
 
               const counters = activePipelineCounters;
               if (counters === null) {
-                callback(now, metadata);
+                processorCallbackStartedAt = activeLatencyProbe === null ? null : performance.now();
+                try {
+                  callback(now, metadata);
+                } finally {
+                  processorCallbackStartedAt = null;
+                }
                 return;
               }
 
@@ -875,20 +870,21 @@ const installPipelineInstrumentation = (): PipelineInstrumentation => {
     ...args: number[]
   ): void {
     const counters = activePipelineCounters;
-    if (counters === null || source === preview || !(source instanceof HTMLVideoElement)) {
+    if (source === preview || !(source instanceof HTMLVideoElement)) {
       Reflect.apply(originalDrawImage, this, [source, ...args]);
       return;
     }
 
-    counters.cropDrawImageCalls += 1;
+    if (counters !== null) counters.cropDrawImageCalls += 1;
     const drawStartedAt = performance.now();
     try {
       Reflect.apply(originalDrawImage, this, [source, ...args]);
+      paintTimingToken(this, processorCallbackStartedAt ?? drawStartedAt);
     } catch (error) {
-      counters.cropDrawImageFailures += 1;
+      if (counters !== null) counters.cropDrawImageFailures += 1;
       throw error;
     } finally {
-      counters.cropDrawImageDurationsMs.push(performance.now() - drawStartedAt);
+      counters?.cropDrawImageDurationsMs.push(performance.now() - drawStartedAt);
     }
   };
   const videoWrapperInstalled =
@@ -958,7 +954,7 @@ const collectStage = async (
   let presentedFrameGaps = 0;
   let previousPresentedFrames: number | null = null;
   const latencySamples: number[] = [];
-  let staleMarkerSamples = 0;
+  const staleMarkerSamples = 0;
   const pipelineCounters: PipelineCounters | null = isCropProfile(stage.profile)
     ? {
         processorInputVideoFrameCallbacks: 0,
@@ -1007,13 +1003,6 @@ const collectStage = async (
             presentedFrameGaps += metadata.presentedFrames - previousPresentedFrames - 1;
           }
           previousPresentedFrames = metadata.presentedFrames;
-        }
-        const marker = decodeMarker(preview);
-        const markerAt = marker === null ? undefined : markerTimes.get(marker);
-        if (markerAt !== undefined && now >= markerAt) {
-          const sampleAge = now - markerAt;
-          if (sampleAge <= MAX_MARKER_SAMPLE_AGE_MS) latencySamples.push(sampleAge);
-          else staleMarkerSamples += 1;
         }
         if (now >= endAt) finish();
         else handle = preview.requestVideoFrameCallback?.(onFrame) ?? null;
@@ -1064,6 +1053,7 @@ const collectStage = async (
     sourceToPreviewP95Ms: quantile(latencySamples, 0.95),
     sourceToPreviewMaxMs: latencySamples.length === 0 ? null : Math.max(...latencySamples),
     latencySamples: latencySamples.length,
+    latencyMeasuredMs: null,
     staleMarkerSamples,
     processorInputVideoFrameCallbacks: pipelineCounters?.processorInputVideoFrameCallbacks ?? null,
     processorInputVideoFrameRateFps: processorInputFrameRateFps,
@@ -1076,7 +1066,7 @@ const collectStage = async (
       pipelineCounters === null ? null : quantile(pipelineCounters.cropDrawImageDurationsMs, 0.95),
     cropCallbackDurationP95Ms:
       pipelineCounters === null ? null : quantile(pipelineCounters.cropCallbackDurationsMs, 0.95),
-    latencyMethod: "animated-optical-marker",
+    latencyMethod: "processor-sideband-id-v1",
     cropSetupMs: stage.cropSetupMs,
     budgetChecks: {
       frameRateAtLeast30: (frames * 1000) / measuredMs >= 30,
@@ -1097,7 +1087,7 @@ const applyEffects = async (
   signal: AbortSignal,
 ): Promise<OperationResult> => activeSession.setVideoEffects(effects, { signal });
 
-type CoreLibrary = typeof import("../../src/index.js");
+type CoreLibrary = typeof import("../../src/core/index.js");
 type VideoEffectsModule = typeof import("../../src/effects/video/index.js");
 
 const isCoreLibrary = (value: unknown): value is CoreLibrary =>
@@ -1205,6 +1195,9 @@ const updateRecord = (): void => {
         ? null
         : crops.every((stage) => stage.budgetChecks.sourceToPreviewP95AtMost50Ms === true),
     retainedHeapGrowthWithinBudget: record.retainedHeapGrowthWithinBudget,
+    heapMeasurementMethod: record.heapMeasurementMethod,
+    heapGrowthWithinBudget: record.heapGrowthWithinBudget,
+    heapEffectGrowthWithinBudget: record.heapEffectGrowthWithinBudget,
     exactUndeliveredSourceFrameCount:
       "unknown: the browser exposes presented-frame callback gaps, not camera frames never delivered",
     exactMarkerLatencyUnavailableRuns: crops
@@ -1218,6 +1211,89 @@ const recordIssue = (message: string): void => {
   if (record === null) return;
   record.issues.push(message);
   updateRecord();
+};
+
+const collectProcessingLatency = async (
+  label: string,
+  signal: AbortSignal,
+): Promise<
+  Pick<
+    StageMetric,
+    | "sourceToPreviewP50Ms"
+    | "sourceToPreviewP95Ms"
+    | "sourceToPreviewMaxMs"
+    | "latencySamples"
+    | "latencyMeasuredMs"
+    | "staleMarkerSamples"
+  >
+> => {
+  const probe: ProcessingLatencyProbe = { sequence: 0, startedAt: new Map() };
+  const samples: number[] = [];
+  let measuredMs = 0;
+  activeLatencyProbe = probe;
+  let handle: number | null = null;
+  try {
+    setStatus(`${label}: processing-latency warm-up; no camera marker alignment is needed.`);
+    await wait(TEST_MODE ? 50 : 1000, signal);
+    setStatus(`${label}: measuring processing latency separately from FPS.`);
+    const start = performance.now();
+    let lastSampleAt = -Infinity;
+    await new Promise<void>((resolve, reject) => {
+      const finish = (error?: Error): void => {
+        window.clearTimeout(timer);
+        signal.removeEventListener("abort", abort);
+        if (handle !== null) preview.cancelVideoFrameCallback(handle);
+        if (error !== undefined) reject(error);
+        else resolve();
+      };
+      const abort = (): void => finish(abortError());
+      const timer = window.setTimeout(
+        () =>
+          finish(
+            new PreviewFrameTimeoutError(
+              "No complete processing-latency measurement was collected.",
+            ),
+          ),
+        LATENCY_MEASURE_MS + MEASUREMENT_FRAME_TIMEOUT_MS,
+      );
+      const onFrame = (): void => {
+        const observedAt = performance.now(); // Record receipt before pixel readback.
+        if (signal.aborted) {
+          abort();
+          return;
+        }
+        if (TEST_MODE || observedAt - lastSampleAt >= 200) {
+          lastSampleAt = observedAt;
+          const token = decodeTimingToken(preview);
+          const sourceAt = token === null ? undefined : probe.startedAt.get(token);
+          if (sourceAt !== undefined && observedAt >= sourceAt) {
+            samples.push(observedAt - sourceAt);
+            if (token !== null) probe.startedAt.delete(token);
+          }
+        }
+        if (observedAt - start >= LATENCY_MEASURE_MS) {
+          measuredMs = observedAt - start;
+          finish();
+        } else handle = preview.requestVideoFrameCallback(onFrame);
+      };
+      signal.addEventListener("abort", abort, { once: true });
+      if (signal.aborted) abort();
+      else handle = preview.requestVideoFrameCallback(onFrame);
+    });
+  } finally {
+    activeLatencyProbe = null;
+    processorCallbackStartedAt = null;
+    if (handle !== null) preview.cancelVideoFrameCallback(handle);
+  }
+  const enough = samples.length >= (TEST_MODE ? 1 : 20);
+  return {
+    sourceToPreviewP50Ms: enough ? quantile(samples, 0.5) : null,
+    sourceToPreviewP95Ms: enough ? quantile(samples, 0.95) : null,
+    sourceToPreviewMaxMs: enough ? Math.max(...samples) : null,
+    latencySamples: samples.length,
+    latencyMeasuredMs: measuredMs,
+    staleMarkerSamples: 0,
+  };
 };
 
 const runProfiles = async (
@@ -1297,12 +1373,23 @@ const runProfiles = async (
         },
         signal,
       );
-      record.stages.push(crop);
+      const latency = await collectProcessingLatency(`Trial ${run} of 3`, signal);
+      record.stages.push({
+        ...crop,
+        ...latency,
+        budgetChecks: {
+          ...crop.budgetChecks,
+          sourceToPreviewP95AtMost50Ms:
+            latency.sourceToPreviewP95Ms === null ? null : latency.sourceToPreviewP95Ms <= 50,
+        },
+      });
       updateRecord();
     }
 
     const processorInputVideo = instrumentation.getProcessorInputVideo();
-    if (processorInputVideo === null) {
+    if (!RUN_DOM_COMPARISON) {
+      // Internal video attachment experiments are not part of the consumer API acceptance flow.
+    } else if (processorInputVideo === null) {
       recordIssue(
         "The processor input video could not be captured for the DOM connection comparison.",
       );
@@ -1374,6 +1461,21 @@ const runEffectCycles = async (
   if (inputTrack === null) throw new Error("The original camera track is unavailable.");
   const initialCrop = videoEffects.crop({ region: EFFECT_REGION });
   const updatedCrop = videoEffects.crop({ region: UPDATED_REGION });
+  const clearedForBaseline = await applyEffects(activeSession, { effects: [] }, signal);
+  if (clearedForBaseline.status !== "success") {
+    throw new Error(
+      `Could not restore original input before the heap baseline: ${clearedForBaseline.status}.`,
+    );
+  }
+  await attachOutput(activeSession);
+  const collectHeap = window.videoCropBenchmarkCollectGarbage;
+  record.heapMeasurementMethod =
+    collectHeap === undefined
+      ? "approximate-uncollected-used-js-heap"
+      : "controlled-post-gc-used-js-heap";
+  await wait(SETTLE_MS, signal);
+  record.heapBeforeEffectCyclesBytes =
+    collectHeap === undefined ? heapUsedBytes() : await collectHeap();
 
   for (let cycle = 1; cycle <= 5; cycle += 1) {
     assertNotAborted(signal);
@@ -1413,6 +1515,15 @@ const runEffectCycles = async (
     });
     updateRecord();
   }
+  await wait(SETTLE_MS, signal);
+  record.heapAfterEffectCyclesBytes =
+    collectHeap === undefined ? heapUsedBytes() : await collectHeap();
+  const before = record.heapBeforeEffectCyclesBytes;
+  const after = record.heapAfterEffectCyclesBytes;
+  record.heapEffectGrowthWithinBudget =
+    before === null || after === null
+      ? null
+      : after - before <= Math.max(before * 0.1, 5 * 1024 * 1024);
 };
 
 const runSessionCycles = async (
@@ -1423,7 +1534,13 @@ const runSessionCycles = async (
   await activeSession.stop();
   preview.srcObject = null;
   await wait(SETTLE_MS, signal);
-  record.heapBeforeSessionCyclesBytes = heapUsedBytes();
+  const collectHeap = window.videoCropBenchmarkCollectGarbage;
+  record.heapMeasurementMethod =
+    collectHeap === undefined
+      ? "approximate-uncollected-used-js-heap"
+      : "controlled-post-gc-used-js-heap";
+  record.heapBeforeSessionCyclesBytes =
+    collectHeap === undefined ? heapUsedBytes() : await collectHeap();
 
   for (let cycle = 1; cycle <= 5; cycle += 1) {
     assertNotAborted(signal);
@@ -1446,13 +1563,23 @@ const runSessionCycles = async (
     await wait(SETTLE_MS, signal);
   }
 
-  record.heapAfterSessionCyclesBytes = heapUsedBytes();
+  record.heapAfterSessionCyclesBytes =
+    collectHeap === undefined ? heapUsedBytes() : await collectHeap();
   const heapBefore = record.heapBeforeSessionCyclesBytes;
   const heapAfter = record.heapAfterSessionCyclesBytes;
-  record.retainedHeapGrowthWithinBudget =
+  record.heapGrowthWithinBudget =
     heapBefore === null || heapAfter === null
       ? null
       : heapAfter - heapBefore <= Math.max(heapBefore * 0.1, 5 * 1024 * 1024);
+  // Uncollected allocations and page rendering are not evidence of retained heap.
+  record.retainedHeapGrowthWithinBudget =
+    collectHeap === undefined
+      ? null
+      : record.heapGrowthWithinBudget === false || record.heapEffectGrowthWithinBudget === false
+        ? false
+        : record.heapGrowthWithinBudget === true && record.heapEffectGrowthWithinBudget === true
+          ? true
+          : null;
   await activeSession.dispose();
   const tracks = [...knownTracks];
   record.cleanup = {
@@ -1491,8 +1618,20 @@ const startCamera = async (): Promise<void> => {
   if (TEST_MODE)
     record.issues.push("Automated synthetic-input timing mode; not physical-device evidence.");
   showRecord(record);
-  const coreUrl = new URL("/dist/index.js", window.location.origin);
+  // Bypass both Vite's ignored-outDir transform cache and the browser's ESM cache.
+  // A query on the root barrel alone would still import its cached stable core URL.
+  const coreUrl = new URL("/dist/core/index.js", window.location.origin);
+  coreUrl.searchParams.set("benchmark", `${record.commitSha}-${crypto.randomUUID()}`);
   try {
+    const response = await fetch(coreUrl.href, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Built core unavailable: ${response.status}`);
+    const source = await response.text();
+    record.browser.coreModuleUrl = coreUrl.href;
+    record.browser.processingRuntimeModule = source.match(/runtime-[\w-]+\.js/u)?.[0] ?? null;
+    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(source));
+    record.browser.coreModuleSha256 = Array.from(new Uint8Array(digest), (byte) =>
+      byte.toString(16).padStart(2, "0"),
+    ).join("");
     const importedCore: unknown = await import(/* @vite-ignore */ coreUrl.href);
     if (!isCoreLibrary(importedCore)) throw new Error("The built media-session entry is invalid.");
     const core = importedCore;
@@ -1612,9 +1751,7 @@ const startCamera = async (): Promise<void> => {
     }
     updateRecord();
     runButton.disabled = false;
-    setStatus(
-      "Camera is active. Center the marker in the preview, then run the three measurements.",
-    );
+    setStatus("Camera is active. Run the three measurements; no marker alignment is needed.");
   } catch (error) {
     restoreGetUserMedia();
     record.status = startupController.signal.aborted ? "stopped" : "failed";
@@ -1651,6 +1788,8 @@ const runMeasurements = async (): Promise<void> => {
   setStatus("Loading the built crop processor.");
   try {
     const effectsUrl = new URL("/dist/effects/video/index.js", window.location.origin);
+    effectsUrl.searchParams.set("benchmark", `${currentRecord.commitSha}-${crypto.randomUUID()}`);
+    currentRecord.browser.effectsModuleUrl = effectsUrl.href;
     const importedEffects: unknown = await import(/* @vite-ignore */ effectsUrl.href);
     if (!isVideoEffectsModule(importedEffects)) {
       throw new Error("The built video-effects entry is invalid.");

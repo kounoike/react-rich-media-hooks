@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-09-25 10:53'
-updated_date: '2026-10-07 18:09'
+updated_date: '2026-10-07 21:39'
 labels: []
 dependencies:
   - TASK-1.11
@@ -33,6 +33,9 @@ modified_files:
   - tests/browser/video-crop-throughput.html
   - tests/browser/video-crop-throughput.ts
   - tests/browser/video-crop-throughput.spec.ts
+  - docs/measurements/crop-acceptance-c922-declared-4a5fd53.json
+  - docs/measurements/crop-benchmark-served-module-provenance.json
+  - docs/measurements/crop-benchmark-synthetic-post-gc.json
 parent_task_id: TASK-1
 priority: medium
 type: task
@@ -57,7 +60,7 @@ Close the measured verification gaps left by TASK-1.11 for the approved fixed ca
 ## Implementation Plan
 
 <!-- SECTION:PLAN:BEGIN -->
-1. Re-audit the crop pipeline and FPS estimator independently of earlier conclusions. 2. Build a minimal throughput experiment with matched source, no pixel readback, no prototype instrumentation, and no Performance recording; compare captureStream(30), automatic capture without a rate limit, and captureStream(0) plus requestFrame, then check source DOM attachment separately. 3. Repeat promising comparisons across browser engines and the actual library runtime; identify the stage that loses frames. 4. Prepare the smallest evidence-supported countermeasure and preserve lifecycle behavior. Record synthetic evidence separately from user-operated physical acceptance measurements.
+1. Record the new acceptance report without inferring task completion from its completed status. 2. Verify the actual served/loaded bundle and compare the built-session path with the low-overhead source-runtime path. 3. Isolate prototype diagnostics and pixel readback as independent factors, using controlled synthetic input without operating the physical camera. 4. Distinguish uncollected heap allocations from retained memory using post-GC controls; correct only measurement defects supported by those experiments. 5. Keep successful physical lifecycle/cleanup evidence and outstanding FPS/latency/memory evidence explicit.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -132,10 +135,14 @@ User-operated camera throughput evidence (started 2026-10-07T09:56:51.157Z): sou
 Persisted the pasted evidence as an explicitly labeled per-run summary at docs/measurements/crop-throughput-camera-2026-10-07-summary.json and updated docs/video-crop-throughput.md. The report does not bind a camera model, commit SHA, or full browser build and does not contain first-frame timing, source-to-preview p95 latency, retained heap, or the five required effect lifecycle cycles. The FPS-loss fix is now supported by user-operated camera evidence; retain In Progress and acceptance criteria 1-3 open pending the remaining acceptance protocol and provenance. No code change or additional camera run was needed to assess this result.
 
 The user supplied a five-repeat throughput table: library and request matched input at displayed ratio 1.000 in all five trials (approximately 29.92 fps, with library trial 3 at 30.00). Timer ratios were 0.972/0.944/0.972/0.966/0.961. Saved the display-rounded evidence as docs/measurements/crop-throughput-five-repeat-user-table.csv. This supports repeatable throughput improvement but is not the acceptance-required lifecycle test: each required effect cycle must add, update, bypass, and remove the crop through the session API, and retention testing separately stops/restarts the camera five times. The normal video-crop-benchmark.html measurement flow already performs both sets automatically. The supplied table has no such lifecycle rows or heap measurements; keep those checks outstanding.
+
+Acceptance-page provenance correction: saved the complete user-operated C922 report declaring 4a5fd536640a98407736b1511701e332b226410e at docs/measurements/crop-acceptance-c922-declared-4a5fd53.json. First usable frame was 72.1 ms; five effect cycles and five camera restart cycles succeeded; all 19 observed tracks ended. The declared SHA did not bind actual loaded code: HTTP inspection of the existing task server on port 4174 showed plain /dist/core/index.js referencing the old runtime-BV2FNQJa.js without requestFrame, while disk and a unique queried core entry referenced the fixed runtime-B1MYy2hy.js. The benchmark now imports a uniquely queried compiled core entry directly, records entry URL/content SHA256/runtime chunk, and has a stale-module preload regression. Do not attribute the old report FPS to the fixed runtime. The old optical path had insufficient samples and included display/camera delay. FPS collection now performs no pixel readback; processing latency uses matching checksum timing tokens from the input processor callback to the output callback in a separate six-second window, at most five readbacks/second and at least 20 matched samples. Private DOM mutations are opt-in via dom=1. Raw used heap growth of 10,616,963 bytes is preserved but cannot establish retained leakage without controlled GC; the normal page now reports retained budget unknown, and a synthetic CDP post-GC test verifies the controlled protocol. These are measurement-page fixes within the existing task, with no shipped API, compatibility, distribution, dependency, budget or architecture changes. Physical measurement remains user-operated. Keep TASK-1.25 In Progress with AC1-3 open until a corrected physical report establishes runtime provenance and remaining performance comparisons.
+
+Final measurement-page verification: pnpm verify passed on the final code (format/lint, 14 unit tests, types/build/package consumer checks and lifecycle policy). Ten targeted Chromium browser cases passed across the benchmark, low-overhead throughput and existing crop integration; after completing same-state heap baselines, all five benchmark cases passed again. The GC regression uses four controlled boundaries, separately around five effect cycles with original input restored at both ends and around five stopped/restarted camera cycles. Both windows passed the retained budget on synthetic input; raw automated report saved at docs/measurements/crop-benchmark-synthetic-post-gc.json. This is protocol evidence only, not physical retained-memory acceptance. HTTP provenance evidence saved at docs/measurements/crop-benchmark-served-module-provenance.json. No physical camera was operated by the agent.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Reproduced canvas capture timer loss, implemented optional per-draw frame requests with a live-rate output-cap guard, and verified synthetic library output at approximately 30 fps in three Windows Chrome trials. User-operated 1280x720 camera evidence now confirms library output/input ratios approximately 1.0000 across all three crop trials, with 960x720 output, zero observed callback gaps, and all 10 observed tracks released. Original timer trial 1 retained a 2.24% lower output rate. pnpm verify, 14 unit tests, eight Chromium cases, and the existing Firefox integration case passed during implementation. First-frame timing, source-to-preview latency, retained heap, five-cycle lifecycle evidence, and complete device/commit provenance remain outstanding; TASK-1.25 stays In Progress.
+Fixed the measured crop output sampling loss with optional per-draw frame requests and a live-rate cap guard; three and five user-operated throughput trials matched input. Preserved the complete C922 acceptance report: first frame 72.1 ms, five successful effect cycles, five successful camera restart cycles and all 19 observed tracks released. Verified that the acceptance server still served an old compiled runtime despite the declared SHA, then corrected fresh compiled-module loading with module fingerprints. Separated FPS from processing-token latency, made invasive DOM diagnostics optional, and distinguished raw heap allocations from controlled post-GC retention around both effect and camera cycles. pnpm verify, ten targeted Chromium cases and a final five-case benchmark rerun passed. Corrected physical throughput, processing latency, controlled retained heap and complete runtime provenance remain outstanding; TASK-1.25 stays In Progress. Agent improvement PR: none; changes are scoped benchmark/product verification work.
 <!-- SECTION:FINAL_SUMMARY:END -->

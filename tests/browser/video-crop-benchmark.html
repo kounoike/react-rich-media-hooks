@@ -18,7 +18,7 @@
         <h1>Fixed camera crop benchmark</h1>
         <p>
           Run the approved 1280×720 at 30 fps capture-only, pass-through, and fixed-crop
-          measurements on a reference camera, followed by a paired source-video DOM comparison.
+          measurements on a reference camera, followed by separate processing-latency and lifecycle checks.
           Results stay in this browser until you download them.
         </p>
       </header>
@@ -69,7 +69,7 @@
                   <th scope="col">processor callback p95 (ms)</th>
                   <th scope="col">input video in DOM</th>
                   <th scope="col">遅延 p95 (crop ≤50 ms)</th>
-                  <th scope="col">マーカー標本 (採用 / 古い)</th>
+                  <th scope="col">処理時刻標本 (一致 / 除外)</th>
                   <th scope="col">crop setup (≤1 s)</th>
                 </tr>
               </thead>
@@ -85,7 +85,7 @@
           OKはこのページに記載した計測予算を満たした意味です。NGは少なくとも1項目の未達です。
           必須データが不足している場合は未完了、疑似入力の場合は実機判定対象外になります。
           カメラが一度も送出しなかったフレーム数はブラウザから取得できないため、この判定には含まれません。
-          1秒より古いマーカー標本は遅延計算から除外し、採用数と合わせて表示します。
+          遅延はFPSとは別の測定窓で、入力callbackと出力の時刻パターンが一致した標本だけを採用します。
           crop の入力 callback、drawImage、出力 preview は同じ測定窓で数えます。入力の presented-frame gap もカメラ未送出フレーム数ではありません。
         </p>
       </section>
@@ -154,22 +154,16 @@
           camera IDs or media are uploaded; JSON is saved only when you download it.
         </p>
         <p class="setup-note">
-          For latency measurement, center the animated marker in the camera view. Use an external
-          display for an integrated camera, or open the synchronized marker window below. Confirm
-          the marker appears in the live preview before starting; if the report has zero marker
-          samples, source-to-preview latency is unknown. First-frame timing starts when
+          Processing latency is measured in a separate window with a small temporary timing patch
+          added to the cropped output. No camera alignment or external marker display is needed.
+          FPS measurement performs no pixel readback. First-frame timing starts when
           <code>getUserMedia</code> resolves, and its request-to-stream duration is reported
           separately so the permission prompt is excluded from the 500 ms budget. The final
           retention phase briefly stops and restarts capture five times.
         </p>
-        <p class="setup-note">
-          <a href="/tests/browser/video-crop-latency-marker.html" target="_blank" rel="noreferrer">
-            Open synchronized marker window
-          </a>
-          on another display in this browser. Keep that window visible and active throughout the
-          run; a background or minimized window may pause marker animation. That page has no camera
-          access.
-        </p>
+        <p class="setup-note">Heap snapshots without explicit garbage collection are reported as
+          approximate allocation measurements; retained memory remains unknown until a controlled
+          post-GC comparison is available. Internal video DOM experiments are optional via <code>?dom=1</code>.</p>
         <div class="actions">
           <button id="start-camera" type="button">Start camera</button>
           <button id="run-measurements" type="button" disabled>Run measurements</button>
@@ -199,9 +193,10 @@
             width="4"
             height="4"
             role="img"
-            aria-label="Animated 4 by 4 black and white latency marker"
+            aria-label="Static synthetic source fixture"
+            hidden
           ></canvas>
-          <figcaption>Center this marker in the camera view</figcaption>
+          <figcaption>Timing is generated automatically in the cropped output during the latency phase.</figcaption>
         </figure>
       </section>
 
@@ -209,14 +204,14 @@
         <h2 id="protocol-heading">Run protocol</h2>
         <ol>
           <li>Enter the commit SHA, host/device description, and Node/package-manager versions.</li>
-          <li>Start the camera, grant permission, and frame the marker in the preview.</li>
+          <li>Start the camera and grant permission.</li>
           <li>Run three warmed trials of capture-only, pass-through, and fixed crop.</li>
           <li>Run five warm crop add/update/bypass/remove cycles and five session stop/start cycles.</li>
           <li>Review the JSON, download it, and keep the physical-device evidence with TASK-1.25.</li>
         </ol>
         <p>
-          The marker-to-preview samples provide an optical source-to-preview latency measurement.
-          A run with too few decoded marker samples records latency as unknown. Presented-frame gaps
+          Timing tokens pair a processor input callback with its matching output preview callback.
+          This excludes display and camera capture delay. A run with too few matched samples records latency as unknown. Presented-frame gaps
           describe frames missed by the browser's video-frame callback; they do not detect source
           frames the camera never delivered.
         </p>

@@ -65,3 +65,15 @@ See the [user-report summary](measurements/crop-throughput-camera-2026-10-07-sum
 The user subsequently supplied a [five-repeat throughput table](measurements/crop-throughput-five-repeat-user-table.csv), recorded at display-rounded precision. Library and request output/input ratios were 1.000 in all five trials. Timer ratios were 0.972, 0.944, 0.972, 0.966, and 0.961. This strengthens throughput repeatability evidence. These are five repetitions of the four FPS profiles, not five session-owned add/update/bypass/remove cycles or five camera stop/start cycles. Those operation checks are implemented in `/tests/browser/video-crop-benchmark.html` and run automatically during its normal measurement flow.
 
 The preliminary Firefox experiment produced no observed frames because its synthetic source called an unavailable `requestFrame()` method. On a loaded page, Firefox 153 explicitly reported `Synthetic requestFrame unavailable` for both attached and detached input conditions. These are fixture capability failures, not FPS comparisons or proof of a DOM attachment problem. The runtime feature check retains automatic capture on such tracks; no Firefox performance improvement is claimed. Edge, Safari, and mobile remain within decision-7's existing cadence.
+
+## Follow-up acceptance-page provenance correction
+
+The subsequent full camera acceptance report declared commit
+`4a5fd536640a98407736b1511701e332b226410e`, but the existing Vite server served
+an older runtime through its cached plain compiled core entry. This explains
+why the declared SHA could not establish that the acceptance page exercised the
+same implementation as this source-importing comparator. See the
+[provenance finding and corrected protocol](video-crop-benchmark.md#physical-report-declaring-commit-4a5fd53-provenance-failure).
+The full report supplies five successful effect and five successful camera
+cycles and zero live tracks after cleanup. Corrected physical throughput,
+processing latency, and controlled post-GC retention remain unverified.

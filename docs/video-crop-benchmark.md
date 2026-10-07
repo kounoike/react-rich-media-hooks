@@ -34,30 +34,25 @@ pnpm run video-crop:benchmark
 
 Open `http://127.0.0.1:4173/tests/browser/video-crop-benchmark.html`, enter the
 full benchmark commit SHA, host OS/device model, Node and package-manager
-versions, and camera description. For an integrated camera, open the
-synchronized marker window on an external display in the same browser and aim
-the camera at it. The main page also shows a marker for cameras that can see its
-display. The page requests the default camera only after **Start camera** is
-clicked. **Run measurements** performs three
-independent trials of capture-only, no-op pass-through, and fixed crop; each
-stage warms for one second and measures for two seconds. It then measures the
-same live crop processor with its input video detached and connected to the DOM
-in three paired comparisons. The order alternates detached-connected,
-connected-detached, detached-connected. Each state warms for one second and
-measures for two seconds; the connected input appears as a small raw preview
-beside the crop output. This changes only DOM attachment, not the media track,
-crop, or capture session. The source video is detached again before lifecycle
-checks. The page then records five warm crop add/update/bypass/remove cycles and
-five camera stop/start retention cycles. Capture is released when the run ends
-or when **Stop and release camera** is selected.
+versions, and camera description. The page requests the default camera only
+when **Start camera** is clicked. **Run measurements** performs three trials of
+capture-only, no-op pass-through, and fixed crop; each FPS stage warms for one
+second and measures for two seconds. FPS collection performs no pixel readback.
+Each crop trial then measures processing latency in a separate six-second
+window. No photographed display or external marker window is required.
 
-The downloaded stages label these rows `crop-dom-detached` and
-`crop-dom-connected`; their paired preview, input, draw, and callback rates are
-also summarized in `cropDomAttachmentComparisonByRun`. They are diagnostic
-comparison rows and do not replace or inflate the three default `fixed-crop`
-acceptance trials. The attached state is a visible 320×180 raw camera preview;
-the comparison therefore tests DOM connection with normal rendering, not an
-invisible or `display:none` video element.
+The page records five warm crop add/update/bypass/remove cycles and five camera
+stop/start cycles. Capture is released at completion or when **Stop and release
+camera** is selected. The input-video DOM manipulation experiment is optional
+(`?dom=1`); it is excluded from the normal acceptance flow because it mutates a
+private processor element and previously stalled frame delivery. Optional rows
+are diagnostic and never replace the three fixed-crop acceptance trials.
+
+The page imports the compiled core entry directly with a unique query per
+session, bypassing stale stable-entry transforms in a long-running Vite server.
+The JSON records the core URL, transformed module SHA-256, referenced runtime
+chunk, and effects entry URL. The entered commit SHA is a user assertion;
+these module fields provide additional evidence of the code actually loaded.
 
 For each fixed-crop stage, the page also counts the processor input video
 `requestVideoFrameCallback` callbacks and their `presentedFrames` gaps, the
@@ -79,24 +74,54 @@ The downloaded JSON records browser user agent and client hints where available,
 the user-entered host/runtime details, requested and negotiated camera settings,
 commit SHA, crop and capture frame rates, presented-frame callback gaps, first
 usable frame measured from `getUserMedia` resolution, time from the `getUserMedia`
-request to stream resolution, crop setup time, marker-to-preview p50/p95/maximum latency, heap
-measurements where exposed, budget comparisons, effect/session lifecycle results,
-and track cleanup. The page keeps the result locally until the user downloads it
-and does not serialize camera device IDs.
+request to stream resolution, crop setup time, processing-to-preview
+p50/p95/maximum latency, heap observations, budget comparisons, lifecycle
+results, and track cleanup. Results remain local until downloaded; camera
+device IDs are not serialized.
 
-The optical latency sampler decodes the changing marker captured by the camera
-and measures from its animation-frame update to the preview-frame callback. The
-separate marker window synchronizes timestamps to the main page over a
-same-origin `BroadcastChannel`; it does not request media or send data over the
-network. Keep the same marker display and camera framing for comparisons. This
-includes the display-to-camera optical path. `presentedFrameGapPercent` counts gaps reported
-by `requestVideoFrameCallback`; browsers do not expose the exact count of camera
-frames that were never delivered, so that source-loss quantity remains unknown.
-Keep the synchronized marker window visible and active during the full run.
-Marker codes older than one second are excluded as stale and counted separately;
-when too few fresh marker samples remain, latency is recorded as unknown.
-`performance.memory` is browser-specific and is not forced through garbage
-collection.
+The processing-latency probe stamps a temporary 24×16 pixel timing token after
+each crop draw. A source callback timestamp and checksum associate the token
+with the output preview callback. Receipt time is recorded before decoding.
+Readback is limited to five samples per second and occurs only in the separate
+latency window; at least 20 matched samples are required. `latencyMeasuredMs`
+records that window independently of the FPS `measuredMs`. This measures from
+the processor's input callback to the matching output preview callback,
+excluding display refresh and camera acquisition. The probe exists only in the
+benchmark; it changes no shipped processor code or public API.
+
+Raw `performance.memory.usedJSHeapSize` differences are recorded as allocated
+heap observations, not retained-memory verdicts. `retainedHeapGrowthWithinBudget`
+is unknown without controlled GC before and after both the effect-cycle and session-cycle windows. The
+Playwright GC test uses CDP `HeapProfiler.collectGarbage` and
+`Runtime.getHeapUsage`; its synthetic evidence does not establish physical-device
+retention. Presented-frame gaps likewise do not count camera frames never
+delivered to the browser. The [synthetic post-GC report](measurements/crop-benchmark-synthetic-post-gc.json)
+preserves the four controlled heap observations and cleanup evidence. Its
+shortened test windows verify the protocol, not physical performance.
+The historical reports below preserve the old optical
+protocol and uncollected heap flags; those values must not be read as results
+from the corrected protocol.
+
+## Physical report declaring commit 4a5fd53: provenance failure
+
+The [complete user report](measurements/crop-acceptance-c922-declared-4a5fd53.json)
+ran on Windows 11 25H2, Chrome 154.0.8037.98, C922, 1280×720/30 input and
+960×720 crop. First usable frame was 72.1 ms; all five effect cycles and all five
+session cycles succeeded; all 19 observed tracks ended after cleanup. Crop
+preview rates were 27.199, 27.652, and 29.934 fps while draw rates remained near
+30 fps. DOM mutation diagnostics stalled in three states. Optical latency had
+only nine crop samples in trial 1 and none in trials 2–3. Uncollected used heap
+grew from 7,493,345 to 18,110,308 bytes; this is not proof of a retained leak.
+
+[HTTP inspection](measurements/crop-benchmark-served-module-provenance.json) of
+the same task-worktree Vite server on port 4174 proved that
+its plain `/dist/core/index.js` still referenced `runtime-BV2FNQJa.js`, without
+the explicit `requestFrame` fix. Disk and a uniquely queried core entry instead
+referenced `runtime-B1MYy2hy.js`, containing that fix. The old root-entry import
+and manually entered SHA did not establish the actual loaded implementation.
+Therefore this report cannot validate throughput of the declared fixed commit.
+The corrected loader has a regression test that preloads a stale core entry and
+verifies that a new session uses the fresh compiled entry.
 
 ## Initial physical reference-camera result
 
