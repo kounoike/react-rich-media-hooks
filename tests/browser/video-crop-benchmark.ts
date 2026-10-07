@@ -145,6 +145,7 @@ declare global {
 const TEST_MODE = new URLSearchParams(window.location.search).get("test") === "1";
 const WARMUP_MS = TEST_MODE ? 50 : 1000;
 const MEASURE_MS = TEST_MODE ? 250 : 2000;
+const MEASUREMENT_FRAME_TIMEOUT_MS = TEST_MODE ? 1500 : 10_000;
 const SETTLE_MS = TEST_MODE ? 25 : 500;
 const MAX_MARKER_SAMPLE_AGE_MS = 1000;
 const EFFECT_REGION: CropOptions["region"] = { x: 0.125, y: 0, width: 0.75, height: 1 };
@@ -575,6 +576,13 @@ const abortError = (): Error => {
   return error;
 };
 
+class PreviewFrameTimeoutError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "PreviewFrameTimeoutError";
+  }
+}
+
 const assertNotAborted = (signal: AbortSignal): void => {
   if (signal.aborted) throw abortError();
 };
@@ -931,18 +939,21 @@ const collectStage = async (
   stage: {
     readonly run: number;
     readonly profile: Profile;
+    readonly label: string;
     readonly operationStatus: OperationStatus | "not-applied";
     readonly warmupMs: number;
     readonly cropSetupMs: number | null;
   },
   signal: AbortSignal,
 ): Promise<StageMetric> => {
+  setStatus(`${stage.label}: warming for ${stage.warmupMs} ms.`);
   await wait(stage.warmupMs, signal);
   assertNotAborted(signal);
   const activeTrack = addOutputTrack(activeSession);
   const outputSettings = safeTrackSettings(activeTrack);
   const start = performance.now();
   const endAt = start + MEASURE_MS;
+  setStatus(`${stage.label}: measuring for ${MEASURE_MS} ms.`);
   let frames = 0;
   let presentedFrameGaps = 0;
   let previousPresentedFrames: number | null = null;
@@ -966,7 +977,10 @@ const collectStage = async (
   try {
     measuredMs = await new Promise<number>((resolve, reject) => {
       let handle: number | null = null;
+      let timeout: number | null = null;
+      let lastProgressAt = start;
       const finish = (error?: Error): void => {
+        if (timeout !== null) window.clearTimeout(timeout);
         signal.removeEventListener("abort", onAbort);
         if (handle !== null) preview.cancelVideoFrameCallback?.(handle);
         if (error !== undefined) reject(error);
@@ -979,6 +993,12 @@ const collectStage = async (
           return;
         }
         frames += 1;
+        if (now - lastProgressAt >= 500) {
+          lastProgressAt = now;
+          setStatus(
+            `${stage.label}: measuring (${frames} frames; ${Math.max(0, endAt - now).toFixed(0)} ms left).`,
+          );
+        }
         if (typeof metadata.presentedFrames === "number") {
           if (
             previousPresentedFrames !== null &&
@@ -1003,6 +1023,15 @@ const collectStage = async (
         reject(new Error("This browser does not provide requestVideoFrameCallback()."));
         return;
       }
+      timeout = window.setTimeout(
+        () =>
+          finish(
+            new PreviewFrameTimeoutError(
+              `The preview did not deliver a frame callback within ${MEASUREMENT_FRAME_TIMEOUT_MS} ms during ${stage.label}; no complete measurement was collected.`,
+            ),
+          ),
+        MEASUREMENT_FRAME_TIMEOUT_MS,
+      );
       signal.addEventListener("abort", onAbort, { once: true });
       handle = preview.requestVideoFrameCallback(onFrame);
     });
@@ -1211,13 +1240,14 @@ const runProfiles = async (
         await attachOutput(activeSession);
       }
 
-      setStatus(`Trial ${run} of 3: warming capture-only output.`);
+      setStatus(`Trial ${run} of 3: preparing capture-only output.`);
       const captureOnlyTrack = await attachOutput(activeSession);
       const captureOnly = await collectStage(
         activeSession,
         {
           run,
           profile: "capture-only",
+          label: `Trial ${run} of 3: capture-only`,
           operationStatus: "not-applied",
           warmupMs: WARMUP_MS,
           cropSetupMs: null,
@@ -1238,6 +1268,7 @@ const runProfiles = async (
         {
           run,
           profile: "pass-through",
+          label: `Trial ${run} of 3: pass-through`,
           operationStatus: passThroughResult.status,
           warmupMs: WARMUP_MS,
           cropSetupMs: null,
@@ -1259,6 +1290,7 @@ const runProfiles = async (
         {
           run,
           profile: "fixed-crop",
+          label: `Trial ${run} of 3: fixed-crop`,
           operationStatus: cropResult.status,
           warmupMs: WARMUP_MS,
           cropSetupMs,
@@ -1290,21 +1322,30 @@ const runProfiles = async (
             processorInputVideoSlot.hidden = true;
           }
 
-          setStatus(
-            `DOM comparison ${run} of 3: processor input ${condition}; warming for measurement.`,
-          );
+          setStatus(`DOM comparison ${run} of 3: preparing ${condition} input output.`);
           await attachOutput(activeSession);
-          const comparison = await collectStage(
-            activeSession,
-            {
-              run,
-              profile: connected ? "crop-dom-connected" : "crop-dom-detached",
-              operationStatus: "not-applied",
-              warmupMs: WARMUP_MS,
-              cropSetupMs: null,
-            },
-            signal,
-          );
+          const label = `DOM comparison ${run} of 3: processor input ${condition}`;
+          let comparison: StageMetric;
+          try {
+            comparison = await collectStage(
+              activeSession,
+              {
+                run,
+                profile: connected ? "crop-dom-connected" : "crop-dom-detached",
+                label,
+                operationStatus: "not-applied",
+                warmupMs: WARMUP_MS,
+                cropSetupMs: null,
+              },
+              signal,
+            );
+          } catch (error) {
+            if (signal.aborted) throw abortError();
+            if (!(error instanceof PreviewFrameTimeoutError)) throw error;
+            recordIssue(error.message);
+            setStatus(`${label}: no measurement; continuing with the next DOM comparison.`);
+            continue;
+          }
           record.stages.push(comparison);
           updateRecord();
         }
@@ -1627,11 +1668,12 @@ const runMeasurements = async (): Promise<void> => {
       "Measurements complete. The camera is released; review and download the JSON report.",
     );
   } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
     if (currentRecord.status === "running") {
       currentRecord.status = runController.signal.aborted ? "stopped" : "failed";
     }
     currentRecord.finishedAt = new Date().toISOString();
-    currentRecord.issues.push(error instanceof Error ? error.message : String(error));
+    currentRecord.issues.push(errorMessage);
     if (runController.signal.aborted) {
       try {
         await activeSession.stop();
@@ -1655,7 +1697,7 @@ const runMeasurements = async (): Promise<void> => {
     setStatus(
       runController.signal.aborted
         ? "The run was stopped and the camera was released. Partial results are available."
-        : "The run stopped with an error. Review the partial report; the camera will be released when you stop it.",
+        : `The run stopped with an error: ${errorMessage} Review the partial report; stop and release the camera before retrying.`,
     );
   } finally {
     runController = null;

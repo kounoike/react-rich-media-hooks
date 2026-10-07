@@ -61,6 +61,7 @@ test("physical crop benchmark requests only after start and exports synthetic li
   expect(await page.evaluate(() => window.manualBenchmarkHarness?.captureRequests ?? -1)).toBe(1);
 
   await page.getByRole("button", { name: "Run measurements" }).click();
+  await expect(page.locator("#status")).toContainText("measuring", { timeout: 5_000 });
   await expect(page.locator("#status")).toContainText("Measurements complete", { timeout: 90_000 });
   const result = await page.evaluate(() => window.videoCropBenchmarkRecord ?? null);
   expect(result).not.toBeNull();
@@ -121,6 +122,47 @@ test("explicit stop interrupts measurement and releases the camera", async ({ pa
   );
   expect(status).toBe("stopped");
   expect(captureRequests).toBe(1);
+  await page.evaluate(() => {
+    for (const cleanup of window.manualBenchmarkHarness?.cleanups ?? []) cleanup();
+  });
+});
+
+test("missing preview frames fail with a timeout instead of hanging", async ({ page }) => {
+  test.setTimeout(30_000);
+  await installSyntheticCamera(page);
+  await page.goto("/tests/browser/video-crop-benchmark.html?test=1");
+  await fillReferenceDetails(page);
+  await page.getByRole("button", { name: "Start camera" }).click();
+  await expect(page.locator("#status")).toContainText("Camera is active", { timeout: 15_000 });
+  await page.locator("#preview").evaluate((element: HTMLVideoElement) => {
+    Object.defineProperty(element, "requestVideoFrameCallback", {
+      configurable: true,
+      value: () => 1,
+    });
+    Object.defineProperty(element, "cancelVideoFrameCallback", {
+      configurable: true,
+      value: () => undefined,
+    });
+  });
+
+  await page.getByRole("button", { name: "Run measurements" }).click();
+  await expect(page.locator("#status")).toContainText("no complete measurement was collected", {
+    timeout: 5_000,
+  });
+  const result = await page.evaluate(() => window.videoCropBenchmarkRecord ?? null);
+  expect(result?.status).toBe("failed");
+  expect(result?.stages).toHaveLength(0);
+  expect(
+    result?.issues.some((issue) => issue.includes("no complete measurement was collected")),
+  ).toBe(true);
+
+  await page.getByRole("button", { name: "Stop and release camera" }).click();
+  await expect
+    .poll(
+      () => page.evaluate(() => window.videoCropBenchmarkRecord?.cleanup?.cameraStopped ?? false),
+      { timeout: 15_000 },
+    )
+    .toBe(true);
   await page.evaluate(() => {
     for (const cleanup of window.manualBenchmarkHarness?.cleanups ?? []) cleanup();
   });

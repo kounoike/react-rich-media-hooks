@@ -201,7 +201,7 @@ export const createCanvasCropProcessor = async (
   }
 
   let outputStream: MediaStream | null = null;
-  let outputTrack: MediaStreamTrack | null = null;
+  let outputTrack: (MediaStreamTrack & { requestFrame?: () => void }) | null = null;
   let callbackHandle: number | null = null;
   let callbackKind: "video" | "animation" | null = null;
   let disposed = false;
@@ -241,6 +241,22 @@ export const createCanvasCropProcessor = async (
     typeof sourceSettings.frameRate === "number" && sourceSettings.frameRate > 0
       ? Math.min(30, sourceSettings.frameRate)
       : 30;
+  // A second rate timer can miss canvas paints even when drawing keeps up with input.
+  // Explicit requests avoid that gate for known inputs at/below the output rate.
+  // Faster or unknown inputs retain the automatic timer's 30 fps limit.
+  const requestOutputFrame = (): void => {
+    if (typeof outputTrack?.requestFrame !== "function") return;
+    let currentRate: number | undefined;
+    try {
+      // Capture constraints may change while this processor keeps the same input track.
+      currentRate = inputTrack.getSettings().frameRate;
+    } catch {
+      return;
+    }
+    if (typeof currentRate === "number" && currentRate > 0 && currentRate <= sourceFrameRate) {
+      outputTrack.requestFrame();
+    }
+  };
 
   const setCropOptions = (options: CropOptions): void => {
     validateOptions(options);
@@ -351,6 +367,7 @@ export const createCanvasCropProcessor = async (
         canvas.width,
         canvas.height,
       );
+      requestOutputFrame();
     } catch (cause) {
       fail(
         cause instanceof VideoCropProcessorError

@@ -386,3 +386,12 @@ Edge/Safari at the approved cadence, mobile feasibility, Firefox retained
 heap, and whether the headless Firefox throughput ceiling occurs on actual
 devices. No backend, dependency, or API change was selected from this
 synthetic baseline.
+
+## Independent throughput comparison
+
+For a low-overhead comparison of the crop output capture policies, use
+`/tests/browser/video-crop-throughput.html`. Its synthetic source requires no camera;
+physical measurement starts only when the user selects camera input and starts the run.
+See [the controlled throughput investigation](video-crop-throughput.md) for the protocol,
+raw before/after reports, and the timer scheduling fix. This diagnostic does not replace
+the reference-device acceptance protocol above.
