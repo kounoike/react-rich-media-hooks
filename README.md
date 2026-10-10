@@ -236,6 +236,23 @@ The task record and `docs/video-crop-benchmark.md` record the observed results,
 known browser/device gaps, and the fallback used when the accepted frame-rate
 or latency budgets are missed.
 
+For a user-operated physical reference-device run, start the local server with
+`pnpm run video-crop:benchmark`. In another terminal, run
+`pnpm run video-crop:reference` to open a dedicated Chrome window with controlled
+GC/heap collection. WSL uses the installed Windows Node and Chrome. Confirm the
+physical-camera checkbox, then select **Start camera** and **Run measurements**.
+The launcher fills available environment details and the commit SHA, and saves
+JSON locally under `.artifacts/reference-device/`. Camera operation remains
+user-controlled; completion or Stop releases its tracks. No photographed marker
+or external display is needed. Processing latency is measured separately from
+FPS. Close the dedicated window when finished.
+
+Opening `http://127.0.0.1:4173/tests/browser/video-crop-benchmark.html` directly
+also measures FPS, processing latency, and lifecycle behavior, but retained heap
+stays unknown without the GC controller. See `docs/video-crop-benchmark.md` for
+setup, custom ports, recorded results, and interpretation of callback gaps and
+endpoint FPS.
+
 ## Supervised task lifecycle
 
 The task-to-PR workflow is repository operating policy rather than a Backlog

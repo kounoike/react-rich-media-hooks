@@ -1,0 +1,21 @@
+{
+  "observedAt": "2026-10-07T21:36:28.511863+00:00",
+  "server": "http://127.0.0.1:4174",
+  "scope": "Existing task-worktree Vite server; HTTP artifact provenance, not a camera run",
+  "declaredCommitSha": "4a5fd536640a98407736b1511701e332b226410e",
+  "plain": {
+    "url": "http://127.0.0.1:4174/dist/core/index.js",
+    "coreSha256": "adb7d91b95738afb17810e06edce7b30933b855fc21b2acb252288776e862098",
+    "runtimeChunk": "runtime-BV2FNQJa.js",
+    "runtimeSha256": "dfae6fbd9ae2aeb944359311d6036caffaba0ac4519d5883f9d34dd2467c1d6c",
+    "containsRequestFrame": false
+  },
+  "fresh": {
+    "url": "http://127.0.0.1:4174/dist/core/index.js?provenance-proof=4a5fd53-final",
+    "coreSha256": "a88758366184df55d94b2a1f4c6de30e3989284127daec6152a90da6887edace",
+    "runtimeChunk": "runtime-B1MYy2hy.js",
+    "runtimeSha256": "57b98863a029b3d3ca661b319ca4793ac463574fbe48a763a38c9fc95b0a80dd",
+    "containsRequestFrame": true
+  },
+  "diskRuntimeChunk": "runtime-B1MYy2hy.js"
+}

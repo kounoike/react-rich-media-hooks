@@ -1,0 +1,158 @@
+{
+  "startedAt": "2026-10-07T03:21:59.402Z",
+  "source": "synthetic",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+  "inputConnected": false,
+  "status": "completed",
+  "rows": [
+    {
+      "mode": "library",
+      "trial": 1,
+      "measuredMs": 6000.799999982119,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.001340842048837,
+        "presentedFps": 30.001340842048837,
+        "wallWindowFps": 29.996000533351616,
+        "callbackGaps": 0,
+        "first": {
+          "now": 101110.6,
+          "presented": 34,
+          "mediaTime": 1.080994
+        },
+        "last": {
+          "now": 107077,
+          "presented": 213,
+          "mediaTime": 7.047546
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.001340842048837,
+        "presentedFps": 30.001340842048837,
+        "wallWindowFps": 29.996000533351616,
+        "callbackGaps": 0,
+        "first": {
+          "now": 101127.3,
+          "presented": 32,
+          "mediaTime": 1.032494
+        },
+        "last": {
+          "now": 107093.7,
+          "presented": 211,
+          "mediaTime": 6.998315
+        }
+      },
+      "outputToInputRatio": 1,
+      "drawCalls": 0,
+      "drawP95Ms": null,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "library",
+      "trial": 2,
+      "measuredMs": 6000.0999999940395,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.001340842048837,
+        "presentedFps": 30.001340842048837,
+        "wallWindowFps": 29.999500008362997,
+        "callbackGaps": 0,
+        "first": {
+          "now": 108177.1,
+          "presented": 34,
+          "mediaTime": 8.147448
+        },
+        "last": {
+          "now": 114143.5,
+          "presented": 213,
+          "mediaTime": 14.113932
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.999500008362997,
+        "callbackGaps": 0,
+        "first": {
+          "now": 108193.7,
+          "presented": 32,
+          "mediaTime": 1.032604
+        },
+        "last": {
+          "now": 114160.2,
+          "presented": 211,
+          "mediaTime": 6.9985
+        }
+      },
+      "outputToInputRatio": 0.9999832397552995,
+      "drawCalls": 0,
+      "drawP95Ms": null,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "library",
+      "trial": 3,
+      "measuredMs": 6000.799999982119,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.00033519927594,
+        "presentedFps": 30.00033519927594,
+        "wallWindowFps": 29.996000533351616,
+        "callbackGaps": 0,
+        "first": {
+          "now": 115243.5,
+          "presented": 34,
+          "mediaTime": 15.213869
+        },
+        "last": {
+          "now": 121210.1,
+          "presented": 213,
+          "mediaTime": 21.180518
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.996000533351616,
+        "callbackGaps": 0,
+        "first": {
+          "now": 115260.2,
+          "presented": 32,
+          "mediaTime": 1.032846
+        },
+        "last": {
+          "now": 121226.7,
+          "presented": 211,
+          "mediaTime": 6.998546
+        }
+      },
+      "outputToInputRatio": 1.0000167602447005,
+      "drawCalls": 0,
+      "drawP95Ms": null,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    }
+  ],
+  "tracksReleased": true,
+  "sourceSettings": {
+    "width": 1280,
+    "height": 720,
+    "frameRate": 30
+  },
+  "tracksObserved": 4,
+  "liveTracksAfterCleanup": 0
+}
