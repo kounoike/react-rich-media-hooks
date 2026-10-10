@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-09-25 10:53'
-updated_date: '2026-10-10 01:10'
+updated_date: '2026-10-10 01:24'
 labels: []
 dependencies:
   - TASK-1.11
@@ -45,6 +45,8 @@ modified_files:
   - tests/video-crop-reference-device.test.ts
   - docs/measurements/crop-acceptance-c922-a40114c-endpoint-reanalysis.json
   - docs/measurements/crop-benchmark-native-gc-endpoints-normal.json
+  - pnpm-workspace.yaml
+  - pnpm-lock.yaml
 parent_task_id: TASK-1
 priority: medium
 type: task
@@ -70,6 +72,10 @@ Close the measured verification gaps left by TASK-1.11 for the approved fixed ca
 
 <!-- SECTION:PLAN:BEGIN -->
 1. Replace whole-window FPS with presented-frame endpoint cadence, keep raw whole-window rates and the unchanged 30 fps threshold, and re-evaluate the saved physical report. 2. Provide a local controlled-GC launcher using an isolated Chrome profile and four CDP GC/heap boundaries; physical Start/Run remain user-operated. 3. Autofill available commit/host/controller details and save completed or partial reports locally without camera identifiers. 4. Verify math regressions, synthetic browser recovery, and the native Windows GC bridge without physical camera access. 5. Publish the prepared task work for review, document outstanding physical post-GC evidence and any strict-threshold misses, and keep the task In Progress until its remaining acceptance evidence is present.
+
+6. Resolve the newly observed CI development-audit blocker under the already approved TASK-1.22 immediate critical/high response policy, using only patched transitive resolutions within existing declared ranges; verify audit/license/signature and compatibility evidence without changing direct toolchain versions or adding an exception.
+
+7. The installed oxfmt 0.65.0 manifest pins tinypool exactly at 2.1.0, so an in-range resolution update alone is impossible. Retain the approved direct toolchain versions and scope a development-only override to oxfmt@0.65.0 > tinypool 2.1.2; pin source-map-js to its compatible security patch 1.2.2. Generate the lockfile with pnpm, record the constraint and advisory evidence, and retain manual review.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -158,6 +164,10 @@ Completed physical reference report (2026-10-07T22:37:37.021Z, commit a40114c3c0
 Implemented the authorized remaining preparation: FPS now uses delta presentedFrames over first-to-last callback timestamps, with the complete-window rate retained separately and processor input/draw endpoint windows recorded. The 30 fps threshold is unchanged and uses unrounded values. Offline replay through the same helper confirms all three saved C922 crop windows pass, while capture/pass trial 1 remains 29.753 fps and its strict failure is preserved. Added a dedicated local reference launcher with WSL-to-Windows Node forwarding, isolated Chrome profile/verified owned CDP endpoint, four GC/getHeapUsage observations around five effect and five camera cycles, automatic available environment/commit details, and local terminal-report saves. Physical camera Start/Run are manual; automatic/headless execution requires explicit synthetic mode. Current-page protocol handshake rejects an old served page. Windows Chrome 154.0.8037.98 / Node v26.7.0 completed a normal-window synthetic run with four GC observations, retained budget true, no errors and all 19 tracks ended; final short run also verified the packaged command and handshake. Stored the normal native report and offline physical reanalysis under docs/measurements. No physical camera was opened during preparation. pnpm verify passed format/lint, 21 unit tests, type/build/React 18.2 and 19.1.1 package consumers and lifecycle policy. Chromium benchmark eight-case run passed. Firefox long-window canvas-source fixture stalled with zero input/draw/output callbacks in timing collection; the configured native fake getUserMedia source completed the same normal-window test. The Firefox test now uses that input, and all fixture reports explicitly identify synthetic input. CDP-only GC and requestFrame-only throughput fixtures are capability-scoped; existing Firefox automatic fallback/lifecycle coverage stays active. Neither new fixture results nor replay implies controlled physical memory verification. Keep AC2/3 and task status open for the user-operated physical post-GC result and documented strict-budget outcome. No new product API, compatibility, distribution contract, dependency, accepted Decision, tolerance or shipped runtime change was introduced.
 
 Final targeted browser matrix: 21 Chromium/Firefox cases passed and 5 feature-specific Firefox cases were explicitly skipped (one CDP GC case and four requestFrame-based diagnostic fixtures); existing automatic crop fallback and cleanup cases passed in Firefox. Both normal-duration measurement cases completed after configuring native fake input for Firefox. No driver support or physical performance pass is inferred from those skips. All synthetic test inputs are marked synthetic in the report, including normal windows. README and the benchmark document now describe the dedicated controlled-GC user flow and automatic local report save.
+
+Current-head CI at 71b3743 passed Node 22/24 quality and Firefox smoke; supply-chain verify failed on GHSA-5gmw-xhrv-c9v3 and GHSA-85c8-ppgw-ccpr (oxfmt > tinypool 2.1.0; fixes 2.1.1 and 2.1.2) and GHSA-68fv-2mgg-jv7q (source-map-js 1.2.1; fix 1.2.2). These pre-existing dev-only resolutions were unchanged by benchmark work. Reviewed the accepted docs/supply-chain-maintenance.md policy: critical/high issues must be patched immediately and dependency changes stay manual-review/no-auto-merge. A bounded transitive patch update within existing ranges is required to unblock this task PR validation; no runtime/peer/direct toolchain version change or vulnerability exception is proposed.
+
+Resolved the observed CI gate using the approved immediate critical/high response policy. oxfmt 0.65.0 pins tinypool exactly at 2.1.0; an in-range lock update cannot patch it. Scoped pnpm override oxfmt@0.65.0>tinypool=2.1.2 and source-map-js=1.2.2 preserves direct toolchain versions and fixes GHSA-5gmw-xhrv-c9v3, GHSA-85c8-ppgw-ccpr and GHSA-68fv-2mgg-jv7q. pnpm 11 explicitly ignored package.json pnpm.overrides, so that temporary field was removed and the settings use pnpm-workspace.yaml with only the root package included. pnpm generated the lockfile; the diff changes only these two resolved packages plus override metadata. Frozen ignore-scripts install passed, both production/development audits report no known vulnerabilities, supply-chain policy/license checks passed for 13 direct dependencies and 224 integrity resolutions, and 224 registry signatures verified. No vulnerability exception, direct version, runtime import, React peer range or public API was changed. Keep dependency changes in manual review and remove scoped overrides when future upstream constraints safely resolve fixes.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
@@ -170,4 +180,6 @@ Follow-up: reproduced and repaired a latency frame-callback exception path that 
 Physical follow-up at a40114c completed with verified fixed-module fingerprint, three complete profile trials, processing p95 16.8/17.7/18.8 ms, first usable frame 105.684 ms, five successful effect and camera cycles, and all 19 tracks released. AC1 is now checked. Crop input/draw/output counts match; derived steady crop presentation cadence is approximately 30.00 fps in all three trials. Preserve the original false strict-FPS flags and distinguish whole-window rate from endpoint cadence. Controlled physical retained-heap evidence and formal FPS interpretation remain outstanding; AC2/3 remain open and the task stays In Progress.
 
 Remaining preparation is implemented: endpoint FPS calculation and replay, unchanged strict 30 fps comparisons, a WSL/Windows dedicated Chrome launcher with four controlled post-GC heap observations and manual physical Start/Run, automatic available environment/commit metadata, local report save and old-page protocol rejection. pnpm verify passed with 21 unit tests; 21 targeted Chromium/Firefox cases passed with 5 explicit capability skips, and native Windows synthetic normal/short GC runs completed with all 19 tracks ended. The existing Draft PR is updated for review. Physical post-GC evidence and final strict-budget/fallback conclusions remain pending; keep In Progress and AC2/3 open. Agent improvement PR: none; this is assigned product benchmark/verification work.
+
+Current-head CI revealed three pre-existing high/critical development advisories. Resolved under the approved immediate-response policy with pnpm-generated lockfile updates and narrowly scoped pnpm 11 configuration: formatter-parent tinypool 2.1.2 and source-map-js 1.2.2. Direct toolchain/peer/runtime versions are unchanged; no audit exception. Frozen install, production/development audits, license/integrity policy, 224 registry signatures, and pnpm verify with 21 tests passed after the patches. Dependency changes remain in manual review; the physical post-GC acceptance evidence is still pending.
 <!-- SECTION:FINAL_SUMMARY:END -->

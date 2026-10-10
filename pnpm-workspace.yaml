@@ -1,0 +1,5 @@
+# Root package only; pnpm 11 resolution settings live in this file.
+# Development security patches: retain the reviewed direct toolchain versions.
+overrides:
+  'oxfmt@0.65.0>tinypool': 2.1.2
+  source-map-js: 1.2.2
