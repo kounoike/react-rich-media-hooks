@@ -26,6 +26,54 @@ The adopted TASK-1.6/doc-6 targets are:
 
 ## User-operated physical reference-device flow
 
+For controlled retained-memory evidence, run the local server in the task checkout,
+then start a dedicated reference browser from another terminal:
+
+```sh
+pnpm run video-crop:benchmark
+pnpm run video-crop:reference
+```
+
+The launcher defaults to the server on port 4173. For the existing TASK-1.25
+server on port 4174, use:
+
+```sh
+pnpm run video-crop:reference -- --url http://localhost:4174/tests/browser/video-crop-benchmark.html
+```
+
+On WSL it uses the installed Windows Node and Chrome. The launcher requires Node
+22 or newer and creates one isolated browser profile; it verifies the debug
+endpoint belongs to that profile and closes only that browser. The installed
+Windows Node version is recorded. No new packages or browser installation are
+required. An incompatible/older page is rejected before measurement.
+
+In the dedicated window, confirm the reference-camera checkbox, select
+**Start camera**, allow camera access, then select **Run measurements**. Commit
+SHA, available OS/CPU information, controller runtime, and repository package
+manager declaration are filled automatically. The actual camera label/settings
+are recorded after Start. The user controls physical camera operation; the
+launcher never clicks either button in its default mode.
+
+At the four existing heap boundaries (before/after five effect cycles and
+before/after five camera restart cycles), the launcher calls
+[CDP HeapProfiler.collectGarbage](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#method-collectGarbage)
+and then [Runtime.getHeapUsage](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getHeapUsage).
+These calls occur after the FPS/latency profiles, not during their measurement
+windows. The JSON identifies the controlled method and collection count.
+The budget remains the larger of 10% of baseline or 5 MiB for each cycle window.
+The measured heap belongs to the page renderer, not the Node controller.
+
+Completed, stopped, and failed reports are saved locally under
+`.artifacts/reference-device/` in this checkout. The page still offers its JSON
+download. Close the dedicated window when finished; its temporary profile is
+removed after the owned browser connection has closed. Existing browser
+windows/profiles are untouched. Opening the page directly without this launcher
+continues to report retained heap as unknown. Synthetic automation is available
+only with explicit `--synthetic --headless --autorun`; headless/automatic physical
+camera runs are rejected.
+
+The direct-page flow below remains available for FPS/latency/lifecycle checks:
+
 From the repository root, start the local page with:
 
 ```sh
@@ -513,3 +561,43 @@ meet the raw growth thresholds but cannot prove retained-memory compliance;
 `retainedHeapGrowthWithinBudget` remains null. Strict FPS interpretation and
 controlled physical post-GC retention remain open. No further physical camera
 access or code changes were made to review this report.
+
+## Endpoint FPS and controlled-GC preparation
+
+The page now reports steady cadence as the advance in `presentedFrames` divided
+by the first-to-last callback timestamp interval. It records
+`frameRateMethod=presented-frame-callback-endpoints` and keeps the original
+complete-window rate separately as `wallWindowFrameRateFps`. Processor input
+uses the same endpoint method; draw calls use first-to-last draw timestamps.
+The raw endpoints are retained for replay. Missing/reset endpoints stay unknown
+and fail collection rather than producing a fabricated rate. The minimum stays
+30 fps and verdicts use unrounded values; no acceptance tolerance was added.
+
+The [offline re-evaluation](measurements/crop-acceptance-c922-a40114c-endpoint-reanalysis.json)
+uses the same helper as the page on the saved physical report. All three crop
+rates meet the unchanged threshold. Capture and pass-through trial 1 still
+presented at 29.753 fps, so their strict checks remain failed; this is recorded
+separately from the camera media timeline near 30 fps. The original report is
+preserved and no extra physical run was used to calculate these rates.
+
+The [native controlled-GC synthetic report](measurements/crop-benchmark-native-gc-endpoints-normal.json)
+completed normal measurement windows on Windows Chrome 154.0.8037.98 with Node
+v26.7.0, four GC observations, successful effect/camera cycles, retained-heap
+checks within budget, and all 19 tracks ended. Input was an animated canvas,
+not a physical camera. Its zero SHA is a fixture value and the tested benchmark
+was the working copy; it proves the launcher/protocol, not device acceptance.
+A final shortened native rerun also verified the explicit collector-version
+handshake, npm-script argument forwarding, and local report save.
+
+Firefox long-window testing with the canvas-generated input stalled during the
+timing phase. Replacing that fixture with Firefox's configured native fake
+`getUserMedia` source completed the same normal windows with sufficient matched
+tokens, without changing the shipped processor. The normal Firefox test now
+uses that input; all fixture reports are marked synthetic. This is not a
+physical Firefox performance claim. CDP GC is Chromium-only; throughput fixtures
+requiring `requestFrame` are capability-gated, while existing Firefox automatic
+fallback and lifecycle coverage remain active.
+
+Physical post-GC memory evidence remains pending user operation. The task and
+Draft PR stay in manual review; neither a synthetic pass nor a metadata-only
+reanalysis completes the remaining acceptance criteria.

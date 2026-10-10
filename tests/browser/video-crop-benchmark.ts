@@ -1,3 +1,8 @@
+import {
+  endpointFrameRate,
+  callbackEndpointRate,
+  type FrameEndpoint,
+} from "./video-crop-benchmark-metrics.js";
 import type { MediaSession, OperationResult, VideoEffectConfig } from "../../src/core/index.js";
 import type { CropOptions } from "../../src/effects/video/index.js";
 
@@ -78,6 +83,8 @@ interface StageMetric {
   readonly measuredMs: number;
   readonly frames: number;
   readonly frameRateFps: number;
+  readonly frameRateMethod: "presented-frame-callback-endpoints";
+  readonly wallWindowFrameRateFps: number;
   readonly presentedFrameGaps: number;
   readonly presentedFrameGapPercent: number;
   readonly sourceToPreviewP50Ms: number | null;
@@ -94,6 +101,12 @@ interface StageMetric {
   };
   readonly staleMarkerSamples: number;
   readonly processorInputVideoFrameCallbacks: number | null;
+  readonly pipelineFrameWindows: {
+    readonly inputFirst: FrameEndpoint | null;
+    readonly inputLast: FrameEndpoint | null;
+    readonly firstDrawAtMs: number | null;
+    readonly lastDrawAtMs: number | null;
+  } | null;
   readonly processorInputVideoFrameRateFps: number | null;
   readonly processorInputPresentedFrameGaps: number | null;
   readonly processorInputVideoConnected: boolean | null;
@@ -189,6 +202,9 @@ declare global {
     videoCropBenchmarkRecord?: BenchmarkRecord;
     /** Automation hook: collect garbage and return the isolated renderer's used heap. */
     videoCropBenchmarkCollectGarbage?: () => Promise<number>;
+    videoCropBenchmarkHeapController?: Record<string, unknown>;
+    videoCropBenchmarkSyntheticInput?: boolean;
+    videoCropBenchmarkProtocolVersion?: string;
   }
 }
 
@@ -277,8 +293,11 @@ interface VerdictCheck {
 const verdictLabel = (state: VerdictState): string =>
   ({ ok: "OK", ng: "NG", pending: "未完了", excluded: "対象外" })[state];
 
+const isSyntheticRecord = (record: BenchmarkRecord): boolean =>
+  typeof record.browser.toolMode === "string" && record.browser.toolMode.startsWith("synthetic ");
+
 const cameraSourceCheck = (record: BenchmarkRecord): VerdictCheck => {
-  if (record.browser.toolMode === "synthetic Playwright timing") {
+  if (isSyntheticRecord(record)) {
     return {
       label: "実機と入力解像度",
       detail: "疑似カメラ入力です。実機結果には使えません。",
@@ -333,7 +352,7 @@ const averageFrameRate = (stages: readonly StageMetric[]): string =>
       )} fps`;
 
 const runCoverageCheck = (record: BenchmarkRecord): VerdictCheck => {
-  if (record.browser.toolMode === "synthetic Playwright timing") {
+  if (isSyntheticRecord(record)) {
     return {
       label: "3モード×3回と反復操作",
       detail: "疑似入力の自動試験結果であり、実機の受け入れ判定には含めません。",
@@ -379,7 +398,7 @@ const runCoverageCheck = (record: BenchmarkRecord): VerdictCheck => {
 };
 
 const performanceCheck = (record: BenchmarkRecord): VerdictCheck => {
-  if (record.browser.toolMode === "synthetic Playwright timing") {
+  if (isSyntheticRecord(record)) {
     return {
       label: "計測予算",
       detail: "合成入力の数値は参考表示のみで、実機判定には使いません。",
@@ -435,7 +454,7 @@ const performanceCheck = (record: BenchmarkRecord): VerdictCheck => {
 };
 
 const cleanupCheck = (record: BenchmarkRecord): VerdictCheck => {
-  if (record.browser.toolMode === "synthetic Playwright timing") {
+  if (isSyntheticRecord(record)) {
     return {
       label: "トラック解放",
       detail: "合成入力テストでは解放確認済みですが、実機判定には含めません。",
@@ -497,7 +516,8 @@ const renderTrialResults = (record: BenchmarkRecord): void => {
     runCell.textContent = String(stage.run);
     row.append(runCell);
     const fpsCell = document.createElement("td");
-    fpsCell.textContent = formatMetric(stage.frameRateFps, "fps");
+    fpsCell.textContent = `${stage.frameRateFps.toFixed(3)} fps`;
+    fpsCell.title = `Unrounded endpoint FPS: ${stage.frameRateFps}; whole-window FPS: ${stage.wallWindowFrameRateFps}`;
     fpsCell.dataset.state = stateForMetric(stage.budgetChecks.frameRateAtLeast30);
     row.append(fpsCell);
     const gapsCell = document.createElement("td");
@@ -560,7 +580,7 @@ const renderVerdict = (record: BenchmarkRecord): void => {
     performanceCheck(record),
     cleanupCheck(record),
   ];
-  const isSynthetic = record.browser.toolMode === "synthetic Playwright timing";
+  const isSynthetic = isSyntheticRecord(record);
   const hasFailure = checks.some((check) => check.state === "ng") || record.status === "failed";
   const isReady = checks.every((check) => check.state === "ok" || check.state === "excluded");
   const overallState: VerdictState = isSynthetic
@@ -601,6 +621,8 @@ const showRecord = (record: BenchmarkRecord): void => {
   resultsElement.textContent = JSON.stringify(record, null, 2);
   renderVerdict(record);
   downloadButton.disabled = false;
+  if (record.status !== "running")
+    window.dispatchEvent(new CustomEvent("video-crop-benchmark-result", { detail: record.status }));
 };
 
 const abortError = (): Error => {
@@ -754,11 +776,20 @@ const getBrowserMetadata = async (): Promise<Record<string, unknown>> => {
     libraryPackageVersion: packageVersion,
     consumerRuntime: "direct browser page; no React application is mounted",
     nodeAndPackageManager: runtimeInput.value.trim(),
-    toolMode: TEST_MODE ? "synthetic Playwright timing" : "local reference-device page",
+    toolMode:
+      window.videoCropBenchmarkHeapController?.input === "synthetic"
+        ? "synthetic native reference launcher"
+        : TEST_MODE || window.videoCropBenchmarkSyntheticInput === true
+          ? "synthetic Playwright timing"
+          : "local reference-device page",
+    benchmarkWindowMode: TEST_MODE ? "shortened protocol test" : "normal measurement windows",
     latencyFixture: "processor-sideband-id-v1; 24x16 output patch in a separate timing window",
     latencyMeasurementDomain: "processor input callback to matching output preview callback",
     latencySamplingHz: TEST_MODE ? "every delivered frame" : 5,
     domComparisonEnabled: RUN_DOM_COMPARISON,
+    frameRateMethod: "presented-frame-callback-endpoints",
+    benchmarkProtocol: "endpoint-gc-v1",
+    heapController: window.videoCropBenchmarkHeapController ?? null,
     hardwareConcurrency: navigator.hardwareConcurrency,
     devicePixelRatio: window.devicePixelRatio,
     viewport: { width: window.innerWidth, height: window.innerHeight },
@@ -840,6 +871,10 @@ interface PipelineCounters {
   cropDrawImageFailures: number;
   cropDrawImageDurationsMs: number[];
   cropCallbackDurationsMs: number[];
+  firstInputFrame: FrameEndpoint | null;
+  lastInputFrame: FrameEndpoint | null;
+  firstDrawAtMs: number | null;
+  lastDrawAtMs: number | null;
 }
 
 interface PipelineInstrumentation {
@@ -883,6 +918,11 @@ const installPipelineInstrumentation = (): PipelineInstrumentation => {
               }
 
               counters.processorInputVideoFrameCallbacks += 1;
+              counters.lastInputFrame = {
+                callbackAtMs: now,
+                presentedFrames: metadata.presentedFrames,
+              };
+              counters.firstInputFrame ??= counters.lastInputFrame;
               counters.processorInputVideoConnected ??= this.isConnected;
               if (
                 counters.previousPresentedFrames !== null &&
@@ -926,6 +966,10 @@ const installPipelineInstrumentation = (): PipelineInstrumentation => {
 
     if (counters !== null) counters.cropDrawImageCalls += 1;
     const drawStartedAt = performance.now();
+    if (counters !== null) {
+      counters.firstDrawAtMs ??= drawStartedAt;
+      counters.lastDrawAtMs = drawStartedAt;
+    }
     try {
       Reflect.apply(originalDrawImage, this, [source, ...args]);
       paintTimingToken(this, processorCallbackStartedAt ?? drawStartedAt);
@@ -1016,6 +1060,10 @@ const collectStage = async (
         cropDrawImageFailures: 0,
         cropDrawImageDurationsMs: [],
         cropCallbackDurationsMs: [],
+        firstInputFrame: null,
+        lastInputFrame: null,
+        firstDrawAtMs: null,
+        lastDrawAtMs: null,
       }
     : null;
   activePipelineCounters = pipelineCounters;
@@ -1086,14 +1134,23 @@ const collectStage = async (
     if (activePipelineCounters === pipelineCounters) activePipelineCounters = null;
   }
 
+  const frameRateFps = endpointFrameRate(firstFrame, lastFrame);
+  if (frameRateFps === null)
+    throw new Error(`${stage.label}: insufficient valid frame endpoints; FPS remains unknown.`);
   const totalObserved = frames + presentedFrameGaps;
   const processorStatus = activeSession.getSnapshot().processors.video.status;
   const processorInputFrameRateFps =
     pipelineCounters === null
       ? null
-      : (pipelineCounters.processorInputVideoFrameCallbacks * 1000) / measuredMs;
+      : endpointFrameRate(pipelineCounters.firstInputFrame, pipelineCounters.lastInputFrame);
   const cropDrawImageRateFps =
-    pipelineCounters === null ? null : (pipelineCounters.cropDrawImageCalls * 1000) / measuredMs;
+    pipelineCounters === null
+      ? null
+      : callbackEndpointRate(
+          pipelineCounters.firstDrawAtMs,
+          pipelineCounters.lastDrawAtMs,
+          pipelineCounters.cropDrawImageCalls,
+        );
   return {
     run: stage.run,
     profile: stage.profile,
@@ -1104,7 +1161,9 @@ const collectStage = async (
     warmupMs: stage.warmupMs,
     measuredMs,
     frames,
-    frameRateFps: (frames * 1000) / measuredMs,
+    frameRateFps,
+    frameRateMethod: "presented-frame-callback-endpoints",
+    wallWindowFrameRateFps: (frames * 1000) / measuredMs,
     presentedFrameGaps,
     presentedFrameGapPercent: totalObserved === 0 ? 0 : (presentedFrameGaps / totalObserved) * 100,
     sourceToPreviewP50Ms: quantile(latencySamples, 0.5),
@@ -1121,6 +1180,15 @@ const collectStage = async (
     },
     staleMarkerSamples,
     processorInputVideoFrameCallbacks: pipelineCounters?.processorInputVideoFrameCallbacks ?? null,
+    pipelineFrameWindows:
+      pipelineCounters === null
+        ? null
+        : {
+            inputFirst: pipelineCounters.firstInputFrame,
+            inputLast: pipelineCounters.lastInputFrame,
+            firstDrawAtMs: pipelineCounters.firstDrawAtMs,
+            lastDrawAtMs: pipelineCounters.lastDrawAtMs,
+          },
     processorInputVideoFrameRateFps: processorInputFrameRateFps,
     processorInputPresentedFrameGaps: pipelineCounters?.processorInputPresentedFrameGaps ?? null,
     processorInputVideoConnected: pipelineCounters?.processorInputVideoConnected ?? null,
@@ -1134,7 +1202,7 @@ const collectStage = async (
     latencyMethod: "processor-sideband-id-v1",
     cropSetupMs: stage.cropSetupMs,
     budgetChecks: {
-      frameRateAtLeast30: (frames * 1000) / measuredMs >= 30,
+      frameRateAtLeast30: frameRateFps >= 30,
       presentedFrameGapAtMost1Percent:
         totalObserved === 0 || presentedFrameGaps / totalObserved <= 0.01,
       sourceToPreviewP95AtMost50Ms:
@@ -1192,6 +1260,12 @@ const updateRecord = (): void => {
   const captureFpsByRun = new Map(captures.map((stage) => [stage.run, stage.frameRateFps]));
   const cropFpsByRun = new Map(crops.map((stage) => [stage.run, stage.frameRateFps]));
   record.summary = {
+    frameRateMethod: "presented-frame-callback-endpoints",
+    originalWallWindowFrameRateFps: record.stages.map((stage) => ({
+      run: stage.run,
+      profile: stage.profile,
+      fps: stage.wallWindowFrameRateFps,
+    })),
     captureOnlyFrameRateFps: captures.map((stage) => stage.frameRateFps),
     passThroughFrameRateFps: passThrough.map((stage) => stage.frameRateFps),
     fixedCropFrameRateFps: crops.map((stage) => stage.frameRateFps),
@@ -1896,8 +1970,8 @@ const startCamera = async (): Promise<void> => {
       settings,
       cameraLabel: label,
       mediaTrackState: inputTrack?.readyState ?? "unavailable",
-      physicalDeviceResult: TEST_MODE
-        ? "synthetic Playwright input; physical device not confirmed"
+      physicalDeviceResult: isSyntheticRecord(record)
+        ? "synthetic input; physical device not confirmed"
         : physicalCameraInput.checked
           ? "user-confirmed physical reference camera"
           : "physical reference camera not confirmed",
@@ -2077,3 +2151,5 @@ startButton.addEventListener("click", () => void startCamera());
 runButton.addEventListener("click", () => void runMeasurements());
 stopButton.addEventListener("click", () => void stopCamera());
 downloadButton.addEventListener("click", downloadResults);
+
+window.videoCropBenchmarkProtocolVersion = "endpoint-gc-v1";

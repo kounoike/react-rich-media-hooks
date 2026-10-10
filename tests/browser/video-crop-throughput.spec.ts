@@ -1,5 +1,22 @@
 import { expect, test } from "@playwright/test";
 
+test.beforeEach(async ({ page }) => {
+  const supported = await page.evaluate(() => {
+    const canvas = document.createElement("canvas");
+    if (typeof canvas.captureStream !== "function") return false;
+    const stream = canvas.captureStream(0);
+    try {
+      return typeof Reflect.get(stream.getVideoTracks()[0] ?? {}, "requestFrame") === "function";
+    } finally {
+      for (const track of stream.getTracks()) track.stop();
+    }
+  });
+  test.skip(
+    !supported,
+    "This synthetic throughput fixture requires canvas requestFrame; automatic fallback remains covered by video-crop.spec.ts.",
+  );
+});
+
 test("compares native crop and frame-request control without camera access", async ({
   page,
 }, testInfo) => {

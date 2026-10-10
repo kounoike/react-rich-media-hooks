@@ -14,6 +14,7 @@ const installSyntheticCamera = async (page: Page): Promise<void> => {
     const cleanups: Array<() => void> = [];
     const harness = { captureRequests: 0, cleanups };
     window.manualBenchmarkHarness = harness;
+    window.videoCropBenchmarkSyntheticInput = true;
     Object.defineProperty(navigator.mediaDevices, "getUserMedia", {
       configurable: true,
       value: async (): Promise<MediaStream> => {
@@ -75,6 +76,23 @@ test("physical crop benchmark requests only after start and exports synthetic li
   expect(countFor("pass-through")).toBe(3);
   expect(countFor("fixed-crop")).toBe(3);
   expect(result.stages.every((stage) => stage.frames > 0)).toBe(true);
+  for (const stage of result.stages) {
+    const { first, last } = stage.frameWindow;
+    if (
+      first === null ||
+      last === null ||
+      first.presentedFrames === null ||
+      last.presentedFrames === null
+    )
+      throw new Error("Missing frame endpoints.");
+    expect(stage.frameRateMethod).toBe("presented-frame-callback-endpoints");
+    expect(stage.frameRateFps).toBeCloseTo(
+      ((last.presentedFrames - first.presentedFrames) * 1000) /
+        (last.callbackAtMs - first.callbackAtMs),
+      8,
+    );
+    expect(stage.wallWindowFrameRateFps).toBeCloseTo((stage.frames * 1000) / stage.measuredMs, 8);
+  }
   expect(result.stages.some((stage) => stage.sourceToPreviewP95Ms !== null)).toBe(true);
   expect(result.effectCycles).toHaveLength(5);
   expect(result.sessionCycles).toHaveLength(5);
@@ -211,7 +229,12 @@ test("a cached stale core entry cannot override the fresh benchmark build", asyn
 
 test("retained heap is judged only at controlled post-GC boundaries", async ({
   page,
+  browserName,
 }, testInfo) => {
+  test.skip(
+    browserName !== "chromium",
+    "Controlled GC uses Chrome DevTools Protocol; other engines retain an unknown heap verdict.",
+  );
   test.setTimeout(60000);
   const cdp = await page.context().newCDPSession(page);
   let collections = 0;
@@ -330,18 +353,27 @@ test("missing latency callbacks preserve FPS and export pipeline diagnostics", a
 
 test("normal-duration timing windows collect enough matched samples without camera access", async ({
   page,
+  browserName,
 }, testInfo) => {
   test.setTimeout(120000);
-  await installSyntheticCamera(page);
+  if (browserName === "firefox") {
+    // The project enforces media.navigator.streams.fake; no physical device is opened.
+    // Native fake input avoids the observed long-window canvas-to-canvas source stall.
+    await page.addInitScript(() => {
+      window.videoCropBenchmarkSyntheticInput = true;
+    });
+  } else await installSyntheticCamera(page);
   await page.goto("/tests/browser/video-crop-benchmark.html");
   await fillReferenceDetails(page);
-  // Input remains the isolated synthetic canvas; this checkbox only opens the normal UI path.
+  // Input remains synthetic; this checkbox only exercises the normal UI path.
   await page.locator("#physical-camera-confirm").check();
   await page.getByRole("button", { name: "Start camera" }).click();
   await expect(page.locator("#status")).toContainText("Camera is active");
   await page.getByRole("button", { name: "Run measurements" }).click();
   await expect(page.locator("#status")).toContainText("Measurements complete", { timeout: 110000 });
   const result = await page.evaluate(() => window.videoCropBenchmarkRecord);
+  expect(result?.browser.toolMode).toBe("synthetic Playwright timing");
+  expect(result?.camera?.physicalDeviceResult).toContain("synthetic");
   expect(result?.stages).toHaveLength(9);
   for (const stage of result?.stages ?? []) {
     expect(stage.frameWindow.first).not.toBeNull();

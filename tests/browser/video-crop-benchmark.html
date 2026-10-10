@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="video-crop-benchmark-protocol" content="endpoint-gc-v1" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
@@ -19,7 +20,7 @@
         <p>
           Run the approved 1280×720 at 30 fps capture-only, pass-through, and fixed-crop
           measurements on a reference camera, followed by separate processing-latency and lifecycle checks.
-          Results stay in this browser until you download them.
+          Results stay local. The dedicated GC launcher also saves the JSON in the task worktree.
         </p>
       </header>
 
@@ -86,6 +87,7 @@
           必須データが不足している場合は未完了、疑似入力の場合は実機判定対象外になります。
           カメラが一度も送出しなかったフレーム数はブラウザから取得できないため、この判定には含まれません。
           遅延はFPSとは別の測定窓で、入力callbackと出力の時刻パターンが一致した標本だけを採用します。
+          FPSは最初と最後のフレーム時刻から計算し、開始待ちを含む窓全体のFPSはJSONに別記します。30fps判定は丸め前の値で行います。
           crop の入力 callback、drawImage、出力 preview は同じ測定窓で数えます。入力の presented-frame gap もカメラ未送出フレーム数ではありません。
         </p>
       </section>
@@ -179,6 +181,7 @@
         </p>
       </section>
 
+      <p id="heap-controller-status">GC未接続 — GC後の保持メモリを測るには、専用の計測ウィンドウを起動してください。</p>
       <section class="media-layout" aria-label="Camera preview and latency marker">
         <figure class="panel preview-panel">
           <video id="preview" autoplay muted playsinline aria-label="Camera output preview"></video>
