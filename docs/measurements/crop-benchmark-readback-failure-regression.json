@@ -1,0 +1,69 @@
+{
+  "scope": "Injected timing pixel-readback failure on isolated synthetic input; reproduces a collector defect, not proof of the physical timeout cause",
+  "baselineCommit": "5a849dbd8dbcfc322e3dc42a548a4b71bb4427a5",
+  "after": "Working-copy collector repair after that commit",
+  "before": {
+    "status": "failed",
+    "profilesRecorded": [
+      "capture-only",
+      "pass-through"
+    ],
+    "issues": [
+      "Automated synthetic-input timing mode; not physical-device evidence.",
+      "No complete processing-latency measurement was collected."
+    ],
+    "unhandledPageErrors": [
+      "Injected timing-readback failure"
+    ],
+    "cropFrames": null,
+    "latencyDiagnostics": null,
+    "cleanup": null
+  },
+  "afterResult": {
+    "status": "failed",
+    "profilesRecorded": [
+      "capture-only",
+      "pass-through",
+      "fixed-crop"
+    ],
+    "issues": [
+      "Automated synthetic-input timing mode; not physical-device evidence.",
+      "Trial 1 of 3: processing-latency sampling failed: Error: Injected timing-readback failure"
+    ],
+    "unhandledPageErrors": [],
+    "cropFrames": 7,
+    "latencyDiagnostics": {
+      "status": "failed",
+      "measuredMs": 48.400000005960464,
+      "previewCallbacks": 1,
+      "inputCallbacks": 1,
+      "cropDrawCalls": 1,
+      "readbackAttempts": 1,
+      "matchedSamples": 0,
+      "rejectedSamples": 0,
+      "error": "Trial 1 of 3: processing-latency sampling failed: Error: Injected timing-readback failure",
+      "documentVisibility": "visible",
+      "documentHasFocus": true,
+      "processorStatus": "active",
+      "outputTrackState": "live",
+      "preview": {
+        "readyState": 4,
+        "paused": false,
+        "currentTime": 0.397323
+      },
+      "processorInput": {
+        "connected": false,
+        "readyState": 4,
+        "paused": false,
+        "currentTime": 1.320173
+      }
+    },
+    "cleanup": {
+      "cameraStopped": true,
+      "tracksObserved": 2,
+      "liveTracksAfterStop": 0,
+      "effectCyclesCompleted": 0,
+      "sessionCyclesCompleted": 0
+    }
+  }
+}

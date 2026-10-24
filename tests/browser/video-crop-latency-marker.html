@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Video crop latency marker</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: #080d12;
+        color: #eef4fb;
+      }
+
+      body {
+        display: grid;
+        min-height: 100vh;
+        margin: 0;
+        place-items: center;
+      }
+
+      main {
+        display: grid;
+        justify-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      canvas {
+        width: min(80vmin, 32rem);
+        aspect-ratio: 1;
+        border: 0.6rem solid #ffffff;
+        border-radius: 0.35rem;
+        background: #000000;
+        image-rendering: pixelated;
+      }
+
+      p {
+        max-width: 38rem;
+        margin: 0;
+        color: #b7c7d7;
+      }
+    </style>
+    <script type="module" src="/tests/browser/video-crop-latency-marker.ts"></script>
+  </head>
+  <body>
+    <main>
+      <canvas id="latency-marker" width="4" height="4" aria-label="Animated optical latency marker"></canvas>
+      <p>Center this marker in the reference camera view. This page does not request camera access.</p>
+      <p id="sync-status">Waiting for the local benchmark page.</p>
+    </main>
+  </body>
+</html>

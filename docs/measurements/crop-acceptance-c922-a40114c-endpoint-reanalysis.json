@@ -1,0 +1,66 @@
+{
+  "scope": "Offline re-evaluation of saved user-operated physical evidence; original report and flags preserved",
+  "source": "docs/measurements/crop-acceptance-c922-a40114c-summary.json",
+  "commitSha": "a40114c3c08100f146199e6a1e30d01654d2764a",
+  "frameRateMethod": "presented-frame-callback-endpoints",
+  "unchangedMinimumFps": 30,
+  "stages": [
+    {
+      "profile": "capture-only",
+      "run": 1,
+      "originalWallWindowFps": 29.93424281069936,
+      "endpointFps": 29.753049687592945
+    },
+    {
+      "profile": "pass-through",
+      "run": 1,
+      "originalWallWindowFps": 29.894633668218574,
+      "endpointFps": 29.7531087039744
+    },
+    {
+      "profile": "fixed-crop",
+      "run": 1,
+      "originalWallWindowFps": 30.14876686627742,
+      "endpointFps": 30
+    },
+    {
+      "profile": "capture-only",
+      "run": 2,
+      "originalWallWindowFps": 30.193535613344586,
+      "endpointFps": 30.0010800388814
+    },
+    {
+      "profile": "pass-through",
+      "run": 2,
+      "originalWallWindowFps": 30.635438284235,
+      "endpointFps": 30.254424833625404
+    },
+    {
+      "profile": "fixed-crop",
+      "run": 2,
+      "originalWallWindowFps": 29.657456378911952,
+      "endpointFps": 30.00049831336173
+    },
+    {
+      "profile": "capture-only",
+      "run": 3,
+      "originalWallWindowFps": 29.982010793702486,
+      "endpointFps": 30.002023865338717
+    },
+    {
+      "profile": "pass-through",
+      "run": 3,
+      "originalWallWindowFps": 29.986506072178152,
+      "endpointFps": 30.000376275905836
+    },
+    {
+      "profile": "fixed-crop",
+      "run": 3,
+      "originalWallWindowFps": 29.8879202988792,
+      "endpointFps": 30.001505160258898
+    }
+  ],
+  "captureAllAtLeast30": false,
+  "cropAllAtLeast30": true,
+  "retainedHeapGrowthWithinBudget": null
+}

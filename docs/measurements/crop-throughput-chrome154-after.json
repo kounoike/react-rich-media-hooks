@@ -1,0 +1,579 @@
+{
+  "startedAt": "2026-10-07T02:54:25.444Z",
+  "source": "synthetic",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+  "inputConnected": false,
+  "status": "completed",
+  "rows": [
+    {
+      "mode": "direct",
+      "trial": 1,
+      "measuredMs": 6000.0999999940395,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.999500008362997,
+        "callbackGaps": 0,
+        "first": {
+          "now": 33654.7,
+          "presented": 32,
+          "mediaTime": 1.016236
+        },
+        "last": {
+          "now": 39621.2,
+          "presented": 211,
+          "mediaTime": 6.982699
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.999500008362997,
+        "callbackGaps": 0,
+        "first": {
+          "now": 33654.7,
+          "presented": 31,
+          "mediaTime": 1.016236
+        },
+        "last": {
+          "now": 39621.2,
+          "presented": 210,
+          "mediaTime": 6.982699
+        }
+      },
+      "outputToInputRatio": 1,
+      "drawCalls": 0,
+      "drawP95Ms": null,
+      "outputSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "library",
+      "trial": 1,
+      "measuredMs": 6000.5999999940395,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.9970002999998,
+        "callbackGaps": 0,
+        "first": {
+          "now": 40721.1,
+          "presented": 35,
+          "mediaTime": 8.082758
+        },
+        "last": {
+          "now": 46687.6,
+          "presented": 214,
+          "mediaTime": 14.049203
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.001340842048837,
+        "presentedFps": 30.001340842048837,
+        "wallWindowFps": 29.9970002999998,
+        "callbackGaps": 0,
+        "first": {
+          "now": 40737.8,
+          "presented": 32,
+          "mediaTime": 1.032276
+        },
+        "last": {
+          "now": 46704.2,
+          "presented": 211,
+          "mediaTime": 6.998121
+        }
+      },
+      "outputToInputRatio": 1.0000167605256112,
+      "drawCalls": 0,
+      "drawP95Ms": null,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "timer",
+      "trial": 1,
+      "measuredMs": 6000.300000011921,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.001340842048837,
+        "presentedFps": 30.001340842048837,
+        "wallWindowFps": 29.99850007493665,
+        "callbackGaps": 0,
+        "first": {
+          "now": 47754.3,
+          "presented": 32,
+          "mediaTime": 15.11586
+        },
+        "last": {
+          "now": 53720.7,
+          "presented": 211,
+          "mediaTime": 21.08249
+        }
+      },
+      "output": {
+        "callbacks": 158,
+        "callbackFps": 26.313584178329002,
+        "presentedFps": 26.313584178329002,
+        "wallWindowFps": 26.332016732444394,
+        "callbackGaps": 0,
+        "first": {
+          "now": 47770.9,
+          "presented": 28,
+          "mediaTime": 1.029661
+        },
+        "last": {
+          "now": 53737.4,
+          "presented": 185,
+          "mediaTime": 6.995594
+        }
+      },
+      "outputToInputRatio": 0.8770802717406816,
+      "drawCalls": 180,
+      "drawP95Ms": 0.30000001192092896,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "request",
+      "trial": 1,
+      "measuredMs": 6000.0999999940395,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.999500008362997,
+        "callbackGaps": 0,
+        "first": {
+          "now": 54787.4,
+          "presented": 33,
+          "mediaTime": 22.149041
+        },
+        "last": {
+          "now": 60753.9,
+          "presented": 212,
+          "mediaTime": 28.11538
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.999500008362997,
+        "callbackGaps": 0,
+        "first": {
+          "now": 54804.1,
+          "presented": 32,
+          "mediaTime": 1.02895
+        },
+        "last": {
+          "now": 60770.6,
+          "presented": 211,
+          "mediaTime": 6.994347
+        }
+      },
+      "outputToInputRatio": 1,
+      "drawCalls": 180,
+      "drawP95Ms": 0.30000001192092896,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "request",
+      "trial": 2,
+      "measuredMs": 6000.4000000059605,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.00033519927594,
+        "presentedFps": 30.00033519927594,
+        "wallWindowFps": 29.998000133294646,
+        "callbackGaps": 0,
+        "first": {
+          "now": 61820.5,
+          "presented": 32,
+          "mediaTime": 29.18213
+        },
+        "last": {
+          "now": 67787.1,
+          "presented": 211,
+          "mediaTime": 35.148708
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.998000133294646,
+        "callbackGaps": 0,
+        "first": {
+          "now": 61837.2,
+          "presented": 32,
+          "mediaTime": 1.025505
+        },
+        "last": {
+          "now": 67803.7,
+          "presented": 211,
+          "mediaTime": 6.991323
+        }
+      },
+      "outputToInputRatio": 1.0000167602447005,
+      "drawCalls": 180,
+      "drawP95Ms": 0.30000001192092896,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "timer",
+      "trial": 2,
+      "measuredMs": 6001.5,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.992501874531367,
+        "callbackGaps": 0,
+        "first": {
+          "now": 68853.7,
+          "presented": 32,
+          "mediaTime": 36.215429
+        },
+        "last": {
+          "now": 74820.2,
+          "presented": 211,
+          "mediaTime": 42.18178
+        }
+      },
+      "output": {
+        "callbacks": 171,
+        "callbackFps": 28.492893537141285,
+        "presentedFps": 28.492893537141285,
+        "wallWindowFps": 28.4928767808048,
+        "callbackGaps": 0,
+        "first": {
+          "now": 68870.4,
+          "presented": 29,
+          "mediaTime": 1.025686
+        },
+        "last": {
+          "now": 74836.8,
+          "presented": 199,
+          "mediaTime": 6.99133
+        }
+      },
+      "outputToInputRatio": 0.9497365882086786,
+      "drawCalls": 180,
+      "drawP95Ms": 0.30000001192092896,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "library",
+      "trial": 2,
+      "measuredMs": 6000.0999999940395,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.999500008362997,
+        "callbackGaps": 0,
+        "first": {
+          "now": 75920.2,
+          "presented": 34,
+          "mediaTime": 43.281892
+        },
+        "last": {
+          "now": 81886.7,
+          "presented": 213,
+          "mediaTime": 49.248271
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.999500008362997,
+        "callbackGaps": 0,
+        "first": {
+          "now": 75936.9,
+          "presented": 32,
+          "mediaTime": 1.032458
+        },
+        "last": {
+          "now": 81903.4,
+          "presented": 211,
+          "mediaTime": 6.998005
+        }
+      },
+      "outputToInputRatio": 1,
+      "drawCalls": 0,
+      "drawP95Ms": null,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "direct",
+      "trial": 2,
+      "measuredMs": 6004.299999982119,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.97851539738788,
+        "callbackGaps": 0,
+        "first": {
+          "now": 82953.3,
+          "presented": 33,
+          "mediaTime": 50.315151
+        },
+        "last": {
+          "now": 88919.8,
+          "presented": 212,
+          "mediaTime": 56.281515
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.97851539738788,
+        "callbackGaps": 0,
+        "first": {
+          "now": 82953.3,
+          "presented": 32,
+          "mediaTime": 50.315151
+        },
+        "last": {
+          "now": 88919.8,
+          "presented": 211,
+          "mediaTime": 56.281515
+        }
+      },
+      "outputToInputRatio": 1,
+      "drawCalls": 0,
+      "drawP95Ms": null,
+      "outputSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "direct",
+      "trial": 3,
+      "measuredMs": 6001,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.995000833194467,
+        "callbackGaps": 0,
+        "first": {
+          "now": 89986.5,
+          "presented": 34,
+          "mediaTime": 57.348381
+        },
+        "last": {
+          "now": 95953,
+          "presented": 213,
+          "mediaTime": 63.31466
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.995000833194467,
+        "callbackGaps": 0,
+        "first": {
+          "now": 89986.5,
+          "presented": 32,
+          "mediaTime": 57.348381
+        },
+        "last": {
+          "now": 95953,
+          "presented": 211,
+          "mediaTime": 63.31466
+        }
+      },
+      "outputToInputRatio": 1,
+      "drawCalls": 0,
+      "drawP95Ms": null,
+      "outputSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "library",
+      "trial": 3,
+      "measuredMs": 6000.199999988079,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.000335199276012,
+        "presentedFps": 30.000335199276012,
+        "wallWindowFps": 29.999000033391823,
+        "callbackGaps": 0,
+        "first": {
+          "now": 97019.6,
+          "presented": 34,
+          "mediaTime": 64.381281
+        },
+        "last": {
+          "now": 102986.2,
+          "presented": 213,
+          "mediaTime": 70.348202
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.000335199276012,
+        "presentedFps": 30.000335199276012,
+        "wallWindowFps": 29.999000033391823,
+        "callbackGaps": 0,
+        "first": {
+          "now": 97036.3,
+          "presented": 32,
+          "mediaTime": 1.032031
+        },
+        "last": {
+          "now": 103002.9,
+          "presented": 211,
+          "mediaTime": 6.997741
+        }
+      },
+      "outputToInputRatio": 1,
+      "drawCalls": 0,
+      "drawP95Ms": null,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "timer",
+      "trial": 3,
+      "measuredMs": 6000.0999999940395,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.999500008362997,
+        "callbackGaps": 0,
+        "first": {
+          "now": 104086.1,
+          "presented": 33,
+          "mediaTime": 71.44801
+        },
+        "last": {
+          "now": 110052.6,
+          "presented": 212,
+          "mediaTime": 77.414265
+        }
+      },
+      "output": {
+        "callbacks": 170,
+        "callbackFps": 28.32528828104052,
+        "presentedFps": 28.32528828104052,
+        "wallWindowFps": 28.332861119009497,
+        "callbackGaps": 0,
+        "first": {
+          "now": 104069.5,
+          "presented": 31,
+          "mediaTime": 1.016259
+        },
+        "last": {
+          "now": 110035.9,
+          "presented": 200,
+          "mediaTime": 6.983104
+        }
+      },
+      "outputToInputRatio": 0.9441499023956886,
+      "drawCalls": 180,
+      "drawP95Ms": 0.30000001192092896,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    },
+    {
+      "mode": "request",
+      "trial": 3,
+      "measuredMs": 6000.200000017881,
+      "input": {
+        "callbacks": 180,
+        "callbackFps": 30.00083801223498,
+        "presentedFps": 30.00083801223498,
+        "wallWindowFps": 29.999000033242822,
+        "callbackGaps": 0,
+        "first": {
+          "now": 111119.3,
+          "presented": 33,
+          "mediaTime": 78.480857
+        },
+        "last": {
+          "now": 117085.8,
+          "presented": 212,
+          "mediaTime": 84.447356
+        }
+      },
+      "output": {
+        "callbacks": 180,
+        "callbackFps": 30.001340842048837,
+        "presentedFps": 30.001340842048837,
+        "wallWindowFps": 29.999000033242822,
+        "callbackGaps": 0,
+        "first": {
+          "now": 111136,
+          "presented": 32,
+          "mediaTime": 1.030637
+        },
+        "last": {
+          "now": 117102.4,
+          "presented": 211,
+          "mediaTime": 6.99602
+        }
+      },
+      "outputToInputRatio": 1.0000167605256112,
+      "drawCalls": 180,
+      "drawP95Ms": 0.30000001192092896,
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30
+      }
+    }
+  ],
+  "tracksReleased": true,
+  "sourceSettings": {
+    "width": 1280,
+    "height": 720,
+    "frameRate": 30
+  }
+}

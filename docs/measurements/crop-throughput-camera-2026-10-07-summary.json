@@ -1,0 +1,30 @@
+{
+  "evidenceKind": "summary of user-supplied camera report",
+  "reportedStartedAt": "2026-10-07T09:56:51.157Z",
+  "source": "camera",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+  "inputConnected": false,
+  "status": "completed",
+  "sourceSettings": { "width": 1280, "height": 720, "frameRate": 30 },
+  "cropOutputSettings": { "width": 960, "height": 720, "frameRate": 30 },
+  "rows": [
+    { "mode": "direct", "trial": 1, "inputPresentedFps": 29.917101216740203, "outputPresentedFps": 29.917101216740203, "outputToInputRatio": 1, "inputCallbacks": 180, "outputCallbacks": 180 },
+    { "mode": "library", "trial": 1, "inputPresentedFps": 29.916971999058795, "outputPresentedFps": 29.917101216740203, "outputToInputRatio": 1.0000043192098924, "inputCallbacks": 179, "outputCallbacks": 180 },
+    { "mode": "timer", "trial": 1, "inputPresentedFps": 29.916971999058795, "outputPresentedFps": 29.246155139087318, "outputToInputRatio": 0.9775773811603466, "inputCallbacks": 179, "outputCallbacks": 175 },
+    { "mode": "request", "trial": 1, "inputPresentedFps": 29.91710121674022, "outputPresentedFps": 29.916469184356032, "outputToInputRatio": 0.9999788738761951, "inputCallbacks": 180, "outputCallbacks": 179 },
+    { "mode": "request", "trial": 2, "inputPresentedFps": 29.917474830663746, "outputPresentedFps": 29.91680104016346, "outputToInputRatio": 0.9999774783632609, "inputCallbacks": 179, "outputCallbacks": 179 },
+    { "mode": "timer", "trial": 2, "inputPresentedFps": 29.91760124350254, "outputPresentedFps": 29.916971999058777, "outputToInputRatio": 0.999978967416584, "inputCallbacks": 180, "outputCallbacks": 179 },
+    { "mode": "library", "trial": 2, "inputPresentedFps": 29.916469184356032, "outputPresentedFps": 29.916601206691944, "outputToInputRatio": 1.0000044130320025, "inputCallbacks": 179, "outputCallbacks": 180 },
+    { "mode": "direct", "trial": 2, "inputPresentedFps": 29.833235565239253, "outputPresentedFps": 29.833235565239253, "outputToInputRatio": 1, "inputCallbacks": 179, "outputCallbacks": 179 },
+    { "mode": "direct", "trial": 3, "inputPresentedFps": 29.917601243502578, "outputPresentedFps": 29.917601243502578, "outputToInputRatio": 1, "inputCallbacks": 180, "outputCallbacks": 180 },
+    { "mode": "library", "trial": 3, "inputPresentedFps": 29.916469184356068, "outputPresentedFps": 29.91710121674022, "outputToInputRatio": 1.0000211265701262, "inputCallbacks": 179, "outputCallbacks": 180 },
+    { "mode": "timer", "trial": 3, "inputPresentedFps": 29.91664013945863, "outputPresentedFps": 29.74996657307128, "outputToInputRatio": 0.9944287337879392, "inputCallbacks": 179, "outputCallbacks": 179 },
+    { "mode": "request", "trial": 3, "inputPresentedFps": 29.918101286979777, "outputPresentedFps": 29.916469184356068, "outputToInputRatio": 0.9999454476536443, "inputCallbacks": 180, "outputCallbacks": 179 }
+  ],
+  "inputCallbackGapsAllRows": 0,
+  "outputCallbackGapsAllRows": 0,
+  "timerAndRequestDrawP95Ms": 0.30000001192092896,
+  "libraryDrawTiming": "not instrumented",
+  "cleanup": { "tracksReleased": true, "tracksObserved": 10, "liveTracksAfterCleanup": 0 },
+  "notRecorded": ["commit SHA", "camera model", "full browser build", "source-to-preview latency", "first usable frame time", "retained heap", "five effect lifecycle cycles"]
+}

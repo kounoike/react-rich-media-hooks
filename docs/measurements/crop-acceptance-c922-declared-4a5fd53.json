@@ -1,0 +1,934 @@
+{
+  "schemaVersion": 1,
+  "taskId": "TASK-1.25",
+  "decisionId": "decision-7",
+  "status": "completed",
+  "startedAt": "2026-10-07T20:28:02.297Z",
+  "finishedAt": "2026-10-07T20:29:22.653Z",
+  "commitSha": "4a5fd536640a98407736b1511701e332b226410e",
+  "hostDescription": "Windows 11 25H2",
+  "runtimeDescription": "Node 22.16.0",
+  "cameraDescription": "C922",
+  "browser": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "platform": "Win32",
+    "language": "ja",
+    "userAgentBrands": [
+      {
+        "brand": "Chromium",
+        "version": "154"
+      },
+      {
+        "brand": "Google Chrome",
+        "version": "154"
+      },
+      {
+        "brand": "Not A(Brand",
+        "version": "99"
+      }
+    ],
+    "userAgentPlatform": "Windows",
+    "userAgentMobile": false,
+    "userAgentHighEntropy": {
+      "brands": [
+        {
+          "brand": "Chromium",
+          "version": "154"
+        },
+        {
+          "brand": "Google Chrome",
+          "version": "154"
+        },
+        {
+          "brand": "Not A(Brand",
+          "version": "99"
+        }
+      ],
+      "fullVersionList": [
+        {
+          "brand": "Chromium",
+          "version": "154.0.8037.98"
+        },
+        {
+          "brand": "Google Chrome",
+          "version": "154.0.8037.98"
+        },
+        {
+          "brand": "Not A(Brand",
+          "version": "99.0.0.0"
+        }
+      ],
+      "mobile": false,
+      "model": "",
+      "platform": "Windows",
+      "platformVersion": "19.0.0"
+    },
+    "libraryPackageVersion": "0.1.0",
+    "consumerRuntime": "direct browser page; no React application is mounted",
+    "nodeAndPackageManager": "Node 22.16.0",
+    "toolMode": "local reference-device page",
+    "latencyFixture": "animated 4x4 optical marker v1",
+    "latencyMarkerSync": "same-origin BroadcastChannel",
+    "hardwareConcurrency": 24,
+    "devicePixelRatio": 1.5,
+    "viewport": {
+      "width": 1899,
+      "height": 1167
+    },
+    "screen": {
+      "width": 2560,
+      "height": 1440
+    },
+    "secureContext": true
+  },
+  "camera": {
+    "requested": {
+      "width": 1280,
+      "height": 720,
+      "frameRate": 30
+    },
+    "settings": {
+      "width": 1280,
+      "height": 720,
+      "frameRate": 30,
+      "aspectRatio": 1.7777777777777777
+    },
+    "cameraLabel": "c922 Pro Stream Webcam (046d:085c)",
+    "mediaTrackState": "live",
+    "physicalDeviceResult": "user-confirmed physical reference camera"
+  },
+  "budgets": {
+    "captureFrameRateFpsMin": 30,
+    "capturePresentedFrameGapPercentMax": 1,
+    "firstUsableFrameMsMax": 500,
+    "cropFrameRateFpsMin": 30,
+    "cropSourceToPreviewP95MsMax": 50,
+    "warmEffectSetupMsMax": 1000,
+    "retainedHeapGrowthPercentMax": 10,
+    "retainedHeapGrowthBytesFloor": 5242880
+  },
+  "firstUsableFrameMs": 72.09999999999854,
+  "stages": [
+    {
+      "run": 1,
+      "profile": "capture-only",
+      "operationStatus": "not-applied",
+      "processorStatus": "off",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2029.7000000178814,
+      "frames": 61,
+      "frameRateFps": 30.053702517348672,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": null,
+      "sourceToPreviewP95Ms": null,
+      "sourceToPreviewMaxMs": null,
+      "latencySamples": 0,
+      "staleMarkerSamples": 16,
+      "processorInputVideoFrameCallbacks": null,
+      "processorInputVideoFrameRateFps": null,
+      "processorInputPresentedFrameGaps": null,
+      "processorInputVideoConnected": null,
+      "cropDrawImageCalls": null,
+      "cropDrawImageFailures": null,
+      "cropDrawImageRateFps": null,
+      "cropDrawImageDurationP95Ms": null,
+      "cropCallbackDurationP95Ms": null,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": null,
+      "budgetChecks": {
+        "frameRateAtLeast30": true,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": null,
+        "cropSetupWithin1Second": null
+      }
+    },
+    {
+      "run": 1,
+      "profile": "pass-through",
+      "operationStatus": "success",
+      "processorStatus": "off",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2022,
+      "frames": 60,
+      "frameRateFps": 29.673590504451038,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": 712.7000000000044,
+      "sourceToPreviewP95Ms": 896,
+      "sourceToPreviewMaxMs": 896,
+      "latencySamples": 13,
+      "staleMarkerSamples": 0,
+      "processorInputVideoFrameCallbacks": null,
+      "processorInputVideoFrameRateFps": null,
+      "processorInputPresentedFrameGaps": null,
+      "processorInputVideoConnected": null,
+      "cropDrawImageCalls": null,
+      "cropDrawImageFailures": null,
+      "cropDrawImageRateFps": null,
+      "cropDrawImageDurationP95Ms": null,
+      "cropCallbackDurationP95Ms": null,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": null,
+      "budgetChecks": {
+        "frameRateAtLeast30": false,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": null,
+        "cropSetupWithin1Second": null
+      }
+    },
+    {
+      "run": 1,
+      "profile": "fixed-crop",
+      "operationStatus": "success",
+      "processorStatus": "active",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.3333333333333333
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2022.0999999940395,
+      "frames": 55,
+      "frameRateFps": 27.199446120450087,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": 566.5,
+      "sourceToPreviewP95Ms": 916.6000000000058,
+      "sourceToPreviewMaxMs": 916.6000000000058,
+      "latencySamples": 9,
+      "staleMarkerSamples": 0,
+      "processorInputVideoFrameCallbacks": 60,
+      "processorInputVideoFrameRateFps": 29.672123040491005,
+      "processorInputPresentedFrameGaps": 0,
+      "processorInputVideoConnected": false,
+      "cropDrawImageCalls": 60,
+      "cropDrawImageFailures": 0,
+      "cropDrawImageRateFps": 29.672123040491005,
+      "cropDrawImageDurationP95Ms": 0.4000000059604645,
+      "cropCallbackDurationP95Ms": 0.4000000059604645,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": 77.7999999821186,
+      "budgetChecks": {
+        "frameRateAtLeast30": false,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": false,
+        "cropSetupWithin1Second": true
+      }
+    },
+    {
+      "run": 2,
+      "profile": "capture-only",
+      "operationStatus": "not-applied",
+      "processorStatus": "off",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2031.5,
+      "frames": 61,
+      "frameRateFps": 30.027073590942653,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": null,
+      "sourceToPreviewP95Ms": null,
+      "sourceToPreviewMaxMs": null,
+      "latencySamples": 0,
+      "staleMarkerSamples": 21,
+      "processorInputVideoFrameCallbacks": null,
+      "processorInputVideoFrameRateFps": null,
+      "processorInputPresentedFrameGaps": null,
+      "processorInputVideoConnected": null,
+      "cropDrawImageCalls": null,
+      "cropDrawImageFailures": null,
+      "cropDrawImageRateFps": null,
+      "cropDrawImageDurationP95Ms": null,
+      "cropCallbackDurationP95Ms": null,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": null,
+      "budgetChecks": {
+        "frameRateAtLeast30": true,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": null,
+        "cropSetupWithin1Second": null
+      }
+    },
+    {
+      "run": 2,
+      "profile": "pass-through",
+      "operationStatus": "success",
+      "processorStatus": "off",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2012.699999988079,
+      "frames": 61,
+      "frameRateFps": 30.307547076246482,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": null,
+      "sourceToPreviewP95Ms": null,
+      "sourceToPreviewMaxMs": null,
+      "latencySamples": 0,
+      "staleMarkerSamples": 0,
+      "processorInputVideoFrameCallbacks": null,
+      "processorInputVideoFrameRateFps": null,
+      "processorInputPresentedFrameGaps": null,
+      "processorInputVideoConnected": null,
+      "cropDrawImageCalls": null,
+      "cropDrawImageFailures": null,
+      "cropDrawImageRateFps": null,
+      "cropDrawImageDurationP95Ms": null,
+      "cropCallbackDurationP95Ms": null,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": null,
+      "budgetChecks": {
+        "frameRateAtLeast30": true,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": null,
+        "cropSetupWithin1Second": null
+      }
+    },
+    {
+      "run": 2,
+      "profile": "fixed-crop",
+      "operationStatus": "success",
+      "processorStatus": "active",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.3333333333333333
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2025.2000000178814,
+      "frames": 56,
+      "frameRateFps": 27.65158996617892,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": null,
+      "sourceToPreviewP95Ms": null,
+      "sourceToPreviewMaxMs": null,
+      "latencySamples": 0,
+      "staleMarkerSamples": 0,
+      "processorInputVideoFrameCallbacks": 61,
+      "processorInputVideoFrameRateFps": 30.120481927444896,
+      "processorInputPresentedFrameGaps": 0,
+      "processorInputVideoConnected": false,
+      "cropDrawImageCalls": 61,
+      "cropDrawImageFailures": 0,
+      "cropDrawImageRateFps": 30.120481927444896,
+      "cropDrawImageDurationP95Ms": 0.30000001192092896,
+      "cropCallbackDurationP95Ms": 0.4000000059604645,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": 61.5,
+      "budgetChecks": {
+        "frameRateAtLeast30": false,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": null,
+        "cropSetupWithin1Second": true
+      }
+    },
+    {
+      "run": 3,
+      "profile": "capture-only",
+      "operationStatus": "not-applied",
+      "processorStatus": "off",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2032.5,
+      "frames": 61,
+      "frameRateFps": 30.01230012300123,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": null,
+      "sourceToPreviewP95Ms": null,
+      "sourceToPreviewMaxMs": null,
+      "latencySamples": 0,
+      "staleMarkerSamples": 11,
+      "processorInputVideoFrameCallbacks": null,
+      "processorInputVideoFrameRateFps": null,
+      "processorInputPresentedFrameGaps": null,
+      "processorInputVideoConnected": null,
+      "cropDrawImageCalls": null,
+      "cropDrawImageFailures": null,
+      "cropDrawImageRateFps": null,
+      "cropDrawImageDurationP95Ms": null,
+      "cropCallbackDurationP95Ms": null,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": null,
+      "budgetChecks": {
+        "frameRateAtLeast30": true,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": null,
+        "cropSetupWithin1Second": null
+      }
+    },
+    {
+      "run": 3,
+      "profile": "pass-through",
+      "operationStatus": "success",
+      "processorStatus": "off",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2033.699999988079,
+      "frames": 62,
+      "frameRateFps": 30.48630574832248,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": null,
+      "sourceToPreviewP95Ms": null,
+      "sourceToPreviewMaxMs": null,
+      "latencySamples": 0,
+      "staleMarkerSamples": 0,
+      "processorInputVideoFrameCallbacks": null,
+      "processorInputVideoFrameRateFps": null,
+      "processorInputPresentedFrameGaps": null,
+      "processorInputVideoConnected": null,
+      "cropDrawImageCalls": null,
+      "cropDrawImageFailures": null,
+      "cropDrawImageRateFps": null,
+      "cropDrawImageDurationP95Ms": null,
+      "cropCallbackDurationP95Ms": null,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": null,
+      "budgetChecks": {
+        "frameRateAtLeast30": true,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": null,
+        "cropSetupWithin1Second": null
+      }
+    },
+    {
+      "run": 3,
+      "profile": "fixed-crop",
+      "operationStatus": "success",
+      "processorStatus": "active",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.3333333333333333
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2037.800000011921,
+      "frames": 61,
+      "frameRateFps": 29.93424281069936,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": null,
+      "sourceToPreviewP95Ms": null,
+      "sourceToPreviewMaxMs": null,
+      "latencySamples": 0,
+      "staleMarkerSamples": 0,
+      "processorInputVideoFrameCallbacks": 61,
+      "processorInputVideoFrameRateFps": 29.93424281069936,
+      "processorInputPresentedFrameGaps": 0,
+      "processorInputVideoConnected": false,
+      "cropDrawImageCalls": 61,
+      "cropDrawImageFailures": 0,
+      "cropDrawImageRateFps": 29.93424281069936,
+      "cropDrawImageDurationP95Ms": 0.30000001192092896,
+      "cropCallbackDurationP95Ms": 0.30000001192092896,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": 91.90000000596046,
+      "budgetChecks": {
+        "frameRateAtLeast30": false,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": null,
+        "cropSetupWithin1Second": true
+      }
+    },
+    {
+      "run": 1,
+      "profile": "crop-dom-detached",
+      "operationStatus": "not-applied",
+      "processorStatus": "active",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.3333333333333333
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2008.5999999940395,
+      "frames": 58,
+      "frameRateFps": 28.875833914254763,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": null,
+      "sourceToPreviewP95Ms": null,
+      "sourceToPreviewMaxMs": null,
+      "latencySamples": 0,
+      "staleMarkerSamples": 15,
+      "processorInputVideoFrameCallbacks": 60,
+      "processorInputVideoFrameRateFps": 29.871552325091134,
+      "processorInputPresentedFrameGaps": 0,
+      "processorInputVideoConnected": false,
+      "cropDrawImageCalls": 60,
+      "cropDrawImageFailures": 0,
+      "cropDrawImageRateFps": 29.871552325091134,
+      "cropDrawImageDurationP95Ms": 0.30000001192092896,
+      "cropCallbackDurationP95Ms": 0.30000001192092896,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": null,
+      "budgetChecks": {
+        "frameRateAtLeast30": false,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": null,
+        "cropSetupWithin1Second": null
+      }
+    },
+    {
+      "run": 1,
+      "profile": "crop-dom-connected",
+      "operationStatus": "not-applied",
+      "processorStatus": "active",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.3333333333333333
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2037.6000000238419,
+      "frames": 56,
+      "frameRateFps": 27.483313702073392,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": null,
+      "sourceToPreviewP95Ms": null,
+      "sourceToPreviewMaxMs": null,
+      "latencySamples": 0,
+      "staleMarkerSamples": 21,
+      "processorInputVideoFrameCallbacks": 61,
+      "processorInputVideoFrameRateFps": 29.937180996901375,
+      "processorInputPresentedFrameGaps": 0,
+      "processorInputVideoConnected": true,
+      "cropDrawImageCalls": 61,
+      "cropDrawImageFailures": 0,
+      "cropDrawImageRateFps": 29.937180996901375,
+      "cropDrawImageDurationP95Ms": 0.30000001192092896,
+      "cropCallbackDurationP95Ms": 0.30000001192092896,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": null,
+      "budgetChecks": {
+        "frameRateAtLeast30": false,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": null,
+        "cropSetupWithin1Second": null
+      }
+    },
+    {
+      "run": 2,
+      "profile": "crop-dom-connected",
+      "operationStatus": "not-applied",
+      "processorStatus": "active",
+      "sourceSettings": {
+        "width": 1280,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.7777777777777777
+      },
+      "outputSettings": {
+        "width": 960,
+        "height": 720,
+        "frameRate": 30,
+        "aspectRatio": 1.3333333333333333
+      },
+      "warmupMs": 1000,
+      "measuredMs": 2031,
+      "frames": 56,
+      "frameRateFps": 27.572624322993597,
+      "presentedFrameGaps": 0,
+      "presentedFrameGapPercent": 0,
+      "sourceToPreviewP50Ms": null,
+      "sourceToPreviewP95Ms": null,
+      "sourceToPreviewMaxMs": null,
+      "latencySamples": 0,
+      "staleMarkerSamples": 7,
+      "processorInputVideoFrameCallbacks": 61,
+      "processorInputVideoFrameRateFps": 30.034465780403742,
+      "processorInputPresentedFrameGaps": 0,
+      "processorInputVideoConnected": true,
+      "cropDrawImageCalls": 61,
+      "cropDrawImageFailures": 0,
+      "cropDrawImageRateFps": 30.034465780403742,
+      "cropDrawImageDurationP95Ms": 0.30000001192092896,
+      "cropCallbackDurationP95Ms": 0.30000001192092896,
+      "latencyMethod": "animated-optical-marker",
+      "cropSetupMs": null,
+      "budgetChecks": {
+        "frameRateAtLeast30": false,
+        "presentedFrameGapAtMost1Percent": true,
+        "sourceToPreviewP95AtMost50Ms": null,
+        "cropSetupWithin1Second": null
+      }
+    }
+  ],
+  "effectCycles": [
+    {
+      "cycle": 1,
+      "addStatus": "success",
+      "updateStatus": "success",
+      "bypassStatus": "success",
+      "removeStatus": "success",
+      "bypassRestoredInput": true,
+      "removeRestoredInput": true,
+      "oldTracksEnded": true
+    },
+    {
+      "cycle": 2,
+      "addStatus": "success",
+      "updateStatus": "success",
+      "bypassStatus": "success",
+      "removeStatus": "success",
+      "bypassRestoredInput": true,
+      "removeRestoredInput": true,
+      "oldTracksEnded": true
+    },
+    {
+      "cycle": 3,
+      "addStatus": "success",
+      "updateStatus": "success",
+      "bypassStatus": "success",
+      "removeStatus": "success",
+      "bypassRestoredInput": true,
+      "removeRestoredInput": true,
+      "oldTracksEnded": true
+    },
+    {
+      "cycle": 4,
+      "addStatus": "success",
+      "updateStatus": "success",
+      "bypassStatus": "success",
+      "removeStatus": "success",
+      "bypassRestoredInput": true,
+      "removeRestoredInput": true,
+      "oldTracksEnded": true
+    },
+    {
+      "cycle": 5,
+      "addStatus": "success",
+      "updateStatus": "success",
+      "bypassStatus": "success",
+      "removeStatus": "success",
+      "bypassRestoredInput": true,
+      "removeRestoredInput": true,
+      "oldTracksEnded": true
+    }
+  ],
+  "sessionCycles": [
+    {
+      "cycle": 1,
+      "startStatus": "success",
+      "trackEndedAfterStop": true
+    },
+    {
+      "cycle": 2,
+      "startStatus": "success",
+      "trackEndedAfterStop": true
+    },
+    {
+      "cycle": 3,
+      "startStatus": "success",
+      "trackEndedAfterStop": true
+    },
+    {
+      "cycle": 4,
+      "startStatus": "success",
+      "trackEndedAfterStop": true
+    },
+    {
+      "cycle": 5,
+      "startStatus": "success",
+      "trackEndedAfterStop": true
+    }
+  ],
+  "sessionStartCalls": 6,
+  "profileSessionStartCalls": 0,
+  "heapBeforeSessionCyclesBytes": 7493345,
+  "heapAfterSessionCyclesBytes": 18110308,
+  "retainedHeapGrowthWithinBudget": false,
+  "getUserMediaRequestToStreamMs": 730.0999999940395,
+  "cleanup": {
+    "cameraStopped": true,
+    "tracksObserved": 19,
+    "liveTracksAfterDispose": 0,
+    "effectCyclesCompleted": 5,
+    "effectTracksReleased": true,
+    "sessionCyclesCompleted": 5,
+    "sessionTracksReleased": true
+  },
+  "summary": {
+    "captureOnlyFrameRateFps": [
+      30.053702517348672,
+      30.027073590942653,
+      30.01230012300123
+    ],
+    "passThroughFrameRateFps": [
+      29.673590504451038,
+      30.307547076246482,
+      30.48630574832248
+    ],
+    "fixedCropFrameRateFps": [
+      27.199446120450087,
+      27.65158996617892,
+      29.93424281069936
+    ],
+    "captureMinusCropFrameRateFpsByRun": [
+      {
+        "run": 1,
+        "fps": 2.8542563968985846
+      },
+      {
+        "run": 2,
+        "fps": 2.3754836247637314
+      },
+      {
+        "run": 3,
+        "fps": 0.07805731230186908
+      }
+    ],
+    "capturePresentedFrameGapPercent": [
+      0,
+      0,
+      0
+    ],
+    "fixedCropPresentedFrameGapPercent": [
+      0,
+      0,
+      0
+    ],
+    "cropSourceToPreviewP95MsByRun": [
+      {
+        "run": 1,
+        "value": 916.6000000000058
+      },
+      {
+        "run": 2,
+        "value": null
+      },
+      {
+        "run": 3,
+        "value": null
+      }
+    ],
+    "processorInputFrameRateFpsByRun": [
+      {
+        "run": 1,
+        "value": 29.672123040491005
+      },
+      {
+        "run": 2,
+        "value": 30.120481927444896
+      },
+      {
+        "run": 3,
+        "value": 29.93424281069936
+      }
+    ],
+    "processorInputPresentedFrameGapsByRun": [
+      {
+        "run": 1,
+        "value": 0
+      },
+      {
+        "run": 2,
+        "value": 0
+      },
+      {
+        "run": 3,
+        "value": 0
+      }
+    ],
+    "cropDrawImageRateFpsByRun": [
+      {
+        "run": 1,
+        "value": 29.672123040491005
+      },
+      {
+        "run": 2,
+        "value": 30.120481927444896
+      },
+      {
+        "run": 3,
+        "value": 29.93424281069936
+      }
+    ],
+    "cropDrawImageDurationP95MsByRun": [
+      {
+        "run": 1,
+        "value": 0.4000000059604645
+      },
+      {
+        "run": 2,
+        "value": 0.30000001192092896
+      },
+      {
+        "run": 3,
+        "value": 0.30000001192092896
+      }
+    ],
+    "cropDomAttachmentComparisonByRun": [
+      {
+        "run": 1,
+        "detached": {
+          "previewFrameRateFps": 28.875833914254763,
+          "inputFrameRateFps": 29.871552325091134,
+          "inputPresentedFrameGaps": 0,
+          "drawImageRateFps": 29.871552325091134,
+          "drawImageDurationP95Ms": 0.30000001192092896,
+          "processorCallbackDurationP95Ms": 0.30000001192092896,
+          "processorInputVideoConnected": false
+        },
+        "connected": {
+          "previewFrameRateFps": 27.483313702073392,
+          "inputFrameRateFps": 29.937180996901375,
+          "inputPresentedFrameGaps": 0,
+          "drawImageRateFps": 29.937180996901375,
+          "drawImageDurationP95Ms": 0.30000001192092896,
+          "processorCallbackDurationP95Ms": 0.30000001192092896,
+          "processorInputVideoConnected": true
+        },
+        "connectedMinusDetachedPreviewFps": -1.3925202121813705,
+        "connectedMinusDetachedInputFps": 0.06562867181024146
+      },
+      {
+        "run": 2,
+        "detached": null,
+        "connected": {
+          "previewFrameRateFps": 27.572624322993597,
+          "inputFrameRateFps": 30.034465780403742,
+          "inputPresentedFrameGaps": 0,
+          "drawImageRateFps": 30.034465780403742,
+          "drawImageDurationP95Ms": 0.30000001192092896,
+          "processorCallbackDurationP95Ms": 0.30000001192092896,
+          "processorInputVideoConnected": true
+        },
+        "connectedMinusDetachedPreviewFps": null,
+        "connectedMinusDetachedInputFps": null
+      },
+      {
+        "run": 3,
+        "detached": null,
+        "connected": null,
+        "connectedMinusDetachedPreviewFps": null,
+        "connectedMinusDetachedInputFps": null
+      }
+    ],
+    "firstUsableFrameMs": 72.09999999999854,
+    "firstUsableFrameWithin500Ms": true,
+    "captureFrameRateAtLeast30Fps": true,
+    "capturePresentedFrameGapsAtMost1Percent": true,
+    "cropFrameRateAtLeast30Fps": false,
+    "cropP95AtMost50Ms": null,
+    "retainedHeapGrowthWithinBudget": false,
+    "exactUndeliveredSourceFrameCount": "unknown: the browser exposes presented-frame callback gaps, not camera frames never delivered",
+    "exactMarkerLatencyUnavailableRuns": [
+      2,
+      3
+    ]
+  },
+  "issues": [
+    "The preview did not deliver a frame callback within 10000 ms during DOM comparison 2 of 3: processor input detached; no complete measurement was collected.",
+    "The preview did not deliver a frame callback within 10000 ms during DOM comparison 3 of 3: processor input detached; no complete measurement was collected.",
+    "The preview did not deliver a frame callback within 10000 ms during DOM comparison 3 of 3: processor input connected; no complete measurement was collected."
+  ]
+}
