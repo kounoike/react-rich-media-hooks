@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-09-25 10:53'
-updated_date: '2026-10-24 04:10'
+updated_date: '2026-10-24 06:21'
 labels: []
 dependencies:
   - TASK-1.11
@@ -48,6 +48,11 @@ modified_files:
   - pnpm-workspace.yaml
   - pnpm-lock.yaml
   - docs/measurements/crop-acceptance-c922-chrome154-controlled-gc-20261024.json
+  - docs/supply-chain-maintenance.md
+  - examples/capture/package.json
+  - examples/capture/pnpm-lock.yaml
+  - examples/capture/pnpm-workspace.yaml
+  - supply-chain/dependencies.json
 parent_task_id: TASK-1
 priority: medium
 type: task
@@ -79,6 +84,8 @@ Close the measured verification gaps left by TASK-1.11 for the approved fixed ca
 7. The installed oxfmt 0.65.0 manifest pins tinypool exactly at 2.1.0, so an in-range resolution update alone is impossible. Retain the approved direct toolchain versions and scope a development-only override to oxfmt@0.65.0 > tinypool 2.1.2; pin source-map-js to its compatible security patch 1.2.2. Generate the lockfile with pnpm, record the constraint and advisory evidence, and retain manual review.
 
 8. With the user's explicit authorization, run the actual physical C922 acceptance protocol with controlled post-GC observations, save the complete report, compare strict metrics and fallback on the measured pairing, and preserve misses/unknowns while keeping PR #28 Draft for manual approval.
+
+9. On the user's explicit 2026-10-24 request, merge the already accepted PR #30 security patch from origin/main into this task branch without rewriting published history; verify frozen root and standalone-example installs, clean audits, root supply-chain inventory and signatures, pnpm verify, and the standalone example build while preserving all physical measurements and acceptance criteria.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -193,10 +200,16 @@ AC #2 and #3 are now supported by the saved physical comparison, controlled rete
 Post-push current-head checks (2026-10-24): CI validation run 40061027171 completed successfully on 39fdffa98e9a2c7ad24de104d6e3c04ff11f5b80. Node 22/24 quality and Chromium/Firefox browser smoke passed; Chromium test “crop keeps its output cap when the active source changes from 30 to 60 fps” passed on this head. This supports the prior d5ef181 failure being a runner-scheduling-sensitive RAF fixture readiness miss rather than an output-cap defect.
 
 Supply-chain controls run 40061027141 failed the development audit on one newly surfaced high advisory, GHSA-587h-7wmj-h5pm (CVE-2026-112942). The direct exact Vite pin is 8.2.2; affected Vite versions include 8.2.0–8.2.3 and the patched release is 8.2.4. The advisory concerns the Windows launch-editor path; the documented source is https://github.com/advisories/GHSA-587h-7wmj-h5pm. Registry metadata for 8.2.4 reports the same Node engine range as the current toolchain. Existing approved TASK-1.25 plan items 6–7 specify no direct toolchain version changes, so no version change was made without user approval. Keep PR #28 Draft and unmerged pending direction on the security patch.
+
+Dependency integration (user request, 2026-10-24): fetched origin/main at 207478e819cfc71e73ba53af7e833bdb0c11b1d6 (PR #30 squash merge) and merged it without rewriting published history; merge commit 077f64ebb38f9311d087bb1b146a586ff1876348. The accepted pins are root and standalone capture-example Vite 8.2.4, root Vitest and @vitest/coverage-v8 4.1.12, plus the root-only tinypool 2.1.2 and source-map-js 1.2.2 overrides. The synchronized supply-chain inventory, standalone example manifest/lock/workspace metadata, and root workspace configuration are present. No TASK-2 record was edited. This import was explicitly authorized and does not change the approved product API, compatibility contract, architecture, or performance budgets.
+
+Verification on the merged tree: `pnpm install --frozen-lockfile` and `pnpm --dir examples/capture install --frozen-lockfile` passed. `pnpm run supply-chain:audit` reported no known vulnerabilities in production or development dependencies; `pnpm --dir examples/capture audit --audit-level=high` also found none. `pnpm run supply-chain:check` passed for 13 direct dependencies, 224 integrity-pinned resolutions, 3 license exceptions, and 0 distributed assets; `pnpm run supply-chain:signatures` verified all 224 registry signatures. `pnpm verify` passed formatting, lint, 21 unit tests, typecheck, ESM/SSR/CJS package validation, and task-to-PR lifecycle validation. `pnpm --dir examples/capture build` passed using Vite 8.2.4.
+
+Physical evidence was not rerun. The controlled-GC report remains byte-preserved at docs/measurements/crop-acceptance-c922-chrome154-controlled-gc-20261024.json with SHA-256 4d3269b07999b17ba7674be62e7f01be6451907f90c27386134a6fd846353e12. All five existing acceptance criteria and strict misses/unknowns remain unchanged. Current-head GitHub checks are reported separately on PR #28 after pushing this scoped update.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Completed the physical Chrome 154 / C922 verification with a byte-preserved controlled-GC report and documented the strict results. All fixed-crop FPS/latency trials and retained-heap checks passed; two capture/pass-through controls remained below the unchanged 30 fps threshold, presented-frame gaps were zero, and exact undelivered sensor frames remain unknown. Physical bypass restoration and lifecycle cleanup passed; AC #1–#5 are evidence-backed and TASK-1.25 is Done. The current-head CI validation passed, including the 30-to-60 fps cap test; the separate supply-chain gate now reports a newly surfaced high advisory on direct Vite 8.2.2, so PR #28 remains Draft and unmerged pending direction on a toolchain patch.
+Integrated the already accepted PR #30 dependency security patch from origin/main into the existing TASK-1.25 branch with a non-rewriting merge. Root and standalone capture-example frozen installs passed; production, development, and example audits found no known vulnerabilities; all root supply-chain inventory, license, and 224 registry-signature checks passed; `pnpm verify` and the standalone example build passed. Root and example Vite are 8.2.4, Vitest and coverage are 4.1.12, and the approved transitive overrides remain in place. The physical controlled-GC report is byte-preserved with SHA-256 4d3269b07999b17ba7674be62e7f01be6451907f90c27386134a6fd846353e12; the existing measured misses and unknown source drops remain explicit, and AC #1-#5 remain evidence-backed. PR #28 stays OPEN/Draft for manual review and is not merged.
 <!-- SECTION:FINAL_SUMMARY:END -->
