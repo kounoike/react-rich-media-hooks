@@ -27,20 +27,30 @@ development inventory is:
 | `@playwright/test` | 1.62.1 | browser integration validation | Apache-2.0 | npm registry tarball; [upstream](https://github.com/microsoft/playwright) |
 | `@types/node` | 24.3.0 | Node type definitions | MIT | npm registry tarball; [upstream](https://github.com/DefinitelyTyped/DefinitelyTyped) |
 | `@types/react` | 19.1.12 | React type definitions | MIT | npm registry tarball; [upstream](https://github.com/DefinitelyTyped/DefinitelyTyped) |
-| `@vitest/coverage-v8` | 4.1.11 | test coverage provider | MIT | npm registry tarball; [upstream](https://github.com/vitest-dev/vitest) |
+| `@vitest/coverage-v8` | 4.1.12 | test coverage provider | MIT | npm registry tarball; [upstream](https://github.com/vitest-dev/vitest) |
 | `oxfmt` | 0.65.0 | source formatter | MIT | npm registry tarball; [upstream](https://github.com/oxc-project/oxc) |
 | `oxlint` | 1.80.0 | semantic linter | MIT | npm registry tarball; [upstream](https://github.com/oxc-project/oxc) |
 | `oxlint-tsgolint` | 7.0.2001 | TypeScript-aware lint rules | MIT | npm registry tarball; [upstream](https://github.com/oxc-project/tsgolint) |
 | `publint` | 0.3.24 | package validation | MIT | npm registry tarball; [upstream](https://github.com/publint/publint) |
 | `react` | 19.1.1 | peer/runtime fixture | MIT | npm registry tarball; [upstream](https://github.com/facebook/react) |
 | `typescript` | 7.0.2 | compiler and declaration emitter | Apache-2.0 | npm registry tarball; [upstream](https://github.com/microsoft/TypeScript) |
-| `vite` | 8.2.2 | library bundler | MIT | npm registry tarball; [upstream](https://github.com/vitejs/vite) |
-| `vitest` | 4.1.11 | unit and contract test runner | MIT | npm registry tarball; [upstream](https://github.com/vitest-dev/vitest) |
+| `vite` | 8.2.4 | library bundler | MIT | npm registry tarball; [upstream](https://github.com/vitejs/vite) |
+| `vitest` | 4.1.12 | unit and contract test runner | MIT | npm registry tarball; [upstream](https://github.com/vitest-dev/vitest) |
 
 The pinned lockfile is the source of truth for transitive versions and SHA-512
 integrity values. `pnpm licenses list --json` checks every installed direct and
 transitive package; its output is intentionally generated during validation so
 the inventory cannot silently become stale.
+
+The root-only `pnpm-workspace.yaml` records pnpm 11 resolution overrides for
+development security fixes: `oxfmt@0.65.0>tinypool` is pinned to 2.1.2 and
+`source-map-js` to 1.2.2. These address GHSA-5gmw-xhrv-c9v3,
+GHSA-85c8-ppgw-ccpr, and GHSA-68fv-2mgg-jv7q without changing the formatter
+version. Review and remove each override when upstream constraints resolve
+patched versions. Vite 8.2.4 addresses GHSA-587h-7wmj-h5pm; no vulnerability
+exception or runtime dependency is introduced. Vitest and its coverage provider
+are paired at 4.1.12 to resolve the development-only mocker advisories
+GHSA-qxg6-89mg-rqv8 and GHSA-xp26-3454-mjgp.
 
 No model, WebAssembly, worker, worklet, or other distributed runtime asset is
 currently loaded, bundled, or published. Any future asset must be added to the
