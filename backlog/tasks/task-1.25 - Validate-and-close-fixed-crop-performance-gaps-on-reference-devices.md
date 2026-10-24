@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@codex'
 created_date: '2026-09-25 10:53'
-updated_date: '2026-10-24 04:05'
+updated_date: '2026-10-24 04:10'
 labels: []
 dependencies:
   - TASK-1.11
@@ -189,10 +189,14 @@ The measured before/after Windows Chrome comparator continues to support the exi
 CI diagnosis for run 38013042106 on d5ef181: Chromium failed tests/browser/video-crop-throughput.spec.ts at the 60 fps synthetic source readiness check (>45 fps), with attempts 43.821 and 35.394 fps. The fixture uses a 1280x720 captureStream(60) canvas painted through requestAnimationFrame. The failure occurred before output-cap assertions and is not evidence of an output-cap violation. The targeted test passed locally once plus three repeats (4/4); performance budgets and test assertions were not weakened. Current-head CI status must still be reported after the branch push.
 
 AC #2 and #3 are now supported by the saved physical comparison, controlled retention evidence, existing measured before/after evidence, and physical bypass restoration. All AC #1-#5 now have documented evidence. PR #28 remains Draft for manual review and is not merged; Agent improvement PR: none.
+
+Post-push current-head checks (2026-10-24): CI validation run 40061027171 completed successfully on 39fdffa98e9a2c7ad24de104d6e3c04ff11f5b80. Node 22/24 quality and Chromium/Firefox browser smoke passed; Chromium test “crop keeps its output cap when the active source changes from 30 to 60 fps” passed on this head. This supports the prior d5ef181 failure being a runner-scheduling-sensitive RAF fixture readiness miss rather than an output-cap defect.
+
+Supply-chain controls run 40061027141 failed the development audit on one newly surfaced high advisory, GHSA-587h-7wmj-h5pm (CVE-2026-112942). The direct exact Vite pin is 8.2.2; affected Vite versions include 8.2.0–8.2.3 and the patched release is 8.2.4. The advisory concerns the Windows launch-editor path; the documented source is https://github.com/advisories/GHSA-587h-7wmj-h5pm. Registry metadata for 8.2.4 reports the same Node engine range as the current toolchain. Existing approved TASK-1.25 plan items 6–7 specify no direct toolchain version changes, so no version change was made without user approval. Keep PR #28 Draft and unmerged pending direction on the security patch.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Completed the physical Chrome 154 / C922 verification with a byte-preserved controlled-GC report and documented the strict results. All fixed-crop FPS/latency trials and retained-heap checks passed; two capture/pass-through controls remained below the unchanged 30 fps threshold, presented-frame gaps were zero, and exact undelivered sensor frames remain unknown. Physical bypass restoration and lifecycle cleanup passed; AC #1-#5 are evidence-backed and TASK-1.25 is Done, while PR #28 stays Draft and unmerged for manual review.
+Completed the physical Chrome 154 / C922 verification with a byte-preserved controlled-GC report and documented the strict results. All fixed-crop FPS/latency trials and retained-heap checks passed; two capture/pass-through controls remained below the unchanged 30 fps threshold, presented-frame gaps were zero, and exact undelivered sensor frames remain unknown. Physical bypass restoration and lifecycle cleanup passed; AC #1–#5 are evidence-backed and TASK-1.25 is Done. The current-head CI validation passed, including the 30-to-60 fps cap test; the separate supply-chain gate now reports a newly surfaced high advisory on direct Vite 8.2.2, so PR #28 remains Draft and unmerged pending direction on a toolchain patch.
 <!-- SECTION:FINAL_SUMMARY:END -->
