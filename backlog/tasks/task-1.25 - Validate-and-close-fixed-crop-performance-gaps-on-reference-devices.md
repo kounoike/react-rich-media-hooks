@@ -1,11 +1,11 @@
 ---
 id: TASK-1.25
 title: Validate and close fixed-crop performance gaps on reference devices
-status: In Progress
+status: Done
 assignee:
   - '@codex'
 created_date: '2026-09-25 10:53'
-updated_date: '2026-10-10 01:24'
+updated_date: '2026-10-24 04:05'
 labels: []
 dependencies:
   - TASK-1.11
@@ -47,6 +47,7 @@ modified_files:
   - docs/measurements/crop-benchmark-native-gc-endpoints-normal.json
   - pnpm-workspace.yaml
   - pnpm-lock.yaml
+  - docs/measurements/crop-acceptance-c922-chrome154-controlled-gc-20261024.json
 parent_task_id: TASK-1
 priority: medium
 type: task
@@ -62,8 +63,8 @@ Close the measured verification gaps left by TASK-1.11 for the approved fixed ca
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
 - [x] #1 Record at least three capture-only, pass-through, and fixed-crop runs plus five warm add/update/bypass/remove cycles on a physical 1280×720/30 reference camera, with per-browser/device versions and lifecycle cleanup evidence.
-- [ ] #2 Compare capture-only and crop frame rate, unexpected dropped frames, first-frame time, source-to-preview p95 latency, and available retained-heap measurements against TASK-1.6/doc-6 budgets.
-- [ ] #3 Optimize only bottlenecks supported by those measurements and record the before/after evidence; if budgets remain missed, document tested fallback and affected browser/device combinations.
+- [x] #2 Compare capture-only and crop frame rate, unexpected dropped frames, first-frame time, source-to-preview p95 latency, and available retained-heap measurements against TASK-1.6/doc-6 budgets.
+- [x] #3 Optimize only bottlenecks supported by those measurements and record the before/after evidence; if budgets remain missed, document tested fallback and affected browser/device combinations.
 - [x] #4 Preserve the TASK-1.11 no-reacquisition, cancellation, failure, bypass, and cleanup behavior with automated coverage and consumer guidance.
 - [x] #5 Leave Edge, Safari, and mobile coverage within the approved doc-6 cadence and record any still-unknown device results.
 <!-- AC:END -->
@@ -76,6 +77,8 @@ Close the measured verification gaps left by TASK-1.11 for the approved fixed ca
 6. Resolve the newly observed CI development-audit blocker under the already approved TASK-1.22 immediate critical/high response policy, using only patched transitive resolutions within existing declared ranges; verify audit/license/signature and compatibility evidence without changing direct toolchain versions or adding an exception.
 
 7. The installed oxfmt 0.65.0 manifest pins tinypool exactly at 2.1.0, so an in-range resolution update alone is impossible. Retain the approved direct toolchain versions and scope a development-only override to oxfmt@0.65.0 > tinypool 2.1.2; pin source-map-js to its compatible security patch 1.2.2. Generate the lockfile with pnpm, record the constraint and advisory evidence, and retain manual review.
+
+8. With the user's explicit authorization, run the actual physical C922 acceptance protocol with controlled post-GC observations, save the complete report, compare strict metrics and fallback on the measured pairing, and preserve misses/unknowns while keeping PR #28 Draft for manual approval.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -168,18 +171,28 @@ Final targeted browser matrix: 21 Chromium/Firefox cases passed and 5 feature-sp
 Current-head CI at 71b3743 passed Node 22/24 quality and Firefox smoke; supply-chain verify failed on GHSA-5gmw-xhrv-c9v3 and GHSA-85c8-ppgw-ccpr (oxfmt > tinypool 2.1.0; fixes 2.1.1 and 2.1.2) and GHSA-68fv-2mgg-jv7q (source-map-js 1.2.1; fix 1.2.2). These pre-existing dev-only resolutions were unchanged by benchmark work. Reviewed the accepted docs/supply-chain-maintenance.md policy: critical/high issues must be patched immediately and dependency changes stay manual-review/no-auto-merge. A bounded transitive patch update within existing ranges is required to unblock this task PR validation; no runtime/peer/direct toolchain version change or vulnerability exception is proposed.
 
 Resolved the observed CI gate using the approved immediate critical/high response policy. oxfmt 0.65.0 pins tinypool exactly at 2.1.0; an in-range lock update cannot patch it. Scoped pnpm override oxfmt@0.65.0>tinypool=2.1.2 and source-map-js=1.2.2 preserves direct toolchain versions and fixes GHSA-5gmw-xhrv-c9v3, GHSA-85c8-ppgw-ccpr and GHSA-68fv-2mgg-jv7q. pnpm 11 explicitly ignored package.json pnpm.overrides, so that temporary field was removed and the settings use pnpm-workspace.yaml with only the root package included. pnpm generated the lockfile; the diff changes only these two resolved packages plus override metadata. Frozen ignore-scripts install passed, both production/development audits report no known vulnerabilities, supply-chain policy/license checks passed for 13 direct dependencies and 224 integrity resolutions, and 224 registry signatures verified. No vulnerability exception, direct version, runtime import, React peer range or public API was changed. Keep dependency changes in manual review and remove scoped overrides when future upstream constraints safely resolve fixes.
+
+Continuation authorization and current state (2026-10-24, Asia/Tokyo): The user explicitly authorized Computer Use on the actual Windows desktop reference camera, including camera permission, Start/Run controls, and the existing controlled-GC collection flow. This authorization is for TASK-1.25 verification only; it does not authorize merge or budget, API, compatibility, or architecture changes. Refreshed branch/PR: d5ef18167ea720aec2fa06eb1349b95fc9a0fc51, PR #28 OPEN/Draft. Current-head CI run 38013042106 failed in the same-track 30-to-60 fps test at the actual input readiness assertion (>45 fps): the two logged attempts measured 43.821 and 35.394 fps. The failure occurred before output-cap assertions and therefore does not show a cap violation. The 1280x720 captureStream(60) fixture is painted from requestAnimationFrame. The isolated Chromium test passed locally four times (one run plus three repeats) after building the current task page. Leave performance budgets unchanged; the failure points to a runner-scheduler-sensitive fixture/readiness condition unless additional evidence shows an output-cap defect.
+
+Prior smoke findings to retain as non-acceptance evidence: Orca app 1.4.220, default profile, Chrome 150.0.7871.250 on Win32. getUserMedia for c922 Pro Stream Webcam (046d:085c) negotiated 1280x720 at 30 fps. With a visible video element appended to the DOM, requestVideoFrameCallback delivered a 1280x720 frame while document.visibilityState was visible and document.hasFocus was false. An earlier callback timeout used a detached video element, so tab inactivity is not established as the cause. This smoke evidence is neither sustained FPS evidence nor acceptance evidence.
+
+The user explicitly authorized actual desktop camera verification on 2026-10-24, including permission, Start/Run, and controlled GC. The first chooser defaulted to nizima LIVE Virtual Camera; after the actual track label exposed that source, the stream was stopped before any benchmark stage or GC collection. The stopped 03:49:30Z report has zero stages and is not acceptance evidence. Chrome camera settings were then set to c922 Pro Stream Webcam, and the permission chooser confirmed the exact physical device before granting access.
+
+Valid physical report: docs/measurements/crop-acceptance-c922-chrome154-controlled-gc-20261024.json, SHA-256 4d3269b07999b17ba7674be62e7f01be6451907f90c27386134a6fd846353e12. Run 2026-10-24T03:59:30.270Z through 04:01:03.831Z used Chrome 154.0.8037.98, Windows 11 build 26200, Ryzen 9 5900X, Node 26.7.0, pnpm 11.21.0, and the C922 negotiated at 1280x720/30. Current benchmark SHA was d5ef18167ea720aec2fa06eb1349b95fc9a0fc51. Report source label is in camera.cameraLabel; the redundant free-text cameraDescription stayed at its placeholder.
+
+Strict endpoint FPS values were capture-only 30.252609/29.749899/30.030030, pass-through 29.757549/30.503050/30.252609, and fixed crop 30.001017/30.001017/30.001500. Two of six capture/pass-through controls failed the unchanged 30 fps threshold; all three crop trials passed. Reported presented-frame gaps were zero across these modes, while the exact number of camera frames never delivered remains unknown. First usable frame was 54.300 ms (500 ms budget); crop source-to-preview p95 was 16.8/16.8/16.7 ms (28/29/28 matched samples); crop setup was 66.8/80.3/90.7 ms. Whole-window rates remain in the raw report as diagnostics and do not override endpoint checks.
+
+Four controlled post-GC observations were 1,790,368 bytes before effects, 1,821,284 after effects, 1,823,012 before camera sessions, and 1,879,452 after sessions. Total growth was 89,084 bytes; the unchanged max(10%, 5 MiB) retention criterion passed, as did the effect/session growth flags. All five physical effect cycles passed add/update/bypass/remove; bypass and removal restored original input in each. All five camera restart cycles passed; 19 tracks were observed and zero remained live after disposal. Thus explicit original-media fallback is verified on this Chrome 154/C922 pairing. The automatic overload watchdog did not trigger in this run; its existing automated Firefox coverage is synthetic only and no physical Firefox result is inferred.
+
+The measured before/after Windows Chrome comparator continues to support the existing crop output-scheduling fix. The physical C922 crop passed the strict rate and latency budgets with matching input/draw/output cadence; the two strict misses were already present in capture-only/pass-through. The evidence does not support another crop optimization. Keep strict misses and unknown sensor-level drops visible; do not adjust budgets or add tolerance. Edge/Safari/mobile remain unknown per doc-6 cadence, and Firefox retained heap remains unavailable.
+
+CI diagnosis for run 38013042106 on d5ef181: Chromium failed tests/browser/video-crop-throughput.spec.ts at the 60 fps synthetic source readiness check (>45 fps), with attempts 43.821 and 35.394 fps. The fixture uses a 1280x720 captureStream(60) canvas painted through requestAnimationFrame. The failure occurred before output-cap assertions and is not evidence of an output-cap violation. The targeted test passed locally once plus three repeats (4/4); performance budgets and test assertions were not weakened. Current-head CI status must still be reported after the branch push.
+
+AC #2 and #3 are now supported by the saved physical comparison, controlled retention evidence, existing measured before/after evidence, and physical bypass restoration. All AC #1-#5 now have documented evidence. PR #28 remains Draft for manual review and is not merged; Agent improvement PR: none.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Fixed the measured crop output sampling loss with optional per-draw frame requests and a live-rate cap guard; three and five user-operated throughput trials matched input. Preserved the complete C922 acceptance report: first frame 72.1 ms, five successful effect cycles, five successful camera restart cycles and all 19 observed tracks released. Verified that the acceptance server still served an old compiled runtime despite the declared SHA, then corrected fresh compiled-module loading with module fingerprints. Separated FPS from processing-token latency, made invasive DOM diagnostics optional, and distinguished raw heap allocations from controlled post-GC retention around both effect and camera cycles. pnpm verify, ten targeted Chromium cases and a final five-case benchmark rerun passed. Corrected physical throughput, processing latency, controlled retained heap and complete runtime provenance remain outstanding; TASK-1.25 stays In Progress. Agent improvement PR: none; changes are scoped benchmark/product verification work.
-
-Follow-up: reproduced and repaired a latency frame-callback exception path that hid the original error, discarded completed crop FPS and left camera cleanup unconfirmed. The page now preserves FPS before latency, records exact timing errors and pipeline/video/visibility diagnostics, and cleans up failed runs. Verified normal-duration timing on synthetic WSL Chromium and isolated native Windows Chrome 154 (three trials, 29 matched tokens each, p95 16.8 ms and all 19 tracks released). Physical low baseline FPS and the actual timeout cause remain unconfirmed pending the user report; task remains In Progress.
-
-Physical follow-up at a40114c completed with verified fixed-module fingerprint, three complete profile trials, processing p95 16.8/17.7/18.8 ms, first usable frame 105.684 ms, five successful effect and camera cycles, and all 19 tracks released. AC1 is now checked. Crop input/draw/output counts match; derived steady crop presentation cadence is approximately 30.00 fps in all three trials. Preserve the original false strict-FPS flags and distinguish whole-window rate from endpoint cadence. Controlled physical retained-heap evidence and formal FPS interpretation remain outstanding; AC2/3 remain open and the task stays In Progress.
-
-Remaining preparation is implemented: endpoint FPS calculation and replay, unchanged strict 30 fps comparisons, a WSL/Windows dedicated Chrome launcher with four controlled post-GC heap observations and manual physical Start/Run, automatic available environment/commit metadata, local report save and old-page protocol rejection. pnpm verify passed with 21 unit tests; 21 targeted Chromium/Firefox cases passed with 5 explicit capability skips, and native Windows synthetic normal/short GC runs completed with all 19 tracks ended. The existing Draft PR is updated for review. Physical post-GC evidence and final strict-budget/fallback conclusions remain pending; keep In Progress and AC2/3 open. Agent improvement PR: none; this is assigned product benchmark/verification work.
-
-Current-head CI revealed three pre-existing high/critical development advisories. Resolved under the approved immediate-response policy with pnpm-generated lockfile updates and narrowly scoped pnpm 11 configuration: formatter-parent tinypool 2.1.2 and source-map-js 1.2.2. Direct toolchain/peer/runtime versions are unchanged; no audit exception. Frozen install, production/development audits, license/integrity policy, 224 registry signatures, and pnpm verify with 21 tests passed after the patches. Dependency changes remain in manual review; the physical post-GC acceptance evidence is still pending.
+Completed the physical Chrome 154 / C922 verification with a byte-preserved controlled-GC report and documented the strict results. All fixed-crop FPS/latency trials and retained-heap checks passed; two capture/pass-through controls remained below the unchanged 30 fps threshold, presented-frame gaps were zero, and exact undelivered sensor frames remain unknown. Physical bypass restoration and lifecycle cleanup passed; AC #1-#5 are evidence-backed and TASK-1.25 is Done, while PR #28 stays Draft and unmerged for manual review.
 <!-- SECTION:FINAL_SUMMARY:END -->
