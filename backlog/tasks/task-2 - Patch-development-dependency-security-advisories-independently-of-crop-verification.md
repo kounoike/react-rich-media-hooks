@@ -3,16 +3,17 @@ id: TASK-2
 title: >-
   Patch development dependency security advisories independently of crop
   verification
-status: In Progress
+status: Done
 assignee:
   - '@codex'
 created_date: '2026-10-24 06:06'
-updated_date: '2026-10-24 06:11'
+updated_date: '2026-10-24 06:12'
 labels: []
 dependencies: []
 references:
   - 'https://github.com/advisories/GHSA-587h-7wmj-h5pm'
   - 'https://github.com/kounoike/react-rich-media-hooks/pull/28'
+  - 'https://github.com/kounoike/react-rich-media-hooks/pull/30'
 documentation:
   - docs/supply-chain-maintenance.md
 priority: high
@@ -30,15 +31,17 @@ Restore the main branch supply-chain gate with a focused dependency-only PR, mer
 <!-- AC:BEGIN -->
 - [x] #1 Main-based manifest, pnpm-generated lockfile and dependency inventory consistently resolve patched Vite and the affected transitive packages without unrelated product changes.
 - [x] #2 Frozen installation, vulnerability gates, registry signatures, license/provenance policy, quality/package verification and Chromium/Firefox browser checks pass for the updated dependency graph.
-- [ ] #3 A separate PR targeting main contains only dependency fixes, associated inventory/documentation and this task record, with the user-requested merge ordering documented.
+- [x] #3 A separate PR targeting main contains only dependency fixes, associated inventory/documentation and this task record, with the user-requested merge ordering documented.
 <!-- AC:END -->
 
 ## Implementation Plan
 
 <!-- SECTION:PLAN:BEGIN -->
-1. Verify advisories and accepted supply-chain/toolchain policies; isolate dependency changes from PR #28. 2. Apply Vite 8.2.4, paired Vitest/coverage 4.1.12 and existing tinypool/source-map-js patches on origin/main; synchronize dependency inventory and regenerate the lockfile with pnpm 11.21.0. 3. Run frozen installation, audits, signatures, license/provenance, aggregate quality/package, coverage and Chromium/Firefox browser verification against the final graph. 4. Publish a focused Draft PR, finalize the task with objective evidence, review the exact diff and current-head CI, then use the user-authorized squash merge before PR #28.
-
-5. Update the separately locked capture example to the same patched Vite version and preserve standalone installation with a local root-only pnpm-workspace.yaml; verify its frozen install, audit and build.
+1. Verify security advisories and the accepted supply-chain/toolchain contracts; isolate dependency changes from PR #28.
+2. Apply Vite 8.2.4, paired Vitest/coverage 4.1.12 and the existing tinypool/source-map-js patches on origin/main; synchronize inventory and regenerate the root lockfile with pnpm 11.21.0.
+3. Patch the separately locked capture example to Vite 8.2.4 and preserve its standalone commands and frozen lockfile through local pnpm workspace metadata.
+4. Verify root/example frozen installs and audits, root signatures and license/provenance checks, quality/package/coverage, an isolated own-server Chromium/Firefox matrix, and the example build.
+5. Publish focused PR #30, finalize the task with evidence, review the exact diff and successful final-head CI, then squash merge under the user's explicit instruction before PR #28.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -53,4 +56,12 @@ The separately locked capture example also pins Vite 8.2.2. Update that pin and 
 Final root graph validation passed: pnpm install --frozen-lockfile --ignore-scripts; pnpm verify (format/lint, 14 unit tests, typecheck, Vite 8.2.4 build, React 18.2/19.1.1 packed ESM/SSR/CJS/TypeScript consumers, lifecycle policy); pnpm test:unit:coverage (14 tests); supply-chain:check (13 direct dependencies, 224 integrity-pinned resolutions, unchanged three license exceptions, zero distributed assets); supply-chain:signatures (224 verified); supply-chain:audit (no known vulnerabilities in production or development). The dedicated own-worktree browser server on port 4197 passed all four Chromium/Firefox capture/crop tests in 50.1s. Example frozen installation and audit passed with Vite 8.2.4 and no known vulnerabilities. Manifest contract comparison confirms only Vite/Vitest/coverage direct development patch versions changed; exports, React peers, engines, scripts, distributed file list and runtime dependencies match origin/main. No product source/tests, CI/workflow, Decision, API, compatibility or distribution-contract changes are included. Agent improvement PR: none.
 
 The standalone capture example production build also passed with its own Vite 8.2.4 and frozen lockfile; the script rebuilt the library and typechecked the React consumer before bundling. All local acceptance verification is complete. The separately published PR and current-head CI are the remaining review/integration steps.
+
+Published separate Draft PR #30 against main: https://github.com/kounoike/react-rich-media-hooks/pull/30. Verified its exact ten-file scope, root/example manifest and lockfile versions, synchronized inventory, clean whitespace and real-newline PR body. The PR contains dependency patches, standalone-install metadata, current-version documentation and TASK-2 only; it contains no TASK-1.25 implementation or measurement files. All local acceptance criteria are satisfied; current-head GitHub checks remain an integration prerequisite. The user explicitly authorized this dependency PR to merge before PR #28; no further merge permission is required for this scoped result. This manual dependency update is not eligible for the automatic lane.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Patched Vite to 8.2.4 in the library and standalone React example, paired Vitest/coverage at 4.1.12, and extracted the tinypool 2.1.2/source-map-js 1.2.2 security fixes independently of PR #28. Regenerated both frozen lockfiles and synchronized provenance/current-version documentation. Root/example audits report no known vulnerabilities; 224 registry signatures and license/integrity checks passed; pnpm verify, 14 coverage tests, all four isolated-server Chromium/Firefox cases and the example typecheck/build passed. PR #30 targets main with ten scoped files and no product, API, compatibility or distribution changes; merge is explicitly authorized after final-head CI passes.
+<!-- SECTION:FINAL_SUMMARY:END -->
