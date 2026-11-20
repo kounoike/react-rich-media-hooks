@@ -227,6 +227,7 @@ class EvidenceProfile extends AudioWorkletProcessor {
   process(_inputs: Float32Array[][], outputs: Float32Array[][]): boolean {
     const now = profileNow;
     const started = now();
+    const measuring = this.frames >= 80;
     const output = outputs[0]?.[0];
     if (!output || this.done) return false;
     output.fill(0);
@@ -244,7 +245,7 @@ class EvidenceProfile extends AudioWorkletProcessor {
       if (this.frames >= 80) this.nativeTimes[this.frames - 80] = elapsed;
       this.frames++;
     }
-    if (this.frames >= 80 && this.callbacks < this.callbackTimes.length)
+    if (measuring && this.callbacks < this.callbackTimes.length)
       this.callbackTimes[this.callbacks++] = now() - started;
     if (this.frames === 320) {
       const validation = new Float32Array(480).fill(0.1);
@@ -261,7 +262,7 @@ class EvidenceProfile extends AudioWorkletProcessor {
       }
       const loopMs = now() - loopStart;
       this.port.postMessage({
-        profileProtocol: "ac3-inplace-v1",
+        profileProtocol: "ac3-zig-v2",
         mode: this.mode,
         clock: typeof globalThis.performance?.now === "function" ? "performance.now" : "Date.now",
         engineMs: this.nativeTimes,

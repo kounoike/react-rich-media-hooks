@@ -50,6 +50,20 @@ class LatencyMeasurementTests(unittest.TestCase):
         self.assertTrue(phase['fallbackDuringCapture'])
         self.assertFalse(phase['qualifiedProbe'])
         self.assertIsNone(phase['incrementalMs'])
+    def test_added_latency_keeps_graph_delay_and_uses_original_baseline(self):
+        windows = []
+        for delay in [0, 30, 60]:
+            windows.extend([self.window(delay * 16, f'known-{delay}') for _ in range(3)])
+        windows.extend([self.window(20 * 16, 'original') for _ in range(4)])
+        windows.extend([self.window(60 * 16, 'graph-0') for _ in range(4)])
+        for index in range(6):
+            windows.append(self.window(90 * 16, 'rnnoise-zig-generic') | {
+                'startFrame': 150000 + index * 48000, 'endFrame': 198000 + index * 48000})
+        report = summarize({'windows': windows, 'captureRate': 16000, 'profiles': [], 'history': [
+            {'frame': 100000, 'status': 'active', 'original': False}]})
+        added = report['phases']['rnnoise-zig-generic']['incrementalMs']['p95']
+        self.assertEqual(added, 70)
+        self.assertGreater(added, 40)  # Subtracting the graph would incorrectly report 30 ms.
     def test_rank_percentiles_do_not_interpolate_latency(self):
         self.assertEqual(distribution(range(1,101)),{'count':100,'p50':50.,'p95':95.,'p99':99.,'max':100.})
 

@@ -288,3 +288,22 @@ and closed analysis context. Chromium recorded 1747 active/473 degraded polls;
 Firefox recorded 2219 degraded polls with brief active retries between polls.
 These observations qualify neither uninterrupted denoised speech nor the
 40 ms budget. See the controlled report for zero-quanta and polling limits.
+
+## Minimum Zig compute-kernel prototype
+
+The next [Zig kernel experiment](measurements/audio/zig-kernel-prototype.md)
+ports RNNoise affine dense/sparse computation while retaining the C model,
+feature extraction, FFT, activation and GRU orchestration as the oracle.
+Separate graph-only and native/actual-host runs retain the original-relative
+added-latency definition, including graph cost, and the unchanged 40 ms target.
+
+The scalar port did not establish a practical improvement. Explicit SIMD
+reduced Firefox raw native p95 from 7 to 3 ms, but still exceeded the 2.667 ms
+render budget and fell back in the actual host. Chromium SIMD added p95 was
+89.375 ms. Both variants matched C bit-for-bit in the tested frame sequences
+and browser batch samples; all 36 limited quality cells per artifact had
+identical metrics. The prototype is rejected as a production/AC3 solution and
+remains opt-in, outside packaged assets; the current C WASM is unchanged.
+Fallback-only qualification remains the next owner-review candidate, with no
+accepted support-policy change, new task or Decision. AC3 and Draft PR #32
+remain open for manual review.

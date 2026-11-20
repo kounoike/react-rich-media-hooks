@@ -9,32 +9,37 @@ test("separates known delay, media bridges, native profiles and processor state"
   test.skip(process.env.AUDIO_AC3 !== "1", "Opt-in AC3 latency/profile and SIMD comparison.");
   test.setTimeout(420_000);
   const generic = readFileSync("src/effects/audio/assets/rnnoise.wasm");
-  const simd = readFileSync(".cache/audio-experiment/rnnoise-simd128.wasm");
+  const measurementStage = process.env.AUDIO_AC3_STAGE ?? "all";
+  expect(["all", "graph", "compute"]).toContain(measurementStage);
+  const artifacts: Record<string, Buffer> = { generic };
+  if (measurementStage !== "graph") {
+    if (process.env.AUDIO_ZIG === "1") {
+      for (const variant of ["zig-generic", "zig-simd128"])
+        artifacts[variant] = readFileSync(`.cache/audio-zig/${variant}.wasm`);
+    } else artifacts.simd128 = readFileSync(".cache/audio-experiment/rnnoise-simd128.wasm");
+  }
   const input = readFileSync(".cache/audio-quality/speech.f32");
   const worklet = readdirSync("dist/assets").find((name) => /^noise-worklet-.*\.js$/.test(name));
   expect(worklet).toBeDefined();
-  const identities = {
-    input: createHash("sha256").update(input).digest("hex"),
-    generic: createHash("sha256").update(generic).digest("hex"),
-    simd128: createHash("sha256").update(simd).digest("hex"),
-  };
+  const identities = Object.fromEntries(
+    Object.entries({ ...artifacts, input }).map(([name, bytes]) => [
+      name,
+      createHash("sha256").update(bytes).digest("hex"),
+    ]),
+  );
   const servedDiagnostic = await (
     await page.request.get("/tests/browser/audio-diagnostic-worklet.ts")
   ).text();
   const servedKernel = await (
     await page.request.get("/src/effects/audio/backends/rnnoise-kernel.ts")
   ).text();
-  expect(servedDiagnostic).toContain("ac3-inplace-v1");
+  expect(servedDiagnostic).toContain("ac3-zig-v2");
   expect(servedKernel).toContain("get frameBuffer");
   const servedSources = {
     diagnosticModuleSha256: createHash("sha256").update(servedDiagnostic).digest("hex"),
     kernelModuleSha256: createHash("sha256").update(servedKernel).digest("hex"),
   };
-  for (const [name, bytes] of [
-    ["generic", generic],
-    ["simd128", simd],
-    ["input", input],
-  ] as const) {
+  for (const [name, bytes] of Object.entries({ ...artifacts, input })) {
     await page.route(`**/audio-ac3-${name}`, (route) =>
       route.fulfill({ contentType: "application/octet-stream", body: bytes }),
     );
@@ -48,7 +53,7 @@ test("separates known delay, media bridges, native profiles and processor state"
   await page.goto("/tests/browser/index.html");
   await page.getByRole("button", { name: "Start measurement" }).click();
   const result = await page.evaluate(
-    async ({ productionWorklet, nativeWindows }) => {
+    async ({ productionWorklet, nativeWindows, stage, variants }) => {
       const library = await import(new URL("/dist/core/index.js", location.origin).href);
       const effects = await import(new URL("/dist/effects/audio/index.js", location.origin).href);
       const runtime = await import(new URL("/src/effects/audio/runtime.ts", location.origin).href);
@@ -57,7 +62,7 @@ test("separates known delay, media bridges, native profiles and processor state"
         .href;
       const modules: Record<string, WebAssembly.Module> = {};
       const featureErrors: Record<string, string> = {};
-      for (const name of ["generic", "simd128"]) {
+      for (const name of variants) {
         try {
           modules[name] = await WebAssembly.compile(
             await (await fetch(`/audio-ac3-${name}`)).arrayBuffer(),
@@ -228,7 +233,7 @@ test("separates known delay, media bridges, native profiles and processor state"
         await collect("original", 4);
         graph.source?.disconnect();
         graph.source = null;
-        for (const delaySamples of [0, 1440]) {
+        for (const delaySamples of stage === "compute" ? [] : [0, 1440]) {
           const processor = await runtime.createWorkletAudioNoiseProcessor(original, "strong", {
             id: "diagnostic-pass",
             label: "Diagnostic pass",
@@ -245,7 +250,7 @@ test("separates known delay, media bridges, native profiles and processor state"
           graph.source = null;
           processor.dispose();
         }
-        for (const variant of ["generic", "simd128"]) {
+        for (const variant of stage === "graph" ? [] : variants) {
           if (!modules[variant]) continue;
           selectedModule = modules[variant];
           phase = `rnnoise-${variant}`;
@@ -270,7 +275,7 @@ test("separates known delay, media bridges, native profiles and processor state"
           simulated: true,
         };
         rejectCandidate = false;
-        for (const variant of ["generic", "simd128"]) {
+        for (const variant of stage === "graph" ? [] : variants) {
           if (!modules[variant]) continue;
           for (const mode of ["native", "kernel", "inplace"]) {
             const profile = await new Promise<Record<string, unknown>>((resolve, reject) => {
@@ -284,7 +289,7 @@ test("separates known delay, media bridges, native profiles and processor state"
               node.port.addEventListener(
                 "message",
                 (event: MessageEvent<Record<string, unknown>>) => {
-                  if (event.data.profileProtocol !== "ac3-inplace-v1") {
+                  if (event.data.profileProtocol !== "ac3-zig-v2") {
                     clearTimeout(timer);
                     node.disconnect();
                     node.port.close();
@@ -318,7 +323,7 @@ test("separates known delay, media bridges, native profiles and processor state"
           new URL("/src/effects/audio/backends/rnnoise-kernel.ts", location.origin).href
         );
         const numericalOutputs: Record<string, Float32Array> = {};
-        for (const variant of ["generic", "simd128"]) {
+        for (const variant of stage === "graph" ? [] : variants) {
           if (!modules[variant]) continue;
           const kernel = new RnnoiseKernel(modules[variant]);
           const output = new Float32Array(pcm.length);
@@ -333,33 +338,37 @@ test("separates known delay, media bridges, native profiles and processor state"
           kernel.destroy();
           numericalOutputs[variant] = output;
         }
-        const a = numericalOutputs.generic;
-        const b = numericalOutputs.simd128;
-        let maxAbsDiff = 0,
-          squares = 0,
-          differentBits = 0;
-        if (a && b) {
-          const aBits = new Uint32Array(a.buffer);
-          const bBits = new Uint32Array(b.buffer);
-          for (let i = 0; i < a.length; i++) {
-            const delta = a[i]! - b[i]!;
-            maxAbsDiff = Math.max(maxAbsDiff, Math.abs(delta));
-            squares += delta * delta;
-            if (aBits[i] !== bBits[i]) differentBits++;
-          }
-        }
-        const numericalComparison = {
-          batchOnly: true,
-          samples: a?.length ?? 0,
-          maxAbsDiff,
-          rmsDiff: a ? Math.sqrt(squares / a.length) : null,
-          differentBits,
-          comparable: !!(a && b),
-          allFinite: Object.values(numericalOutputs).every((values) =>
-            values.every(Number.isFinite),
-          ),
-        };
+        const numericalComparison = Object.fromEntries(
+          Object.entries(numericalOutputs).map(([variant, b]) => {
+            const a = numericalOutputs.generic!;
+            let maxAbsDiff = 0,
+              squares = 0,
+              differentBits = 0;
+            const aBits = new Uint32Array(a.buffer),
+              bBits = new Uint32Array(b.buffer);
+            for (let i = 0; i < a.length; i++) {
+              const delta = a[i]! - b[i]!;
+              maxAbsDiff = Math.max(maxAbsDiff, Math.abs(delta));
+              squares += delta * delta;
+              if (aBits[i] !== bBits[i]) differentBits++;
+            }
+            return [
+              variant,
+              {
+                batchOnly: true,
+                samples: a.length,
+                maxAbsDiff,
+                rmsDiff: Math.sqrt(squares / a.length),
+                differentBits,
+                allFinite: b.every(Number.isFinite),
+              },
+            ];
+          }),
+        );
         return {
+          measurementStage: stage,
+          addedLatencyDefinition:
+            "processed lag minus this run original-track median; includes graph/model/staging; no graph subtraction; fallback never qualifies",
           userAgent: navigator.userAgent,
           sampleRate: context.sampleRate,
           captureRate: 16_000,
@@ -389,7 +398,12 @@ test("separates known delay, media bridges, native profiles and processor state"
         await context.close();
       }
     },
-    { productionWorklet: worklet, nativeWindows: Number(process.env.AUDIO_AC3_WINDOWS ?? 8) },
+    {
+      productionWorklet: worklet,
+      nativeWindows: Number(process.env.AUDIO_AC3_WINDOWS ?? 8),
+      stage: measurementStage,
+      variants: Object.keys(artifacts),
+    },
   );
   await test.info().attach("audio-ac3.json", {
     body: Buffer.from(JSON.stringify({ identities, servedSources, ...result })),

@@ -3,8 +3,8 @@ import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 const manifest = JSON.parse(readFileSync("native/rnnoise/manifest.json", "utf8"));
 const variant = process.env.AUDIO_EXPERIMENT;
-if (variant !== undefined && variant !== "simd128") throw new Error("Unknown experimental engine");
-const artifact = variant === "simd128" ? {
+if (variant !== undefined && !["simd128", "zig-generic", "zig-simd128"].includes(variant)) throw new Error("Unknown experimental engine");
+const artifact = variant?.startsWith("zig-") ? JSON.parse(readFileSync(".cache/audio-zig/build.json", "utf8")).artifacts[variant] : variant === "simd128" ? {
   path: ".cache/audio-experiment/rnnoise-simd128.wasm",
   sha256: JSON.parse(readFileSync(".cache/audio-experiment/build.json", "utf8")).artifacts.simd128.sha256,
 } : manifest.artifact;
