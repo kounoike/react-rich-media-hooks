@@ -10,6 +10,21 @@ const strings = { type: "array", items: { type: "string" } };
 const stringMap = { type: "object", additionalProperties: { type: "string" } };
 const contract = (required, properties) => ({ type: "object", required, properties });
 const schemas = new Map([
+  ["native/rnnoise/manifest.json", contract(["engine", "version", "abiVersion", "zigVersion", "source", "model", "artifact", "cSources"], {
+    engine: { const: "RNNoise" }, version: { const: "0.2" }, abiVersion: { const: 1 }, zigVersion: { const: "0.15.2" },
+    source: contract(["url", "revision", "sha256"], { url: { type: "string" }, revision: { type: "string" }, sha256: { type: "string", pattern: "^[0-9a-f]{64}$" } }),
+    model: contract(["url", "revision", "sha256"], { url: { type: "string" }, revision: { type: "string" }, sha256: { type: "string", pattern: "^[0-9a-f]{64}$" } }),
+    artifact: contract(["path", "sha256", "memoryBytes", "stackBytes"], {
+      path: { const: "src/effects/audio/assets/rnnoise.wasm" }, sha256: { type: "string", pattern: "^[0-9a-f]{64}$" },
+      memoryBytes: { type: "integer", minimum: 1 }, stackBytes: { type: "integer", minimum: 1 },
+    }), cSources: { type: "array", minItems: 1, items: { type: "string" } },
+  })],
+  ["tests/fixtures/audio-quality-sources.json", { type: "array", minItems: 1,
+    items: contract(["name", "archivePath", "sha256", "license", "source", "attribution"], {
+      name: { type: "string" }, archivePath: { type: "string" }, sha256: { type: "string", pattern: "^[0-9a-f]{64}$" },
+      license: { const: "CC-BY-4.0" }, source: { type: "string" }, attribution: { type: "string" },
+    }),
+  }],
   [".oxfmtrc.json", JSON.parse(readFileSync("node_modules/oxfmt/configuration_schema.json", "utf8"))],
   [".oxlintrc.json", JSON.parse(readFileSync("node_modules/oxlint/configuration_schema.json", "utf8"))],
   ["package.json", contract(["name", "version", "scripts", "packageManager"], {

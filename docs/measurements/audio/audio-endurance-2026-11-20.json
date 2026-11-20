@@ -1,0 +1,95 @@
+{
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+  "initialSettings": {
+    "autoGainControl": true,
+    "channelCount": 1,
+    "echoCancellation": true,
+    "latency": 0.01,
+    "noiseSuppression": false,
+    "sampleRate": 48000,
+    "sampleSize": 16,
+    "voiceIsolation": false
+  },
+  "durationMs": 600073,
+  "acquisitions": 1,
+  "setups": [
+    {
+      "status": "success",
+      "ms": 203.19999998807907
+    },
+    {
+      "status": "success",
+      "ms": 161.30000001192093
+    },
+    {
+      "status": "success",
+      "ms": 164.80000001192093
+    },
+    {
+      "status": "success",
+      "ms": 147.80000001192093
+    },
+    {
+      "status": "success",
+      "ms": 158.9000000357628
+    },
+    {
+      "status": "success",
+      "ms": 0
+    },
+    {
+      "status": "success",
+      "ms": 0
+    },
+    {
+      "status": "success",
+      "ms": 0
+    },
+    {
+      "status": "success",
+      "ms": 0
+    },
+    {
+      "status": "success",
+      "ms": 0
+    },
+    {
+      "status": "success",
+      "ms": 0
+    },
+    {
+      "status": "success",
+      "ms": 0
+    },
+    {
+      "status": "success",
+      "ms": 0
+    },
+    {
+      "status": "success",
+      "ms": 0
+    },
+    {
+      "status": "success",
+      "ms": 0
+    }
+  ],
+  "phases": {
+    "active": 1779,
+    "degraded": 439
+  },
+  "counts": {
+    "samples": 28752000,
+    "quanta": 224625,
+    "missing": 0,
+    "invalid": 0,
+    "zero": 209
+  },
+  "outputChanges": 11,
+  "contentionTicks": 2218,
+  "originalOnExit": false,
+  "cloneLiveAfterDispose": true,
+  "originalEnded": true,
+  "contextClosed": true,
+  "limits": "Fake capture and downstream rendering counters only; active/degraded polls are not glitch-free denoised-speech qualification; opaque device/group identifiers omitted"
+}

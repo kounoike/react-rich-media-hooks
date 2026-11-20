@@ -46,12 +46,6 @@
     "owner",
     "compatiblePackageVersion"
   ],
-  "kinds": [
-    "model",
-    "wasm",
-    "worker",
-    "worklet",
-    "other-distributed-asset"
-  ],
+  "kinds": ["model", "wasm", "worker", "worklet", "other-distributed-asset"],
   "policy": "Distributed runtime assets are pinned below. Each asset requires immutable provenance, digest, notices, compatible package version and an update owner before loading or publication."
 }

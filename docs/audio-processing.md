@@ -156,7 +156,7 @@ The private light tier was adjusted to 0.55 and remeasured. These are initial
 calibration cells, **not calibrated attenuation promises**. In particular, very
 large tail attenuation on strong does not measure speech preservation. Full
 results, exact tool versions and clip identities are in
-[`audio-quality-2026-11-20.json`](evidence/audio-quality-2026-11-20.json).
+[`audio-quality-2026-11-20.json`](measurements/audio/audio-quality-2026-11-20.json).
 
 All three clips are from one speaker and are limited to eight seconds each;
 the two noises are synthetic. These cells cannot qualify diverse speakers,
@@ -210,7 +210,7 @@ accepted one-second windows. The browser reported 11.625 ms base latency. This
 misses the 40 ms incremental target in this synthetic configuration. Firefox
 became degraded through its render-budget guard, so a processed latency number
 is rejected for that cell. Window correlations, estimates and exclusions are in
-[`audio-loopback-2026-11-20.json`](evidence/audio-loopback-2026-11-20.json).
+[`audio-loopback-2026-11-20.json`](measurements/audio/audio-loopback-2026-11-20.json).
 
 `scripts/summarize-audio-latency.py` scores a decoded `audio-loopback.json`
 Playwright attachment: normalized cross-correlation over 0–300 ms, rejection
@@ -226,7 +226,19 @@ The optional zero-latency-hint experiment lowered the reported Chromium context
 baseline to 2.667 ms, but measured incremental loopback p95 was **82.6875 ms**
 (original-track median 12 ms). It did not demonstrate an improvement over the
 40 ms target and is **not adopted**. See
-[`audio-low-latency-hint-2026-11-20.json`](evidence/audio-low-latency-hint-2026-11-20.json).
+[`audio-low-latency-hint-2026-11-20.json`](measurements/audio/audio-low-latency-hint-2026-11-20.json).
 Further latency work needs to distinguish the additional cross-context media
 bridges from native frame/analysis delay with an agreed reference-device route;
 these measurements do not justify replacing the approved processing backend.
+
+The ten-minute Chromium run (before rebasing onto the hk-gate integration)
+completed 600.073 seconds with one acquisition and five initial graph setups
+of 147.8–203.2 ms. It recorded 28,752,000 downstream samples, no missing-input
+quanta or nonfinite samples, and 209 all-zero quanta. Status polling observed
+1,779 active and 439 degraded intervals; explicit minute updates retried the
+effect after fallback. The final output clone remained live after session
+disposal, the original track ended, and the analysis context closed. This is
+sustained processing/fallback evidence rather than uninterrupted denoised
+speech: the zero quanta are not classified as artifacts or underruns. See
+[`audio-endurance-2026-11-20.json`](measurements/audio/audio-endurance-2026-11-20.json)
+and the [environment record](measurements/audio/audio-environment-2026-11-20.json).
