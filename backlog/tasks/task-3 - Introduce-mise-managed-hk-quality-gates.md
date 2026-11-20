@@ -1,11 +1,11 @@
 ---
 id: TASK-3
 title: Introduce mise-managed hk quality gates
-status: In Progress
+status: Done
 assignee:
   - '@codex'
 created_date: '2026-11-20 12:55'
-updated_date: '2026-11-20 13:03'
+updated_date: '2026-11-20 13:04'
 labels: []
 dependencies: []
 priority: high
@@ -26,7 +26,7 @@ Add a deterministic shared hk gate for pre-commit and pull request/main CI using
 - [x] #3 Configuration formatting/schema inventory and standard TS/TSX checks follow Decision 5 and existing tools
 - [x] #4 Zig checks pass with no Zig files and automatically check future tracked Zig sources without changing TASK-1.12
 - [x] #5 Local setup/hook documentation and positive, negative, no-change, workflow syntax, verify/package/lifecycle evidence are recorded
-- [ ] #6 Clean committed and pushed branch has exactly one validated Draft PR for manual review
+- [x] #6 Clean committed and pushed branch has exactly one validated Draft PR for manual review
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -50,4 +50,12 @@ Negative probes (all restored): compacted package.json failed Oxfmt; string prin
 Contract evidence: all package fields except scripts/devDependencies are byte-value equivalent to origin/main; no src/tests, accepted Decisions, TASK-1.12 record/worktree/implementation changes. Ajv/YAML are development-only, with inventory/license entries and lockfile integrities; YAML also resolves Vite existing optional peer without changing its pinned version. New mise action SHA and version are recorded in supply-chain policy. Manual review is required: CI/dependency/protected configuration paths and more than 10 files/300 lines; no automatic-lane eligibility claimed.
 Limitations: offline schema coverage is explicit repository contracts plus Oxc schemas and existing semantic validators, not complete upstream schemas for every format; historical measurements and generated lockfiles receive syntax checks, Backlog config remains CLI-owned, Markdown/HTML remain outside native formatting per Decision-5. Zig AST checks do not replace future target-dependent compilation/tests; TASK-1.12 must reconcile the compiler pin if needed. Initial tool/Pkl installation needs network; existing supply-chain exception expiry remains date-sensitive. Agent improvement PR: none; no independent workflow improvement was introduced.
 Remaining criterion #6: commit/push the branch and create/validate exactly one Draft PR, then record its URL/head and completion.
+
+Publication evidence: exactly one Draft PR #31 targets main: https://github.com/kounoike/react-rich-media-hooks/pull/31; PR head 666caa08dab565a5c5ff95403548ba6bac82daec matched local HEAD and git ls-remote origin/mise-hk-quality-gates, clean worktree, and published body contains real newline bytes with no literal backslash-n. All six acceptance criteria are proven; final task-record-only completion commit follows this note. GitHub Actions started both quality Node rows, both browser smoke rows and supply-chain verify; remote results were pending at this validation point, so manual review/merge remains with the user. No Run ID was supplied by the context Dispatch; exact Orca task task_aaf7d7bbb5c7 and Dispatch ctx_8eb0f9ac32f1 are included in the PR.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Introduced pinned mise/hk shared local, pre-commit and PR/main CI quality gates while preserving Decision-5 and full verify/package/lifecycle behavior. Validated 37 JSON/YAML configurations, native formatting, both Node 22/24 gates, 21 tests and coverage, deliberate schema/format/Zig failures, unchanged file hashes and an actual isolated pre-commit commit. Published exactly one validated manual-review Draft PR #31, https://github.com/kounoike/react-rich-media-hooks/pull/31; TASK-1.12 and public/runtime/distribution contracts are unchanged. Agent improvement PR: none.
+<!-- SECTION:FINAL_SUMMARY:END -->
