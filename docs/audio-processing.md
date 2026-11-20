@@ -252,3 +252,11 @@ This reinforces the lack of a qualified real-time browser/device cell rather
 than replacing the earlier active Chromium latency measurement. Browser smoke
 accepts only successful native execution or its specific render-budget fallback
 in the Chromium cell; unrelated glue/asset failures still fail that regression.
+
+The first GitHub Firefox CSP run reached the existing one-second startup
+deadline rather than a render-budget fault. That does not by itself identify
+CSP blocking. The fixture now clicks an explicit activation control, asserts
+zero `securitypolicyviolation` events and a live input, and requires original
+output if Firefox returns a bounded startup failure. Unknown asset/glue errors
+still fail. No timeout is extended and no warm-start qualification is inferred
+from fallback; the underlying startup/activation cause remains unqualified.

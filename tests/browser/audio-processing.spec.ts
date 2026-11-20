@@ -252,26 +252,49 @@ test("loads local processing assets under a CSP without script unsafe-eval or bl
         "Content-Security-Policy":
           "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; worker-src 'self'; media-src 'self'",
       },
-      body: "<!doctype html><title>Audio CSP fixture</title>",
+      body: "<!doctype html><title>Audio CSP fixture</title><button>Enable local audio</button>",
     }),
   );
   await page.goto("/tests/browser/index.html");
+  await page.getByRole("button", { name: "Enable local audio" }).click();
   const result = await page.evaluate(async () => {
+    const violations: string[] = [];
+    const onViolation = (event: SecurityPolicyViolationEvent): void => {
+      violations.push(event.violatedDirective);
+    };
+    document.addEventListener("securitypolicyviolation", onViolation);
     const library = await import(new URL("/dist/core/index.js", location.origin).href);
     const effects = await import(new URL("/dist/effects/audio/index.js", location.origin).href);
     const session = library.createMediaSession({ capture: { audio: true } });
     try {
       await session.start();
+      const original = session.getOutput("audio")?.track;
       const added = await session.setAudioEffects({ effects: [effects.noiseReduction()] });
-      return { status: added.status, message: added.error?.message };
+      // Let asynchronous CSP evidence arrive; a processor deadline is a separate failure domain.
+      await new Promise<void>((resolve) => setTimeout(resolve, 50));
+      return {
+        status: added.status,
+        message: added.error?.message,
+        violations,
+        original: session.getOutput("audio")?.track === original,
+        inputLive: original?.readyState === "live",
+      };
     } finally {
+      document.removeEventListener("securitypolicyviolation", onViolation);
       await session.dispose();
     }
   });
+  expect(result.violations).toEqual([]);
+  expect(result.inputLive).toBe(true);
   if (browserName === "chromium") expect(result.status).toBe("success");
   else {
     expect(["success", "failed"]).toContain(result.status);
-    if (result.status === "failed") expect(result.message).toContain("render budget");
+    if (result.status === "failed") {
+      expect(result.original).toBe(true);
+      expect(result.message).toMatch(
+        /render budget|did not initialize and produce audio within 1000 ms/,
+      );
+    }
   }
 });
 

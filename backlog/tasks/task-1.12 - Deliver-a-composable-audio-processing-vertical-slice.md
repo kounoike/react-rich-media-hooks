@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-08-13 20:31'
-updated_date: '2026-11-20 13:34'
+updated_date: '2026-11-20 13:43'
 labels: []
 dependencies:
   - TASK-1.5
@@ -89,6 +89,11 @@ Final post-rebase validation on code head 65ef5a15cc2afb6ca94c06be6de152f0126770
 - Vite logs proved earlier navigation contamination came from generated trace/report HTML triggering global reloads. Final verification used an operation-only persistent server with hmr:false and watch:null; no repository workflow/policy workaround was added.
 - Decision frontmatter snapshots match exactly; required body sections are nonempty; git diff --check passed; runtime/native sources are unchanged from the preserved checkpoint across rebase.
 Remaining acceptance: AC3 only. Keep task In Progress and Draft PR in manual review; no broad quality/latency/continuity/browser claim, no merge authorization, and no agent-improvement PR. The final task-record-only commit records these results; it changes no validated implementation/test/config bytes.
+
+Remote CI on published head 20a3334: Node 22/24 quality jobs, verify and Chromium browser job passed; Firefox CSP case failed twice because initialization hit the existing 1000 ms deadline, while the assertion allowed only a native render-budget failure. This is not evidence that CSP blocked asset loading; the exact cause of absent first audio is not inferred from a timeout.
+Corrected that task-specific fixture to perform a trusted browser activation click, collect and reject every securitypolicyviolation, and require a live original microphone. Firefox bounded startup timeout is now accepted only as explicit original-track fallback, alongside the existing native overload path; unrelated glue/asset errors and actual CSP violations still fail. No production timeout, algorithm, runtime or quality budget is changed, and no startup-support claim is added. The correction is being revalidated and will update the same Draft PR #32, never create another PR.
+
+CSP correction verification: the complete shared hk gate passed again (including 49 unit tests and package/SSR/lifecycle checks), and all eight focused Chromium/Firefox audio cases passed with zero securitypolicyviolation events required. The same one-second startup deadline and production runtime remain unchanged; only the explicit-activation fixture, fallback assertion and evidence documentation changed. This is a new validation commit on the existing Draft PR #32, with a new current-head CI run required; AC3 remains open.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
