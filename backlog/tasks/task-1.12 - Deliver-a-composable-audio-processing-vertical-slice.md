@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-08-13 20:31'
-updated_date: '2026-11-20 13:21'
+updated_date: '2026-11-20 13:27'
 labels: []
 dependencies:
   - TASK-1.5
@@ -77,6 +77,9 @@ All pre-rebase evidence is explicitly dated and base-qualified; post-rebase shar
 Post-rebase quality gate (origin/main 5c81f03, integration working tree on implementation commit 3bf12cd): mise exec -- pnpm quality:gate PASSED, including hk configuration/Pkl/actionlint and supply-chain validation (44 JSON/YAML files, 15 direct dependencies, 230 pinned resolutions, two audio assets), Zig fmt+AST checks, and pnpm verify with 49 unit tests, source formatting/lint/typecheck, native asset checks, ESM/CJS build, packed ESM/SSR/CJS/TypeScript consumers for React 18.2/19.1, and lifecycle policy validation. The first attempt correctly found supply-chain/assets.json newly included in main formatting; formatted only that task-owned file and the full gate then passed.
 AC evidence: #1 one-acquisition add/update/bypass/remove with unchanged video in session tests and actual built-browser audio output; #2 actual-model 128/192-sample framing, quantum overload, Firefox original fallback, integrity/module failure, processorerror, context interruption, cancellation/supersession, generated clone independence and deterministic disposal tests plus sustained fallback/cleanup evidence; #4 49 automated unit tests, eight audio browser cases, optional evidence probes and complete consumer/native/measurement docs. Check #1/#2/#4 only. AC3 remains OPEN: Chromium incremental loopback p95 exceeds 40 ms, full representative listening/corpus, physical latency and qualified uninterrupted processing/browser support are still missing.
 The processing/runtime/native source and produced Worklet/WASM remain identical across the main rebase; pre-rebase performance evidence is not relabeled. Current-main browser smoke and native rebuild checks will run again before publishing. This is a successful scoped manual-review delivery, not TASK-1.12 completion or release qualification.
+
+Post-rebase native rebuild again reproduced the exact reviewed WASM. Paired loopback probes passed both browser contracts but both native processors degraded through the quantum guard in this run, so both processed latency estimates were rejected; the new report records main 5c81f03 and runtime commit 1f5015a. This reinforces AC3 remaining open.
+Adjusted the Chromium smoke contract to require actual native readiness or the specific native render-budget failure, rather than assume every Chromium device can sustain processing; generic glue/asset errors still fail. The current audio browser suite passes 8/8 after this correction. First post-rebase aggregate was 30 passed/9 skipped with one execution-context navigation failure, so a final frozen-server aggregate is being run before publication; no unsupported all-green aggregate claim is made from that run.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

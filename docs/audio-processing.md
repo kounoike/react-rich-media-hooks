@@ -242,3 +242,13 @@ sustained processing/fallback evidence rather than uninterrupted denoised
 speech: the zero quanta are not classified as artifacts or underruns. See
 [`audio-endurance-2026-11-20.json`](measurements/audio/audio-endurance-2026-11-20.json)
 and the [environment record](measurements/audio/audio-environment-2026-11-20.json).
+
+After rebasing onto main `5c81f03`, paired-loopback checks ran again on the
+reconciled implementation. Both Chromium and Firefox initialized the native
+engine and then fell back through the render-budget guard during this run;
+processed latency estimates are rejected for both. See
+[`audio-loopback-post-rebase-2026-11-20.json`](measurements/audio/audio-loopback-post-rebase-2026-11-20.json).
+This reinforces the lack of a qualified real-time browser/device cell rather
+than replacing the earlier active Chromium latency measurement. Browser smoke
+accepts only successful native execution or its specific render-budget fallback
+in the Chromium cell; unrelated glue/asset failures still fail that regression.
