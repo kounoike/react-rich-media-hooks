@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-08-13 20:31'
-updated_date: '2026-11-20 13:27'
+updated_date: '2026-11-20 13:34'
 labels: []
 dependencies:
   - TASK-1.5
@@ -80,10 +80,19 @@ The processing/runtime/native source and produced Worklet/WASM remain identical 
 
 Post-rebase native rebuild again reproduced the exact reviewed WASM. Paired loopback probes passed both browser contracts but both native processors degraded through the quantum guard in this run, so both processed latency estimates were rejected; the new report records main 5c81f03 and runtime commit 1f5015a. This reinforces AC3 remaining open.
 Adjusted the Chromium smoke contract to require actual native readiness or the specific native render-budget failure, rather than assume every Chromium device can sustain processing; generic glue/asset errors still fail. The current audio browser suite passes 8/8 after this correction. First post-rebase aggregate was 30 passed/9 skipped with one execution-context navigation failure, so a final frozen-server aggregate is being run before publication; no unsupported all-green aggregate claim is made from that run.
+
+Final post-rebase validation on code head 65ef5a15cc2afb6ca94c06be6de152f012677063, based on origin/main 5c81f030d73a0d688bb41bdf92e9e7e9e16df02c:
+- mise exec -- pnpm quality:gate PASSED: configuration/Pkl/actionlint/supply-chain, Zig fmt/AST and complete pnpm verify (49 unit tests, formatting, lint, typecheck, native asset integrity/ABI/fixed memory, build, packed ESM/CJS/SSR/TypeScript consumers with React 18.2/19.1, lifecycle policy).
+- mise exec -- pnpm audio:rebuild PASSED again with byte-identical 43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56 WASM.
+- mise exec -- pnpm test:browser:smoke PASSED: 31 passed, 9 intentional skips (four opt-in probe cases and five existing Firefox capability exclusions), about four minutes; no product/test-code changes during this run.
+- Explicit post-rebase paired loopback checks PASSED 2/2 fallback contracts; both native processors degraded, so no qualifying processed-latency estimate is asserted. Current focused audio tests also passed 8/8 after the measured-overload contract correction.
+- Vite logs proved earlier navigation contamination came from generated trace/report HTML triggering global reloads. Final verification used an operation-only persistent server with hmr:false and watch:null; no repository workflow/policy workaround was added.
+- Decision frontmatter snapshots match exactly; required body sections are nonempty; git diff --check passed; runtime/native sources are unchanged from the preserved checkpoint across rebase.
+Remaining acceptance: AC3 only. Keep task In Progress and Draft PR in manual review; no broad quality/latency/continuity/browser claim, no merge authorization, and no agent-improvement PR. The final task-record-only commit records these results; it changes no validated implementation/test/config bytes.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Integrated the approved local RNNoise 0.2 AudioWorklet backend with reproducible mise/Zig 0.15.2 native assets, private adapters, session-owned add/update/bypass/remove and typed recovery; restored existing Decisions 8/9/10 without new adoption. Verified lifecycle, actual native framing, package/SSR consumers, CSP/integrity failure and explicit fallback, plus limited quality, loopback and ten-minute evidence. Rebased onto origin/main 5c81f03 and passed its hk shared gate; task remains In Progress because AC3 quality/listening, physical and incremental latency, uninterrupted continuity and browser/device qualification are not satisfied.
+Delivered a manual-reviewable RNNoise audio slice on latest main 5c81f03, with private adapters, reproducible mise/Zig native assets, approved bypass, observable fallback/cancellation and independent media ownership. Post-rebase hk/shared verification passed with 49 unit tests and packed React 18.2/19.1 SSR/ESM/CJS/type consumers; browser smoke passed 31 tests with 9 intentional skips, and native rebuild was byte-identical. Recorded limited 36-cell quality, failed latency gates and sustained processing/fallback evidence; AC1/2/4 are satisfied, AC3 remains open, and TASK-1.12 stays In Progress for manual review.
 <!-- SECTION:FINAL_SUMMARY:END -->
