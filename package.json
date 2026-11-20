@@ -90,8 +90,8 @@
     "orchestration:coordinator": "node scripts/orca-task-coordinator.mjs",
     "validate:lifecycle": "node scripts/validate-task-pr-lifecycle.mjs",
     "install:frozen": "pnpm install --frozen-lockfile",
-    "format:write": "oxfmt --write src tests package.json tsconfig.json tsconfig.base.json tsconfig.build.json vite.config.ts playwright.config.ts vitest.config.ts .oxlintrc.json .oxfmtrc.json mise.toml",
-    "format:check": "oxfmt --check src tests package.json tsconfig.json tsconfig.base.json tsconfig.build.json vite.config.ts playwright.config.ts vitest.config.ts .oxlintrc.json .oxfmtrc.json mise.toml",
+    "format:write": "oxfmt --write src tests examples package.json tsconfig*.json *.config.ts .oxlintrc.json .oxfmtrc.json mise.toml pnpm-workspace.yaml .github supply-chain release-manifest.json .orca",
+    "format:check": "oxfmt --check src tests examples package.json tsconfig*.json *.config.ts .oxlintrc.json .oxfmtrc.json mise.toml pnpm-workspace.yaml .github supply-chain release-manifest.json .orca",
     "lint": "oxlint --config .oxlintrc.json src tests",
     "lint:fix": "oxlint --config .oxlintrc.json --fix src tests",
     "supply-chain:check": "node scripts/check-supply-chain.mjs",
@@ -113,7 +113,11 @@
     "release:check": "node scripts/release-check.mjs",
     "release:dry-run": "pnpm package:check && pnpm pack --dry-run && pnpm release:check -- --dry-run",
     "release:publish": "node scripts/release-publish.mjs",
-    "verify": "pnpm format:check && pnpm lint && pnpm test:unit && pnpm package:check && pnpm run validate:lifecycle"
+    "verify": "pnpm format:check && pnpm lint && pnpm test:unit && pnpm package:check && pnpm run validate:lifecycle",
+    "config:check": "node scripts/check-config.mjs && hk validate --deny-warnings && actionlint -shellcheck= -pyflakes= && pnpm run supply-chain:check",
+    "zig:check": "node scripts/check-zig.mjs",
+    "quality:gate": "hk check --all",
+    "hooks:install": "hk install --mise"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.5",
@@ -121,6 +125,7 @@
     "@types/node": "24.3.0",
     "@types/react": "19.1.12",
     "@vitest/coverage-v8": "4.1.12",
+    "ajv": "8.20.0",
     "oxfmt": "0.65.0",
     "oxlint": "1.80.0",
     "oxlint-tsgolint": "7.0.2001",
@@ -128,7 +133,8 @@
     "react": "19.1.1",
     "typescript": "7.0.2",
     "vite": "8.2.4",
-    "vitest": "4.1.12"
+    "vitest": "4.1.12",
+    "yaml": "2.9.1"
   },
   "peerDependencies": {
     "react": ">=18.2.0 <20.0.0"

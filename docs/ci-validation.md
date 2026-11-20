@@ -12,15 +12,16 @@ Use the pinned Node and pnpm versions from `mise.toml` and install exactly the
 lockfile contents:
 
 ```sh
-pnpm install:frozen
-pnpm format:check
-pnpm lint
-pnpm typecheck
+mise trust
+mise install
+mise exec -- pnpm install --frozen-lockfile --ignore-scripts
+mise run quality
 pnpm test:unit:coverage
-pnpm build
-pnpm package:check
-pnpm run validate:lifecycle
 ```
+
+See [local quality gates](quality-gates.md) for explicit hook installation, the
+configuration schema inventory, pinned tools, and conditional Zig checks. The shared
+gate includes the complete existing `pnpm verify`; coverage is additional in CI.
 
 Install the Playwright browsers once before running browser smoke:
 

@@ -33,7 +33,15 @@
     "grouping": [
       {
         "name": "toolchain",
-        "members": ["typescript", "vite", "oxfmt", "oxlint", "oxlint-tsgolint", "@arethetypeswrong/cli", "publint"]
+        "members": [
+          "typescript",
+          "vite",
+          "oxfmt",
+          "oxlint",
+          "oxlint-tsgolint",
+          "@arethetypeswrong/cli",
+          "publint"
+        ]
       },
       {
         "name": "test-tooling",
@@ -152,6 +160,15 @@
         "sha": "d1b8138b7a31075141b6cd64103de9485ced7ac9",
         "source": "https://github.com/Songmu/tagpr",
         "purpose": "reviewed release PR, version, changelog, immutable tag, and draft GitHub Release authority",
+        "owner": "repository maintainers",
+        "reviewCadence": "monthly and on security advisories"
+      },
+      {
+        "name": "jdx/mise-action",
+        "version": "v5.2.10",
+        "sha": "90f833d396d0cc3674b631d2d225e306476c303a",
+        "source": "https://github.com/jdx/mise-action",
+        "purpose": "pinned local quality-gate tool provisioning; existing setup-node retains CI matrix ownership",
         "owner": "repository maintainers",
         "reviewCadence": "monthly and on security advisories"
       }
