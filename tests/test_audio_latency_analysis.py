@@ -64,7 +64,34 @@ class LatencyMeasurementTests(unittest.TestCase):
         added = report['phases']['rnnoise-zig-generic']['incrementalMs']['p95']
         self.assertEqual(added, 70)
         self.assertGreater(added, 40)  # Subtracting the graph would incorrectly report 30 ms.
+    def test_negative_original_baseline_is_not_clamped_to_make_a_route_pass(self):
+        windows = []
+        for delay in [-30, 0, 30, 60]:
+            windows.extend([self.window(delay*16, f'known-{delay}') for _ in range(3)])
+        windows.extend([self.window(-6*16, 'original') for _ in range(4)])
+        for index in range(6):
+            windows.append(self.window(36*16, 'rnnoise-raw') | {
+                'startFrame':150000+index*48000, 'endFrame':198000+index*48000})
+        report = summarize({'windows':windows, 'captureRate':16000, 'profiles':[],
+            'minimumLagMs':-300, 'knownDelayMs':[-30,0,30,60],
+            'history':[{'frame':100000,'status':'active','original':False}]})
+        self.assertEqual(report['baselineMedianMs'], -6)
+        self.assertEqual(report['phases']['rnnoise-raw']['incrementalMs']['p95'], 42)
+
     def test_rank_percentiles_do_not_interpolate_latency(self):
         self.assertEqual(distribution(range(1,101)),{'count':100,'p50':50.,'p95':95.,'p99':99.,'max':100.})
+
+    def test_internal_render_gap_cannot_cancel_an_overlap_at_window_endpoints(self):
+        window = self.window()
+        window['frameDiscontinuities'] = 2
+        row = score_window(window, [])
+        self.assertFalse(row['accepted'])
+        self.assertEqual(row['excluded'], 'internal-render-frame-discontinuity')
+
+    def test_signed_lag_is_explicit_and_legacy_defaults_remain_positive(self):
+        window = self.window(-480, 'known--30')
+        signed = score_window(window, [], minimum_lag_ms=-300)
+        self.assertTrue(signed['accepted']); self.assertEqual(signed['lagMs'], -30)
+        self.assertGreaterEqual(score_window(window, [])['lagMs'], 0)
 
 if __name__ == '__main__':unittest.main()

@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-const build = JSON.parse(readFileSync(".cache/audio-zig/build.json", "utf8"));
+const build = JSON.parse(readFileSync(process.env.AUDIO_COMPARISON_BUILD ?? ".cache/audio-zig/build.json", "utf8"));
 const manifest = JSON.parse(readFileSync("native/rnnoise/manifest.json", "utf8"));
 const variants = { generic: manifest.artifact, ...build.artifacts };
 const pcmBytes = readFileSync(".cache/audio-quality/speech.f32");
@@ -41,6 +41,6 @@ for (const [fixture, input] of [["speech", speech], ["seeded-noise-voiced-impuls
   }
   report.fixtures[fixture] = rows;
 }
-writeFileSync(".cache/audio-zig/frame-comparison.json", JSON.stringify(report,null,2)+"\n");
+writeFileSync(process.env.AUDIO_COMPARISON_OUTPUT ?? ".cache/audio-zig/frame-comparison.json", JSON.stringify(report,null,2)+"\n");
 console.log(JSON.stringify(report,null,2));
 assert(Object.values(report.fixtures).every((rows)=>Object.values(rows).every((r)=>r.withinProvisionalTolerance)), "Prototype exceeds the stated experimental numerical tolerance");

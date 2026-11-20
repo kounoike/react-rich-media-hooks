@@ -1,0 +1,124 @@
+{
+  "speechArchive": {
+    "name": "dev-clean.tar.gz",
+    "url": "https://www.openslr.org/resources/12/dev-clean.tar.gz",
+    "sha256": "76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3",
+    "license": "CC-BY-4.0",
+    "attribution": "LibriSpeech: Vassil Panayotov, Daniel Povey, Guoguo Chen, Sanjeev Khudanpur; https://www.openslr.org/12"
+  },
+  "selection": "first five speaker IDs for each F/M corpus metadata category, first archive clip at least four seconds; deterministic, not score-selected",
+  "speech": [
+    {
+      "name": "1988-147956-0007.flac",
+      "archivePath": "LibriSpeech/dev-clean/1988/147956/1988-147956-0007.flac",
+      "sha256": "a539d1dc245942b93a26784b298202b050babe9ce291a14dc86366ca1c3679ce",
+      "speaker": "1988",
+      "corpusSexMetadata": "F",
+      "seconds": 5.865
+    },
+    {
+      "name": "777-126732-0019.flac",
+      "archivePath": "LibriSpeech/dev-clean/777/126732/777-126732-0019.flac",
+      "sha256": "18f702d17fa9cf155110aa47e4336b6ae8bdb9523771dd16ca88defb3a4b05b2",
+      "speaker": "777",
+      "corpusSexMetadata": "M",
+      "seconds": 4.94
+    },
+    {
+      "name": "84-121123-0021.flac",
+      "archivePath": "LibriSpeech/dev-clean/84/121123/84-121123-0021.flac",
+      "sha256": "8359f2f20d7874d0f12003aaf69c7fbde25ff6349603c3fdb9328e3cb6b40186",
+      "speaker": "84",
+      "corpusSexMetadata": "F",
+      "seconds": 4.815
+    },
+    {
+      "name": "1673-143396-0014.flac",
+      "archivePath": "LibriSpeech/dev-clean/1673/143396/1673-143396-0014.flac",
+      "sha256": "a74094488de3a7371072b07497450c750b3ce1863fad3f3bf2338b097ea13f58",
+      "speaker": "1673",
+      "corpusSexMetadata": "F",
+      "seconds": 13.985
+    },
+    {
+      "name": "174-50561-0005.flac",
+      "archivePath": "LibriSpeech/dev-clean/174/50561/174-50561-0005.flac",
+      "sha256": "25c81fd3af839dad7f0185dba4c836479d4f3fdc828d9c0ae605960ed542ff5c",
+      "speaker": "174",
+      "corpusSexMetadata": "M",
+      "seconds": 5.705
+    },
+    {
+      "name": "1462-170138-0027.flac",
+      "archivePath": "LibriSpeech/dev-clean/1462/170138/1462-170138-0027.flac",
+      "sha256": "88118c60081bd8d096e5e42addb18361fa30d2b01f6d9672529ce2e841fbc74f",
+      "speaker": "1462",
+      "corpusSexMetadata": "F",
+      "seconds": 5.005
+    },
+    {
+      "name": "251-136532-0019.flac",
+      "archivePath": "LibriSpeech/dev-clean/251/136532/251-136532-0019.flac",
+      "sha256": "1222caea81aee75267531c171b80fd5a2d4d9a85c5dd44a91a661a5f9ff3d05c",
+      "speaker": "251",
+      "corpusSexMetadata": "M",
+      "seconds": 9.345
+    },
+    {
+      "name": "652-130726-0029.flac",
+      "archivePath": "LibriSpeech/dev-clean/652/130726/652-130726-0029.flac",
+      "sha256": "6d066e4fc02eea47041003a0d7d0d4f6f83deff74f3e6316fcdca9066b4bf9ae",
+      "speaker": "652",
+      "corpusSexMetadata": "M",
+      "seconds": 7.775
+    },
+    {
+      "name": "422-122949-0020.flac",
+      "archivePath": "LibriSpeech/dev-clean/422/122949/422-122949-0020.flac",
+      "sha256": "59ddf98c780b9bb4000c762d9acee033ade4db92d4b411fc0a3b2f607940e6ec",
+      "speaker": "422",
+      "corpusSexMetadata": "M",
+      "seconds": 23.41
+    },
+    {
+      "name": "1919-142785-0054.flac",
+      "archivePath": "LibriSpeech/dev-clean/1919/142785/1919-142785-0054.flac",
+      "sha256": "0166c040cecf0e861bc900f05b9e1efd9c9afbe5c7a8128c4a3c3037f8735a81",
+      "speaker": "1919",
+      "corpusSexMetadata": "F",
+      "seconds": 7.725
+    }
+  ],
+  "noise": [
+    {
+      "archiveName": "DLIVING_16k.zip",
+      "url": "https://zenodo.org/records/1227121/files/DLIVING_16k.zip",
+      "archiveSha256": "2b1726fe06e41551ce2397f2aaf3e4fb692c912d81914b04708df0bbb5252338",
+      "archivePath": "DLIVING/ch01.wav",
+      "name": "DLIVING-ch01.wav",
+      "sha256": "9567ff039c040359534075d575b469b587b1e3858ef48a93acd3ecba95f57210",
+      "license": "CC-BY-SA-3.0",
+      "attribution": "DEMAND: Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent; https://zenodo.org/records/1227121",
+      "selection": "first channel, first 120 seconds, no score selection"
+    },
+    {
+      "archiveName": "DKITCHEN_16k.zip",
+      "url": "https://zenodo.org/records/1227121/files/DKITCHEN_16k.zip",
+      "archiveSha256": "9d68e46d2709847c59580770e2f8aa160607ebff7475788174aa1080332cc845",
+      "archivePath": "DKITCHEN/ch01.wav",
+      "name": "DKITCHEN-ch01.wav",
+      "sha256": "94eda18f9461348d1d070ca69d001e7fa9e51604731509026b4905d2e321561d",
+      "license": "CC-BY-SA-3.0",
+      "attribution": "DEMAND: Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent; https://zenodo.org/records/1227121",
+      "selection": "first channel, first 120 seconds, no score selection"
+    }
+  ],
+  "latencySpeech": {
+    "name": "2277-149896-0026.flac",
+    "archivePath": "LibriSpeech/dev-clean/2277/149896/2277-149896-0026.flac",
+    "sha256": "3909a6c5ae93112518681fcbf0a74df43615a4f88bd6d5cd788775255296e3f6",
+    "license": "CC-BY-4.0",
+    "source": "https://www.openslr.org/resources/12/dev-clean.tar.gz",
+    "attribution": "LibriSpeech, Vassil Panayotov, Daniel Povey, Guoguo Chen and Sanjeev Khudanpur; https://www.openslr.org/12"
+  }
+}

@@ -304,6 +304,21 @@ render budget and fell back in the actual host. Chromium SIMD added p95 was
 and browser batch samples; all 36 limited quality cells per artifact had
 identical metrics. The prototype is rejected as a production/AC3 solution and
 remains opt-in, outside packaged assets; the current C WASM is unchanged.
-Fallback-only qualification remains the next owner-review candidate, with no
-accepted support-policy change, new task or Decision. AC3 and Draft PR #32
-remain open for manual review.
+The owner has rejected fallback-only adoption or closure. Further profile-selected
+Zig/SIMD and disposable Worker/SAB/raw-track trials are documented in
+[the current route research](measurements/audio/route-prototypes.md). The C
+production artifact and Decision-10 remain in force; no new support-policy
+change, public API or Worker route is adopted. AC3 and Draft PR #32 remain open
+for manual review.
+
+
+The expanded research preserves the C production engine. In the additional
+native-host diagnostic, raw C measured40 ms added p95 across60 windows/600 stable
+seconds (no margin, three unclassified zero quanta); raw SIMD measured42 ms.
+A short SIMD Worklet screen reached39.3125 ms, but its required long follow-up
+measured81.3125 ms despite checked-kernel p95 1 ms and no guard fallback. These
+are experimental/embedding results, not release support. The broader120-cell
+quality corpus retains one strong-level numeric failure, and human listening
+is PENDING. The [current comparison](measurements/audio/route-prototypes.md)
+records alternatives and the approval needed before any Worker or SIMD
+production adoption; fallback-only closure remains rejected by the owner.

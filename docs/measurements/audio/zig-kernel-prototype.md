@@ -4,6 +4,10 @@ Owner-authorized TASK-1.12 follow-up, Dispatch `ctx_ec9fc37c5590`, existing PR #
 This experiment does not replace the production C+Zig artifact or adopt a new
 engine, API, compatibility requirement, Decision or fallback policy.
 
+Historical report: the owner subsequently rejected fallback-only adoption or
+closure. See the [current route research](route-prototypes.md) for the authorized
+next phase and current disposition; the measurements below remain unchanged.
+
 ## Boundaries and unchanged acceptance
 
 Measurement A (`AUDIO_AC3_STAGE=graph`) runs the known 0/30/60 ms controls,

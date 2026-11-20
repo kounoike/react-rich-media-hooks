@@ -10,11 +10,13 @@ def distribution(values):
     return {"count": len(values), **{name: values[max(0, math.ceil(len(values)*ratio)-1)]
             for name, ratio in [("p50", .5), ("p95", .95), ("p99", .99)]}, "max": values[-1]}
 
-def score_window(window, history, rate=16000):
+def score_window(window, history, rate=16000, minimum_lag_ms=0):
     row = {key: value for key, value in window.items() if key not in ["a", "b"]}
     row.update({"accepted": False, "processed": False})
     if len(window["a"]) != rate or len(window["b"]) != rate or window["endFrame"]-window["startFrame"] != 48000:
         return {**row, "excluded": "incomplete-or-discontinuous-one-second-window"}
+    if window.get("frameDiscontinuities", 0):
+        return {**row, "excluded": "internal-render-frame-discontinuity"}
     if window.get("droppedWindows", 0):
         return {**row, "excluded": "collector-backpressure"}
     a = np.asarray(window["a"], dtype=float); b = np.asarray(window["b"], dtype=float)
@@ -24,7 +26,7 @@ def score_window(window, history, rate=16000):
     if energy < 1e-9:
         return {**row, "excluded": "silence"}
     correlations = correlate(b, a, mode="full", method="fft")/energy
-    lags = correlation_lags(len(b), len(a)); selected = (lags >= 0) & (lags <= rate*.3)
+    lags = correlation_lags(len(b), len(a)); selected = (lags >= rate*minimum_lag_ms/1000) & (lags <= rate*.3)
     index = int(np.argmax(correlations[selected])); peak = float(correlations[selected][index])
     row.update({"correlation": peak, "lagMs": float(lags[selected][index]/rate*1000), "accepted": peak >= .3})
     if peak < .3:
@@ -46,9 +48,9 @@ def score_window(window, history, rate=16000):
     return row
 
 def summarize(data):
-    rows = [score_window(window, data["history"], data["captureRate"]) for window in data["windows"]]
+    rows = [score_window(window, data["history"], data["captureRate"], data.get("minimumLagMs", 0)) for window in data["windows"]]
     controls = {}
-    for delay in [0,30,60]:
+    for delay in data.get("knownDelayMs", [0,30,60]):
         matching = [r for r in rows if r["phase"] == f"known-{delay}" and r["accepted"]]
         errors = [abs(r["lagMs"]-delay) for r in matching]
         controls[str(delay)] = {"windows": len(matching), "maxErrorMs": max(errors) if errors else None,
@@ -74,5 +76,5 @@ def summarize(data):
             "input": p["input"], "engineMs": distribution(native), "callbackMs": distribution(callback),
             "renderBudgetMs": p["renderBudgetMs"], "callbackBudgetExceedances": sum(t>p["renderBudgetMs"] for t in callback), "validation": p["validation"], "boundaryMicrobench": p.get("boundaryMicrobench")})
     return {key: value for key,value in data.items() if key not in ["windows","profiles"]} | {
-        "method": "exact 16000-sample/48000-frame producer windows; 0..300ms normalized correlation; reject low energy, peak<0.3, discontinuity, collector drops, and state/output transitions within +/-256 frames; native qualification rejects whole-phase fallback; nearest-rank percentiles",
+        "method": f"exact 16000-sample/48000-frame producer windows; {data.get('minimumLagMs', 0)}..300ms normalized correlation; reject low energy, peak<0.3, discontinuity, collector drops, and state/output transitions within +/-256 frames; native qualification rejects whole-phase fallback; nearest-rank percentiles",
         "calibrated": calibrated, "knownDelayControls": controls, "baselineMedianMs": baseline_median, "phases": phases, "profiles": profiles, "windows": rows}

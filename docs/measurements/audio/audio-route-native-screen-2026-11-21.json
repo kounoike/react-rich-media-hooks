@@ -1,0 +1,603 @@
+{
+  "scope": "Additional native-host Orca Win32 Electron Chromium150 diagnostic, eight-window screen only; not standalone Chrome/Edge/device qualification; originally no HTTP digests captured; later v6 run verifies them",
+  "report": {
+    "protocol": "audio-routes-v4",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) orca/1.4.265 Chrome/150.0.7871.250 Electron/43.8.10 Safari/537.36",
+    "isolated": false,
+    "definition": "original captured-track reference in independent observer context; source, processor and observer contexts form a DAG; graph-inclusive standard output difference, no graph subtraction",
+    "minimumLagMs": -300,
+    "knownDelayMs": [-30, 0, 30, 60],
+    "captureRate": 16000,
+    "sampleRate": 48000,
+    "history": [
+      {
+        "frame": 769152,
+        "status": "active",
+        "original": true,
+        "phase": "known-60",
+        "reason": "original baseline"
+      },
+      {
+        "frame": 1014016,
+        "status": "active",
+        "original": false,
+        "phase": "rnnoise-raw-c",
+        "reason": "processed ready"
+      },
+      {
+        "frame": 1453696,
+        "status": "off",
+        "original": true,
+        "phase": "rnnoise-raw-c",
+        "reason": "case cleanup"
+      }
+    ],
+    "results": [
+      {
+        "name": "raw-c",
+        "readyMs": 61.39999997615814,
+        "durationMs": 9212.299999952316,
+        "fault": null,
+        "continuity": {
+          "samples": 432384,
+          "missingReference": 0,
+          "missingOutput": 0,
+          "nonfinite": 0,
+          "zeroQuanta": 7,
+          "frameGaps": 0,
+          "frame": 432384,
+          "dropped": 0
+        },
+        "stableContinuity": {
+          "samples": 384384,
+          "missingReference": 0,
+          "missingOutput": 0,
+          "nonfinite": 0,
+          "zeroQuanta": 0,
+          "frameGaps": 0,
+          "frame": 384384,
+          "dropped": 0
+        },
+        "stableSeconds": 8.008,
+        "observerGapEvents": [],
+        "activeSeconds": 9.008,
+        "metrics": {},
+        "closed": {
+          "stats": {
+            "protocol": "audio-routes-v4",
+            "type": "stopped",
+            "frames": 905,
+            "warmupMs": 42.299999952316284,
+            "warmupFrames": 80,
+            "sourceSamples": 434400,
+            "outputSamples": 434400,
+            "gaps": 897,
+            "maxChunk": 480,
+            "maxPending": 2,
+            "timestampDeltaSum": 9477,
+            "timestampDeltas": {
+              "count": 904,
+              "p50": -581,
+              "p95": 8756,
+              "p99": 9574,
+              "max": 15255
+            },
+            "firstTimestamp": 541021831021,
+            "lastEnd": 541030890498,
+            "engineBudgetExceedances": 5,
+            "engineMs": {
+              "count": 905,
+              "p50": 0.5,
+              "p95": 0.8999999761581421,
+              "p99": 1.600000023841858,
+              "max": 9.200000047683716
+            }
+          },
+          "workerAcknowledged": true
+        },
+        "cloneInitiallyLive": true,
+        "cloneLiveAfterClose": true,
+        "inputLiveBeforeOwnStop": true,
+        "contentionTicks": 0,
+        "outputOriginalAfterFault": false,
+        "qualification": {
+          "sixtyAcceptedProcessedWindows": false,
+          "addedP95Within40Ms": true,
+          "denoisingActive600Seconds": false,
+          "observedStable600SecondsWithoutMissingFrames": false,
+          "cloneSurvives150MsAfterClose": true,
+          "humanListening": "PENDING",
+          "physicalDeviceQualification": "PENDING"
+        },
+        "rawThroughput": {
+          "sourceSeconds": 9.05,
+          "renderedSeconds": 9.008,
+          "unwrittenSourceRemainderSamples": 0,
+          "timestampSpanSeconds": 9.059477,
+          "timestampDeltaSumSeconds": 0.009477,
+          "timestampJitterEventsNotProvenDropouts": 897
+        }
+      }
+    ],
+    "counts": {
+      "type": "counts",
+      "samples": 1453696,
+      "missingReference": 0,
+      "missingOutput": 0,
+      "nonfinite": 0,
+      "zeroQuanta": 115,
+      "frameGaps": 0,
+      "dropped": 0,
+      "gapEvents": []
+    },
+    "nativeHost": {
+      "platform": "Win32",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) orca/1.4.265 Chrome/150.0.7871.250 Electron/43.8.10 Safari/537.36",
+      "renderer": "Orca embedded Electron Chromium; not standalone Chrome/Edge or a physical microphone loopback"
+    },
+    "method": "exact 16000-sample/48000-frame producer windows; -300..300ms normalized correlation; reject low energy, peak<0.3, discontinuity, collector drops, and state/output transitions within +/-256 frames; native qualification rejects whole-phase fallback; nearest-rank percentiles",
+    "calibrated": true,
+    "knownDelayControls": {
+      "-30": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      },
+      "0": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      },
+      "30": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      },
+      "60": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      }
+    },
+    "baselineMedianMs": 4.0,
+    "phases": {
+      "known--30": {
+        "latencyMs": {
+          "count": 3,
+          "p50": -30.0,
+          "p95": -30.0,
+          "p99": -30.0,
+          "max": -30.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "known-0": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "known-30": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 30.0,
+          "p95": 30.0,
+          "p99": 30.0,
+          "max": 30.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "known-60": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 60.0,
+          "p95": 60.0,
+          "p99": 60.0,
+          "max": 60.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "original": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 4.0,
+          "p95": 4.0,
+          "p99": 4.0,
+          "max": 4.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "rnnoise-raw-c": {
+        "latencyMs": {
+          "count": 8,
+          "p50": 25.3125,
+          "p95": 25.3125,
+          "p99": 25.3125,
+          "max": 25.3125
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 8,
+          "p50": 21.3125,
+          "p95": 21.3125,
+          "p99": 21.3125,
+          "max": 21.3125
+        }
+      }
+    },
+    "profiles": [],
+    "windows": [
+      {
+        "type": "window",
+        "phase": "known--30",
+        "sequence": 0,
+        "startFrame": 48000,
+        "endFrame": 96000,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9928564120011804,
+        "lagMs": -30.0
+      },
+      {
+        "type": "window",
+        "phase": "known--30",
+        "sequence": 1,
+        "startFrame": 96000,
+        "endFrame": 144000,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9793163583678325,
+        "lagMs": -30.0
+      },
+      {
+        "type": "window",
+        "phase": "known--30",
+        "sequence": 2,
+        "startFrame": 144000,
+        "endFrame": 192000,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9813966216040396,
+        "lagMs": -30.0
+      },
+      {
+        "type": "window",
+        "phase": "known-0",
+        "sequence": 3,
+        "startFrame": 240000,
+        "endFrame": 288000,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0
+      },
+      {
+        "type": "window",
+        "phase": "known-0",
+        "sequence": 4,
+        "startFrame": 288000,
+        "endFrame": 336000,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0
+      },
+      {
+        "type": "window",
+        "phase": "known-0",
+        "sequence": 5,
+        "startFrame": 336000,
+        "endFrame": 384000,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999997,
+        "lagMs": 0.0
+      },
+      {
+        "type": "window",
+        "phase": "known-30",
+        "sequence": 6,
+        "startFrame": 432384,
+        "endFrame": 480384,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9891847644566137,
+        "lagMs": 30.0
+      },
+      {
+        "type": "window",
+        "phase": "known-30",
+        "sequence": 7,
+        "startFrame": 480384,
+        "endFrame": 528384,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9983224757374168,
+        "lagMs": 30.0
+      },
+      {
+        "type": "window",
+        "phase": "known-30",
+        "sequence": 8,
+        "startFrame": 528384,
+        "endFrame": 576384,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9835647841725981,
+        "lagMs": 30.0
+      },
+      {
+        "type": "window",
+        "phase": "known-60",
+        "sequence": 9,
+        "startFrame": 624768,
+        "endFrame": 672768,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.8995959069235355,
+        "lagMs": 60.0
+      },
+      {
+        "type": "window",
+        "phase": "known-60",
+        "sequence": 10,
+        "startFrame": 672768,
+        "endFrame": 720768,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9649281008831748,
+        "lagMs": 60.0
+      },
+      {
+        "type": "window",
+        "phase": "known-60",
+        "sequence": 11,
+        "startFrame": 720768,
+        "endFrame": 768768,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9952286846642887,
+        "lagMs": 60.0
+      },
+      {
+        "type": "window",
+        "phase": "original",
+        "sequence": 12,
+        "startFrame": 817152,
+        "endFrame": 865152,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9962410342704238,
+        "lagMs": -6.0
+      },
+      {
+        "type": "window",
+        "phase": "original",
+        "sequence": 13,
+        "startFrame": 865152,
+        "endFrame": 913152,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.5712899696430918,
+        "lagMs": 4.0
+      },
+      {
+        "type": "window",
+        "phase": "original",
+        "sequence": 14,
+        "startFrame": 913152,
+        "endFrame": 961152,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9878422696793606,
+        "lagMs": 4.0
+      },
+      {
+        "type": "window",
+        "phase": "original",
+        "sequence": 15,
+        "startFrame": 961152,
+        "endFrame": 1009152,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9989861539014506,
+        "lagMs": 4.0
+      },
+      {
+        "type": "window",
+        "phase": "rnnoise-raw-c",
+        "sequence": 16,
+        "startFrame": 1062018,
+        "endFrame": 1110018,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.964256085587558,
+        "lagMs": 25.3125,
+        "path": "processed"
+      },
+      {
+        "type": "window",
+        "phase": "rnnoise-raw-c",
+        "sequence": 17,
+        "startFrame": 1110018,
+        "endFrame": 1158018,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8961524848970388,
+        "lagMs": 25.3125,
+        "path": "processed"
+      },
+      {
+        "type": "window",
+        "phase": "rnnoise-raw-c",
+        "sequence": 18,
+        "startFrame": 1158018,
+        "endFrame": 1206018,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9532610883267059,
+        "lagMs": 25.3125,
+        "path": "processed"
+      },
+      {
+        "type": "window",
+        "phase": "rnnoise-raw-c",
+        "sequence": 19,
+        "startFrame": 1206018,
+        "endFrame": 1254018,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9445929640114391,
+        "lagMs": 25.3125,
+        "path": "processed"
+      },
+      {
+        "type": "window",
+        "phase": "rnnoise-raw-c",
+        "sequence": 20,
+        "startFrame": 1254018,
+        "endFrame": 1302018,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9575905532757187,
+        "lagMs": 25.3125,
+        "path": "processed"
+      },
+      {
+        "type": "window",
+        "phase": "rnnoise-raw-c",
+        "sequence": 21,
+        "startFrame": 1302018,
+        "endFrame": 1350018,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9650784292742741,
+        "lagMs": 25.3125,
+        "path": "processed"
+      },
+      {
+        "type": "window",
+        "phase": "rnnoise-raw-c",
+        "sequence": 22,
+        "startFrame": 1350018,
+        "endFrame": 1398018,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.909921346583308,
+        "lagMs": 25.3125,
+        "path": "processed"
+      },
+      {
+        "type": "window",
+        "phase": "rnnoise-raw-c",
+        "sequence": 23,
+        "startFrame": 1398018,
+        "endFrame": 1446018,
+        "droppedWindows": 0,
+        "frameDiscontinuities": 0,
+        "encoding": "base64-f32le",
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9597998989110152,
+        "lagMs": 25.3125,
+        "path": "processed"
+      }
+    ]
+  }
+}

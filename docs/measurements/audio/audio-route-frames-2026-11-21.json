@@ -1,0 +1,86 @@
+{
+  "experimentalOnly": true,
+  "frameSamples": 480,
+  "sampleRate": 48000,
+  "comparison": "same streaming 480-sample input/state reset per fixture, no delay compensation or cross-correlation",
+  "provisionalNormalizedMaxAbsTolerance": 1e-5,
+  "provisionalNormalizedRmsTolerance": 1e-6,
+  "fixtures": {
+    "speech": {
+      "generic": {
+        "sha256": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+        "frames": 492,
+        "samples": 236160,
+        "maxAbsDiff": 0,
+        "rmsDiff": 0,
+        "differentBits": 0,
+        "worstFrame": 0,
+        "probabilityMaxAbsDiff": 0,
+        "finite": true,
+        "withinProvisionalTolerance": true
+      },
+      "zig-generic": {
+        "sha256": "9a15deaf80ccea05800c8f292cf1f89f8d4bc75b5ec88dc91965011a0d46106c",
+        "frames": 492,
+        "samples": 236160,
+        "maxAbsDiff": 0,
+        "rmsDiff": 0,
+        "differentBits": 0,
+        "worstFrame": 0,
+        "probabilityMaxAbsDiff": 0,
+        "finite": true,
+        "withinProvisionalTolerance": true
+      },
+      "zig-simd128": {
+        "sha256": "da72f53a3586a9066b3cb61434921d4bef31da9a64a1cf166381541cf4c7925f",
+        "frames": 492,
+        "samples": 236160,
+        "maxAbsDiff": 0,
+        "rmsDiff": 0,
+        "differentBits": 0,
+        "worstFrame": 0,
+        "probabilityMaxAbsDiff": 0,
+        "finite": true,
+        "withinProvisionalTolerance": true
+      }
+    },
+    "seeded-noise-voiced-impulse-silence": {
+      "generic": {
+        "sha256": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+        "frames": 1000,
+        "samples": 480000,
+        "maxAbsDiff": 0,
+        "rmsDiff": 0,
+        "differentBits": 0,
+        "worstFrame": 0,
+        "probabilityMaxAbsDiff": 0,
+        "finite": true,
+        "withinProvisionalTolerance": true
+      },
+      "zig-generic": {
+        "sha256": "9a15deaf80ccea05800c8f292cf1f89f8d4bc75b5ec88dc91965011a0d46106c",
+        "frames": 1000,
+        "samples": 480000,
+        "maxAbsDiff": 0,
+        "rmsDiff": 0,
+        "differentBits": 0,
+        "worstFrame": 0,
+        "probabilityMaxAbsDiff": 0,
+        "finite": true,
+        "withinProvisionalTolerance": true
+      },
+      "zig-simd128": {
+        "sha256": "da72f53a3586a9066b3cb61434921d4bef31da9a64a1cf166381541cf4c7925f",
+        "frames": 1000,
+        "samples": 480000,
+        "maxAbsDiff": 0,
+        "rmsDiff": 0,
+        "differentBits": 0,
+        "worstFrame": 0,
+        "probabilityMaxAbsDiff": 0,
+        "finite": true,
+        "withinProvisionalTolerance": true
+      }
+    }
+  }
+}
