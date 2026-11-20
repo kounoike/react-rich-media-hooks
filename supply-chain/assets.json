@@ -2,8 +2,39 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "schemaVersion": 1,
   "owner": "repository maintainers",
-  "lastReviewed": "2026-08-31",
-  "assets": [],
+  "lastReviewed": "2026-11-20",
+  "assets": [
+    {
+      "name": "rnnoise-wasm",
+      "kind": "wasm",
+      "version": "0.2-abi1",
+      "source": "https://github.com/xiph/rnnoise",
+      "sourceRevision": "904a876dce1f9ab8860c0a5000ed151f9f6eef58; model 0b50c45",
+      "sha256": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+      "license": "BSD-3-Clause AND MIT",
+      "owner": "repository maintainers",
+      "compatiblePackageVersion": "0.1.x",
+      "path": "src/effects/audio/assets/rnnoise.wasm",
+      "buildManifest": "native/rnnoise/manifest.json",
+      "notes": "RNNoise C/default model; Zig 0.15.2; statically linked wasi-libc math under MIT; no runtime host imports. Notices ship with the asset."
+    },
+    {
+      "name": "rnnoise-worklet",
+      "kind": "worklet",
+      "version": "0.2-abi1",
+      "source": "https://github.com/kounoike/react-rich-media-hooks/tree/main/src/effects/audio",
+      "sourceRevision": "sha256:afc8671958c21938ddc072c72c8fa5359ceb865f834a46c52a9f47e5625b620d",
+      "sha256": "9fd5fa784aba97f5867d20ca3092856611d16872f0bf3b265019d981afe0382a",
+      "license": "MIT",
+      "owner": "repository maintainers",
+      "compatiblePackageVersion": "0.1.x",
+      "sourceFiles": [
+        "src/effects/audio/noise-worklet.ts",
+        "src/effects/audio/backends/rnnoise-kernel.ts"
+      ],
+      "notes": "First-party bundled worklet; native RNNoise is the separately pinned WASM asset. Source revision hashes the concatenated source files in the listed order."
+    }
+  ],
   "requiredFieldsWhenAdded": [
     "name",
     "kind",
@@ -15,6 +46,12 @@
     "owner",
     "compatiblePackageVersion"
   ],
-  "kinds": ["model", "wasm", "worker", "worklet", "other-distributed-asset"],
-  "policy": "No runtime, model, WebAssembly, worker, worklet, or other distributed asset is currently published. Any future asset must be added with immutable source revision, SHA-256, license, compatibility, and update owner before it is loaded or published."
+  "kinds": [
+    "model",
+    "wasm",
+    "worker",
+    "worklet",
+    "other-distributed-asset"
+  ],
+  "policy": "Distributed runtime assets are pinned below. Each asset requires immutable provenance, digest, notices, compatible package version and an update owner before loading or publication."
 }

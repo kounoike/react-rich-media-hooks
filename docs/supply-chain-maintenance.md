@@ -52,11 +52,16 @@ exception or runtime dependency is introduced. Vitest and its coverage provider
 are paired at 4.1.12 to resolve the development-only mocker advisories
 GHSA-qxg6-89mg-rqv8 and GHSA-xp26-3454-mjgp.
 
-No model, WebAssembly, worker, worklet, or other distributed runtime asset is
-currently loaded, bundled, or published. Any future asset must be added to the
-asset manifest before implementation or release, with an immutable source
-revision, SHA-256, version, license, compatible package version, and update
-owner. Asset loading must reject an incompatible major or unverifiable digest.
+The experimental audio slice adds an RNNoise WASM asset and a first-party
+AudioWorklet to the asset inventory. `native/rnnoise/manifest.json` pins the
+upstream source/model archives, Zig compiler and generated WASM digest;
+`pnpm audio:rebuild` verifies an independent source rebuild. Normal package
+builds check the native ABI, empty import list, fixed memory, asset digests and
+packaged notices. The runtime verifies the WASM digest before compiling it and
+checks its private ABI before initialization. See
+[`audio-processing.md`](audio-processing.md) for rebuild and support limits.
+Future assets require the same immutable provenance, SHA-256, version,
+license, package compatibility and update owner before loading or publication.
 
 ## 2. Update cadence and review
 

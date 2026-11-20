@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-20",
+  "baseCommit": "8616866f1f5bb2a9aa87c46a6e23d4cfaff2b671",
+  "hostSystem": "Linux",
+  "hostRelease": "6.18.58.1-microsoft-standard-WSL2",
+  "logicalCpus": 24,
+  "note": "Local headless Playwright on Linux/WSL. Desktop device presets supply Windows user agents; UA does not establish the host OS. Fake capture and synthetic loopback are not physical device qualification. Multiple measurement and smoke browser processes ran concurrently during portions of the sustained probe.",
+  "nativeArtifactSha256": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+  "zig": "0.15.2",
+  "playwright": "1.62.1",
+  "node": "v24.19.0",
+  "browserProfiles": [
+    "chromium Desktop Chrome / reported Chrome 151.0.7922.34",
+    "firefox Desktop Firefox / reported Firefox 153.0"
+  ]
+}

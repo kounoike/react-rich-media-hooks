@@ -253,6 +253,63 @@ stays unknown without the GC controller. See `docs/video-crop-benchmark.md` for
 setup, custom ports, recorded results, and interpretation of callback gaps and
 endpoint FPS.
 
+## Audio noise reduction
+
+The audio effects entry provides an experimental local RNNoise 0.2 backend.
+It uses the existing microphone track and leaves video capture independent.
+Call session actions from a client event after hydration:
+
+```ts
+import { createMediaSession } from "react-rich-media-hooks/core";
+import { noiseReduction } from "react-rich-media-hooks/effects/audio";
+
+const session = createMediaSession({
+  capture: { audio: { noiseSuppression: false }, video: true },
+});
+await session.start();
+
+const result = await session.setAudioEffects({
+  effects: [noiseReduction({ level: "strong" })],
+});
+if (result.status === "success") {
+  const audio = session.getOutput("audio");
+  // Attach audio.stream to your recorder or other browser consumer.
+}
+
+await session.setAudioEffects({ effects: [noiseReduction({ level: "light" })] });
+await session.setAudioEffects({ effects: [noiseReduction()], bypass: true });
+await session.setAudioEffects({ effects: [] });
+await session.dispose();
+```
+
+Observe `snapshot.processors.audio`, `snapshot.error`, and output changes. A
+successful replacement can change the audio track: update recorder/transport
+attachments accordingly. Loading, explicit bypass, and recoverable failure
+retain or restore the original microphone when possible. Cancelling or
+superseding setup disposes obsolete resources. A retry is an explicit effect
+application. Application-owned output clones must be stopped independently.
+Bypass and removal release the processing graph without reacquiring capture.
+
+The backend verifies and compiles a packaged WASM asset outside the rendering
+callback, then initializes and runs the model inside AudioWorklet. No captured
+media is uploaded, no runtime CDN is required, and importing the package on the
+server does not fetch or initialize processing assets. Serve the complete
+`dist/` output, including `rnnoise.wasm` and its worklet, together. Your CSP must
+allow their script/connect origins and WebAssembly compilation, for example
+`script-src 'self' 'wasm-unsafe-eval'`; script `unsafe-eval` and `blob:` are not
+required by this backend. Offline use requires application-managed caching of
+these files. Missing or corrupted assets produce an observable failure and
+original-track fallback.
+
+This slice has processed-audio smoke evidence in Chromium 151. A local Firefox
+153 run initialized the model but exceeded rendering deadlines and used the
+degraded original-track path; Edge/Safari and real microphones are unqualified.
+Noise attenuation, intelligibility, listening quality, end-to-end p95 latency
+and ten-minute continuity gates remain open. `light`, `standard` (default) and
+`strong` are provisional semantic tiers, not calibrated dB settings or equal
+quality guarantees. See [audio processing evidence](docs/audio-processing.md)
+for exact limits and native rebuild instructions.
+
 ## Supervised task lifecycle
 
 The task-to-PR workflow is repository operating policy rather than a Backlog
