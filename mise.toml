@@ -1,5 +1,17 @@
 [tools]
 node = "24.19.0"
 pnpm = "11.21.0"
+hk = "2.13.0"
+pkl = "0.31.1"
+zig = "0.15.2"
+actionlint = "1.7.12"
 
 "npm:backlog.md" = "1.50.1"
+
+[tasks.quality]
+description = "Run the shared check-only repository gate"
+run = "pnpm quality:gate"
+
+[tasks.hooks-install]
+description = "Install repository hk hooks using mise"
+run = "hk install --mise"

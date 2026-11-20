@@ -316,3 +316,5 @@ Orca and GitHub integrations enforce the external Run/Dispatch, approval,
 checks, merge, and exact cleanup operations. Failures, interruptions, rejected
 approvals, requested changes, and restarts retain the pull request, branch,
 worktree, and logs for recovery.
+
+See [local quality gates and pre-commit setup](docs/quality-gates.md) for the mise-managed hk gate, configuration validation, and CI parity.

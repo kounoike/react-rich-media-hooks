@@ -42,3 +42,10 @@ yarn-error.log*
 Thumbs.db
 .idea/
 .vscode/
+
+# Zig compiler caches
+.zig-cache/
+zig-out/
+
+# Per-checkout hk overrides
+hk.local.pkl

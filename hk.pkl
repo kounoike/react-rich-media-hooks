@@ -1,0 +1,26 @@
+amends "package://github.com/jdx/hk/releases/download/v2.13.0/hk@2.13.0#/Config.pkl"
+
+// Whole-repository commands deliberately have no file glob or result cache.
+local gates = new Mapping<String, Step> {
+  ["configuration"] {
+    check = "pnpm config:check"
+  }
+  ["zig"] {
+    check = "pnpm zig:check"
+  }
+  ["verify"] {
+    check = "pnpm verify"
+  }
+}
+
+hooks {
+  ["check"] {
+    steps = gates
+  }
+  ["pre-commit"] {
+    fix = false
+    stage = false
+    stash = "none"
+    steps = gates
+  }
+}

@@ -173,7 +173,10 @@
         "separate_staging_worktree": true,
         "staging_worktree_command": "git worktree add -b agent-improvement/<run-id>-<slug> <unique-path> origin/main",
         "staging_worktree_single_flight": true,
-        "retry_after_indeterminate_only_after": ["git_worktree_list", "exact_local_remote_branch_inspection"],
+        "retry_after_indeterminate_only_after": [
+          "git_worktree_list",
+          "exact_local_remote_branch_inspection"
+        ],
         "requires_independent_from_unmerged_task_changes": true,
         "task_branch_must_not_contain_agent_improvements": true,
         "task_pr_may_reference_agent_improvement_pr": true,
@@ -245,19 +248,10 @@
         "requires_eligibility": true,
         "approval_required": false,
         "bypasses_manual_approval_gate": true,
-        "bypasses": [
-          "forbid_merge_before_approval",
-          "forbid_cleanup_before_approval_and_merge"
-        ],
+        "bypasses": ["forbid_merge_before_approval", "forbid_cleanup_before_approval_and_merge"],
         "fallback": "manual_review"
       },
-      "approval_must_bind": [
-        "task_id",
-        "run_id",
-        "dispatch_id",
-        "pull_request_number",
-        "head_sha"
-      ],
+      "approval_must_bind": ["task_id", "run_id", "dispatch_id", "pull_request_number", "head_sha"],
       "pending_or_rejected_policy": "retain_all_review_artifacts",
       "forbid_merge_before_approval": true,
       "forbid_cleanup_before_approval_and_merge": true
