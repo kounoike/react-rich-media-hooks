@@ -260,3 +260,31 @@ zero `securitypolicyviolation` events and a live input, and requires original
 output if Firefox returns a bounded startup failure. Unknown asset/glue errors
 still fail. No timeout is extended and no warm-start qualification is inferred
 from fallback; the underlying startup/activation cause remains unqualified.
+
+## AC3 remediation and current qualification
+
+The [controlled follow-up report](measurements/audio/ac3-remediation.md)
+separates exact one-second/known-delay controls, no-RNNoise graph delay,
+native-call/callback profiles and processor transitions. The final fresh-server
+Chromium generic trial overloaded after stable processed windows, so its
+whole-trial processed p95 is rejected; the unadopted SIMD candidate measured
+90.625 ms added p95, above the unchanged 40 ms criterion. Firefox fell back
+for both variants. The copy/mono optimization retains exact model output;
+it does not establish a qualified real-time browser/device cell.
+
+The production artifact remains generic WASM, with the same API, startup
+bound, render-budget guard and original-output fallback. SIMD128 is only an
+ignored-cache experiment; no asset selector or changed browser requirement is
+shipped. Fallback-only qualification is a candidate for owner review, not an
+accepted support policy. TASK-1.12 AC3 remains open and PR #32 remains Draft.
+The controlled report and committed before/after summaries are the current
+engineering evidence; older loopback reports above are historical probes.
+
+The post-optimization ten-minute trials passed their rendering/fallback and
+cleanup contracts in both browsers: 28,800,000 downstream samples each, one
+capture acquisition, no probe-reported missing-input or nonfinite samples,
+an independently live original-output clone after disposal, ended owned input
+and closed analysis context. Chromium recorded 1747 active/473 degraded polls;
+Firefox recorded 2219 degraded polls with brief active retries between polls.
+These observations qualify neither uninterrupted denoised speech nor the
+40 ms budget. See the controlled report for zero-quanta and polling limits.

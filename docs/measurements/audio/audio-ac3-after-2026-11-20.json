@@ -1,0 +1,5065 @@
+[
+  {
+    "identities": {
+      "input": "686a58782ad5aac0c9349761674aa7bce9e4cc5a4feae67d0eb1b178145cf9bd",
+      "generic": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+      "simd128": "3dccaf732681036ad8b2cc70ed5cb6f0ad6c06dab7f34f6a9060b9416b311da3"
+    },
+    "servedSources": {
+      "diagnosticModuleSha256": "e4abe113bd33bef4d876ccc2e27ba58b34f814fd52471c7b58eb2bb92e46a5f5",
+      "kernelModuleSha256": "6f82aa76e88ece81053c1f1e4c57595e51e23f8d6929e32da68174fd4c0d179c"
+    },
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+    "sampleRate": 48000,
+    "captureRate": 16000,
+    "acquisitions": 1,
+    "browserReportedBaseLatencyMs": 11.625,
+    "history": [
+      {
+        "frame": 27392,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 27392,
+        "status": "off",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 27392,
+        "status": "off",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 27392,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-0"
+      },
+      {
+        "frame": 27904,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "known-0"
+      },
+      {
+        "frame": 220416,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-0"
+      },
+      {
+        "frame": 220416,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-30"
+      },
+      {
+        "frame": 412928,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-30"
+      },
+      {
+        "frame": 412928,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-60"
+      },
+      {
+        "frame": 606080,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-60"
+      },
+      {
+        "frame": 606080,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "original"
+      },
+      {
+        "frame": 846592,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "original"
+      },
+      {
+        "frame": 846592,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "graph-0"
+      },
+      {
+        "frame": 1087104,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "graph-0"
+      },
+      {
+        "frame": 1088128,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "graph-1440"
+      },
+      {
+        "frame": 1328640,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "graph-1440"
+      },
+      {
+        "frame": 1328640,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 1328640,
+        "status": "loading",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 1337600,
+        "status": "active",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 1337600,
+        "status": "active",
+        "original": false,
+        "reason": "phase-start",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 3884288,
+        "status": "degraded",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 4265984,
+        "status": "degraded",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 4265984,
+        "status": "degraded",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "cleanup"
+      },
+      {
+        "frame": 4265984,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "cleanup"
+      },
+      {
+        "frame": 4265984,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "rnnoise-simd128"
+      },
+      {
+        "frame": 4265984,
+        "status": "loading",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "rnnoise-simd128"
+      },
+      {
+        "frame": 4274304,
+        "status": "active",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "rnnoise-simd128"
+      },
+      {
+        "frame": 4274304,
+        "status": "active",
+        "original": false,
+        "reason": "phase-start",
+        "phase": "rnnoise-simd128"
+      },
+      {
+        "frame": 7202688,
+        "status": "active",
+        "original": false,
+        "reason": "phase-end",
+        "phase": "rnnoise-simd128"
+      },
+      {
+        "frame": 7202688,
+        "status": "active",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "cleanup"
+      },
+      {
+        "frame": 7202688,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "cleanup"
+      },
+      {
+        "frame": 7202688,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      },
+      {
+        "frame": 7202688,
+        "status": "loading",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      },
+      {
+        "frame": 7210496,
+        "status": "failed",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      }
+    ],
+    "operations": [
+      {
+        "phase": "rnnoise-generic",
+        "result": "success"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "result": "success"
+      }
+    ],
+    "featureErrors": {},
+    "numericalComparison": {
+      "batchOnly": true,
+      "samples": 236160,
+      "maxAbsDiff": 0,
+      "rmsDiff": 0,
+      "differentBits": 0,
+      "comparable": true,
+      "allFinite": true
+    },
+    "unsupportedFallback": {
+      "result": "failed",
+      "original": true,
+      "inputLive": true,
+      "message": "SIMD128 unavailable in controlled rejection probe",
+      "simulated": true
+    },
+    "producerWindowFrames": 48000,
+    "productionWorklet": "noise-worklet-L0m6AlGp.js",
+    "fixture": "same cached speech PCM, 48kHz mono; native generic module or experimental SIMD module injected at private AudioWorklet construction, no public selector",
+    "method": "exact 16000-sample/48000-frame producer windows; 0..300ms normalized correlation; reject low energy, peak<0.3, discontinuity, collector drops, and state/output transitions within +/-256 frames; native qualification rejects whole-phase fallback; nearest-rank percentiles",
+    "calibrated": true,
+    "knownDelayControls": {
+      "0": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      },
+      "30": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      },
+      "60": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      }
+    },
+    "baselineMedianMs": 20.6875,
+    "phases": {
+      "known-0": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "known-30": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 30.0,
+          "p95": 30.0,
+          "p99": 30.0,
+          "max": 30.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "known-60": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 60.0,
+          "p95": 60.0,
+          "p99": 60.0,
+          "max": 60.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "original": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 20.6875,
+          "p95": 20.6875,
+          "p99": 20.6875,
+          "max": 20.6875
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "graph-0": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 67.3125,
+          "p95": 77.3125,
+          "p99": 77.3125,
+          "max": 77.3125
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 46.625,
+          "p95": 56.625,
+          "p99": 56.625,
+          "max": 56.625
+        }
+      },
+      "graph-1440": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 98.6875,
+          "p95": 98.6875,
+          "p99": 98.6875,
+          "max": 98.6875
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 78.0,
+          "p95": 78.0,
+          "p99": 78.0,
+          "max": 78.0
+        }
+      },
+      "rnnoise-generic": {
+        "latencyMs": {
+          "count": 51,
+          "p50": 114.0,
+          "p95": 114.0,
+          "p99": 114.0,
+          "max": 114.0
+        },
+        "excludedWindows": 9,
+        "fallbackDuringCapture": true,
+        "qualifiedProbe": false,
+        "incrementalMs": null
+      },
+      "rnnoise-simd128": {
+        "latencyMs": {
+          "count": 60,
+          "p50": 111.3125,
+          "p95": 111.3125,
+          "p99": 111.3125,
+          "max": 111.3125
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 60,
+          "p50": 90.625,
+          "p95": 90.625,
+          "p99": 90.625,
+          "max": 90.625
+        }
+      }
+    },
+    "profiles": [
+      {
+        "variant": "generic",
+        "mode": "native",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 1.0,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 2.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 2.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 0,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 68,
+          "loopMs": 8
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            4,
+            6,
+            4,
+            3,
+            4,
+            4,
+            4
+          ],
+          "inplaceMs": [
+            1,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            11,
+            12,
+            15,
+            4,
+            5,
+            5,
+            5
+          ],
+          "fastMonoMs": [
+            3,
+            5,
+            2,
+            2,
+            1,
+            2,
+            1
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      },
+      {
+        "variant": "generic",
+        "mode": "kernel",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 1.0,
+          "p95": 1.0,
+          "p99": 2.0,
+          "max": 2.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 2.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 0,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 66,
+          "loopMs": 5
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            4,
+            4,
+            6,
+            3,
+            4,
+            4,
+            4
+          ],
+          "inplaceMs": [
+            2,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            15,
+            17,
+            16,
+            16,
+            16,
+            16,
+            17
+          ],
+          "fastMonoMs": [
+            3,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      },
+      {
+        "variant": "generic",
+        "mode": "inplace",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 1.0,
+          "p95": 1.0,
+          "p99": 2.0,
+          "max": 4.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 4.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 2,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 71,
+          "loopMs": 44
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            6,
+            4,
+            4,
+            4,
+            4,
+            4,
+            5
+          ],
+          "inplaceMs": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            19,
+            17,
+            17,
+            17,
+            16,
+            16,
+            16
+          ],
+          "fastMonoMs": [
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      },
+      {
+        "variant": "simd128",
+        "mode": "native",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 1.0,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 2.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 2.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 0,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 70,
+          "loopMs": 46
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            8,
+            4,
+            4,
+            4,
+            4,
+            4,
+            3
+          ],
+          "inplaceMs": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            23,
+            5,
+            6,
+            6,
+            5,
+            5,
+            7
+          ],
+          "fastMonoMs": [
+            1,
+            2,
+            1,
+            1,
+            2,
+            2,
+            1
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      },
+      {
+        "variant": "simd128",
+        "mode": "kernel",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 1.0,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 2.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 2.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 0,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 65,
+          "loopMs": 46
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            4,
+            4,
+            3,
+            4,
+            4,
+            4,
+            5
+          ],
+          "inplaceMs": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            18,
+            17,
+            15,
+            18,
+            16,
+            16,
+            15
+          ],
+          "fastMonoMs": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            2
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      },
+      {
+        "variant": "simd128",
+        "mode": "inplace",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 1.0,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 2.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 1.0,
+          "p99": 1.0,
+          "max": 2.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 0,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 65,
+          "loopMs": 44
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            4,
+            4,
+            3,
+            4,
+            4,
+            4,
+            3
+          ],
+          "inplaceMs": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            6,
+            5,
+            6,
+            6,
+            5,
+            5,
+            7
+          ],
+          "fastMonoMs": [
+            1,
+            2,
+            1,
+            1,
+            1,
+            2,
+            1
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      }
+    ],
+    "windows": [
+      {
+        "phase": "known-0",
+        "sequence": 0,
+        "startFrame": 75393,
+        "endFrame": 123393,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-0",
+        "sequence": 1,
+        "startFrame": 123393,
+        "endFrame": 171393,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-0",
+        "sequence": 2,
+        "startFrame": 171393,
+        "endFrame": 219393,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 3,
+        "startFrame": 268416,
+        "endFrame": 316416,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9995029719176314,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 4,
+        "startFrame": 316416,
+        "endFrame": 364416,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.988407866422446,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 5,
+        "startFrame": 364416,
+        "endFrame": 412416,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9651063717063639,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 6,
+        "startFrame": 460929,
+        "endFrame": 508929,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.980020951292157,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 7,
+        "startFrame": 508929,
+        "endFrame": 556929,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9945864661987981,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 8,
+        "startFrame": 556929,
+        "endFrame": 604929,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9565369129280454,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "original",
+        "sequence": 9,
+        "startFrame": 654081,
+        "endFrame": 702081,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9331865316705907,
+        "lagMs": 20.6875
+      },
+      {
+        "phase": "original",
+        "sequence": 10,
+        "startFrame": 702081,
+        "endFrame": 750081,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.8933651868533227,
+        "lagMs": 20.6875
+      },
+      {
+        "phase": "original",
+        "sequence": 11,
+        "startFrame": 750081,
+        "endFrame": 798081,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9804481414490193,
+        "lagMs": 20.6875
+      },
+      {
+        "phase": "original",
+        "sequence": 12,
+        "startFrame": 798081,
+        "endFrame": 846081,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9855976232748629,
+        "lagMs": 20.6875
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 13,
+        "startFrame": 894594,
+        "endFrame": 942594,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.8444903194130381,
+        "lagMs": 67.3125
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 14,
+        "startFrame": 942594,
+        "endFrame": 990594,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.5005908376335839,
+        "lagMs": 67.3125
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 15,
+        "startFrame": 990594,
+        "endFrame": 1038594,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.8940773935232,
+        "lagMs": 67.3125
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 16,
+        "startFrame": 1038594,
+        "endFrame": 1086594,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9171083191179912,
+        "lagMs": 77.3125
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 17,
+        "startFrame": 1136130,
+        "endFrame": 1184130,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9477641781165834,
+        "lagMs": 98.6875
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 18,
+        "startFrame": 1184130,
+        "endFrame": 1232130,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.6918547735320335,
+        "lagMs": 98.6875
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 19,
+        "startFrame": 1232130,
+        "endFrame": 1280130,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.7002633003824799,
+        "lagMs": 98.6875
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 20,
+        "startFrame": 1280130,
+        "endFrame": 1328130,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9819134018569731,
+        "lagMs": 98.6875
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 21,
+        "startFrame": 1385601,
+        "endFrame": 1433601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7485803183591881,
+        "lagMs": 104.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 22,
+        "startFrame": 1433601,
+        "endFrame": 1481601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9288925694636708,
+        "lagMs": 104.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 23,
+        "startFrame": 1481601,
+        "endFrame": 1529601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7699123151408925,
+        "lagMs": 104.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 24,
+        "startFrame": 1529601,
+        "endFrame": 1577601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8374343195363334,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 25,
+        "startFrame": 1577601,
+        "endFrame": 1625601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8383297087546168,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 26,
+        "startFrame": 1625601,
+        "endFrame": 1673601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9328367968188215,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 27,
+        "startFrame": 1673601,
+        "endFrame": 1721601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.982448000379055,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 28,
+        "startFrame": 1721601,
+        "endFrame": 1769601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7437500578848084,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 29,
+        "startFrame": 1769601,
+        "endFrame": 1817601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8750606625353585,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 30,
+        "startFrame": 1817601,
+        "endFrame": 1865601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9084406758967981,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 31,
+        "startFrame": 1865601,
+        "endFrame": 1913601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8764129541302714,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 32,
+        "startFrame": 1913601,
+        "endFrame": 1961601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9419096988930319,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 33,
+        "startFrame": 1961601,
+        "endFrame": 2009601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.34451233346673105,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 34,
+        "startFrame": 2009601,
+        "endFrame": 2057601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.712545549764928,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 35,
+        "startFrame": 2057601,
+        "endFrame": 2105601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9710117620474342,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 36,
+        "startFrame": 2105601,
+        "endFrame": 2153601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9143732077695793,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 37,
+        "startFrame": 2153601,
+        "endFrame": 2201601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9882294667736262,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 38,
+        "startFrame": 2201601,
+        "endFrame": 2249601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9589223323250301,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 39,
+        "startFrame": 2249601,
+        "endFrame": 2297601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8975318597083981,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 40,
+        "startFrame": 2297601,
+        "endFrame": 2345601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9306570401150085,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 41,
+        "startFrame": 2345601,
+        "endFrame": 2393601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9573000551621503,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 42,
+        "startFrame": 2393601,
+        "endFrame": 2441601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9804264448140069,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 43,
+        "startFrame": 2441601,
+        "endFrame": 2489601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9410912833809187,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 44,
+        "startFrame": 2489601,
+        "endFrame": 2537601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.761598720660193,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 45,
+        "startFrame": 2537601,
+        "endFrame": 2585601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7810699972561517,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 46,
+        "startFrame": 2585601,
+        "endFrame": 2633601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9750612858625712,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 47,
+        "startFrame": 2633601,
+        "endFrame": 2681601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9931251764698487,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 48,
+        "startFrame": 2681601,
+        "endFrame": 2729601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9417596714766493,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 49,
+        "startFrame": 2729601,
+        "endFrame": 2777601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8545940640274567,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 50,
+        "startFrame": 2777601,
+        "endFrame": 2825601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8111168836205283,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 51,
+        "startFrame": 2825601,
+        "endFrame": 2873601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.927814312455978,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 52,
+        "startFrame": 2873601,
+        "endFrame": 2921601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9852279821090949,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 53,
+        "startFrame": 2921601,
+        "endFrame": 2969601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9478312920781543,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 54,
+        "startFrame": 2969601,
+        "endFrame": 3017601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8791533267795416,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 55,
+        "startFrame": 3017601,
+        "endFrame": 3065601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.6983538787844422,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 56,
+        "startFrame": 3065601,
+        "endFrame": 3113601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.572473683644285,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 57,
+        "startFrame": 3113601,
+        "endFrame": 3161601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9576189126984713,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 58,
+        "startFrame": 3161601,
+        "endFrame": 3209601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9656657681000401,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 59,
+        "startFrame": 3209601,
+        "endFrame": 3257601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9508524507615458,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 60,
+        "startFrame": 3257601,
+        "endFrame": 3305601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7649757800302063,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 61,
+        "startFrame": 3305601,
+        "endFrame": 3353601,
+        "droppedWindows": 0,
+        "accepted": false,
+        "processed": false,
+        "correlation": 0.29494052635889556,
+        "lagMs": 114.0,
+        "excluded": "low-correlation"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 62,
+        "startFrame": 3353601,
+        "endFrame": 3401601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7577771896625948,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 63,
+        "startFrame": 3401601,
+        "endFrame": 3449601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9395084583439237,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 64,
+        "startFrame": 3449601,
+        "endFrame": 3497601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.970514812437163,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 65,
+        "startFrame": 3497601,
+        "endFrame": 3545601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.929276654968687,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 66,
+        "startFrame": 3545601,
+        "endFrame": 3593601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.48921921360092885,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 67,
+        "startFrame": 3593601,
+        "endFrame": 3641601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.6256950426511334,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 68,
+        "startFrame": 3641601,
+        "endFrame": 3689601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9824420323704949,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 69,
+        "startFrame": 3689601,
+        "endFrame": 3737601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9856343905702694,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 70,
+        "startFrame": 3737601,
+        "endFrame": 3785601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9416252368262771,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 71,
+        "startFrame": 3785601,
+        "endFrame": 3833601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.925216111541926,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 72,
+        "startFrame": 3833601,
+        "endFrame": 3881601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.885413048394642,
+        "lagMs": 114.0,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 73,
+        "startFrame": 3881601,
+        "endFrame": 3929601,
+        "droppedWindows": 0,
+        "accepted": false,
+        "processed": false,
+        "correlation": 0.9669433943580685,
+        "lagMs": 21.3125,
+        "excluded": "processor-or-output-transition"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 74,
+        "startFrame": 3929601,
+        "endFrame": 3977601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9725230678546972,
+        "lagMs": 21.3125,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 75,
+        "startFrame": 3977601,
+        "endFrame": 4025601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9826927099236983,
+        "lagMs": 21.3125,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 76,
+        "startFrame": 4025601,
+        "endFrame": 4073601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9897944227484917,
+        "lagMs": 21.3125,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 77,
+        "startFrame": 4073601,
+        "endFrame": 4121601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9878214892693805,
+        "lagMs": 21.3125,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 78,
+        "startFrame": 4121601,
+        "endFrame": 4169601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.985228672620569,
+        "lagMs": 21.3125,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 79,
+        "startFrame": 4169601,
+        "endFrame": 4217601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9667354408705936,
+        "lagMs": 21.3125,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 80,
+        "startFrame": 4217601,
+        "endFrame": 4265601,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9417655501385442,
+        "lagMs": 21.3125,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 81,
+        "startFrame": 4322304,
+        "endFrame": 4370304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.3600121762760265,
+        "lagMs": 91.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 82,
+        "startFrame": 4370304,
+        "endFrame": 4418304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7162073157957691,
+        "lagMs": 91.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 83,
+        "startFrame": 4418304,
+        "endFrame": 4466304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9743196971476602,
+        "lagMs": 91.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 84,
+        "startFrame": 4466304,
+        "endFrame": 4514304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8081800823529376,
+        "lagMs": 91.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 85,
+        "startFrame": 4514304,
+        "endFrame": 4562304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9834261609815411,
+        "lagMs": 101.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 86,
+        "startFrame": 4562304,
+        "endFrame": 4610304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.939181635275501,
+        "lagMs": 101.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 87,
+        "startFrame": 4610304,
+        "endFrame": 4658304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.5435971438827416,
+        "lagMs": 101.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 88,
+        "startFrame": 4658304,
+        "endFrame": 4706304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9623824407785214,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 89,
+        "startFrame": 4706304,
+        "endFrame": 4754304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9554434380637497,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 90,
+        "startFrame": 4754304,
+        "endFrame": 4802304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9761846292445608,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 91,
+        "startFrame": 4802304,
+        "endFrame": 4850304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9422292961085218,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 92,
+        "startFrame": 4850304,
+        "endFrame": 4898304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7729595367544149,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 93,
+        "startFrame": 4898304,
+        "endFrame": 4946304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7952903007331322,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 94,
+        "startFrame": 4946304,
+        "endFrame": 4994304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9719538054310818,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 95,
+        "startFrame": 4994304,
+        "endFrame": 5042304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9916560001757637,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 96,
+        "startFrame": 5042304,
+        "endFrame": 5090304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9522682086554901,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 97,
+        "startFrame": 5090304,
+        "endFrame": 5138304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8455569390819718,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 98,
+        "startFrame": 5138304,
+        "endFrame": 5186304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8117338436108515,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 99,
+        "startFrame": 5186304,
+        "endFrame": 5234304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9707026595172417,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 100,
+        "startFrame": 5234304,
+        "endFrame": 5282304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9882149169161554,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 101,
+        "startFrame": 5282304,
+        "endFrame": 5330304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9400907308141535,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 102,
+        "startFrame": 5330304,
+        "endFrame": 5378304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8634421947541321,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 103,
+        "startFrame": 5378304,
+        "endFrame": 5426304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7225672550253455,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 104,
+        "startFrame": 5426304,
+        "endFrame": 5474304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.6489822760415196,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 105,
+        "startFrame": 5474304,
+        "endFrame": 5522304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9583496462049569,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 106,
+        "startFrame": 5522304,
+        "endFrame": 5570304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.970187128279251,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 107,
+        "startFrame": 5570304,
+        "endFrame": 5618304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9390613887191221,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 108,
+        "startFrame": 5618304,
+        "endFrame": 5666304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7333754800880407,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 109,
+        "startFrame": 5666304,
+        "endFrame": 5714304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.3457429555851513,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 110,
+        "startFrame": 5714304,
+        "endFrame": 5762304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8294725040415457,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 111,
+        "startFrame": 5762304,
+        "endFrame": 5810304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9338274332136596,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 112,
+        "startFrame": 5810304,
+        "endFrame": 5858304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9690270581178067,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 113,
+        "startFrame": 5858304,
+        "endFrame": 5906304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9167640823407273,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 114,
+        "startFrame": 5906304,
+        "endFrame": 5954304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.34303479017168415,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 115,
+        "startFrame": 5954304,
+        "endFrame": 6002304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.6036946104842841,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 116,
+        "startFrame": 6002304,
+        "endFrame": 6050304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9789353318031924,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 117,
+        "startFrame": 6050304,
+        "endFrame": 6098304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9844612569310011,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 118,
+        "startFrame": 6098304,
+        "endFrame": 6146304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9373019784055566,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 119,
+        "startFrame": 6146304,
+        "endFrame": 6194304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8861475579662693,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 120,
+        "startFrame": 6194304,
+        "endFrame": 6242304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8427052417832859,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 121,
+        "startFrame": 6242304,
+        "endFrame": 6290304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9734521498969424,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 122,
+        "startFrame": 6290304,
+        "endFrame": 6338304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.982076690414203,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 123,
+        "startFrame": 6338304,
+        "endFrame": 6386304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9779988148537406,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 124,
+        "startFrame": 6386304,
+        "endFrame": 6434304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9679523430992749,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 125,
+        "startFrame": 6434304,
+        "endFrame": 6482304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9480801320205228,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 126,
+        "startFrame": 6482304,
+        "endFrame": 6530304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9184886209822779,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 127,
+        "startFrame": 6530304,
+        "endFrame": 6578304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9112681855905368,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 128,
+        "startFrame": 6578304,
+        "endFrame": 6626304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9268228562485046,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 129,
+        "startFrame": 6626304,
+        "endFrame": 6674304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9315969559984746,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 130,
+        "startFrame": 6674304,
+        "endFrame": 6722304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8262540099779871,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 131,
+        "startFrame": 6722304,
+        "endFrame": 6770304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9228414499563348,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 132,
+        "startFrame": 6770304,
+        "endFrame": 6818304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8730250516865032,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 133,
+        "startFrame": 6818304,
+        "endFrame": 6866304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8395814278177673,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 134,
+        "startFrame": 6866304,
+        "endFrame": 6914304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9351148893685163,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 135,
+        "startFrame": 6914304,
+        "endFrame": 6962304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.7858383421496746,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 136,
+        "startFrame": 6962304,
+        "endFrame": 7010304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.858281509561981,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 137,
+        "startFrame": 7010304,
+        "endFrame": 7058304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.8642059376311553,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 138,
+        "startFrame": 7058304,
+        "endFrame": 7106304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.9686167383871009,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 139,
+        "startFrame": 7106304,
+        "endFrame": 7154304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.960397101585295,
+        "lagMs": 111.3125,
+        "path": "processed"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 140,
+        "startFrame": 7154304,
+        "endFrame": 7202304,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": true,
+        "correlation": 0.5121721445947934,
+        "lagMs": 111.3125,
+        "path": "processed"
+      }
+    ]
+  },
+  {
+    "identities": {
+      "input": "686a58782ad5aac0c9349761674aa7bce9e4cc5a4feae67d0eb1b178145cf9bd",
+      "generic": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+      "simd128": "3dccaf732681036ad8b2cc70ed5cb6f0ad6c06dab7f34f6a9060b9416b311da3"
+    },
+    "servedSources": {
+      "diagnosticModuleSha256": "e4abe113bd33bef4d876ccc2e27ba58b34f814fd52471c7b58eb2bb92e46a5f5",
+      "kernelModuleSha256": "6f82aa76e88ece81053c1f1e4c57595e51e23f8d6929e32da68174fd4c0d179c"
+    },
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0",
+    "sampleRate": 48000,
+    "captureRate": 16000,
+    "acquisitions": 1,
+    "browserReportedBaseLatencyMs": 0,
+    "history": [
+      {
+        "frame": 25984,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 25984,
+        "status": "off",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 25984,
+        "status": "off",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 25984,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-0"
+      },
+      {
+        "frame": 26496,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "known-0"
+      },
+      {
+        "frame": 218496,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-0"
+      },
+      {
+        "frame": 218496,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-30"
+      },
+      {
+        "frame": 410496,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-30"
+      },
+      {
+        "frame": 410496,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-60"
+      },
+      {
+        "frame": 602496,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-60"
+      },
+      {
+        "frame": 602496,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "original"
+      },
+      {
+        "frame": 842496,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "original"
+      },
+      {
+        "frame": 848000,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "graph-0"
+      },
+      {
+        "frame": 1088512,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "graph-0"
+      },
+      {
+        "frame": 1093888,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "graph-1440"
+      },
+      {
+        "frame": 1334528,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "graph-1440"
+      },
+      {
+        "frame": 1334528,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 1334528,
+        "status": "loading",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 1342976,
+        "status": "active",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 1342976,
+        "status": "active",
+        "original": false,
+        "reason": "phase-start",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 1343488,
+        "status": "degraded",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 4271488,
+        "status": "degraded",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "rnnoise-generic"
+      },
+      {
+        "frame": 4271488,
+        "status": "degraded",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "cleanup"
+      },
+      {
+        "frame": 4271488,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "cleanup"
+      },
+      {
+        "frame": 4271488,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "rnnoise-simd128"
+      },
+      {
+        "frame": 4271488,
+        "status": "loading",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "rnnoise-simd128"
+      },
+      {
+        "frame": 4278400,
+        "status": "active",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "rnnoise-simd128"
+      },
+      {
+        "frame": 4278400,
+        "status": "active",
+        "original": false,
+        "reason": "phase-start",
+        "phase": "rnnoise-simd128"
+      },
+      {
+        "frame": 4279040,
+        "status": "degraded",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "rnnoise-simd128"
+      },
+      {
+        "frame": 7207040,
+        "status": "degraded",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "rnnoise-simd128"
+      },
+      {
+        "frame": 7207040,
+        "status": "degraded",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "cleanup"
+      },
+      {
+        "frame": 7207040,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "cleanup"
+      },
+      {
+        "frame": 7207040,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      },
+      {
+        "frame": 7207040,
+        "status": "loading",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      },
+      {
+        "frame": 7211520,
+        "status": "failed",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      }
+    ],
+    "operations": [
+      {
+        "phase": "rnnoise-generic",
+        "result": "success"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "result": "success"
+      }
+    ],
+    "featureErrors": {},
+    "numericalComparison": {
+      "batchOnly": true,
+      "samples": 236160,
+      "maxAbsDiff": 0,
+      "rmsDiff": 0,
+      "differentBits": 0,
+      "comparable": true,
+      "allFinite": true
+    },
+    "unsupportedFallback": {
+      "result": "failed",
+      "original": true,
+      "inputLive": true,
+      "message": "SIMD128 unavailable in controlled rejection probe",
+      "simulated": true
+    },
+    "producerWindowFrames": 48000,
+    "productionWorklet": "noise-worklet-L0m6AlGp.js",
+    "fixture": "same cached speech PCM, 48kHz mono; native generic module or experimental SIMD module injected at private AudioWorklet construction, no public selector",
+    "method": "exact 16000-sample/48000-frame producer windows; 0..300ms normalized correlation; reject low energy, peak<0.3, discontinuity, collector drops, and state/output transitions within +/-256 frames; native qualification rejects whole-phase fallback; nearest-rank percentiles",
+    "calibrated": true,
+    "knownDelayControls": {
+      "0": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      },
+      "30": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      },
+      "60": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      }
+    },
+    "baselineMedianMs": 0.0,
+    "phases": {
+      "known-0": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "known-30": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 30.0,
+          "p95": 30.0,
+          "p99": 30.0,
+          "max": 30.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "known-60": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 60.0,
+          "p95": 60.0,
+          "p99": 60.0,
+          "max": 60.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "original": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "graph-0": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "graph-1440": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 30.0,
+          "p95": 30.0,
+          "p99": 30.0,
+          "max": 30.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 30.0,
+          "p95": 30.0,
+          "p99": 30.0,
+          "max": 30.0
+        }
+      },
+      "rnnoise-generic": {
+        "latencyMs": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null,
+          "max": null
+        },
+        "excludedWindows": 60,
+        "fallbackDuringCapture": true,
+        "qualifiedProbe": false,
+        "incrementalMs": null
+      },
+      "rnnoise-simd128": {
+        "latencyMs": {
+          "count": 0,
+          "p50": null,
+          "p95": null,
+          "p99": null,
+          "max": null
+        },
+        "excludedWindows": 60,
+        "fallbackDuringCapture": true,
+        "qualifiedProbe": false,
+        "incrementalMs": null
+      }
+    },
+    "profiles": [
+      {
+        "variant": "generic",
+        "mode": "native",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 5.0,
+          "p95": 8.0,
+          "p99": 11.0,
+          "max": 15.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 6.0,
+          "p99": 9.0,
+          "max": 15.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 241,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 11,
+          "loopMs": 34
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            4,
+            3,
+            4,
+            5,
+            4,
+            3,
+            4
+          ],
+          "inplaceMs": [
+            1,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            20,
+            19,
+            19,
+            20,
+            20,
+            20,
+            19
+          ],
+          "fastMonoMs": [
+            6,
+            5,
+            5,
+            4,
+            5,
+            5,
+            5
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      },
+      {
+        "variant": "generic",
+        "mode": "kernel",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 5.0,
+          "p95": 6.0,
+          "p99": 10.0,
+          "max": 13.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 5.0,
+          "p99": 8.0,
+          "max": 13.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 241,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 10,
+          "loopMs": 9
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            4,
+            7,
+            4,
+            5,
+            4,
+            4,
+            4
+          ],
+          "inplaceMs": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            25,
+            29,
+            23,
+            18,
+            20,
+            19,
+            20
+          ],
+          "fastMonoMs": [
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      },
+      {
+        "variant": "generic",
+        "mode": "inplace",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 5.0,
+          "p95": 8.0,
+          "p99": 15.0,
+          "max": 16.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 6.0,
+          "p99": 9.0,
+          "max": 16.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 241,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 9,
+          "loopMs": 11
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            4,
+            5,
+            6,
+            5,
+            4,
+            4,
+            4
+          ],
+          "inplaceMs": [
+            1,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            21,
+            21,
+            21,
+            19,
+            19,
+            19,
+            18
+          ],
+          "fastMonoMs": [
+            4,
+            3,
+            1,
+            2,
+            1,
+            2,
+            1
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      },
+      {
+        "variant": "simd128",
+        "mode": "native",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 5.0,
+          "p95": 8.0,
+          "p99": 12.0,
+          "max": 16.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 6.0,
+          "p99": 8.0,
+          "max": 16.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 241,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 8,
+          "loopMs": 12
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            5,
+            4
+          ],
+          "inplaceMs": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            21,
+            19,
+            20,
+            19,
+            20,
+            21,
+            20
+          ],
+          "fastMonoMs": [
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      },
+      {
+        "variant": "simd128",
+        "mode": "kernel",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 5.0,
+          "p95": 7.0,
+          "p99": 10.0,
+          "max": 12.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 6.0,
+          "p99": 8.0,
+          "max": 12.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 241,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 9,
+          "loopMs": 7
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            4,
+            4,
+            6,
+            4,
+            4,
+            4,
+            5
+          ],
+          "inplaceMs": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            19,
+            19,
+            20,
+            20,
+            20,
+            21,
+            20
+          ],
+          "fastMonoMs": [
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      },
+      {
+        "variant": "simd128",
+        "mode": "inplace",
+        "clock": "Date.now",
+        "warmupFrames": 80,
+        "input": "fixed deterministic 480-sample voiced/noise frame",
+        "engineMs": {
+          "count": 240,
+          "p50": 5.0,
+          "p95": 6.0,
+          "p99": 11.0,
+          "max": 16.0
+        },
+        "callbackMs": {
+          "count": 901,
+          "p50": 0.0,
+          "p95": 6.0,
+          "p99": 8.0,
+          "max": 16.0
+        },
+        "renderBudgetMs": 2.6666666666666665,
+        "callbackBudgetExceedances": 241,
+        "validation": {
+          "repetitions": 20000,
+          "everyMs": 9,
+          "loopMs": 9
+        },
+        "boundaryMicrobench": {
+          "copiesMs": [
+            4,
+            5,
+            7,
+            5,
+            5,
+            5,
+            4
+          ],
+          "inplaceMs": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "copyCallsPerBatch": 100000,
+          "referenceMonoMs": [
+            24,
+            20,
+            20,
+            20,
+            20,
+            20,
+            20
+          ],
+          "fastMonoMs": [
+            1,
+            2,
+            1,
+            1,
+            1,
+            2,
+            2
+          ],
+          "monoFramesPerBatch": 4000,
+          "checksum": 78270.89378902843,
+          "caveat": "isolated boundary microbench, not native compute or end-to-end latency"
+        }
+      }
+    ],
+    "windows": [
+      {
+        "phase": "known-0",
+        "sequence": 0,
+        "startFrame": 74496,
+        "endFrame": 122496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-0",
+        "sequence": 1,
+        "startFrame": 122496,
+        "endFrame": 170496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-0",
+        "sequence": 2,
+        "startFrame": 170496,
+        "endFrame": 218496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 3,
+        "startFrame": 266496,
+        "endFrame": 314496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9995908924477186,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 4,
+        "startFrame": 314496,
+        "endFrame": 362496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9905173331690391,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 5,
+        "startFrame": 362496,
+        "endFrame": 410496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.975778226836042,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 6,
+        "startFrame": 458496,
+        "endFrame": 506496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9801169334824472,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 7,
+        "startFrame": 506496,
+        "endFrame": 554496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9946107510179885,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 8,
+        "startFrame": 554496,
+        "endFrame": 602496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9567263981933678,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "original",
+        "sequence": 9,
+        "startFrame": 650496,
+        "endFrame": 698496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "original",
+        "sequence": 10,
+        "startFrame": 698496,
+        "endFrame": 746496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "original",
+        "sequence": 11,
+        "startFrame": 746496,
+        "endFrame": 794496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "original",
+        "sequence": 12,
+        "startFrame": 794496,
+        "endFrame": 842496,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 13,
+        "startFrame": 896514,
+        "endFrame": 944514,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 14,
+        "startFrame": 944514,
+        "endFrame": 992514,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 15,
+        "startFrame": 992514,
+        "endFrame": 1040514,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 16,
+        "startFrame": 1040514,
+        "endFrame": 1088514,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 17,
+        "startFrame": 1142529,
+        "endFrame": 1190529,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9682833294418706,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 18,
+        "startFrame": 1190529,
+        "endFrame": 1238529,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9874773155249754,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 19,
+        "startFrame": 1238529,
+        "endFrame": 1286529,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9701849398250431,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 20,
+        "startFrame": 1286529,
+        "endFrame": 1334529,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.986198759749316,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 21,
+        "startFrame": 1391490,
+        "endFrame": 1439490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 22,
+        "startFrame": 1439490,
+        "endFrame": 1487490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 23,
+        "startFrame": 1487490,
+        "endFrame": 1535490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 24,
+        "startFrame": 1535490,
+        "endFrame": 1583490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 25,
+        "startFrame": 1583490,
+        "endFrame": 1631490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 26,
+        "startFrame": 1631490,
+        "endFrame": 1679490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999996,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 27,
+        "startFrame": 1679490,
+        "endFrame": 1727490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 28,
+        "startFrame": 1727490,
+        "endFrame": 1775490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 29,
+        "startFrame": 1775490,
+        "endFrame": 1823490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 30,
+        "startFrame": 1823490,
+        "endFrame": 1871490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 31,
+        "startFrame": 1871490,
+        "endFrame": 1919490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 32,
+        "startFrame": 1919490,
+        "endFrame": 1967490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 33,
+        "startFrame": 1967490,
+        "endFrame": 2015490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 34,
+        "startFrame": 2015490,
+        "endFrame": 2063490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 35,
+        "startFrame": 2063490,
+        "endFrame": 2111490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 36,
+        "startFrame": 2111490,
+        "endFrame": 2159490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 37,
+        "startFrame": 2159490,
+        "endFrame": 2207490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 38,
+        "startFrame": 2207490,
+        "endFrame": 2255490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999993,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 39,
+        "startFrame": 2255490,
+        "endFrame": 2303490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 40,
+        "startFrame": 2303490,
+        "endFrame": 2351490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999997,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 41,
+        "startFrame": 2351490,
+        "endFrame": 2399490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 42,
+        "startFrame": 2399490,
+        "endFrame": 2447490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 43,
+        "startFrame": 2447490,
+        "endFrame": 2495490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 44,
+        "startFrame": 2495490,
+        "endFrame": 2543490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 45,
+        "startFrame": 2543490,
+        "endFrame": 2591490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999997,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 46,
+        "startFrame": 2591490,
+        "endFrame": 2639490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 47,
+        "startFrame": 2639490,
+        "endFrame": 2687490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 48,
+        "startFrame": 2687490,
+        "endFrame": 2735490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 49,
+        "startFrame": 2735490,
+        "endFrame": 2783490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 50,
+        "startFrame": 2783490,
+        "endFrame": 2831490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 51,
+        "startFrame": 2831490,
+        "endFrame": 2879490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 52,
+        "startFrame": 2879490,
+        "endFrame": 2927490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999997,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 53,
+        "startFrame": 2927490,
+        "endFrame": 2975490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 54,
+        "startFrame": 2975490,
+        "endFrame": 3023490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 55,
+        "startFrame": 3023490,
+        "endFrame": 3071490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 56,
+        "startFrame": 3071490,
+        "endFrame": 3119490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 57,
+        "startFrame": 3119490,
+        "endFrame": 3167490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 58,
+        "startFrame": 3167490,
+        "endFrame": 3215490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 59,
+        "startFrame": 3215490,
+        "endFrame": 3263490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 60,
+        "startFrame": 3263490,
+        "endFrame": 3311490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 61,
+        "startFrame": 3311490,
+        "endFrame": 3359490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 62,
+        "startFrame": 3359490,
+        "endFrame": 3407490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 63,
+        "startFrame": 3407490,
+        "endFrame": 3455490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999997,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 64,
+        "startFrame": 3455490,
+        "endFrame": 3503490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 65,
+        "startFrame": 3503490,
+        "endFrame": 3551490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 66,
+        "startFrame": 3551490,
+        "endFrame": 3599490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 67,
+        "startFrame": 3599490,
+        "endFrame": 3647490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 68,
+        "startFrame": 3647490,
+        "endFrame": 3695490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 69,
+        "startFrame": 3695490,
+        "endFrame": 3743490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 70,
+        "startFrame": 3743490,
+        "endFrame": 3791490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 71,
+        "startFrame": 3791490,
+        "endFrame": 3839490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 72,
+        "startFrame": 3839490,
+        "endFrame": 3887490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 73,
+        "startFrame": 3887490,
+        "endFrame": 3935490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 74,
+        "startFrame": 3935490,
+        "endFrame": 3983490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 75,
+        "startFrame": 3983490,
+        "endFrame": 4031490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 76,
+        "startFrame": 4031490,
+        "endFrame": 4079490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999993,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 77,
+        "startFrame": 4079490,
+        "endFrame": 4127490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 78,
+        "startFrame": 4127490,
+        "endFrame": 4175490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 79,
+        "startFrame": 4175490,
+        "endFrame": 4223490,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-generic",
+        "sequence": 80,
+        "startFrame": 4223490,
+        "endFrame": 4271490,
+        "droppedWindows": 0,
+        "accepted": false,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "excluded": "processor-or-output-transition"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 81,
+        "startFrame": 4327041,
+        "endFrame": 4375041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 82,
+        "startFrame": 4375041,
+        "endFrame": 4423041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 83,
+        "startFrame": 4423041,
+        "endFrame": 4471041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 84,
+        "startFrame": 4471041,
+        "endFrame": 4519041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999997,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 85,
+        "startFrame": 4519041,
+        "endFrame": 4567041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999997,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 86,
+        "startFrame": 4567041,
+        "endFrame": 4615041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 87,
+        "startFrame": 4615041,
+        "endFrame": 4663041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 88,
+        "startFrame": 4663041,
+        "endFrame": 4711041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 89,
+        "startFrame": 4711041,
+        "endFrame": 4759041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 90,
+        "startFrame": 4759041,
+        "endFrame": 4807041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 91,
+        "startFrame": 4807041,
+        "endFrame": 4855041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 92,
+        "startFrame": 4855041,
+        "endFrame": 4903041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 93,
+        "startFrame": 4903041,
+        "endFrame": 4951041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999997,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 94,
+        "startFrame": 4951041,
+        "endFrame": 4999041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 95,
+        "startFrame": 4999041,
+        "endFrame": 5047041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 96,
+        "startFrame": 5047041,
+        "endFrame": 5095041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999996,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 97,
+        "startFrame": 5095041,
+        "endFrame": 5143041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 98,
+        "startFrame": 5143041,
+        "endFrame": 5191041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 99,
+        "startFrame": 5191041,
+        "endFrame": 5239041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 100,
+        "startFrame": 5239041,
+        "endFrame": 5287041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 101,
+        "startFrame": 5287041,
+        "endFrame": 5335041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 102,
+        "startFrame": 5335041,
+        "endFrame": 5383041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 103,
+        "startFrame": 5383041,
+        "endFrame": 5431041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 104,
+        "startFrame": 5431041,
+        "endFrame": 5479041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 105,
+        "startFrame": 5479041,
+        "endFrame": 5527041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 106,
+        "startFrame": 5527041,
+        "endFrame": 5575041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999996,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 107,
+        "startFrame": 5575041,
+        "endFrame": 5623041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 108,
+        "startFrame": 5623041,
+        "endFrame": 5671041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 109,
+        "startFrame": 5671041,
+        "endFrame": 5719041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 110,
+        "startFrame": 5719041,
+        "endFrame": 5767041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 111,
+        "startFrame": 5767041,
+        "endFrame": 5815041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 112,
+        "startFrame": 5815041,
+        "endFrame": 5863041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 113,
+        "startFrame": 5863041,
+        "endFrame": 5911041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 114,
+        "startFrame": 5911041,
+        "endFrame": 5959041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 115,
+        "startFrame": 5959041,
+        "endFrame": 6007041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 116,
+        "startFrame": 6007041,
+        "endFrame": 6055041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 117,
+        "startFrame": 6055041,
+        "endFrame": 6103041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999997,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 118,
+        "startFrame": 6103041,
+        "endFrame": 6151041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999996,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 119,
+        "startFrame": 6151041,
+        "endFrame": 6199041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 120,
+        "startFrame": 6199041,
+        "endFrame": 6247041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 121,
+        "startFrame": 6247041,
+        "endFrame": 6295041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 122,
+        "startFrame": 6295041,
+        "endFrame": 6343041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 123,
+        "startFrame": 6343041,
+        "endFrame": 6391041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 124,
+        "startFrame": 6391041,
+        "endFrame": 6439041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 125,
+        "startFrame": 6439041,
+        "endFrame": 6487041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 126,
+        "startFrame": 6487041,
+        "endFrame": 6535041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 127,
+        "startFrame": 6535041,
+        "endFrame": 6583041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 128,
+        "startFrame": 6583041,
+        "endFrame": 6631041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 129,
+        "startFrame": 6631041,
+        "endFrame": 6679041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 130,
+        "startFrame": 6679041,
+        "endFrame": 6727041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 131,
+        "startFrame": 6727041,
+        "endFrame": 6775041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 132,
+        "startFrame": 6775041,
+        "endFrame": 6823041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 133,
+        "startFrame": 6823041,
+        "endFrame": 6871041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999999,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 134,
+        "startFrame": 6871041,
+        "endFrame": 6919041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 135,
+        "startFrame": 6919041,
+        "endFrame": 6967041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000004,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 136,
+        "startFrame": 6967041,
+        "endFrame": 7015041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 137,
+        "startFrame": 7015041,
+        "endFrame": 7063041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 138,
+        "startFrame": 7063041,
+        "endFrame": 7111041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999997,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 139,
+        "startFrame": 7111041,
+        "endFrame": 7159041,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0,
+        "path": "original-fallback"
+      },
+      {
+        "phase": "rnnoise-simd128",
+        "sequence": 140,
+        "startFrame": 7159041,
+        "endFrame": 7207041,
+        "droppedWindows": 0,
+        "accepted": false,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "excluded": "processor-or-output-transition"
+      }
+    ]
+  }
+]

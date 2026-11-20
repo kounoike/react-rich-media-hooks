@@ -42,4 +42,20 @@ describe("built RNNoise kernel", () => {
     expect(() => new RnnoiseKernel(empty)).toThrow("ABI");
     kernel.destroy();
   });
+  it("reuses the owned native frame with exactly the same samples as the copying interface", () => {
+    const inplace = new RnnoiseKernel(module);
+    const copied = new RnnoiseKernel(module);
+    const buffer = inplace.frameBuffer;
+    for (let index = 0; index < 80; index += 1) {
+      const input = inputFrame(index);
+      buffer.set(input);
+      inplace.processFrame(buffer);
+      copied.processFrame(input);
+      expect(inplace.frameBuffer).toBe(buffer);
+      expect(buffer).toEqual(input);
+    }
+    inplace.destroy();
+    copied.destroy();
+    expect(() => inplace.frameBuffer).toThrow("disposed");
+  });
 });

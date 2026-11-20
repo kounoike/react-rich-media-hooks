@@ -2,8 +2,14 @@
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 const manifest = JSON.parse(readFileSync("native/rnnoise/manifest.json", "utf8"));
-const bytes = readFileSync(manifest.artifact.path);
-if (createHash("sha256").update(bytes).digest("hex") !== manifest.artifact.sha256) {
+const variant = process.env.AUDIO_EXPERIMENT;
+if (variant !== undefined && variant !== "simd128") throw new Error("Unknown experimental engine");
+const artifact = variant === "simd128" ? {
+  path: ".cache/audio-experiment/rnnoise-simd128.wasm",
+  sha256: JSON.parse(readFileSync(".cache/audio-experiment/build.json", "utf8")).artifacts.simd128.sha256,
+} : manifest.artifact;
+const bytes = readFileSync(artifact.path);
+if (createHash("sha256").update(bytes).digest("hex") !== artifact.sha256) {
   throw new Error("Unreviewed measurement artifact.");
 }
 const native = new WebAssembly.Instance(new WebAssembly.Module(bytes)).exports;

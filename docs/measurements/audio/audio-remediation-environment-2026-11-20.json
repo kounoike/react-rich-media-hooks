@@ -1,0 +1,31 @@
+{
+  "dateUtc": "2026-11-20T14:58:39.520002+00:00",
+  "baseMain": "5c81f030d73a0d688bb41bdf92e9e7e9e16df02c",
+  "parentImplementationHead": "cd7eb897309bef08809605748ca119fe1d85ea11",
+  "runId": "run_4c34d4390ca9",
+  "dispatchId": "ctx_188a6f22c6ca",
+  "hostSystem": "Linux",
+  "hostRelease": "6.18.58.1-microsoft-standard-WSL2",
+  "logicalCpus": 24,
+  "node": "v24.19.0",
+  "zig": "0.15.2",
+  "playwright": "1.62.1",
+  "productionArtifactSha256": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+  "speechInputSha256": "686a58782ad5aac0c9349761674aa7bce9e4cc5a4feae67d0eb1b178145cf9bd",
+  "latencyCondition": "Headless local WSL, sequential Chromium/Firefox with one worker; no competing repository build/quality/benchmark during accepted collection. Original, same host graph pass and RNNoise use one unchanged local speech loop. No physical device or broad support qualification.",
+  "cacheControl": "Frozen Vite (hmr:false,watch:null), restarted after edits; final harness verifies served diagnostic protocol/kernel getter and records transformed-module digests. The first post-optimization profile probe used stale served source and is discarded for profile/equivalence conclusions.",
+  "sourceSha256": {
+    "src/effects/audio/noise-worklet.ts": "1aa8cb47396b5ca6f73c2b645119808a397a176175c1910d74b7ea3907e23761",
+    "src/effects/audio/backends/rnnoise-kernel.ts": "80e369317586ff0385e0d1ede68f2767643daaeaabd370ca72c739562c764caa",
+    "tests/browser/audio-diagnostic-worklet.ts": "db9235ed924044c4d7489e0ce931d178f1cdcfc95efe9aefd45af7e6a2e15781",
+    "tests/browser/audio-ac3.spec.ts": "c7e14ffb8b92c5aa432bec6898b862bcd194be139f3bd6b1b2233bd98023a578",
+    "tests/browser/audio-endurance.spec.ts": "aefa2b3f46c986f6f5d4f75eb2922f7f860c895177d7ada84524fb20a71423a5"
+  },
+  "rawReportSha256": {
+    "before-chromium": "6466361814405fc8f9ca3e8c0ed47dde727b82f4bfc711ea9e89d462152f45a3",
+    "before-firefox": "601079ca8d55267d0406c0ac5c61edc607c3d17d342cc3650a5d658991e7504e",
+    "fresh-chromium": "42c0d272a382d6d950deb2c225ebf29bb1832e0e7a0cd81168a6355d87f95699",
+    "fresh-firefox": "7464fa3231edf5f8646ff75a848eb2bb50378d797ca47d4116da09e232ff472d"
+  },
+  "enduranceCondition": "Sequential ten-minute Chromium/Firefox, same fixture, 20ms main-thread busy work approximately every 250ms and explicit minute updates/retries; no competing repository build or benchmark during collection"
+}

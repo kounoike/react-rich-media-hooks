@@ -24,7 +24,7 @@ const MIX_BY_LEVEL: Readonly<Record<NoiseReductionLevel, number>> = {
 
 class NoiseReductionProcessor extends AudioWorkletProcessor {
   private denoiseState: RnnoiseKernel | null = null;
-  private inputFrame = new Float32Array(FRAME_SIZE);
+  private inputFrame: Float32Array = new Float32Array(FRAME_SIZE);
   private dryFrame = new Float32Array(FRAME_SIZE);
   // Upstream v0.2 synthesizes the previous analysis window: align dry audio by two frames.
   private dryDelay = new Float32Array(FRAME_SIZE * 2);
@@ -74,6 +74,7 @@ class NoiseReductionProcessor extends AudioWorkletProcessor {
     }
     try {
       this.denoiseState = new RnnoiseKernel(prepared.module);
+      this.inputFrame = this.denoiseState.frameBuffer;
     } catch (cause) {
       this.fail("failed", this.errorMessage(cause, "RNNoise could not initialize."));
     }
@@ -84,9 +85,11 @@ class NoiseReductionProcessor extends AudioWorkletProcessor {
     const output = outputs[0]?.[0];
     if (output === undefined) return true;
     const channels = inputs[0] ?? [];
+    const mono = channels.length === 1 ? channels[0] : undefined;
 
     for (let index = 0; index < output.length; index += 1) {
-      const input = this.downmix(channels, index);
+      // Preserve the reference downmix's signed-zero behavior while avoiding its mono loop.
+      const input = mono === undefined ? this.downmix(channels, index) : (mono[index] ?? 0) + 0;
       if (this.failed) {
         output[index] = input;
         continue;

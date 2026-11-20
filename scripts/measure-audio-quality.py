@@ -5,6 +5,7 @@ Inputs are external CC-BY-4.0 LibriSpeech clips plus locally generated noise.
 import hashlib
 import importlib.metadata
 import json
+import os
 import pathlib
 import subprocess
 
@@ -56,9 +57,10 @@ for source in sources:
                     "clippedSamples": int(np.sum(np.abs(output) > 1)),
                     "provisionalNumericGates": bool(attenuation >= 6 and output_stoi-input_stoi >= -0.03)})
 report = {"scope": "Offline native-model smoke; three clips from one speaker, synthetic noises, no human listening or browser scheduling. Tail attenuation is measured on known speech-free noise, not speech-segment separation.",
-    "alignmentSamples": 960, "sampleRate": 48000, "seed": 1212, "sources": sources,
+    "variant": os.environ.get("AUDIO_EXPERIMENT", "generic"),
+    "nativeArtifactSha256": hashlib.sha256((root / (".cache/audio-experiment/rnnoise-simd128.wasm" if os.environ.get("AUDIO_EXPERIMENT") == "simd128" else "src/effects/audio/assets/rnnoise.wasm")).read_bytes()).hexdigest(), "alignmentSamples": 960, "sampleRate": 48000, "seed": 1212, "sources": sources,
     "tools": {name: importlib.metadata.version(name) for name in ["numpy", "scipy", "soundfile", "pystoi"]}, "rows": rows}
-out = root / ".artifacts/audio-quality.json"
+out = root / os.environ.get("AUDIO_QUALITY_OUTPUT", ".artifacts/audio-quality.json")
 out.parent.mkdir(parents=True, exist_ok=True)
 out.write_text(json.dumps(report, indent=2) + "\n")
 for level in ["light", "standard", "strong"]:

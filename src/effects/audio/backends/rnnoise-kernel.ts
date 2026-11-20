@@ -47,7 +47,7 @@ export class RnnoiseKernel {
       throw new Error("RNNoise requires a 480-sample frame.");
     if (this.native.memory.buffer !== this.memoryBuffer)
       throw new Error("RNNoise memory changed during processing.");
-    this.frame.set(input);
+    if (input !== this.frame) this.frame.set(input);
     const speechProbability = this.native.engine_process();
     if (
       !Number.isFinite(speechProbability) ||
@@ -56,7 +56,13 @@ export class RnnoiseKernel {
     ) {
       throw new Error("RNNoise returned invalid audio.");
     }
-    input.set(this.frame);
+    if (input !== this.frame) input.set(this.frame);
+  }
+
+  /** Borrowed by the owning worklet only; valid until destroy, never application-owned. */
+  get frameBuffer(): Float32Array {
+    if (this.disposed) throw new Error("RNNoise state is disposed.");
+    return this.frame;
   }
 
   destroy(): void {

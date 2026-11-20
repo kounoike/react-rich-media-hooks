@@ -6,7 +6,14 @@ test("records sustained audio rendering and original-media fallback under UI con
 }) => {
   test.skip(process.env.AUDIO_ENDURANCE !== "1", "Set AUDIO_ENDURANCE=1 for the ten-minute probe.");
   test.setTimeout(660_000);
+  await page.route("**/tests/browser/index.html", (route) =>
+    route.fulfill({
+      contentType: "text/html",
+      body: "<!doctype html><button>Start endurance</button>",
+    }),
+  );
   await page.goto("/tests/browser/index.html");
+  await page.getByRole("button", { name: "Start endurance" }).click();
   const result = await page.evaluate(async () => {
     const library = await import(new URL("/dist/core/index.js", location.origin).href);
     const effects = await import(new URL("/dist/effects/audio/index.js", location.origin).href);
@@ -71,9 +78,17 @@ test("records sustained audio rendering and original-media fallback under UI con
         outputChanges += 1;
       }
     };
+    const transitions: { ms: number; status: string; original: boolean }[] = [];
+    let previousState = "";
     let previousTrack: MediaStreamTrack | undefined;
     const unsubscribe = session.subscribe(() => {
       const current = session.getOutput("audio")?.track;
+      const status = session.getSnapshot().processors.audio.status;
+      const state = `${status}:${current === original}`;
+      if (state !== previousState) {
+        transitions.push({ ms: performance.now(), status, original: current === original });
+        previousState = state;
+      }
       if (current !== previousTrack) {
         previousTrack = current;
         bind();
@@ -146,6 +161,7 @@ test("records sustained audio rendering and original-media fallback under UI con
       acquisitions,
       setups,
       phases,
+      transitions,
       counts,
       outputChanges,
       contentionTicks,

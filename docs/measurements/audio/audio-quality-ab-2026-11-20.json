@@ -1,0 +1,21 @@
+{
+  "scope": "Identical three-clip/synthetic-noise offline smoke; not representative or live browser quality qualification.",
+  "genericSha256": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+  "simd128Sha256": "3dccaf732681036ad8b2cc70ed5cb6f0ad6c06dab7f34f6a9060b9416b311da3",
+  "cellsPerVariant": 36,
+  "numericPasses": {
+    "generic": 36,
+    "simd128": 36
+  },
+  "maxAbsoluteMetricDifference": {
+    "tailNoiseAttenuationDb": 0.0,
+    "inputStoi": 0.0,
+    "outputStoi": 0.0,
+    "stoiDelta": 0.0,
+    "referenceErrorSnrDeltaDb": 0.0
+  },
+  "clippedSamples": {
+    "generic": 0,
+    "simd128": 0
+  }
+}
