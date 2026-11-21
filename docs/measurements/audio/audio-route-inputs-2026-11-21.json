@@ -1,0 +1,29 @@
+{
+  "latencyLoop": {
+    "path": ".cache/audio-routes/corpus/latency-loop.f32",
+    "sha256": "cb0a291b17fffa822a95c6abf1ffeb02da69552395a7a897df73a1880c653ee2",
+    "seconds": 4.92,
+    "source": {
+      "name": "2277-149896-0026.flac",
+      "archivePath": "LibriSpeech/dev-clean/2277/149896/2277-149896-0026.flac",
+      "sha256": "3909a6c5ae93112518681fcbf0a74df43615a4f88bd6d5cd788775255296e3f6",
+      "license": "CC-BY-4.0",
+      "source": "https://www.openslr.org/resources/12/dev-clean.tar.gz",
+      "attribution": "LibriSpeech, Vassil Panayotov, Daniel Povey, Guoguo Chen and Sanjeev Khudanpur; https://www.openslr.org/12"
+    },
+    "noise": {
+      "archiveName": "DLIVING_16k.zip",
+      "url": "https://zenodo.org/records/1227121/files/DLIVING_16k.zip",
+      "archiveSha256": "2b1726fe06e41551ce2397f2aaf3e4fb692c912d81914b04708df0bbb5252338",
+      "archivePath": "DLIVING/ch01.wav",
+      "name": "DLIVING-ch01.wav",
+      "sha256": "9567ff039c040359534075d575b469b587b1e3858ef48a93acd3ecba95f57210",
+      "license": "CC-BY-SA-3.0",
+      "attribution": "DEMAND: Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent; https://zenodo.org/records/1227121",
+      "selection": "first channel, first 120 seconds, no score selection"
+    },
+    "rmsSpeech": 0.07,
+    "snrDb": 10,
+    "policy": "Existing continuous-speech timing clip, no inserted noise-only padding; identical fixture for all compared routes. Representative quality remains separate."
+  }
+}

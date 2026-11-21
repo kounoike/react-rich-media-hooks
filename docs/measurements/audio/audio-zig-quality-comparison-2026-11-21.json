@@ -1,0 +1,20 @@
+{
+  "generic": {
+    "tailNoiseAttenuationDb": 0.0,
+    "outputStoi": 0.0,
+    "stoiDelta": 0.0,
+    "referenceErrorSnrDeltaDb": 0.0
+  },
+  "zig-generic": {
+    "tailNoiseAttenuationDb": 0.0,
+    "outputStoi": 0.0,
+    "stoiDelta": 0.0,
+    "referenceErrorSnrDeltaDb": 0.0
+  },
+  "zig-simd128": {
+    "tailNoiseAttenuationDb": 0.0,
+    "outputStoi": 0.0,
+    "stoiDelta": 0.0,
+    "referenceErrorSnrDeltaDb": 0.0
+  }
+}

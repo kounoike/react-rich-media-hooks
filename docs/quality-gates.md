@@ -54,6 +54,8 @@ upstream schemas for every file.
 | `.github/release.yml` | Oxfmt | YAML parser and repository changelog/category contract |
 | Root and example `pnpm-workspace.yaml` | Oxfmt | YAML parser and packages/overrides shape; frozen installation owns resolver semantics |
 | `supply-chain/*.json` | Oxfmt | Versioned repository contract plus existing `supply-chain:check` dependency/license/asset/action-pin validation (including exception expiry) |
+| `native/rnnoise/manifest.json` | Native build manifest | RNNoise source/model/compiler/ABI/digest/memory shape; `audio:check` and `audio:rebuild` own artifact and build semantics |
+| `tests/fixtures/audio-quality-sources.json` | Oxfmt | Audio measurement source/attribution/license/hash manifest shape; explicit corpus fetch checks source identities |
 | `release-manifest.json` | Oxfmt | Version/status/package/artifact shape; existing release checks remain the release-semantic owner |
 | `.orca/task-pr-lifecycle.json` | Oxfmt | Repository version/lifecycle shape plus unchanged `validate:lifecycle` |
 | `backlog/config.yml` | CLI-owned; not rewritten | YAML parser and project/status shape; Backlog CLI owns task/config semantics |

@@ -1,0 +1,96 @@
+[
+  {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+    "acquisitions": 1,
+    "addedStatus": "success",
+    "finalStatus": "active",
+    "browserReportedBaseLatencyMs": 2.6666666666666665,
+    "captureRate": 16000,
+    "source": "/tmp/audio-low-latency-attachment.json",
+    "method": "0..300ms normalized cross-correlation on paired 16kHz one-second windows; reject peak <0.3; subtract median original-track baseline; synthetic loopback only",
+    "measurements": [
+      {
+        "phase": "baseline",
+        "correlation": 0.9994040462711801,
+        "lagMs": 12.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9985853302217372,
+        "lagMs": 12.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9794695771601163,
+        "lagMs": 12.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9864538185064183,
+        "lagMs": 12.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9978978829577699,
+        "lagMs": 12.0,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.6398399226124031,
+        "lagMs": 94.6875,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.7929890549098556,
+        "lagMs": 94.625,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.9792150378195362,
+        "lagMs": 94.6875,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.986296949524651,
+        "lagMs": 94.6875,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.9480192615407838,
+        "lagMs": 94.6875,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.8683772505564176,
+        "lagMs": 94.6875,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.8322366894763258,
+        "lagMs": 94.625,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.9596063000088559,
+        "lagMs": 94.6875,
+        "accepted": true
+      }
+    ],
+    "qualifiedLoopbackEstimate": true,
+    "baselineMedianMs": 12.0,
+    "incrementalP50Ms": 82.6875,
+    "incrementalP95Ms": 82.6875
+  }
+]

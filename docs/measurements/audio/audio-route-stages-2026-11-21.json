@@ -1,0 +1,5831 @@
+{
+  "scope": "Linux/WSL headless, deterministic voiced/noise, 80 warm/320 measured frames; diagnostic probe imports distinct from no-import controls; UA OS is a Playwright override",
+  "browsers": [
+    {
+      "identities": {
+        "c-profile": "473e398ac6f1ee37a20f187d94b250698de5fb25fec82e058e19a4cacfef930a",
+        "c-profile-simd": "dea9bb2064015edfd0d61408a4d8fd860f4110b1634ca8bcee46990850668a1f",
+        "zig-profile": "650b34718ffa8fd7f141ca69b2b4b2a7ef424f946d72151247955f392378c91c",
+        "zig-profile-simd": "5d94eb4bc4a97ff6f3ebe121b63b7b1d5d4e30cbf7364b89b548e258a4c26ed0",
+        "c-control": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+        "zig-affine-control": "9bcb89465935ccca0e2c375cd4fb2b96c6340a94ee40821626dab517f91253b3",
+        "zig-tiled-generic-control": "9a15deaf80ccea05800c8f292cf1f89f8d4bc75b5ec88dc91965011a0d46106c",
+        "zig-tiled-simd-control": "da72f53a3586a9066b3cb61434921d4bef31da9a64a1cf166381541cf4c7925f"
+      },
+      "protocol": "audio-routes-v1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+      "isolated": true,
+      "rows": [
+        {
+          "name": "c-profile",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 0.3149999976158142,
+            "p95": 0.38999998569488525,
+            "p99": 0.625,
+            "max": 0.6800000071525574
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.3149999976158142,
+                "p95": 0.38999998569488525,
+                "p99": 0.6200000047683716,
+                "max": 0.6800000071525574
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.014999985694885254,
+                "max": 0.019999980926513672
+              },
+              "totalInclusiveMs": 104.64999985694885,
+              "totalExclusiveMs": 1.1149999499320984
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.04000002145767212,
+                "p95": 0.05500000715255737,
+                "p99": 0.08500003814697266,
+                "max": 0.09499996900558472
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.014999985694885254,
+                "p99": 0.019999980926513672,
+                "max": 0.04500001668930054
+              },
+              "totalInclusiveMs": 13.309999585151672,
+              "totalExclusiveMs": 1.690000295639038
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.014999985694885254,
+                "p95": 0.025000035762786865,
+                "p99": 0.04000002145767212,
+                "max": 0.06999999284744263
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.029999971389770508,
+                "max": 0.06499999761581421
+              },
+              "totalInclusiveMs": 4.945000529289246,
+              "totalExclusiveMs": 3.02500057220459
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.010000050067901611,
+                "p99": 0.014999985694885254,
+                "max": 0.06000000238418579
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.010000050067901611,
+                "p99": 0.014999985694885254,
+                "max": 0.0549999475479126
+              },
+              "totalInclusiveMs": 2.5800002217292786,
+              "totalExclusiveMs": 1.5749998688697815
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.004999995231628418,
+                "p99": 0.009999990463256836,
+                "max": 0.009999990463256836
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.004999995231628418,
+                "p99": 0.009999990463256836,
+                "max": 0.009999990463256836
+              },
+              "totalInclusiveMs": 0.8449995517730713,
+              "totalExclusiveMs": 0.8449995517730713
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.014999985694885254,
+                "p95": 0.019999980926513672,
+                "p99": 0.020000040531158447,
+                "max": 0.020000040531158447
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.014999985694885254,
+                "p95": 0.019999980926513672,
+                "p99": 0.020000040531158447,
+                "max": 0.020000040531158447
+              },
+              "totalInclusiveMs": 4.50999903678894,
+              "totalExclusiveMs": 4.50999903678894
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.010000050067901611,
+                "max": 0.019999980926513672
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.010000050067901611,
+                "max": 0.019999980926513672
+              },
+              "totalInclusiveMs": 1.320000171661377,
+              "totalExclusiveMs": 1.320000171661377
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.25999999046325684,
+                "p95": 0.32499998807907104,
+                "p99": 0.5350000262260437,
+                "max": 0.5950000286102295
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.009999990463256836,
+                "p99": 0.014999985694885254,
+                "max": 0.029999971389770508
+              },
+              "totalInclusiveMs": 86.69999992847443,
+              "totalExclusiveMs": 0.5999998450279236
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.050000011920928955,
+                "p95": 0.06999999284744263,
+                "p99": 0.125,
+                "max": 0.23000001907348633
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.004999995231628418,
+                "p99": 0.009999990463256836,
+                "max": 0.010000050067901611
+              },
+              "totalInclusiveMs": 16.73499947786331,
+              "totalExclusiveMs": 0.44000011682510376
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 960,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.20499998331069946,
+                "p95": 0.2550000548362732,
+                "p99": 0.30000001192092896,
+                "max": 0.5
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.010000050067901611,
+                "p99": 0.01500004529953003,
+                "max": 0.020000040531158447
+              },
+              "totalInclusiveMs": 67.90000057220459,
+              "totalExclusiveMs": 1.469999611377716
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.24500000476837158,
+                "p95": 0.3050000071525574,
+                "p99": 0.5050000548362732,
+                "max": 0.5750000476837158
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.24500000476837158,
+                "p95": 0.3050000071525574,
+                "p99": 0.5050000548362732,
+                "max": 0.5750000476837158
+              },
+              "totalInclusiveMs": 81.31999999284744,
+              "totalExclusiveMs": 81.31999999284744
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.025000035762786865,
+                "max": 0.030000030994415283
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.025000035762786865,
+                "max": 0.030000030994415283
+              },
+              "totalInclusiveMs": 2.8700003623962402,
+              "totalExclusiveMs": 2.8700003623962402
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.014999985694885254,
+                "p99": 0.01500004529953003,
+                "max": 0.06499999761581421
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.004999995231628418,
+                "p99": 0.005000054836273193,
+                "max": 0.009999990463256836
+              },
+              "totalInclusiveMs": 2.850000321865082,
+              "totalExclusiveMs": 0.2700001001358032
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.004999995231628418,
+                "p99": 0.009999990463256836,
+                "max": 0.014999985694885254
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.004999995231628418,
+                "p99": 0.009999990463256836,
+                "max": 0.014999985694885254
+              },
+              "totalInclusiveMs": 0.6750000715255737,
+              "totalExclusiveMs": 0.6750000715255737
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 2880,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.01500004529953003,
+                "p99": 0.020000040531158447,
+                "max": 0.020000100135803223
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.01500004529953003,
+                "p99": 0.020000040531158447,
+                "max": 0.020000100135803223
+              },
+              "totalInclusiveMs": 2.925000309944153,
+              "totalExclusiveMs": 2.925000309944153
+            }
+          ]
+        },
+        {
+          "name": "c-profile-simd",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 0.3199999928474426,
+            "p95": 0.45500004291534424,
+            "p99": 0.5900000333786011,
+            "max": 0.6899999976158142
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.3199999928474426,
+                "p95": 0.45500004291534424,
+                "p99": 0.5900000333786011,
+                "max": 0.6850000023841858
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.014999985694885254,
+                "max": 0.02499997615814209
+              },
+              "totalInclusiveMs": 109.03500008583069,
+              "totalExclusiveMs": 1.2750001549720764
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.0350000262260437,
+                "p95": 0.050000011920928955,
+                "p99": 0.10500001907348633,
+                "max": 0.17500001192092896
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.010000050067901611,
+                "p99": 0.01500004529953003,
+                "max": 0.08499997854232788
+              },
+              "totalInclusiveMs": 12.475000202655792,
+              "totalExclusiveMs": 1.5900002717971802
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.014999985694885254,
+                "p95": 0.02499997615814209,
+                "p99": 0.059999942779541016,
+                "max": 0.1350000500679016
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.0549999475479126,
+                "max": 0.12000006437301636
+              },
+              "totalInclusiveMs": 5.2300004959106445,
+              "totalExclusiveMs": 3.3250001668930054
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.014999985694885254,
+                "p99": 0.029999971389770508,
+                "max": 0.06000000238418579
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.010000050067901611,
+                "p99": 0.014999985694885254,
+                "max": 0.06000000238418579
+              },
+              "totalInclusiveMs": 2.8049997091293335,
+              "totalExclusiveMs": 1.8249998092651367
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.005000054836273193,
+                "p99": 0.009999990463256836,
+                "max": 0.0549999475479126
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.005000054836273193,
+                "p99": 0.009999990463256836,
+                "max": 0.0549999475479126
+              },
+              "totalInclusiveMs": 0.8650000095367432,
+              "totalExclusiveMs": 0.8650000095367432
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.01500004529953003,
+                "p99": 0.02499997615814209,
+                "max": 0.06000000238418579
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.01500004529953003,
+                "p99": 0.02499997615814209,
+                "max": 0.06000000238418579
+              },
+              "totalInclusiveMs": 3.4799999594688416,
+              "totalExclusiveMs": 3.4799999594688416
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.009999990463256836,
+                "max": 0.039999961853027344
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.009999990463256836,
+                "max": 0.039999961853027344
+              },
+              "totalInclusiveMs": 1.3099994659423828,
+              "totalExclusiveMs": 1.3099994659423828
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.26499998569488525,
+                "p95": 0.38499999046325684,
+                "p99": 0.48499995470046997,
+                "max": 0.5950000286102295
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.009999990463256836,
+                "p99": 0.010000050067901611,
+                "max": 0.01500004529953003
+              },
+              "totalInclusiveMs": 91.58499997854233,
+              "totalExclusiveMs": 0.5999998450279236
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.050000011920928955,
+                "p95": 0.09999996423721313,
+                "p99": 0.15999996662139893,
+                "max": 0.21000003814697266
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.004999995231628418,
+                "p99": 0.009999990463256836,
+                "max": 0.050000011920928955
+              },
+              "totalInclusiveMs": 18.384999752044678,
+              "totalExclusiveMs": 0.4399999976158142
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 960,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.20999997854232788,
+                "p95": 0.2900000214576721,
+                "p99": 0.3500000238418579,
+                "max": 0.4750000238418579
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.025000035762786865,
+                "max": 0.04499995708465576
+              },
+              "totalInclusiveMs": 71.12500029802322,
+              "totalExclusiveMs": 1.3099995255470276
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.25,
+                "p95": 0.36000001430511475,
+                "p99": 0.4649999737739563,
+                "max": 0.5250000357627869
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.25,
+                "p95": 0.36000001430511475,
+                "p99": 0.4649999737739563,
+                "max": 0.5250000357627869
+              },
+              "totalInclusiveMs": 86.04500061273575,
+              "totalExclusiveMs": 86.04500061273575
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.030000030994415283,
+                "max": 0.05500000715255737
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.030000030994415283,
+                "max": 0.05500000715255737
+              },
+              "totalInclusiveMs": 3.189999997615814,
+              "totalExclusiveMs": 3.189999997615814
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.014999985694885254,
+                "p99": 0.029999971389770508,
+                "max": 0.06000000238418579
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.004999995231628418,
+                "p99": 0.005000054836273193,
+                "max": 0.010000050067901611
+              },
+              "totalInclusiveMs": 3.024999678134918,
+              "totalExclusiveMs": 0.21999996900558472
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.005000054836273193,
+                "p99": 0.010000050067901611,
+                "max": 0.029999971389770508
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.005000054836273193,
+                "p99": 0.010000050067901611,
+                "max": 0.029999971389770508
+              },
+              "totalInclusiveMs": 0.6750000715255737,
+              "totalExclusiveMs": 0.6750000715255737
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 2880,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.025000035762786865,
+                "max": 0.050000011920928955
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.025000035762786865,
+                "max": 0.050000011920928955
+              },
+              "totalInclusiveMs": 2.885000228881836,
+              "totalExclusiveMs": 2.885000228881836
+            }
+          ]
+        },
+        {
+          "name": "zig-profile",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 0.48000001907348633,
+            "p95": 0.625,
+            "p99": 0.7099999785423279,
+            "max": 0.8100000023841858
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.48000001907348633,
+                "p95": 0.6200000047683716,
+                "p99": 0.7099999785423279,
+                "max": 0.8050000071525574
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.010000050067901611,
+                "p99": 0.01500004529953003,
+                "max": 0.029999971389770508
+              },
+              "totalInclusiveMs": 159.84500008821487,
+              "totalExclusiveMs": 1.3399999737739563
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.04000002145767212,
+                "p95": 0.05500000715255737,
+                "p99": 0.10500001907348633,
+                "max": 0.13499999046325684
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.014999985694885254,
+                "p99": 0.034999966621398926,
+                "max": 0.04999995231628418
+              },
+              "totalInclusiveMs": 13.775000631809235,
+              "totalExclusiveMs": 1.7800000309944153
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.014999985694885254,
+                "p95": 0.020000040531158447,
+                "p99": 0.050000011920928955,
+                "max": 0.09999996423721313
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.01500004529953003,
+                "p99": 0.020000040531158447,
+                "max": 0.0899999737739563
+              },
+              "totalInclusiveMs": 5.010000169277191,
+              "totalExclusiveMs": 3.030000329017639
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.014999985694885254,
+                "p99": 0.02499997615814209,
+                "max": 0.050000011920928955
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.014999985694885254,
+                "max": 0.050000011920928955
+              },
+              "totalInclusiveMs": 2.6099997758865356,
+              "totalExclusiveMs": 1.5549995303153992
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.005000054836273193,
+                "p99": 0.009999990463256836,
+                "max": 0.014999985694885254
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.005000054836273193,
+                "p99": 0.009999990463256836,
+                "max": 0.014999985694885254
+              },
+              "totalInclusiveMs": 0.9050000905990601,
+              "totalExclusiveMs": 0.9050000905990601
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.014999985694885254,
+                "p95": 0.019999980926513672,
+                "p99": 0.020000040531158447,
+                "max": 0.020000040531158447
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.014999985694885254,
+                "p95": 0.019999980926513672,
+                "p99": 0.020000040531158447,
+                "max": 0.020000040531158447
+              },
+              "totalInclusiveMs": 4.550000309944153,
+              "totalExclusiveMs": 4.550000309944153
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.014999985694885254,
+                "max": 0.06499999761581421
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.014999985694885254,
+                "max": 0.06499999761581421
+              },
+              "totalInclusiveMs": 1.5300000309944153,
+              "totalExclusiveMs": 1.5300000309944153
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.4249999523162842,
+                "p95": 0.550000011920929,
+                "p99": 0.6150000095367432,
+                "max": 0.7400000095367432
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.005000054836273193,
+                "p99": 0.009999990463256836,
+                "max": 0.02499997615814209
+              },
+              "totalInclusiveMs": 141.08999979496002,
+              "totalExclusiveMs": 0.5300000309944153
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.15999996662139893,
+                "p95": 0.19999998807907104,
+                "p99": 0.25,
+                "max": 0.4099999666213989
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.004999995231628418,
+                "p99": 0.009999990463256836,
+                "max": 0.009999990463256836
+              },
+              "totalInclusiveMs": 52.79499942064285,
+              "totalExclusiveMs": 0.38499999046325684
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 960,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.25,
+                "p95": 0.3400000333786011,
+                "p99": 0.41999995708465576,
+                "max": 0.48000001907348633
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.010000050067901611,
+                "p99": 0.014999985694885254,
+                "max": 0.02499997615814209
+              },
+              "totalInclusiveMs": 84.81000071763992,
+              "totalExclusiveMs": 1.479999601840973
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.4050000309944153,
+                "p95": 0.5350000262260437,
+                "p99": 0.5850000381469727,
+                "max": 0.7099999785423279
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.4050000309944153,
+                "p95": 0.5350000262260437,
+                "p99": 0.5850000381469727,
+                "max": 0.7099999785423279
+              },
+              "totalInclusiveMs": 135.57500076293945,
+              "totalExclusiveMs": 135.57500076293945
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.020000040531158447,
+                "p99": 0.029999971389770508,
+                "max": 0.07499998807907104
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.020000040531158447,
+                "p99": 0.029999971389770508,
+                "max": 0.07499998807907104
+              },
+              "totalInclusiveMs": 3.119999408721924,
+              "totalExclusiveMs": 3.119999408721924
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.014999985694885254,
+                "p99": 0.02499997615814209,
+                "max": 0.050000011920928955
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.004999995231628418,
+                "p99": 0.005000054836273193,
+                "max": 0.005000054836273193
+              },
+              "totalInclusiveMs": 2.8699998259544373,
+              "totalExclusiveMs": 0.2600000500679016
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.004999995231628418,
+                "p99": 0.005000054836273193,
+                "max": 0.009999990463256836
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.004999995231628418,
+                "p99": 0.005000054836273193,
+                "max": 0.009999990463256836
+              },
+              "totalInclusiveMs": 0.7699998617172241,
+              "totalExclusiveMs": 0.7699998617172241
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 2880,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.025000035762786865,
+                "max": 0.06999999284744263
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.025000035762786865,
+                "max": 0.06999999284744263
+              },
+              "totalInclusiveMs": 3.0350000858306885,
+              "totalExclusiveMs": 3.0350000858306885
+            }
+          ]
+        },
+        {
+          "name": "zig-profile-simd",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 0.1899999976158142,
+            "p95": 0.2850000262260437,
+            "p99": 0.3700000047683716,
+            "max": 0.5149999856948853
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.1899999976158142,
+                "p95": 0.2849999666213989,
+                "p99": 0.36000001430511475,
+                "max": 0.5049999952316284
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.014999985694885254,
+                "max": 0.07499998807907104
+              },
+              "totalInclusiveMs": 65.94999980926514,
+              "totalExclusiveMs": 1.3150005340576172
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.0350000262260437,
+                "p95": 0.050000011920928955,
+                "p99": 0.06999999284744263,
+                "max": 0.10000002384185791
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.014999985694885254,
+                "p99": 0.01500004529953003,
+                "max": 0.04999995231628418
+              },
+              "totalInclusiveMs": 12.314999341964722,
+              "totalExclusiveMs": 1.57999986410141
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.014999985694885254,
+                "p95": 0.025000035762786865,
+                "p99": 0.039999961853027344,
+                "max": 0.06499999761581421
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.039999961853027344,
+                "max": 0.06000000238418579
+              },
+              "totalInclusiveMs": 5.1599995493888855,
+              "totalExclusiveMs": 3.1799994707107544
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.014999985694885254,
+                "p99": 0.01500004529953003,
+                "max": 0.025000035762786865
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.014999985694885254,
+                "max": 0.025000035762786865
+              },
+              "totalInclusiveMs": 2.6149998903274536,
+              "totalExclusiveMs": 1.5800001621246338
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.005000054836273193,
+                "p99": 0.009999990463256836,
+                "max": 0.010000050067901611
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.005000054836273193,
+                "p99": 0.009999990463256836,
+                "max": 0.010000050067901611
+              },
+              "totalInclusiveMs": 0.8150001764297485,
+              "totalExclusiveMs": 0.8150001764297485
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.01500004529953003,
+                "p99": 0.019999980926513672,
+                "max": 0.029999971389770508
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.01500004529953003,
+                "p99": 0.019999980926513672,
+                "max": 0.029999971389770508
+              },
+              "totalInclusiveMs": 3.369999945163727,
+              "totalExclusiveMs": 3.369999945163727
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.009999990463256836,
+                "max": 0.01500004529953003
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.009999990463256836,
+                "p99": 0.009999990463256836,
+                "max": 0.01500004529953003
+              },
+              "totalInclusiveMs": 1.389999806880951,
+              "totalExclusiveMs": 1.389999806880951
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.13999998569488525,
+                "p95": 0.2149999737739563,
+                "p99": 0.2800000309944153,
+                "max": 0.45500004291534424
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.009999990463256836,
+                "p99": 0.010000050067901611,
+                "max": 0.014999985694885254
+              },
+              "totalInclusiveMs": 48.71499991416931,
+              "totalExclusiveMs": 0.7600001096725464
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.04500001668930054,
+                "p95": 0.06499999761581421,
+                "p99": 0.09500002861022949,
+                "max": 0.12000000476837158
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.005000054836273193,
+                "p99": 0.010000050067901611,
+                "max": 0.019999980926513672
+              },
+              "totalInclusiveMs": 15.410000503063202,
+              "totalExclusiveMs": 0.5399998426437378
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 960,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.0899999737739563,
+                "p95": 0.14000004529953003,
+                "p99": 0.2200000286102295,
+                "max": 0.4049999713897705
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.004999995231628418,
+                "p95": 0.014999985694885254,
+                "p99": 0.030000030994415283,
+                "max": 0.07999998331069946
+              },
+              "totalInclusiveMs": 31.3799991607666,
+              "totalExclusiveMs": 1.429999828338623
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.125,
+                "p95": 0.1899999976158142,
+                "p99": 0.2500000596046448,
+                "max": 0.4449999928474426
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.125,
+                "p95": 0.1899999976158142,
+                "p99": 0.2500000596046448,
+                "max": 0.4449999928474426
+              },
+              "totalInclusiveMs": 43.02000015974045,
+              "totalExclusiveMs": 43.02000015974045
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.025000035762786865,
+                "max": 0.06000000238418579
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.019999980926513672,
+                "p99": 0.025000035762786865,
+                "max": 0.06000000238418579
+              },
+              "totalInclusiveMs": 2.9649999737739563,
+              "totalExclusiveMs": 2.9649999737739563
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.014999985694885254,
+                "p99": 0.01500004529953003,
+                "max": 0.025000035762786865
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.004999995231628418,
+                "p99": 0.005000054836273193,
+                "max": 0.009999990463256836
+              },
+              "totalInclusiveMs": 2.8749998211860657,
+              "totalExclusiveMs": 0.25999993085861206
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.005000054836273193,
+                "p99": 0.009999990463256836,
+                "max": 0.04500001668930054
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.005000054836273193,
+                "p99": 0.009999990463256836,
+                "max": 0.04500001668930054
+              },
+              "totalInclusiveMs": 0.7300001978874207,
+              "totalExclusiveMs": 0.7300001978874207
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 2880,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.01500004529953003,
+                "p99": 0.019999980926513672,
+                "max": 0.029999971389770508
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.009999990463256836,
+                "p95": 0.01500004529953003,
+                "p99": 0.019999980926513672,
+                "max": 0.029999971389770508
+              },
+              "totalInclusiveMs": 3.014999806880951,
+              "totalExclusiveMs": 3.014999806880951
+            }
+          ]
+        },
+        {
+          "name": "c-control",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 0.3100000023841858,
+            "p95": 0.42500001192092896,
+            "p99": 0.625,
+            "max": 1.1200000047683716
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            }
+          ]
+        },
+        {
+          "name": "zig-affine-control",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 0.17500001192092896,
+            "p95": 0.25999999046325684,
+            "p99": 0.3399999737739563,
+            "max": 0.875
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            }
+          ]
+        },
+        {
+          "name": "zig-tiled-generic-control",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 0.22999995946884155,
+            "p95": 0.35500001907348633,
+            "p99": 0.4950000047683716,
+            "max": 0.6949999928474426
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            }
+          ]
+        },
+        {
+          "name": "zig-tiled-simd-control",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 0.14500004053115845,
+            "p95": 0.22499996423721313,
+            "p99": 0.47999995946884155,
+            "max": 0.5950000286102295
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "identities": {
+        "c-profile": "473e398ac6f1ee37a20f187d94b250698de5fb25fec82e058e19a4cacfef930a",
+        "c-profile-simd": "dea9bb2064015edfd0d61408a4d8fd860f4110b1634ca8bcee46990850668a1f",
+        "zig-profile": "650b34718ffa8fd7f141ca69b2b4b2a7ef424f946d72151247955f392378c91c",
+        "zig-profile-simd": "5d94eb4bc4a97ff6f3ebe121b63b7b1d5d4e30cbf7364b89b548e258a4c26ed0",
+        "c-control": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+        "zig-affine-control": "9bcb89465935ccca0e2c375cd4fb2b96c6340a94ee40821626dab517f91253b3",
+        "zig-tiled-generic-control": "9a15deaf80ccea05800c8f292cf1f89f8d4bc75b5ec88dc91965011a0d46106c",
+        "zig-tiled-simd-control": "da72f53a3586a9066b3cb61434921d4bef31da9a64a1cf166381541cf4c7925f"
+      },
+      "protocol": "audio-routes-v1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0",
+      "isolated": true,
+      "rows": [
+        {
+          "name": "c-profile",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 5.079999999999927,
+            "p95": 7.2000000000000455,
+            "p99": 9.519999999999982,
+            "max": 10.899999999999864
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 5.060000000000173,
+                "p95": 7.2000000000000455,
+                "p99": 9.519999999999982,
+                "max": 10.879999999999882
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.01999999999998181,
+                "p95": 0.040000000000190994,
+                "p99": 0.060000000000172804,
+                "max": 0.16000000000008185
+              },
+              "totalInclusiveMs": 1717.9199999999998,
+              "totalExclusiveMs": 8.300000000000637
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.4800000000000182,
+                "p95": 0.7599999999999909,
+                "p99": 0.8600000000001273,
+                "max": 1.0799999999999272
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.05999999999994543,
+                "p95": 0.08000000000015461,
+                "p99": 0.10000000000002274,
+                "max": 0.12000000000023192
+              },
+              "totalInclusiveMs": 167.66000000000065,
+              "totalExclusiveMs": 18.07999999999896
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.20000000000004547,
+                "p95": 0.32000000000005,
+                "p99": 0.3999999999996362,
+                "max": 0.5799999999999272
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000000455,
+                "p95": 0.1999999999998181,
+                "p99": 0.25999999999976353,
+                "max": 0.4799999999997908
+              },
+              "totalInclusiveMs": 71.18000000000069,
+              "totalExclusiveMs": 40.40000000000265
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.11999999999989086,
+                "p95": 0.18000000000006366,
+                "p99": 0.2199999999997999,
+                "max": 0.2800000000002001
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.07999999999992724,
+                "p95": 0.10000000000002274,
+                "p99": 0.12000000000034561,
+                "max": 0.22000000000002728
+              },
+              "totalInclusiveMs": 38.839999999997985,
+              "totalExclusiveMs": 22.479999999998142
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.06000000000005912,
+                "p99": 0.08000000000004093,
+                "max": 0.42000000000007276
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.06000000000005912,
+                "p99": 0.08000000000004093,
+                "max": 0.42000000000007276
+              },
+              "totalInclusiveMs": 14.20000000000124,
+              "totalExclusiveMs": 14.20000000000124
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.14000000000010004,
+                "p95": 0.22000000000002728,
+                "p99": 0.2599999999999909,
+                "max": 0.35999999999989996
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.14000000000010004,
+                "p95": 0.22000000000002728,
+                "p99": 0.2599999999999909,
+                "max": 0.35999999999989996
+              },
+              "totalInclusiveMs": 48.79999999999893,
+              "totalExclusiveMs": 48.79999999999893
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.06000000000040018,
+                "p99": 0.08000000000015461,
+                "max": 0.15999999999996817
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.06000000000040018,
+                "p99": 0.08000000000015461,
+                "max": 0.15999999999996817
+              },
+              "totalInclusiveMs": 15.40000000000083,
+              "totalExclusiveMs": 15.40000000000083
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 4.3599999999999,
+                "p95": 6.2999999999999545,
+                "p99": 8.579999999999927,
+                "max": 9.759999999999991
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.01999999999998181,
+                "p99": 0.01999999999998181,
+                "max": 0.07999999999992724
+              },
+              "totalInclusiveMs": 1490.739999999999,
+              "totalExclusiveMs": 0.5399999999997362
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.6600000000000819,
+                "p95": 1.080000000000041,
+                "p99": 1.4399999999999409,
+                "max": 1.5599999999999454
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.01999999999998181,
+                "p99": 0.01999999999998181,
+                "max": 0.03999999999996362
+              },
+              "totalInclusiveMs": 231.16000000000088,
+              "totalExclusiveMs": 0.599999999999568
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 960,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 3.580000000000041,
+                "p95": 5.279999999999973,
+                "p99": 7.759999999999991,
+                "max": 8.1400000000001
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.09999999999990905,
+                "p99": 0.13999999999987267,
+                "max": 0.33999999999991815
+              },
+              "totalInclusiveMs": 1240.6599999999976,
+              "totalExclusiveMs": 13.380000000002894
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 4.2000000000000455,
+                "p95": 6.100000000000023,
+                "p99": 8.340000000000146,
+                "max": 9.19999999999959
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 4.2000000000000455,
+                "p95": 6.100000000000023,
+                "p99": 8.340000000000146,
+                "max": 9.19999999999959
+              },
+              "totalInclusiveMs": 1434.4200000000008,
+              "totalExclusiveMs": 1434.4200000000008
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000011823,
+                "p95": 0.1799999999998363,
+                "p99": 0.2199999999999136,
+                "max": 0.6399999999998727
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000011823,
+                "p95": 0.1799999999998363,
+                "p99": 0.2199999999999136,
+                "max": 0.6399999999998727
+              },
+              "totalInclusiveMs": 41.79999999999626,
+              "totalExclusiveMs": 41.79999999999626
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000000455,
+                "p95": 0.20000000000004547,
+                "p99": 0.2400000000000091,
+                "max": 0.42000000000007276
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.01999999999998181,
+                "p99": 0.020000000000209184,
+                "max": 0.2999999999999545
+              },
+              "totalInclusiveMs": 41.119999999997844,
+              "totalExclusiveMs": 2.279999999999859
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.05999999999994543,
+                "p99": 0.06000000000005912,
+                "max": 0.07999999999992724
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.05999999999994543,
+                "p99": 0.06000000000005912,
+                "max": 0.07999999999992724
+              },
+              "totalInclusiveMs": 10.100000000001614,
+              "totalExclusiveMs": 10.100000000001614
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 2880,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.13999999999998636,
+                "p95": 0.20000000000004547,
+                "p99": 0.2400000000000091,
+                "max": 0.29999999999972715
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.13999999999998636,
+                "p95": 0.20000000000004547,
+                "p99": 0.2400000000000091,
+                "max": 0.29999999999972715
+              },
+              "totalInclusiveMs": 47.13999999999788,
+              "totalExclusiveMs": 47.13999999999788
+            }
+          ]
+        },
+        {
+          "name": "c-profile-simd",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 4.660000000000082,
+            "p95": 5.759999999999991,
+            "p99": 8.659999999999854,
+            "max": 10.900000000000091
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 4.660000000000025,
+                "p95": 5.739999999999895,
+                "p99": 8.659999999999854,
+                "max": 10.900000000000091
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.01999999999998181,
+                "p95": 0.040000000000190994,
+                "p99": 0.060000000000172804,
+                "max": 0.12000000000011823
+              },
+              "totalInclusiveMs": 1549.1399999999994,
+              "totalExclusiveMs": 7.000000000000739
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.42000000000007276,
+                "p95": 0.5799999999999272,
+                "p99": 0.6800000000000637,
+                "max": 1.0399999999999636
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.08000000000015461,
+                "p99": 0.10000000000013642,
+                "max": 0.40000000000009095
+              },
+              "totalInclusiveMs": 139.95999999999833,
+              "totalExclusiveMs": 15.359999999999843
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.20000000000004547,
+                "p95": 0.27999999999974534,
+                "p99": 0.3400000000001455,
+                "max": 0.36000000000012733
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.11999999999989086,
+                "p95": 0.16000000000008185,
+                "p99": 0.2199999999997999,
+                "max": 0.23999999999995225
+              },
+              "totalInclusiveMs": 66.69999999999584,
+              "totalExclusiveMs": 38.14000000000004
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.11999999999989086,
+                "p95": 0.16000000000008185,
+                "p99": 0.20000000000004547,
+                "max": 0.2199999999997999
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.07999999999992724,
+                "p95": 0.10000000000013642,
+                "p99": 0.12000000000011823,
+                "max": 0.15999999999985448
+              },
+              "totalInclusiveMs": 37.66000000000355,
+              "totalExclusiveMs": 22.90000000000265
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.040000000000190994,
+                "p99": 0.05999999999994543,
+                "max": 0.07999999999992724
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.040000000000190994,
+                "p99": 0.05999999999994543,
+                "max": 0.07999999999992724
+              },
+              "totalInclusiveMs": 10.16000000000156,
+              "totalExclusiveMs": 10.16000000000156
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.10000000000002274,
+                "p95": 0.13999999999998636,
+                "p99": 0.16000000000008185,
+                "max": 0.1999999999998181
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.10000000000002274,
+                "p95": 0.13999999999998636,
+                "p99": 0.16000000000008185,
+                "max": 0.1999999999998181
+              },
+              "totalInclusiveMs": 33.24000000000183,
+              "totalExclusiveMs": 33.24000000000183
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.060000000000172804,
+                "p99": 0.08000000000004093,
+                "max": 0.09999999999990905
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.060000000000172804,
+                "p99": 0.08000000000004093,
+                "max": 0.09999999999990905
+              },
+              "totalInclusiveMs": 14.499999999999261,
+              "totalExclusiveMs": 14.499999999999261
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 4.059999999999945,
+                "p95": 5.159999999999968,
+                "p99": 7.639999999999873,
+                "max": 10.079999999999927
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.01999999999998181,
+                "p99": 0.01999999999998181,
+                "max": 0.040000000000020464
+              },
+              "totalInclusiveMs": 1353.459999999999,
+              "totalExclusiveMs": 0.49999999999982947
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.6200000000000045,
+                "p95": 0.9600000000000364,
+                "p99": 1.2200000000000273,
+                "max": 1.4600000000000364
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.01999999999998181,
+                "p99": 0.020000000000209184,
+                "max": 0.07999999999992724
+              },
+              "totalInclusiveMs": 212.4000000000002,
+              "totalExclusiveMs": 1.0400000000001342
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 960,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 3.3400000000001455,
+                "p95": 4.3400000000001455,
+                "p99": 6.3400000000001455,
+                "max": 9.360000000000127
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.01999999999998181,
+                "p95": 0.05999999999994543,
+                "p99": 0.08000000000015461,
+                "max": 0.09999999999990905
+              },
+              "totalInclusiveMs": 1123.920000000002,
+              "totalExclusiveMs": 5.600000000000762
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 3.9199999999998454,
+                "p95": 4.960000000000036,
+                "p99": 7.439999999999827,
+                "max": 9.8599999999999
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 3.9199999999998454,
+                "p95": 4.960000000000036,
+                "p99": 7.439999999999827,
+                "max": 9.8599999999999
+              },
+              "totalInclusiveMs": 1306.2999999999952,
+              "totalExclusiveMs": 1306.2999999999952
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000011823,
+                "p95": 0.16000000000030923,
+                "p99": 0.20000000000004547,
+                "max": 0.24000000000023647
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000011823,
+                "p95": 0.16000000000030923,
+                "p99": 0.20000000000004547,
+                "max": 0.24000000000023647
+              },
+              "totalInclusiveMs": 40.02000000000305,
+              "totalExclusiveMs": 40.02000000000305
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000000455,
+                "p95": 0.1799999999998363,
+                "p99": 0.20000000000004547,
+                "max": 0.4399999999999409
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.01999999999998181,
+                "p99": 0.020000000000209184,
+                "max": 0.31999999999993634
+              },
+              "totalInclusiveMs": 39.680000000003304,
+              "totalExclusiveMs": 2.0199999999997544
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.01999999999998181,
+                "p95": 0.04000000000007731,
+                "p99": 0.040000000000190994,
+                "max": 0.06000000000005912
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.01999999999998181,
+                "p95": 0.04000000000007731,
+                "p99": 0.040000000000190994,
+                "max": 0.06000000000005912
+              },
+              "totalInclusiveMs": 9.039999999998088,
+              "totalExclusiveMs": 9.039999999998088
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 2880,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.13999999999987267,
+                "p95": 0.17999999999994998,
+                "p99": 0.20000000000027285,
+                "max": 0.2400000000000091
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.13999999999987267,
+                "p95": 0.17999999999994998,
+                "p99": 0.20000000000027285,
+                "max": 0.2400000000000091
+              },
+              "totalInclusiveMs": 43.319999999996696,
+              "totalExclusiveMs": 43.319999999996696
+            }
+          ]
+        },
+        {
+          "name": "zig-profile",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 4.3400000000001455,
+            "p95": 5.6599999999998545,
+            "p99": 8.239999999999782,
+            "max": 11.200000000000045
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 4.339999999999918,
+                "p95": 5.6599999999998545,
+                "p99": 8.2199999999998,
+                "max": 11.180000000000064
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.01999999999998181,
+                "p95": 0.04000000000007731,
+                "p99": 0.06000000000005912,
+                "max": 0.060000000000172804
+              },
+              "totalInclusiveMs": 1449.480000000001,
+              "totalExclusiveMs": 7.4999999999998295
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.4600000000000364,
+                "p95": 0.67999999999995,
+                "p99": 0.7999999999999545,
+                "max": 0.9400000000000546
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.040000000000190994,
+                "p95": 0.08000000000015461,
+                "p99": 0.10000000000013642,
+                "max": 0.14000000000010004
+              },
+              "totalInclusiveMs": 155.360000000002,
+              "totalExclusiveMs": 16.32000000000346
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.20000000000004547,
+                "p95": 0.2800000000000864,
+                "p99": 0.37999999999988177,
+                "max": 0.540000000000191
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.11999999999989086,
+                "p95": 0.16000000000008185,
+                "p99": 0.24000000000023647,
+                "max": 0.40000000000009095
+              },
+              "totalInclusiveMs": 66.07999999999959,
+              "totalExclusiveMs": 37.4200000000007
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.10000000000002274,
+                "p95": 0.16000000000008185,
+                "p99": 0.22000000000002728,
+                "max": 0.37999999999999545
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.05999999999994543,
+                "p95": 0.09999999999990905,
+                "p99": 0.12000000000000455,
+                "max": 0.31999999999993634
+              },
+              "totalInclusiveMs": 35.77999999999861,
+              "totalExclusiveMs": 20.580000000000382
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.05999999999994543,
+                "p99": 0.060000000000172804,
+                "max": 0.08000000000015461
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.05999999999994543,
+                "p99": 0.060000000000172804,
+                "max": 0.08000000000015461
+              },
+              "totalInclusiveMs": 12.57999999999879,
+              "totalExclusiveMs": 12.57999999999879
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.13999999999998636,
+                "p95": 0.20000000000004547,
+                "p99": 0.22000000000002728,
+                "max": 0.2400000000000091
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.13999999999998636,
+                "p95": 0.20000000000004547,
+                "p99": 0.22000000000002728,
+                "max": 0.2400000000000091
+              },
+              "totalInclusiveMs": 45.599999999997976,
+              "totalExclusiveMs": 45.599999999997976
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.060000000000172804,
+                "p99": 0.08000000000015461,
+                "max": 0.34000000000003183
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.060000000000172804,
+                "p99": 0.08000000000015461,
+                "max": 0.34000000000003183
+              },
+              "totalInclusiveMs": 14.78000000000219,
+              "totalExclusiveMs": 14.78000000000219
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 3.6799999999998363,
+                "p95": 4.940000000000055,
+                "p99": 7.2000000000000455,
+                "max": 9.980000000000018
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.01999999999998181,
+                "p99": 0.01999999999998181,
+                "max": 0.03999999999996362
+              },
+              "totalInclusiveMs": 1239.1799999999992,
+              "totalExclusiveMs": 0.3799999999996544
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.7999999999999545,
+                "p95": 1.1800000000000068,
+                "p99": 1.5,
+                "max": 2.480000000000018
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.01999999999998181,
+                "p99": 0.020000000000209184,
+                "max": 0.03999999999996362
+              },
+              "totalInclusiveMs": 272.9599999999987,
+              "totalExclusiveMs": 0.8000000000007503
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 960,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 2.759999999999991,
+                "p95": 3.819999999999993,
+                "p99": 5.559999999999945,
+                "max": 8.279999999999973
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.08000000000015461,
+                "p99": 0.12000000000011823,
+                "max": 0.14000000000010004
+              },
+              "totalInclusiveMs": 945.8799999999995,
+              "totalExclusiveMs": 11.13999999999993
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 3.519999999999982,
+                "p95": 4.720000000000027,
+                "p99": 6.699999999999818,
+                "max": 9.720000000000255
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 3.519999999999982,
+                "p95": 4.720000000000027,
+                "p99": 6.699999999999818,
+                "max": 9.720000000000255
+              },
+              "totalInclusiveMs": 1185.6399999999999,
+              "totalExclusiveMs": 1185.6399999999999
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000006139,
+                "p95": 0.18000000000006366,
+                "p99": 0.2599999999999909,
+                "max": 0.4600000000000364
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000006139,
+                "p95": 0.18000000000006366,
+                "p99": 0.2599999999999909,
+                "max": 0.4600000000000364
+              },
+              "totalInclusiveMs": 41.21999999999895,
+              "totalExclusiveMs": 41.21999999999895
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.11999999999989086,
+                "p95": 0.1799999999998363,
+                "p99": 0.22000000000002728,
+                "max": 0.38000000000010914
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.01999999999998181,
+                "p99": 0.020000000000209184,
+                "max": 0.040000000000190994
+              },
+              "totalInclusiveMs": 37.75999999999863,
+              "totalExclusiveMs": 1.9800000000000182
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.020000000000209184,
+                "p95": 0.040000000000190994,
+                "p99": 0.05999999999994543,
+                "max": 0.11999999999989086
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.020000000000209184,
+                "p95": 0.040000000000190994,
+                "p99": 0.05999999999994543,
+                "max": 0.11999999999989086
+              },
+              "totalInclusiveMs": 9.680000000001428,
+              "totalExclusiveMs": 9.680000000001428
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 2880,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.13999999999987267,
+                "p95": 0.18000000000006366,
+                "p99": 0.2400000000000091,
+                "max": 0.34000000000003183
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.13999999999987267,
+                "p95": 0.18000000000006366,
+                "p99": 0.2400000000000091,
+                "max": 0.34000000000003183
+              },
+              "totalInclusiveMs": 43.859999999997115,
+              "totalExclusiveMs": 43.859999999997115
+            }
+          ]
+        },
+        {
+          "name": "zig-profile-simd",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 1.900000000000091,
+            "p95": 2.7199999999999704,
+            "p99": 3.740000000000009,
+            "max": 8.560000000000002
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 1.900000000000034,
+                "p95": 2.7199999999999704,
+                "p99": 3.7199999999999704,
+                "max": 8.560000000000002
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.01999999999998181,
+                "p95": 0.04000000000007731,
+                "p99": 0.060000000000002274,
+                "max": 0.08000000000004093
+              },
+              "totalInclusiveMs": 661.8,
+              "totalExclusiveMs": 6.639999999999532
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.4199999999999591,
+                "p95": 0.6399999999999864,
+                "p99": 0.8199999999999932,
+                "max": 0.9400000000000546
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.040000000000020464,
+                "p95": 0.08000000000004093,
+                "p99": 0.10000000000002274,
+                "max": 0.12000000000000455
+              },
+              "totalInclusiveMs": 142.3600000000003,
+              "totalExclusiveMs": 14.97999999999999
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.20000000000004547,
+                "p95": 0.3000000000000682,
+                "p99": 0.37999999999999545,
+                "max": 0.5
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.11999999999989086,
+                "p95": 0.18000000000000682,
+                "p99": 0.20000000000004547,
+                "max": 0.42000000000007276
+              },
+              "totalInclusiveMs": 67.46000000000132,
+              "totalExclusiveMs": 37.960000000000605
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.10000000000002274,
+                "p95": 0.17999999999994998,
+                "p99": 0.19999999999998863,
+                "max": 0.36000000000001364
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.06000000000005912,
+                "p95": 0.10000000000002274,
+                "p99": 0.13999999999987267,
+                "max": 0.32000000000005
+              },
+              "totalInclusiveMs": 36.799999999999386,
+              "totalExclusiveMs": 21.859999999999445
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.04000000000007731,
+                "p99": 0.06000000000005912,
+                "max": 0.37999999999999545
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.03999999999996362,
+                "p95": 0.04000000000007731,
+                "p99": 0.06000000000005912,
+                "max": 0.37999999999999545
+              },
+              "totalInclusiveMs": 10.339999999999037,
+              "totalExclusiveMs": 10.339999999999037
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.10000000000002274,
+                "p95": 0.14000000000001478,
+                "p99": 0.19999999999998863,
+                "max": 0.4799999999999045
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.10000000000002274,
+                "p95": 0.14000000000001478,
+                "p99": 0.19999999999998863,
+                "max": 0.4799999999999045
+              },
+              "totalInclusiveMs": 34.520000000000806,
+              "totalExclusiveMs": 34.520000000000806
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.040000000000020464,
+                "p95": 0.06000000000005912,
+                "p99": 0.10000000000002274,
+                "max": 0.2999999999999545
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.040000000000020464,
+                "p95": 0.06000000000005912,
+                "p99": 0.10000000000002274,
+                "max": 0.2999999999999545
+              },
+              "totalInclusiveMs": 15.05999999999915,
+              "totalExclusiveMs": 15.05999999999915
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 1.3399999999999181,
+                "p95": 1.9399999999999977,
+                "p99": 2.8600000000000136,
+                "max": 7.640000000000043
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.01999999999998181,
+                "p99": 0.020000000000095497,
+                "max": 0.040000000000020464
+              },
+              "totalInclusiveMs": 466.0999999999998,
+              "totalExclusiveMs": 0.440000000000083
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 640,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.21999999999999886,
+                "p95": 0.39999999999997726,
+                "p99": 0.45999999999997954,
+                "max": 0.6800000000000068
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.01999999999998181,
+                "p99": 0.020000000000095497,
+                "max": 0.020000000000095497
+              },
+              "totalInclusiveMs": 76.06000000000023,
+              "totalExclusiveMs": 0.4400000000001114
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 960,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 1.080000000000041,
+                "p95": 1.599999999999966,
+                "p99": 2.3999999999999773,
+                "max": 7.240000000000009
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.040000000000020464,
+                "p99": 0.060000000000002274,
+                "max": 0.0999999999999659
+              },
+              "totalInclusiveMs": 383.3399999999988,
+              "totalExclusiveMs": 4.040000000000731
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 1.1999999999999886,
+                "p95": 1.7200000000000273,
+                "p99": 2.6400000000001,
+                "max": 7.420000000000073
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 1.1999999999999886,
+                "p95": 1.7200000000000273,
+                "p99": 2.6400000000001,
+                "max": 7.420000000000073
+              },
+              "totalInclusiveMs": 420.2799999999996,
+              "totalExclusiveMs": 420.2799999999996
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 3200,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000000455,
+                "p95": 0.17999999999994998,
+                "p99": 0.2199999999999136,
+                "max": 0.42000000000007276
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000000455,
+                "p95": 0.17999999999994998,
+                "p99": 0.2199999999999136,
+                "max": 0.42000000000007276
+              },
+              "totalInclusiveMs": 40.89999999999927,
+              "totalExclusiveMs": 40.89999999999927
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.12000000000000455,
+                "p95": 0.18000000000000682,
+                "p99": 0.21999999999997044,
+                "max": 0.36000000000001364
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0.020000000000038654,
+                "p99": 0.020000000000095497,
+                "max": 0.020000000000095497
+              },
+              "totalInclusiveMs": 38.31999999999937,
+              "totalExclusiveMs": 1.5199999999999818
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 320,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.020000000000010232,
+                "p95": 0.04000000000007731,
+                "p99": 0.04000000000007731,
+                "max": 0.060000000000002274
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.020000000000010232,
+                "p95": 0.04000000000007731,
+                "p99": 0.04000000000007731,
+                "max": 0.060000000000002274
+              },
+              "totalInclusiveMs": 8.380000000001019,
+              "totalExclusiveMs": 8.380000000001019
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 2880,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0.13999999999987267,
+                "p95": 0.19999999999998863,
+                "p99": 0.2400000000000091,
+                "max": 0.42000000000007276
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0.13999999999987267,
+                "p95": 0.19999999999998863,
+                "p99": 0.2400000000000091,
+                "max": 0.42000000000007276
+              },
+              "totalInclusiveMs": 44.44000000000065,
+              "totalExclusiveMs": 44.44000000000065
+            }
+          ]
+        },
+        {
+          "name": "c-control",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 4.820000000000164,
+            "p95": 7.420000000000073,
+            "p99": 11.45999999999998,
+            "max": 12.660000000000082
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            }
+          ]
+        },
+        {
+          "name": "zig-affine-control",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 1.7000000000000455,
+            "p95": 2.7799999999999727,
+            "p99": 3.5200000000000387,
+            "max": 6.300000000000011
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            }
+          ]
+        },
+        {
+          "name": "zig-tiled-generic-control",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 3.6200000000000045,
+            "p95": 4.860000000000014,
+            "p99": 6.3799999999999955,
+            "max": 9.67999999999995
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            }
+          ]
+        },
+        {
+          "name": "zig-tiled-simd-control",
+          "protocol": "audio-routes-v1",
+          "type": "profile",
+          "clock": "Worker performance.now",
+          "input": "same deterministic 480-sample voiced/noise frame",
+          "engineMs": {
+            "count": 320,
+            "p50": 1.5799999999999272,
+            "p95": 2.0600000000000023,
+            "p99": 2.3799999999999955,
+            "max": 2.519999999999982
+          },
+          "checksum": 446.99001747462535,
+          "stages": [
+            {
+              "id": 0,
+              "file": "denoise.c",
+              "function": "rnnoise_process_frame",
+              "stage": "total",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 1,
+              "file": "denoise.c",
+              "function": "rnn_compute_frame_features",
+              "stage": "features",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 2,
+              "file": "denoise.c",
+              "function": "forward_transform",
+              "stage": "fftForward",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 3,
+              "file": "denoise.c",
+              "function": "inverse_transform",
+              "stage": "fftInverse",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 4,
+              "file": "pitch.c",
+              "function": "rnn_pitch_downsample",
+              "stage": "pitchDownsample",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 5,
+              "file": "pitch.c",
+              "function": "rnn_pitch_search",
+              "stage": "pitchSearch",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 6,
+              "file": "pitch.c",
+              "function": "rnn_remove_doubling",
+              "stage": "pitchDoubling",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 7,
+              "file": "rnn.c",
+              "function": "compute_rnn",
+              "stage": "model",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 8,
+              "file": "nnet.c",
+              "function": "compute_generic_conv1d",
+              "stage": "conv",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 9,
+              "file": "nnet.c",
+              "function": "compute_generic_gru",
+              "stage": "gru",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 10,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_linear_)",
+              "stage": "affine",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 11,
+              "file": "nnet_arch.h",
+              "function": "RTCD_SUF(compute_activation_)",
+              "stage": "activation",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 12,
+              "file": "denoise.c",
+              "function": "frame_synthesis",
+              "stage": "synthesis",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 13,
+              "file": "denoise.c",
+              "function": "rnn_pitch_filter",
+              "stage": "pitchFilter",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            },
+            {
+              "id": 14,
+              "file": "kiss_fft.c",
+              "function": "kf_bfly4",
+              "stage": "fftRadix4",
+              "calls": 0,
+              "inclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "exclusiveMs": {
+                "count": 320,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0,
+                "max": 0
+              },
+              "totalInclusiveMs": 0,
+              "totalExclusiveMs": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

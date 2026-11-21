@@ -1,0 +1,3349 @@
+{
+  "scope": "Ten deterministic LibriSpeech speakers (five F/five M corpus metadata), two actual DEMAND environments, 0/10 dB, three semantic levels; offline numeric evidence, not human listening, capture devices or universal speech/noise coverage. Media and derivatives remain local.",
+  "sources": {
+    "speechArchive": {
+      "name": "dev-clean.tar.gz",
+      "url": "https://www.openslr.org/resources/12/dev-clean.tar.gz",
+      "sha256": "76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3",
+      "license": "CC-BY-4.0",
+      "attribution": "LibriSpeech: Vassil Panayotov, Daniel Povey, Guoguo Chen, Sanjeev Khudanpur; https://www.openslr.org/12"
+    },
+    "selection": "first five speaker IDs for each F/M corpus metadata category, first archive clip at least four seconds; deterministic, not score-selected",
+    "speech": [
+      {
+        "name": "1988-147956-0007.flac",
+        "archivePath": "LibriSpeech/dev-clean/1988/147956/1988-147956-0007.flac",
+        "sha256": "a539d1dc245942b93a26784b298202b050babe9ce291a14dc86366ca1c3679ce",
+        "speaker": "1988",
+        "corpusSexMetadata": "F",
+        "seconds": 5.865
+      },
+      {
+        "name": "777-126732-0019.flac",
+        "archivePath": "LibriSpeech/dev-clean/777/126732/777-126732-0019.flac",
+        "sha256": "18f702d17fa9cf155110aa47e4336b6ae8bdb9523771dd16ca88defb3a4b05b2",
+        "speaker": "777",
+        "corpusSexMetadata": "M",
+        "seconds": 4.94
+      },
+      {
+        "name": "84-121123-0021.flac",
+        "archivePath": "LibriSpeech/dev-clean/84/121123/84-121123-0021.flac",
+        "sha256": "8359f2f20d7874d0f12003aaf69c7fbde25ff6349603c3fdb9328e3cb6b40186",
+        "speaker": "84",
+        "corpusSexMetadata": "F",
+        "seconds": 4.815
+      },
+      {
+        "name": "1673-143396-0014.flac",
+        "archivePath": "LibriSpeech/dev-clean/1673/143396/1673-143396-0014.flac",
+        "sha256": "a74094488de3a7371072b07497450c750b3ce1863fad3f3bf2338b097ea13f58",
+        "speaker": "1673",
+        "corpusSexMetadata": "F",
+        "seconds": 13.985
+      },
+      {
+        "name": "174-50561-0005.flac",
+        "archivePath": "LibriSpeech/dev-clean/174/50561/174-50561-0005.flac",
+        "sha256": "25c81fd3af839dad7f0185dba4c836479d4f3fdc828d9c0ae605960ed542ff5c",
+        "speaker": "174",
+        "corpusSexMetadata": "M",
+        "seconds": 5.705
+      },
+      {
+        "name": "1462-170138-0027.flac",
+        "archivePath": "LibriSpeech/dev-clean/1462/170138/1462-170138-0027.flac",
+        "sha256": "88118c60081bd8d096e5e42addb18361fa30d2b01f6d9672529ce2e841fbc74f",
+        "speaker": "1462",
+        "corpusSexMetadata": "F",
+        "seconds": 5.005
+      },
+      {
+        "name": "251-136532-0019.flac",
+        "archivePath": "LibriSpeech/dev-clean/251/136532/251-136532-0019.flac",
+        "sha256": "1222caea81aee75267531c171b80fd5a2d4d9a85c5dd44a91a661a5f9ff3d05c",
+        "speaker": "251",
+        "corpusSexMetadata": "M",
+        "seconds": 9.345
+      },
+      {
+        "name": "652-130726-0029.flac",
+        "archivePath": "LibriSpeech/dev-clean/652/130726/652-130726-0029.flac",
+        "sha256": "6d066e4fc02eea47041003a0d7d0d4f6f83deff74f3e6316fcdca9066b4bf9ae",
+        "speaker": "652",
+        "corpusSexMetadata": "M",
+        "seconds": 7.775
+      },
+      {
+        "name": "422-122949-0020.flac",
+        "archivePath": "LibriSpeech/dev-clean/422/122949/422-122949-0020.flac",
+        "sha256": "59ddf98c780b9bb4000c762d9acee033ade4db92d4b411fc0a3b2f607940e6ec",
+        "speaker": "422",
+        "corpusSexMetadata": "M",
+        "seconds": 23.41
+      },
+      {
+        "name": "1919-142785-0054.flac",
+        "archivePath": "LibriSpeech/dev-clean/1919/142785/1919-142785-0054.flac",
+        "sha256": "0166c040cecf0e861bc900f05b9e1efd9c9afbe5c7a8128c4a3c3037f8735a81",
+        "speaker": "1919",
+        "corpusSexMetadata": "F",
+        "seconds": 7.725
+      }
+    ],
+    "noise": [
+      {
+        "archiveName": "DLIVING_16k.zip",
+        "url": "https://zenodo.org/records/1227121/files/DLIVING_16k.zip",
+        "archiveSha256": "2b1726fe06e41551ce2397f2aaf3e4fb692c912d81914b04708df0bbb5252338",
+        "archivePath": "DLIVING/ch01.wav",
+        "name": "DLIVING-ch01.wav",
+        "sha256": "9567ff039c040359534075d575b469b587b1e3858ef48a93acd3ecba95f57210",
+        "license": "CC-BY-SA-3.0",
+        "attribution": "DEMAND: Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent; https://zenodo.org/records/1227121",
+        "selection": "first channel, first 120 seconds, no score selection"
+      },
+      {
+        "archiveName": "DKITCHEN_16k.zip",
+        "url": "https://zenodo.org/records/1227121/files/DKITCHEN_16k.zip",
+        "archiveSha256": "9d68e46d2709847c59580770e2f8aa160607ebff7475788174aa1080332cc845",
+        "archivePath": "DKITCHEN/ch01.wav",
+        "name": "DKITCHEN-ch01.wav",
+        "sha256": "94eda18f9461348d1d070ca69d001e7fa9e51604731509026b4905d2e321561d",
+        "license": "CC-BY-SA-3.0",
+        "attribution": "DEMAND: Joachim Thiemann, Nobutaka Ito, Emmanuel Vincent; https://zenodo.org/records/1227121",
+        "selection": "first channel, first 120 seconds, no score selection"
+      }
+    ]
+  },
+  "rows": [
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.7876871085971848,
+      "outputStoi": 0.8274472562288346,
+      "tailAttenuationDb": 6.935749723456286,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.7876871085971848,
+      "outputStoi": 0.838068828742162,
+      "tailAttenuationDb": 12.041199824014239,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.7876871085971848,
+      "outputStoi": 0.8354265158539786,
+      "tailAttenuationDb": 148.24250990557437,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.8927933618514864,
+      "outputStoi": 0.9104725132601494,
+      "tailAttenuationDb": 6.935747748732122,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.8927933618514864,
+      "outputStoi": 0.91597839861905,
+      "tailAttenuationDb": 12.041194976517563,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.8927933618514864,
+      "outputStoi": 0.9129015407785654,
+      "tailAttenuationDb": 107.13412056812281,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.8950052945709306,
+      "outputStoi": 0.9126739085987602,
+      "tailAttenuationDb": 6.935749675155339,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.8950052945709306,
+      "outputStoi": 0.9153826709883918,
+      "tailAttenuationDb": 12.041199705454893,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.8950052945709306,
+      "outputStoi": 0.9060520672707482,
+      "tailAttenuationDb": 129.64778234531647,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9477732278798858,
+      "outputStoi": 0.9503304074211878,
+      "tailAttenuationDb": 6.9357468550344725,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9477732278798858,
+      "outputStoi": 0.9492265157267917,
+      "tailAttenuationDb": 12.041192781278049,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1988",
+      "clip": "1988-147956-0007.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9477732278798858,
+      "outputStoi": 0.9347172068148346,
+      "tailAttenuationDb": 100.49255206057688,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.8315128303038216,
+      "outputStoi": 0.8598326899674802,
+      "tailAttenuationDb": 6.927517424289596,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.8315128303038216,
+      "outputStoi": 0.8575856096598059,
+      "tailAttenuationDb": 12.019290800105754,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.8315128303038216,
+      "outputStoi": 0.8339701681831813,
+      "tailAttenuationDb": 41.245674582109075,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9551306468085959,
+      "outputStoi": 0.9658025510840842,
+      "tailAttenuationDb": 6.9341142539857,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9551306468085959,
+      "outputStoi": 0.9651825651131747,
+      "tailAttenuationDb": 12.037130574619077,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9551306468085959,
+      "outputStoi": 0.9599525061556118,
+      "tailAttenuationDb": 56.160812749192246,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.9444915537098939,
+      "outputStoi": 0.9569039936822021,
+      "tailAttenuationDb": 6.9357488094928765,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.9444915537098939,
+      "outputStoi": 0.9516319532928353,
+      "tailAttenuationDb": 12.041197580028536,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.9444915537098939,
+      "outputStoi": 0.9323615336401139,
+      "tailAttenuationDb": 105.71448051698835,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9898342059556262,
+      "outputStoi": 0.9907003088890317,
+      "tailAttenuationDb": 6.935741405339366,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9898342059556262,
+      "outputStoi": 0.9891381813931788,
+      "tailAttenuationDb": 12.041179375872023,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "777",
+      "clip": "777-126732-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9898342059556262,
+      "outputStoi": 0.9859980479171707,
+      "tailAttenuationDb": 88.73775014520959,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.7789178923748804,
+      "outputStoi": 0.829184549933741,
+      "tailAttenuationDb": 6.9356570906316115,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.7789178923748804,
+      "outputStoi": 0.8434198266487563,
+      "tailAttenuationDb": 12.040972394235364,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.7789178923748804,
+      "outputStoi": 0.8553257672395347,
+      "tailAttenuationDb": 85.73580625049188,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9339029430617516,
+      "outputStoi": 0.9649839705565885,
+      "tailAttenuationDb": 6.93559441998021,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9339029430617516,
+      "outputStoi": 0.9710071067493108,
+      "tailAttenuationDb": 12.040818382842954,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9339029430617516,
+      "outputStoi": 0.9692453674890814,
+      "tailAttenuationDb": 79.63958923553699,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.9141787461419469,
+      "outputStoi": 0.9445245158372647,
+      "tailAttenuationDb": 6.93573877058809,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.9141787461419469,
+      "outputStoi": 0.9478703645138411,
+      "tailAttenuationDb": 12.041172827524708,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.9141787461419469,
+      "outputStoi": 0.9429531697422104,
+      "tailAttenuationDb": 83.14686704097812,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.984348208868169,
+      "outputStoi": 0.9883220643887071,
+      "tailAttenuationDb": 6.935730687177361,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.984348208868169,
+      "outputStoi": 0.9873316263689939,
+      "tailAttenuationDb": 12.041151796209299,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "84",
+      "clip": "84-121123-0021.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.984348208868169,
+      "outputStoi": 0.9850305142923138,
+      "tailAttenuationDb": 72.49986553884361,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.8435583022844503,
+      "outputStoi": 0.8858133427990479,
+      "tailAttenuationDb": 6.876998165764686,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.8435583022844503,
+      "outputStoi": 0.8965689932376437,
+      "tailAttenuationDb": 11.88747418442167,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.8435583022844503,
+      "outputStoi": 0.9030643561864738,
+      "tailAttenuationDb": 33.12069825567609,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9588373627801683,
+      "outputStoi": 0.9667737286798732,
+      "tailAttenuationDb": 6.9355073632873845,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9588373627801683,
+      "outputStoi": 0.9673901829927404,
+      "tailAttenuationDb": 12.040604774274568,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9588373627801683,
+      "outputStoi": 0.9660566009182451,
+      "tailAttenuationDb": 80.86356254704164,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.9486973233214568,
+      "outputStoi": 0.9640641914469331,
+      "tailAttenuationDb": 6.935745113848709,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.9486973233214568,
+      "outputStoi": 0.9646001484478737,
+      "tailAttenuationDb": 12.041188504884893,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.9486973233214568,
+      "outputStoi": 0.95964715189547,
+      "tailAttenuationDb": 96.97628498194587,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9919665772767104,
+      "outputStoi": 0.9906755404404641,
+      "tailAttenuationDb": 6.935747532691696,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9919665772767104,
+      "outputStoi": 0.9879818867756734,
+      "tailAttenuationDb": 12.041194427303594,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1673",
+      "clip": "1673-143396-0014.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9919665772767104,
+      "outputStoi": 0.9839853002498145,
+      "tailAttenuationDb": 90.77397551162704,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.8511638125840617,
+      "outputStoi": 0.895438727434403,
+      "tailAttenuationDb": 6.935345544030028,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.8511638125840617,
+      "outputStoi": 0.9050201601868214,
+      "tailAttenuationDb": 12.040205160200761,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.8511638125840617,
+      "outputStoi": 0.9030414545182569,
+      "tailAttenuationDb": 69.40753320149864,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9693685738497175,
+      "outputStoi": 0.9791398558397817,
+      "tailAttenuationDb": 6.9348167731444645,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9693685738497175,
+      "outputStoi": 0.9797050633805214,
+      "tailAttenuationDb": 12.038905626538723,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9693685738497175,
+      "outputStoi": 0.9781004458813244,
+      "tailAttenuationDb": 67.03101170084484,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.9466214364063716,
+      "outputStoi": 0.9665952928082548,
+      "tailAttenuationDb": 6.935747774886186,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.9466214364063716,
+      "outputStoi": 0.9685263433001009,
+      "tailAttenuationDb": 12.041195039416131,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.9466214364063716,
+      "outputStoi": 0.965357037922909,
+      "tailAttenuationDb": 101.22781806545422,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9930939689819084,
+      "outputStoi": 0.9945429248414582,
+      "tailAttenuationDb": 6.935737933272828,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9930939689819084,
+      "outputStoi": 0.9933069420053174,
+      "tailAttenuationDb": 12.04117083517233,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "174",
+      "clip": "174-50561-0005.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9930939689819084,
+      "outputStoi": 0.9908419333659358,
+      "tailAttenuationDb": 86.71423667116105,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.7374781429233651,
+      "outputStoi": 0.806286693431659,
+      "tailAttenuationDb": 6.93532872846607,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.7374781429233651,
+      "outputStoi": 0.8310160060811047,
+      "tailAttenuationDb": 12.040150608315269,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.7374781429233651,
+      "outputStoi": 0.8467954176790757,
+      "tailAttenuationDb": 61.622668385636665,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9306642297959045,
+      "outputStoi": 0.9597110682606069,
+      "tailAttenuationDb": 6.935742709567997,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9306642297959045,
+      "outputStoi": 0.9653427194223609,
+      "tailAttenuationDb": 12.04118259987386,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9306642297959045,
+      "outputStoi": 0.965829705521285,
+      "tailAttenuationDb": 94.48168520758529,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.8534823389342775,
+      "outputStoi": 0.9002418828084616,
+      "tailAttenuationDb": 6.935734869166401,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.8534823389342775,
+      "outputStoi": 0.9153008943925008,
+      "tailAttenuationDb": 12.0411631878006,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.8534823389342775,
+      "outputStoi": 0.9266506352476306,
+      "tailAttenuationDb": 81.19823108685885,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9563836299706389,
+      "outputStoi": 0.9733529058258107,
+      "tailAttenuationDb": 6.935769310009007,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9563836299706389,
+      "outputStoi": 0.9758618076953326,
+      "tailAttenuationDb": 12.04124614044325,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1462",
+      "clip": "1462-170138-0027.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9563836299706389,
+      "outputStoi": 0.9753060772740381,
+      "tailAttenuationDb": 71.19321323144418,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.7530265826219888,
+      "outputStoi": 0.7893325184682012,
+      "tailAttenuationDb": 6.9357849533007645,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.7530265826219888,
+      "outputStoi": 0.7925349245863078,
+      "tailAttenuationDb": 12.041286147025032,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.7530265826219888,
+      "outputStoi": 0.7208394456523302,
+      "tailAttenuationDb": 81.86522816481863,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9364406331257487,
+      "outputStoi": 0.9552059464211125,
+      "tailAttenuationDb": 6.9357387240986785,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9364406331257487,
+      "outputStoi": 0.9554037101144095,
+      "tailAttenuationDb": 12.041172812390359,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9364406331257487,
+      "outputStoi": 0.9497950251361472,
+      "tailAttenuationDb": 92.42550205344969,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.940885400959757,
+      "outputStoi": 0.9560199216688955,
+      "tailAttenuationDb": 6.935256139800686,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.940885400959757,
+      "outputStoi": 0.9553297098730491,
+      "tailAttenuationDb": 12.039768265205613,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.940885400959757,
+      "outputStoi": 0.9486721003656696,
+      "tailAttenuationDb": 50.21960972116794,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9921428611099453,
+      "outputStoi": 0.9918192492484381,
+      "tailAttenuationDb": 6.93545106543219,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9921428611099453,
+      "outputStoi": 0.9898912089824938,
+      "tailAttenuationDb": 12.040462512097783,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "251",
+      "clip": "251-136532-0019.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9921428611099453,
+      "outputStoi": 0.9864745342722144,
+      "tailAttenuationDb": 67.33379279950681,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.7875585342507427,
+      "outputStoi": 0.8198694427607945,
+      "tailAttenuationDb": 6.923829535820786,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.7875585342507427,
+      "outputStoi": 0.8248142688008152,
+      "tailAttenuationDb": 12.010946615520224,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.7875585342507427,
+      "outputStoi": 0.8223147110146296,
+      "tailAttenuationDb": 43.39479704368641,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9479537276338715,
+      "outputStoi": 0.9629609620221328,
+      "tailAttenuationDb": 6.931454114110906,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9479537276338715,
+      "outputStoi": 0.9647392345397656,
+      "tailAttenuationDb": 12.030500153950914,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9479537276338715,
+      "outputStoi": 0.962028865134062,
+      "tailAttenuationDb": 51.502658380559964,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.94192098841652,
+      "outputStoi": 0.9579695183122893,
+      "tailAttenuationDb": 6.935299483127455,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.94192098841652,
+      "outputStoi": 0.9578889924849137,
+      "tailAttenuationDb": 12.040089694933819,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.94192098841652,
+      "outputStoi": 0.9518561342275186,
+      "tailAttenuationDb": 66.59061564433682,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9908729254387909,
+      "outputStoi": 0.9918944182577284,
+      "tailAttenuationDb": 6.935733785766129,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9908729254387909,
+      "outputStoi": 0.9905456722720188,
+      "tailAttenuationDb": 12.041160552400525,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "652",
+      "clip": "652-130726-0029.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9908729254387909,
+      "outputStoi": 0.9879531133619088,
+      "tailAttenuationDb": 81.83126317525507,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.8084919443479703,
+      "outputStoi": 0.8503764445819957,
+      "tailAttenuationDb": 6.935720348389499,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.8084919443479703,
+      "outputStoi": 0.8605539927110288,
+      "tailAttenuationDb": 12.041127040312062,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.8084919443479703,
+      "outputStoi": 0.8652988467625287,
+      "tailAttenuationDb": 75.31233305568719,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9223022626877416,
+      "outputStoi": 0.9336894746370306,
+      "tailAttenuationDb": 6.935690671399765,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9223022626877416,
+      "outputStoi": 0.9354267186975979,
+      "tailAttenuationDb": 12.04105431804324,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9223022626877416,
+      "outputStoi": 0.9425951181702372,
+      "tailAttenuationDb": 76.1545936416827,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.8977081531734784,
+      "outputStoi": 0.9148736775076558,
+      "tailAttenuationDb": 6.935748246378085,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.8977081531734784,
+      "outputStoi": 0.9142493178006806,
+      "tailAttenuationDb": 12.041196197722764,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.8977081531734784,
+      "outputStoi": 0.9116460620872471,
+      "tailAttenuationDb": 104.9741915186456,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9714182026535622,
+      "outputStoi": 0.9748922058685753,
+      "tailAttenuationDb": 6.935762979549731,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9714182026535622,
+      "outputStoi": 0.9731573563609209,
+      "tailAttenuationDb": 12.041232139615243,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "422",
+      "clip": "422-122949-0020.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9714182026535622,
+      "outputStoi": 0.9588142787013306,
+      "tailAttenuationDb": 80.1812988038307,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.889598615891112,
+      "outputStoi": 0.9235500386222478,
+      "tailAttenuationDb": 6.935744331602844,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.889598615891112,
+      "outputStoi": 0.9304274303609096,
+      "tailAttenuationDb": 12.041186587677961,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.889598615891112,
+      "outputStoi": 0.9316751084225942,
+      "tailAttenuationDb": 101.09772039304394,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9767333441149326,
+      "outputStoi": 0.98211860888492,
+      "tailAttenuationDb": 6.935636650759571,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9767333441149326,
+      "outputStoi": 0.9815592940735739,
+      "tailAttenuationDb": 12.040921807117034,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9767333441149326,
+      "outputStoi": 0.9781945096306621,
+      "tailAttenuationDb": 76.83442797486882,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "light",
+      "inputStoi": 0.9316655303429936,
+      "outputStoi": 0.9584180224779612,
+      "tailAttenuationDb": 6.935733383085917,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "standard",
+      "inputStoi": 0.9316655303429936,
+      "outputStoi": 0.9618990940226263,
+      "tailAttenuationDb": 12.041159665998084,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0,
+      "level": "strong",
+      "inputStoi": 0.9316655303429936,
+      "outputStoi": 0.9617064695022141,
+      "tailAttenuationDb": 86.66294488030687,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "light",
+      "inputStoi": 0.9913058537477877,
+      "outputStoi": 0.9905562411391159,
+      "tailAttenuationDb": 6.935710129738615,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "standard",
+      "inputStoi": 0.9913058537477877,
+      "outputStoi": 0.9878096810145203,
+      "tailAttenuationDb": 12.04110241497391,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    },
+    {
+      "speaker": "1919",
+      "clip": "1919-142785-0054.flac",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10,
+      "level": "strong",
+      "inputStoi": 0.9913058537477877,
+      "outputStoi": 0.9839041518695234,
+      "tailAttenuationDb": 80.12388121618352,
+      "clippedSamples": 0,
+      "finite": true,
+      "oracleComparison": {
+        "generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-generic": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        },
+        "zig-simd128": {
+          "differentBits": 0,
+          "maxAbsDifference": 0.0
+        }
+      }
+    }
+  ],
+  "loop": {
+    "path": ".cache/audio-routes/corpus/mixed-loop.f32",
+    "sha256": "10a3c78ada4bc8bda2b3c754b1ba82a2a54e2bf3db32aaf788a97615f25f83f8",
+    "sampleRate": 48000,
+    "seconds": 60.0
+  },
+  "humanListening": "PENDING: no human scores supplied; never infer them from STOI or bit equality",
+  "timingInputReport": "audio-route-inputs-2026-11-21.json",
+  "provisionalPassCount": 119,
+  "provisionalCellCount": 120,
+  "blindedCaseMetadata": [
+    {
+      "case": "case-01",
+      "speaker": "1988",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0
+    },
+    {
+      "case": "case-02",
+      "speaker": "1988",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10
+    },
+    {
+      "case": "case-03",
+      "speaker": "1988",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0
+    },
+    {
+      "case": "case-04",
+      "speaker": "1988",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10
+    },
+    {
+      "case": "case-05",
+      "speaker": "777",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0
+    },
+    {
+      "case": "case-06",
+      "speaker": "777",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10
+    },
+    {
+      "case": "case-07",
+      "speaker": "777",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0
+    },
+    {
+      "case": "case-08",
+      "speaker": "777",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10
+    },
+    {
+      "case": "case-09",
+      "speaker": "251",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0
+    },
+    {
+      "case": "case-10",
+      "speaker": "251",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10
+    },
+    {
+      "case": "case-11",
+      "speaker": "251",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0
+    },
+    {
+      "case": "case-12",
+      "speaker": "251",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10
+    },
+    {
+      "case": "case-13",
+      "speaker": "1919",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 0
+    },
+    {
+      "case": "case-14",
+      "speaker": "1919",
+      "noise": "DLIVING-ch01.wav",
+      "snrDb": 10
+    },
+    {
+      "case": "case-15",
+      "speaker": "1919",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 0
+    },
+    {
+      "case": "case-16",
+      "speaker": "1919",
+      "noise": "DKITCHEN-ch01.wav",
+      "snrDb": 10
+    }
+  ]
+}

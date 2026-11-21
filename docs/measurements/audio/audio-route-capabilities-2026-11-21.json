@@ -1,0 +1,159 @@
+{
+  "scope": "Actual API reads/writes, not presence-only support claims; missing browser runtimes are unmeasured, not unsupported product claims",
+  "isolatedLinux": [
+    {
+      "identities": {},
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+      "isolated": true,
+      "secure": true,
+      "sab": "function",
+      "processor": "function",
+      "generator": "function",
+      "audioData": "function",
+      "worker": {
+        "type": "probe",
+        "processor": "undefined",
+        "generator": "undefined",
+        "videoGenerator": "undefined",
+        "audioData": "function",
+        "sab": "function",
+        "isolated": true
+      },
+      "audioProcessor": {
+        "ok": true,
+        "type": "AudioData",
+        "sampleRate": 48000,
+        "frames": 480,
+        "channels": 2,
+        "format": "f32-planar"
+      },
+      "audioGenerator": {
+        "ok": true,
+        "kind": "audio"
+      }
+    },
+    {
+      "identities": {},
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0",
+      "isolated": true,
+      "secure": true,
+      "sab": "function",
+      "processor": "undefined",
+      "generator": "undefined",
+      "audioData": "function",
+      "worker": {
+        "type": "probe",
+        "processor": "undefined",
+        "generator": "undefined",
+        "videoGenerator": "undefined",
+        "audioData": "function",
+        "sab": "function",
+        "isolated": true
+      },
+      "audioProcessor": {
+        "ok": false,
+        "error": "not exposed in Window"
+      },
+      "audioGenerator": {
+        "ok": false,
+        "error": "not exposed in Window"
+      }
+    }
+  ],
+  "nonisolatedLinux": [
+    {
+      "identities": {
+        "source:experiments/audio-routes/research.mjs": "645573992b6ac49f503c528ad4932461a79d862136b3aae796d39c9e8b760454",
+        "served:experiments/audio-routes/research.mjs": "29c25c1946defea0279ad22b12fe31b9f6252bc20a163f3cbf1b707a4946dbfe",
+        "source:experiments/audio-routes/inference-worker.mjs": "453fc983d500e412c7eabc7990ddfe58db95910d74754220956147f34bfc6e06",
+        "served:experiments/audio-routes/inference-worker.mjs": "75e1c26d57d50c9689ca01f742f86191ae8e24571ac2e71e6003503b91af65e5",
+        "source:experiments/audio-routes/observer-worklet.mjs": "22a583af4060d5c54180de922e10ea452536bcb591c0cd3fcc9447220b8573e6",
+        "served:experiments/audio-routes/observer-worklet.mjs": "70e7d95dd233de2f6b4d6a255278be223471ab6d40d43788768b923b03a3e05f",
+        "source:experiments/audio-routes/ring-worklet.mjs": "5934b5e45e37f6efc68177ef7f34f10758c3f1b7a1cf2eb7701164fe8165aff2",
+        "served:experiments/audio-routes/ring-worklet.mjs": "650ee879a9ee2b983d8b2e082c6f62750bedc1c37c44ca156a98fa0f304670e3"
+      },
+      "protocol": "audio-routes-v2",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+      "isolated": false,
+      "secure": true,
+      "sab": "undefined",
+      "processor": "function",
+      "generator": "function",
+      "audioData": "function",
+      "worker": {
+        "protocol": "audio-routes-v2",
+        "type": "probe",
+        "processor": "undefined",
+        "generator": "undefined",
+        "videoGenerator": "undefined",
+        "audioData": "function",
+        "sab": "undefined",
+        "isolated": false
+      },
+      "audioProcessor": {
+        "ok": true,
+        "type": "AudioData",
+        "sampleRate": 48000,
+        "frames": 480,
+        "channels": 2,
+        "format": "f32-planar"
+      },
+      "audioGenerator": {
+        "ok": true,
+        "kind": "audio"
+      }
+    },
+    {
+      "identities": {
+        "source:experiments/audio-routes/research.mjs": "645573992b6ac49f503c528ad4932461a79d862136b3aae796d39c9e8b760454",
+        "served:experiments/audio-routes/research.mjs": "29c25c1946defea0279ad22b12fe31b9f6252bc20a163f3cbf1b707a4946dbfe",
+        "source:experiments/audio-routes/inference-worker.mjs": "453fc983d500e412c7eabc7990ddfe58db95910d74754220956147f34bfc6e06",
+        "served:experiments/audio-routes/inference-worker.mjs": "75e1c26d57d50c9689ca01f742f86191ae8e24571ac2e71e6003503b91af65e5",
+        "source:experiments/audio-routes/observer-worklet.mjs": "22a583af4060d5c54180de922e10ea452536bcb591c0cd3fcc9447220b8573e6",
+        "served:experiments/audio-routes/observer-worklet.mjs": "70e7d95dd233de2f6b4d6a255278be223471ab6d40d43788768b923b03a3e05f",
+        "source:experiments/audio-routes/ring-worklet.mjs": "5934b5e45e37f6efc68177ef7f34f10758c3f1b7a1cf2eb7701164fe8165aff2",
+        "served:experiments/audio-routes/ring-worklet.mjs": "650ee879a9ee2b983d8b2e082c6f62750bedc1c37c44ca156a98fa0f304670e3"
+      },
+      "protocol": "audio-routes-v2",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0",
+      "isolated": false,
+      "secure": true,
+      "sab": "undefined",
+      "processor": "undefined",
+      "generator": "undefined",
+      "audioData": "function",
+      "worker": {
+        "protocol": "audio-routes-v2",
+        "type": "probe",
+        "processor": "undefined",
+        "generator": "undefined",
+        "videoGenerator": "undefined",
+        "audioData": "function",
+        "sab": "undefined",
+        "isolated": false
+      },
+      "audioProcessor": {
+        "ok": false,
+        "error": "not exposed in Window"
+      },
+      "audioGenerator": {
+        "ok": false,
+        "error": "not exposed in Window"
+      }
+    }
+  ],
+  "unmeasured": [
+    {
+      "browser": "Edge",
+      "reason": "Runtime missing: /opt/microsoft/msedge/msedge"
+    },
+    {
+      "browser": "WebKit / Safari",
+      "reason": "Playwright WebKit runtime missing; no Safari device measured"
+    },
+    {
+      "browser": "Physical microphone/speaker/reference-device matrix",
+      "reason": "No physical acoustic measurement; no release support claim"
+    }
+  ]
+}

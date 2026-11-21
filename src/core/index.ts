@@ -1,5 +1,6 @@
 import type { CropOptions } from "../effects/video/index.js";
 import type { VideoCropProcessor } from "../effects/video/runtime.js";
+import type { AudioNoiseProcessor } from "../effects/audio/runtime.js";
 
 export type MediaKind = "video" | "audio";
 
@@ -129,6 +130,7 @@ export interface VideoEffectConfig {
 
 export interface AudioEffectConfig {
   readonly effects?: readonly AudioEffect[];
+  readonly bypass?: boolean;
 }
 
 export interface VideoEffect {
@@ -192,6 +194,11 @@ type ActivityMap = Record<MediaKind, Activity>;
 type DeviceMap = Record<MediaKind, readonly MediaDeviceSnapshot[]>;
 type SelectedDeviceMap = Record<MediaKind, string | null>;
 type VideoProcessorFault = { readonly faultKind: string; readonly message: string };
+type AudioProcessorFault = {
+  readonly faultKind: "unsupported" | "failed" | "overload";
+  readonly message: string;
+};
+type AudioNoiseLevel = "light" | "standard" | "strong";
 
 const idleProcessor = (): ProcessorSnapshot => ({ status: "off", effects: [] });
 
@@ -207,7 +214,18 @@ const copyVideoEffects = (config: VideoEffectConfig): VideoEffectConfig => ({
   ...(config.bypass === undefined ? {} : { bypass: config.bypass }),
 });
 
+const copyAudioEffects = (config: AudioEffectConfig): AudioEffectConfig => ({
+  effects: (config.effects ?? []).map((effect) => ({
+    kind: effect.kind,
+    options: { ...effect.options },
+  })),
+  ...(config.bypass === undefined ? {} : { bypass: config.bypass }),
+});
+
 const videoEffectNames = (config: VideoEffectConfig): readonly string[] =>
+  (config.effects ?? []).map((effect) => effect.kind);
+
+const audioEffectNames = (config: AudioEffectConfig): readonly string[] =>
   (config.effects ?? []).map((effect) => effect.kind);
 
 const freezeSnapshot = (snapshot: MediaSnapshot): MediaSnapshot => {
@@ -445,9 +463,14 @@ type AcquireResult =
 class BrowserMediaSession implements MediaSession {
   private captureConfig: MediaCaptureOptions;
   private videoEffects: VideoEffectConfig;
+  private audioEffects: AudioEffectConfig;
   private videoProcessor: VideoCropProcessor | null = null;
+  private audioProcessor: AudioNoiseProcessor | null = null;
   private videoSetupController: AbortController | null = null;
+  private audioSetupController: AbortController | null = null;
+  private audioSetupSnapshot: ProcessorSnapshot | null = null;
   private videoGeneration = 0;
+  private audioGeneration = 0;
   private snapshot: MediaSnapshot;
   private generation = 0;
   private operationId = 0;
@@ -472,12 +495,23 @@ class BrowserMediaSession implements MediaSession {
   constructor(options: MediaSessionOptions) {
     this.captureConfig = options.capture ?? {};
     this.videoEffects = copyVideoEffects(options.video ?? {});
+    this.audioEffects = copyAudioEffects(options.audio ?? {});
     this.snapshot = createSnapshot();
     const effects = videoEffectNames(this.videoEffects);
+    const audioEffects = audioEffectNames(this.audioEffects);
     if (effects.length > 0) {
       this.snapshot = freezeSnapshot({
         ...this.snapshot,
         processors: { ...this.snapshot.processors, video: { status: "off", effects } },
+      });
+    }
+    if (audioEffects.length > 0) {
+      this.snapshot = freezeSnapshot({
+        ...this.snapshot,
+        processors: {
+          ...this.snapshot.processors,
+          audio: { status: "off", effects: audioEffects },
+        },
       });
     }
   }
@@ -633,6 +667,7 @@ class BrowserMediaSession implements MediaSession {
     );
     void this.refreshDevices();
     this.applyConfiguredVideoEffects();
+    this.applyConfiguredAudioEffects();
     return { status: "success", generation };
   }
 
@@ -735,6 +770,7 @@ class BrowserMediaSession implements MediaSession {
     );
     void this.refreshDevices();
     this.applyConfiguredVideoEffects();
+    if (kind === "audio") this.applyConfiguredAudioEffects();
     return { status: "success", generation };
   }
 
@@ -1022,10 +1058,328 @@ class BrowserMediaSession implements MediaSession {
   }
 
   async setAudioEffects(
-    _effects: AudioEffectConfig,
-    options?: OperationOptions,
+    effects: AudioEffectConfig,
+    options: OperationOptions = {},
   ): Promise<OperationResult> {
-    return this.unsupported("processor", options?.signal);
+    if (this.disposed) return this.disposedResult(++this.generation, "processor");
+    if (options.signal?.aborted) return { status: "cancelled", generation: this.audioGeneration };
+
+    const generation = ++this.audioGeneration;
+    const previousProcessorSnapshot = this.audioSetupSnapshot ?? this.snapshot.processors.audio;
+    this.cancelPendingAudioSetup();
+    const nextConfig = copyAudioEffects(effects);
+    const selectedEffects = nextConfig.effects ?? [];
+
+    if (this.activeTracks.audio === null) {
+      this.audioEffects = nextConfig;
+      this.publish(
+        {
+          processors: {
+            ...this.snapshot.processors,
+            audio: {
+              status: nextConfig.bypass && selectedEffects.length > 0 ? "bypassed" : "off",
+              effects: audioEffectNames(nextConfig),
+            },
+          },
+        },
+        "processor",
+        "configured",
+      );
+      return { status: "success", generation };
+    }
+
+    const operation = this.beginOperation("audio", "processor", generation);
+    const returnToInput = (): void => {
+      const output = this.createInputAudioOutput();
+      if (output !== null) this.outputs.audio = output;
+    };
+
+    if (selectedEffects.length === 0 || nextConfig.bypass === true) {
+      const oldProcessor = this.audioProcessor;
+      this.audioProcessor = null;
+      this.audioEffects = nextConfig;
+      returnToInput();
+      const status: ProcessorStatus = selectedEffects.length === 0 ? "off" : "bypassed";
+      this.publish(
+        {
+          processors: {
+            ...this.snapshot.processors,
+            audio: { status, effects: audioEffectNames(nextConfig) },
+          },
+          outputs: { ...this.outputs },
+          operation: null,
+          error: null,
+        },
+        "processor",
+        selectedEffects.length === 0 ? "removed" : "bypassed",
+      );
+      oldProcessor?.dispose();
+      return { status: "success", generation };
+    }
+
+    if (selectedEffects.length !== 1 || selectedEffects[0]?.kind !== "noise-reduction") {
+      const oldProcessor = this.audioProcessor;
+      this.audioProcessor = null;
+      this.audioEffects = nextConfig;
+      returnToInput();
+      const error = createUnsupportedError(
+        "audio",
+        "processor",
+        generation,
+        "This release slice supports one RNNoise voice noise-reduction effect.",
+      );
+      this.publish(
+        {
+          processors: {
+            ...this.snapshot.processors,
+            audio: { status: "unsupported", effects: audioEffectNames(nextConfig) },
+          },
+          outputs: { ...this.outputs },
+          operation: null,
+          error,
+        },
+        "processor",
+        "unsupported-effect",
+      );
+      oldProcessor?.dispose();
+      return { status: "unsupported", generation, error };
+    }
+
+    const rawLevel = selectedEffects[0].options.level;
+    const level: AudioNoiseLevel | null =
+      rawLevel === undefined || rawLevel === "standard"
+        ? "standard"
+        : rawLevel === "light" || rawLevel === "strong"
+          ? rawLevel
+          : null;
+    if (level === null) {
+      const oldProcessor = this.audioProcessor;
+      this.audioProcessor = null;
+      const error: MediaError = {
+        code: "constraint-invalid",
+        kind: "audio",
+        operation: "processor",
+        retryable: false,
+        message: "Noise-reduction level must be light, standard, or strong.",
+        generation,
+      };
+      this.audioEffects = nextConfig;
+      returnToInput();
+      this.publish(
+        {
+          processors: {
+            ...this.snapshot.processors,
+            audio: { status: "failed", effects: audioEffectNames(nextConfig) },
+          },
+          outputs: { ...this.outputs },
+          operation: null,
+          error,
+        },
+        "processor",
+        "invalid-effect-options",
+      );
+      oldProcessor?.dispose();
+      return { status: "failed", generation, error };
+    }
+
+    if (this.audioProcessor !== null) {
+      try {
+        this.audioProcessor.update(level);
+        this.audioEffects = nextConfig;
+        this.publish(
+          {
+            processors: {
+              ...this.snapshot.processors,
+              audio: { status: "active", effects: audioEffectNames(nextConfig) },
+            },
+            operation: null,
+            error: null,
+          },
+          "processor",
+          "updated",
+        );
+        return { status: "success", generation };
+      } catch (cause) {
+        const oldProcessor = this.audioProcessor;
+        this.audioProcessor = null;
+        this.audioEffects = nextConfig;
+        returnToInput();
+        const error: MediaError = {
+          code: "processor-failed",
+          kind: "audio",
+          operation: "processor",
+          retryable: true,
+          message: cause instanceof Error ? cause.message : "The audio processor update failed.",
+          generation,
+          cause,
+        };
+        this.publish(
+          {
+            processors: {
+              ...this.snapshot.processors,
+              audio: { status: "failed", effects: audioEffectNames(nextConfig) },
+            },
+            outputs: { ...this.outputs },
+            operation: null,
+            error,
+          },
+          "processor",
+          "update-failed",
+        );
+        oldProcessor.dispose();
+        return { status: "failed", generation, error };
+      }
+    }
+
+    const inputTrack = this.activeTracks.audio;
+    if (inputTrack === null) return { status: "superseded", generation };
+    const controller = new AbortController();
+    this.audioSetupController = controller;
+    this.audioSetupSnapshot = previousProcessorSnapshot;
+    const relayAbort = (): void => controller.abort();
+    options.signal?.addEventListener("abort", relayAbort, { once: true });
+    this.publish(
+      {
+        processors: {
+          ...this.snapshot.processors,
+          audio: { status: "loading", effects: audioEffectNames(nextConfig) },
+        },
+        operation,
+        error: null,
+      },
+      "processor",
+      "loading",
+    );
+
+    let createdProcessor: AudioNoiseProcessor | null = null;
+    try {
+      const runtime = await import("../effects/audio/runtime.js");
+      if (generation !== this.audioGeneration) return { status: "superseded", generation };
+      if (controller.signal.aborted) {
+        this.publish(
+          {
+            processors: { ...this.snapshot.processors, audio: previousProcessorSnapshot },
+            operation: null,
+            error: null,
+          },
+          "processor",
+          "cancelled",
+        );
+        return { status: options.signal?.aborted ? "cancelled" : "superseded", generation };
+      }
+      createdProcessor = await runtime.createAudioNoiseProcessor(inputTrack, level, {
+        signal: controller.signal,
+        onFault: (fault) => {
+          if (createdProcessor !== null) this.onAudioProcessorFault(createdProcessor, fault);
+        },
+      });
+      if (generation !== this.audioGeneration || this.disposed) {
+        createdProcessor.dispose();
+        return { status: "superseded", generation };
+      }
+      if (controller.signal.aborted) {
+        createdProcessor.dispose();
+        this.publish(
+          {
+            processors: { ...this.snapshot.processors, audio: previousProcessorSnapshot },
+            operation: null,
+            error: null,
+          },
+          "processor",
+          "cancelled",
+        );
+        return { status: options.signal?.aborted ? "cancelled" : "superseded", generation };
+      }
+
+      this.audioProcessor = createdProcessor;
+      this.audioEffects = nextConfig;
+      const inputStream = this.inputStreams.get(inputTrack) ?? this.outputs.audio?.stream;
+      if (inputStream === undefined) {
+        createdProcessor.dispose();
+        this.audioProcessor = null;
+        throw new Error("The active microphone output is unavailable for processor handoff.");
+      }
+      this.outputs.audio = this.createOutput("audio", createdProcessor.track, inputStream);
+      this.publish(
+        {
+          processors: {
+            ...this.snapshot.processors,
+            audio: { status: "active", effects: audioEffectNames(nextConfig) },
+          },
+          outputs: { ...this.outputs },
+          operation: null,
+          error: null,
+        },
+        "processor",
+        "output-replaced",
+      );
+      return { status: "success", generation };
+    } catch (cause) {
+      if (generation !== this.audioGeneration || this.disposed) {
+        return { status: options.signal?.aborted ? "cancelled" : "superseded", generation };
+      }
+      if (controller.signal.aborted || options.signal?.aborted) {
+        this.publish(
+          {
+            processors: { ...this.snapshot.processors, audio: previousProcessorSnapshot },
+            operation: null,
+            error: null,
+          },
+          "processor",
+          "cancelled",
+        );
+        return { status: options.signal?.aborted ? "cancelled" : "superseded", generation };
+      }
+
+      const faultKind =
+        typeof cause === "object" &&
+        cause !== null &&
+        "faultKind" in cause &&
+        (cause.faultKind === "unsupported" ||
+          cause.faultKind === "failed" ||
+          cause.faultKind === "overload")
+          ? cause.faultKind
+          : "failed";
+      const isUnsupported = faultKind === "unsupported";
+      const isOverload = faultKind === "overload";
+      const error: MediaError = {
+        code: isUnsupported ? "unsupported" : "processor-failed",
+        kind: "audio",
+        operation: "processor",
+        retryable: !isUnsupported,
+        message: cause instanceof Error ? cause.message : "The audio processor failed.",
+        generation,
+        cause,
+      };
+      const oldProcessor = this.audioProcessor;
+      this.audioProcessor = null;
+      this.audioEffects = nextConfig;
+      returnToInput();
+      this.publish(
+        {
+          processors: {
+            ...this.snapshot.processors,
+            audio: {
+              status: isUnsupported ? "unsupported" : isOverload ? "degraded" : "failed",
+              effects: audioEffectNames(nextConfig),
+            },
+          },
+          outputs: { ...this.outputs },
+          operation: null,
+          error,
+        },
+        "processor",
+        isOverload ? "overloaded" : isUnsupported ? "unsupported" : "failed",
+      );
+      oldProcessor?.dispose();
+      return { status: isUnsupported ? "unsupported" : "failed", generation, error };
+    } finally {
+      options.signal?.removeEventListener("abort", relayAbort);
+      if (this.audioSetupController === controller) {
+        this.audioSetupController = null;
+        this.audioSetupSnapshot = null;
+      }
+    }
   }
 
   getOutput(kind: MediaKind): MediaOutput | null {
@@ -1155,6 +1509,7 @@ class BrowserMediaSession implements MediaSession {
       if (![...tracks.values()].includes(track)) this.stopOwnedTrack(track);
     }
     if (kinds.includes("video")) this.resetVideoProcessor();
+    if (operation === "start" || kinds.includes("audio")) this.resetAudioProcessor();
     const oldTracks: MediaStreamTrack[] = [];
     if (operation === "start") {
       for (const kind of ["video", "audio"] as const) {
@@ -1195,12 +1550,27 @@ class BrowserMediaSession implements MediaSession {
         activity,
         selectedDevices,
         outputs: { ...this.outputs },
-        ...(kinds.includes("video")
+        ...(operation === "start" || kinds.includes("video") || kinds.includes("audio")
           ? {
-              processors: this.videoProcessorSnapshot(
-                this.videoEffects.bypass ? "bypassed" : "off",
-                this.videoEffects,
-              ),
+              processors: {
+                ...this.snapshot.processors,
+                ...(kinds.includes("video")
+                  ? {
+                      video: this.videoProcessorSnapshot(
+                        this.videoEffects.bypass ? "bypassed" : "off",
+                        this.videoEffects,
+                      ).video,
+                    }
+                  : {}),
+                ...(operation === "start" || kinds.includes("audio")
+                  ? {
+                      audio: {
+                        status: this.audioEffects.bypass ? "bypassed" : "off",
+                        effects: audioEffectNames(this.audioEffects),
+                      },
+                    }
+                  : {}),
+              },
             }
           : {}),
       },
@@ -1265,6 +1635,7 @@ class BrowserMediaSession implements MediaSession {
     const ended = (): void => {
       if (this.activeTracks[kind] !== track || this.disposed) return;
       if (kind === "video") this.resetVideoProcessor();
+      else this.resetAudioProcessor();
       this.detachTrack(kind);
       this.activeTracks[kind] = null;
       this.outputs[kind] = null;
@@ -1283,9 +1654,17 @@ class BrowserMediaSession implements MediaSession {
           availability: "unavailable",
           activity,
           outputs: { ...this.outputs },
-          ...(kind === "video"
-            ? { processors: this.videoProcessorSnapshot("failed", this.videoEffects) }
-            : {}),
+          processors: {
+            ...this.snapshot.processors,
+            ...(kind === "video"
+              ? { video: this.videoProcessorSnapshot("failed", this.videoEffects).video }
+              : {
+                  audio: {
+                    status: "failed" as const,
+                    effects: audioEffectNames(this.audioEffects),
+                  },
+                }),
+          },
           operation: null,
           error,
         },
@@ -1308,6 +1687,7 @@ class BrowserMediaSession implements MediaSession {
 
   private clearActiveTracks(stop: boolean): void {
     this.resetVideoProcessor();
+    this.resetAudioProcessor();
     for (const kind of ["video", "audio"] as const) {
       const track = this.activeTracks[kind];
       this.detachTrack(kind);
@@ -1318,7 +1698,11 @@ class BrowserMediaSession implements MediaSession {
     this.publish(
       {
         outputs: { ...this.outputs },
-        processors: this.videoProcessorSnapshot("off", this.videoEffects),
+        processors: {
+          ...this.snapshot.processors,
+          video: this.videoProcessorSnapshot("off", this.videoEffects).video,
+          audio: { status: "off", effects: audioEffectNames(this.audioEffects) },
+        },
       },
       "stop",
       "resources-released",
@@ -1331,11 +1715,26 @@ class BrowserMediaSession implements MediaSession {
     controller?.abort();
   }
 
+  private cancelPendingAudioSetup(): void {
+    const controller = this.audioSetupController;
+    this.audioSetupController = null;
+    this.audioSetupSnapshot = null;
+    controller?.abort();
+  }
+
   private resetVideoProcessor(): void {
     this.videoGeneration += 1;
     this.cancelPendingVideoSetup();
     const processor = this.videoProcessor;
     this.videoProcessor = null;
+    processor?.dispose();
+  }
+
+  private resetAudioProcessor(): void {
+    this.audioGeneration += 1;
+    this.cancelPendingAudioSetup();
+    const processor = this.audioProcessor;
+    this.audioProcessor = null;
     processor?.dispose();
   }
 
@@ -1345,6 +1744,14 @@ class BrowserMediaSession implements MediaSession {
     const fallbackStream = this.inputStreams.get(track) ?? this.outputs.video?.stream;
     if (fallbackStream === undefined) return null;
     return this.createOutput("video", track, fallbackStream);
+  }
+
+  private createInputAudioOutput(): MediaOutput | null {
+    const track = this.activeTracks.audio;
+    if (track === null) return null;
+    const fallbackStream = this.inputStreams.get(track) ?? this.outputs.audio?.stream;
+    if (fallbackStream === undefined) return null;
+    return this.createOutput("audio", track, fallbackStream);
   }
 
   private videoProcessorSnapshot(
@@ -1357,9 +1764,24 @@ class BrowserMediaSession implements MediaSession {
     };
   }
 
+  private audioProcessorSnapshot(
+    status: ProcessorStatus,
+    config: AudioEffectConfig = this.audioEffects,
+  ) {
+    return {
+      ...this.snapshot.processors,
+      audio: { status, effects: audioEffectNames(config) },
+    };
+  }
+
   private applyConfiguredVideoEffects(): void {
     if ((this.videoEffects.effects?.length ?? 0) === 0) return;
     void this.setVideoEffects(this.videoEffects);
+  }
+
+  private applyConfiguredAudioEffects(): void {
+    if ((this.audioEffects.effects?.length ?? 0) === 0) return;
+    void this.setAudioEffects(this.audioEffects);
   }
 
   private onVideoProcessorFault(processor: VideoCropProcessor, fault: VideoProcessorFault): void {
@@ -1384,6 +1806,38 @@ class BrowserMediaSession implements MediaSession {
     this.publish(
       {
         processors: this.videoProcessorSnapshot(status),
+        outputs: { ...this.outputs },
+        operation: null,
+        error,
+      },
+      "processor",
+      status === "degraded" ? "overloaded" : status,
+    );
+    processor.dispose();
+  }
+
+  private onAudioProcessorFault(processor: AudioNoiseProcessor, fault: AudioProcessorFault): void {
+    if (this.disposed || this.audioProcessor !== processor) return;
+    this.audioProcessor = null;
+    const output = this.createInputAudioOutput();
+    if (output !== null) this.outputs.audio = output;
+    const status: ProcessorStatus =
+      fault.faultKind === "overload"
+        ? "degraded"
+        : fault.faultKind === "unsupported"
+          ? "unsupported"
+          : "failed";
+    const error: MediaError = {
+      code: status === "unsupported" ? "unsupported" : "processor-failed",
+      kind: "audio",
+      operation: "processor",
+      retryable: status !== "unsupported",
+      message: fault.message,
+      generation: this.audioGeneration,
+    };
+    this.publish(
+      {
+        processors: this.audioProcessorSnapshot(status),
         outputs: { ...this.outputs },
         operation: null,
         error,
@@ -1438,16 +1892,6 @@ class BrowserMediaSession implements MediaSession {
 
   private notify(): void {
     for (const listener of this.listeners) listener();
-  }
-
-  private unsupported(operation: MediaOperation, signal?: AbortSignal): OperationResult {
-    const generation = ++this.generation;
-    if (signal?.aborted) return { status: "cancelled", generation };
-    const error = this.disposed
-      ? this.disposedError(generation, operation)
-      : createUnsupportedError("session", operation, generation);
-    this.publish({ availability: "unsupported", error, operation: null }, operation, "unsupported");
-    return { status: "unsupported", generation, error };
   }
 
   private disposedError(generation: number, operation: MediaOperation): MediaError {

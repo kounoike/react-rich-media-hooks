@@ -1,0 +1,786 @@
+{
+  "task": "TASK-1.12",
+  "run": "run_4c34d4390ca9",
+  "dispatch": "ctx_dfe716058329",
+  "baseCommit": "88b558670b4d24e2b97cc5047572ed31cec6450f",
+  "rawMediaCommitted": false,
+  "productionWasmSha256": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+  "productionAbi": 1,
+  "wasmImports": [],
+  "nativeMemoryBytes": 8388608,
+  "gzipMeasurement": "Python gzip.compress default level9 with mtime0; Node native check uses its own default compression and also remains below5MiB.",
+  "builds": {
+    "default": {
+      "dist/runtime-B1MYy2hy.js": {
+        "bytes": 8225,
+        "gzipBytes": 2721,
+        "sha256": "3d0feb6c1b1226d17a99a08c45348a90028f0bb35703673b9f9ffc4357ff7452"
+      },
+      "dist/index.d.cts": {
+        "bytes": 67,
+        "gzipBytes": 63,
+        "sha256": "896bb58cbf91c0ecc5f2cd853311265085de6d893b4662969a0af2794258ef05"
+      },
+      "dist/index.cjs": {
+        "bytes": 671,
+        "gzipBytes": 371,
+        "sha256": "d231c9298f68d6146678a1f6f46f6ef82d7f6312e4286cfbeac6faf17d4898bd"
+      },
+      "dist/rnnoise-l1Q6glL1.cjs": {
+        "bytes": 1242,
+        "gzipBytes": 648,
+        "sha256": "33882094e9e2c1f7f27f3443af095417ae92801591a6c2d932be91cd8e7d1a1b"
+      },
+      "dist/runtime-DZvqpsGs.cjs": {
+        "bytes": 6577,
+        "gzipBytes": 2404,
+        "sha256": "7debec62a32a51444579ad81be6e25c7174360a09709823d85a5cefa253551c4"
+      },
+      "dist/rnnoise-CDxs_xaz.js": {
+        "bytes": 1017,
+        "gzipBytes": 626,
+        "sha256": "71dafe4f8bfb7aa937bc2b90c05028b4dbba7f29e35d1f1a802893ab84ac0343"
+      },
+      "dist/runtime-B31sMvMJ.cjs": {
+        "bytes": 4908,
+        "gzipBytes": 2059,
+        "sha256": "2a8e9ea1f688413721f5a6200f64701d35f3d3b7b70d54cc0fc6769d175a6a44"
+      },
+      "dist/index.js": {
+        "bytes": 743,
+        "gzipBytes": 396,
+        "sha256": "b2c79b4d5ac9f3a1c450fd2350b68c50ccb7447760b23279f11b11e0e552dcb2"
+      },
+      "dist/runtime-BRkBBBMk.js": {
+        "bytes": 6032,
+        "gzipBytes": 2315,
+        "sha256": "95f6e09a993f69ccbf48fb93f3fcf9d424a70a6e41a062c8e26d56958b016e4b"
+      },
+      "dist/index.d.ts": {
+        "bytes": 67,
+        "gzipBytes": 63,
+        "sha256": "896bb58cbf91c0ecc5f2cd853311265085de6d893b4662969a0af2794258ef05"
+      },
+      "dist/rnnoise.wasm": {
+        "bytes": 5579171,
+        "gzipBytes": 5046682,
+        "sha256": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56"
+      },
+      "dist/assets/rnnoise-build.json": {
+        "bytes": 1755,
+        "gzipBytes": 867,
+        "sha256": "0221eca301952d9202df57920db79395ac141e9149cc0bf81c1d360bc087c7d6"
+      },
+      "dist/assets/RNNOISE-NOTICES.txt": {
+        "bytes": 18513,
+        "gzipBytes": 5033,
+        "sha256": "81133e49b4ab1e2ed73fa3b0d13ef16aef70a256f3a8fee4d6d5756c049b613a"
+      },
+      "dist/assets/noise-worklet-L0m6AlGp.js": {
+        "bytes": 4412,
+        "gzipBytes": 1665,
+        "sha256": "bd1e18d6feab60d4a38434ab8dff278b090888620cba97e815ff2f59b9240120"
+      },
+      "dist/react/index.d.cts": {
+        "bytes": 824,
+        "gzipBytes": 317,
+        "sha256": "bb6974e298ef8808dc1cdceb83e85ce169eb322879d98fbf9b309c5444204e12"
+      },
+      "dist/react/index.d.ts": {
+        "bytes": 824,
+        "gzipBytes": 317,
+        "sha256": "bb6974e298ef8808dc1cdceb83e85ce169eb322879d98fbf9b309c5444204e12"
+      },
+      "dist/core/index.d.cts": {
+        "bytes": 5592,
+        "gzipBytes": 1280,
+        "sha256": "c4cd19581a958093cf4b90490b578f42b2aea48b5180641b3ca212ec8a5f0d39"
+      },
+      "dist/core/index.cjs": {
+        "bytes": 30660,
+        "gzipBytes": 6646,
+        "sha256": "91a36d22fa13c4e35fe7524fc9640e4eb6285a9c91bf8652f5dbcaf09682ff8e"
+      },
+      "dist/core/index.js": {
+        "bytes": 38812,
+        "gzipBytes": 7510,
+        "sha256": "9ca08048d2594b0bf8b645b3a1bd5a44929db4d4da5df83ac37c8df59e6ea8b0"
+      },
+      "dist/core/index.d.ts": {
+        "bytes": 5592,
+        "gzipBytes": 1280,
+        "sha256": "c4cd19581a958093cf4b90490b578f42b2aea48b5180641b3ca212ec8a5f0d39"
+      },
+      "dist/effects/audio/noise-worker.d.ts": {
+        "bytes": 11,
+        "gzipBytes": 31,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/effects/audio/index.d.cts": {
+        "bytes": 269,
+        "gzipBytes": 183,
+        "sha256": "4101211752f3e640562e21ce6d227505b4ece93c717d88350693a2d38b00616c"
+      },
+      "dist/effects/audio/backend.d.ts": {
+        "bytes": 535,
+        "gzipBytes": 316,
+        "sha256": "b85a91c44979a5ffa95a948effe74c71276fe0caa8dc123f9e39233f7c5ac483"
+      },
+      "dist/effects/audio/runtime.d.cts": {
+        "bytes": 1475,
+        "gzipBytes": 546,
+        "sha256": "32b5d4557762f684ace99f3c3c668e1a901b44e2bf75536435cae37195476078"
+      },
+      "dist/effects/audio/index.cjs": {
+        "bytes": 195,
+        "gzipBytes": 166,
+        "sha256": "4b8c9b245bb356a1ce4458a469051f1f44f8ee64083e7ce1886ac74805b2b247"
+      },
+      "dist/effects/audio/raw-audio-runtime.d.cts": {
+        "bytes": 756,
+        "gzipBytes": 408,
+        "sha256": "e646a4f02b44ed112e766dc8a1b621e54d73b6276c7a4d8adaa3037595e7bbda"
+      },
+      "dist/effects/audio/noise-worklet.d.cts": {
+        "bytes": 11,
+        "gzipBytes": 31,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/effects/audio/raw-audio-pump.d.cts": {
+        "bytes": 887,
+        "gzipBytes": 471,
+        "sha256": "8cfd76fbe5be2841fedf315e478aa951cafe6d90d851b1303dde49be40aaf117"
+      },
+      "dist/effects/audio/index.js": {
+        "bytes": 206,
+        "gzipBytes": 172,
+        "sha256": "c7255b408b0bef5809a2d09ad6323f25b2b5301ff67bb1bdee284aaa44131f35"
+      },
+      "dist/effects/audio/index.d.ts": {
+        "bytes": 269,
+        "gzipBytes": 183,
+        "sha256": "4101211752f3e640562e21ce6d227505b4ece93c717d88350693a2d38b00616c"
+      },
+      "dist/effects/audio/runtime.d.ts": {
+        "bytes": 1475,
+        "gzipBytes": 546,
+        "sha256": "32b5d4557762f684ace99f3c3c668e1a901b44e2bf75536435cae37195476078"
+      },
+      "dist/effects/audio/raw-audio-types.d.ts": {
+        "bytes": 1066,
+        "gzipBytes": 416,
+        "sha256": "6e20a6e10f1fb8c90650f82a5d47859221fb7a4d86b04ebf03596598f8a95754"
+      },
+      "dist/effects/audio/raw-audio-pump.d.ts": {
+        "bytes": 887,
+        "gzipBytes": 471,
+        "sha256": "8cfd76fbe5be2841fedf315e478aa951cafe6d90d851b1303dde49be40aaf117"
+      },
+      "dist/effects/audio/noise-worker.d.cts": {
+        "bytes": 11,
+        "gzipBytes": 31,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/effects/audio/noise-worklet.d.ts": {
+        "bytes": 11,
+        "gzipBytes": 31,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/effects/audio/raw-audio-types.d.cts": {
+        "bytes": 1066,
+        "gzipBytes": 416,
+        "sha256": "6e20a6e10f1fb8c90650f82a5d47859221fb7a4d86b04ebf03596598f8a95754"
+      },
+      "dist/effects/audio/raw-audio-runtime.d.ts": {
+        "bytes": 756,
+        "gzipBytes": 408,
+        "sha256": "e646a4f02b44ed112e766dc8a1b621e54d73b6276c7a4d8adaa3037595e7bbda"
+      },
+      "dist/effects/audio/backend.d.cts": {
+        "bytes": 535,
+        "gzipBytes": 316,
+        "sha256": "b85a91c44979a5ffa95a948effe74c71276fe0caa8dc123f9e39233f7c5ac483"
+      },
+      "dist/effects/video/index.d.cts": {
+        "bytes": 1090,
+        "gzipBytes": 427,
+        "sha256": "fbef87c1a72205110bee5cc89b0003d33ab9f7b754da89cbfb17aa7bb5a9b0d8"
+      },
+      "dist/effects/video/runtime.d.cts": {
+        "bytes": 776,
+        "gzipBytes": 352,
+        "sha256": "345aefe3bebff050ab6272ec648be17a64935fb4634d456cbfbd94232c562fc7"
+      },
+      "dist/effects/video/index.cjs": {
+        "bytes": 347,
+        "gzipBytes": 224,
+        "sha256": "f72691a6ecd415eeb7b4caf6db4c5b0b9cf0c834d46e7a75f66438e462272382"
+      },
+      "dist/effects/video/index.js": {
+        "bytes": 370,
+        "gzipBytes": 230,
+        "sha256": "d67ef9ae5b88a250b0917b10bda64a78186c65cfcd52c63683e7aed74a8d4efc"
+      },
+      "dist/effects/video/index.d.ts": {
+        "bytes": 1090,
+        "gzipBytes": 427,
+        "sha256": "fbef87c1a72205110bee5cc89b0003d33ab9f7b754da89cbfb17aa7bb5a9b0d8"
+      },
+      "dist/effects/video/runtime.d.ts": {
+        "bytes": 776,
+        "gzipBytes": 352,
+        "sha256": "345aefe3bebff050ab6272ec648be17a64935fb4634d456cbfbd94232c562fc7"
+      },
+      "dist/effects/audio/backends/rnnoise-kernel.d.cts": {
+        "bytes": 527,
+        "gzipBytes": 334,
+        "sha256": "9fcd9ed698e540560e7930176151e322274ba8ba5fc576985cf52ebf73486381"
+      },
+      "dist/effects/audio/backends/rnnoise.d.ts": {
+        "bytes": 208,
+        "gzipBytes": 165,
+        "sha256": "0796da9f7524f1620eabd85e4c89ade690357303cfa296424b5242f2293e267c"
+      },
+      "dist/effects/audio/backends/rnnoise.d.cts": {
+        "bytes": 208,
+        "gzipBytes": 165,
+        "sha256": "0796da9f7524f1620eabd85e4c89ade690357303cfa296424b5242f2293e267c"
+      },
+      "dist/effects/audio/backends/rnnoise-kernel.d.ts": {
+        "bytes": 527,
+        "gzipBytes": 334,
+        "sha256": "9fcd9ed698e540560e7930176151e322274ba8ba5fc576985cf52ebf73486381"
+      }
+    },
+    "enabled": {
+      "dist/runtime-B1MYy2hy.js": {
+        "bytes": 8225,
+        "gzipBytes": 2721,
+        "sha256": "3d0feb6c1b1226d17a99a08c45348a90028f0bb35703673b9f9ffc4357ff7452"
+      },
+      "dist/index.d.cts": {
+        "bytes": 67,
+        "gzipBytes": 63,
+        "sha256": "896bb58cbf91c0ecc5f2cd853311265085de6d893b4662969a0af2794258ef05"
+      },
+      "dist/index.cjs": {
+        "bytes": 671,
+        "gzipBytes": 371,
+        "sha256": "d231c9298f68d6146678a1f6f46f6ef82d7f6312e4286cfbeac6faf17d4898bd"
+      },
+      "dist/rnnoise-l1Q6glL1.cjs": {
+        "bytes": 1242,
+        "gzipBytes": 648,
+        "sha256": "33882094e9e2c1f7f27f3443af095417ae92801591a6c2d932be91cd8e7d1a1b"
+      },
+      "dist/runtime-DZvqpsGs.cjs": {
+        "bytes": 6577,
+        "gzipBytes": 2404,
+        "sha256": "7debec62a32a51444579ad81be6e25c7174360a09709823d85a5cefa253551c4"
+      },
+      "dist/rnnoise-CDxs_xaz.js": {
+        "bytes": 1017,
+        "gzipBytes": 626,
+        "sha256": "71dafe4f8bfb7aa937bc2b90c05028b4dbba7f29e35d1f1a802893ab84ac0343"
+      },
+      "dist/index.js": {
+        "bytes": 743,
+        "gzipBytes": 396,
+        "sha256": "b2c79b4d5ac9f3a1c450fd2350b68c50ccb7447760b23279f11b11e0e552dcb2"
+      },
+      "dist/index.d.ts": {
+        "bytes": 67,
+        "gzipBytes": 63,
+        "sha256": "896bb58cbf91c0ecc5f2cd853311265085de6d893b4662969a0af2794258ef05"
+      },
+      "dist/rnnoise.wasm": {
+        "bytes": 5579171,
+        "gzipBytes": 5046682,
+        "sha256": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56"
+      },
+      "dist/raw-audio-runtime-Bx7tUfBO.js": {
+        "bytes": 5431,
+        "gzipBytes": 2094,
+        "sha256": "3e53e82476d389f12df9016d49bd03d41473b342ad51ffab72a58d71ab84d15e"
+      },
+      "dist/runtime-DUbQiDxl.cjs": {
+        "bytes": 5201,
+        "gzipBytes": 2160,
+        "sha256": "6c046cbf179196394f0530808909554531f1d146b7049c7473d3fc2c30521b33"
+      },
+      "dist/raw-audio-runtime-DgTaHCi5.cjs": {
+        "bytes": 4949,
+        "gzipBytes": 1950,
+        "sha256": "f87f8e5fdb8d3688a7d4734aeff0331a728cb101e9774c8b5ae45a0e012976c4"
+      },
+      "dist/runtime-EpELFiQq.js": {
+        "bytes": 6354,
+        "gzipBytes": 2423,
+        "sha256": "615a95bb701afc6c5a3d4105ea7a5139c0ea5209ee8fdd8a82e249ded5b851a3"
+      },
+      "dist/assets/rnnoise-build.json": {
+        "bytes": 1755,
+        "gzipBytes": 867,
+        "sha256": "0221eca301952d9202df57920db79395ac141e9149cc0bf81c1d360bc087c7d6"
+      },
+      "dist/assets/RNNOISE-NOTICES.txt": {
+        "bytes": 18513,
+        "gzipBytes": 5033,
+        "sha256": "81133e49b4ab1e2ed73fa3b0d13ef16aef70a256f3a8fee4d6d5756c049b613a"
+      },
+      "dist/assets/noise-worklet-L0m6AlGp.js": {
+        "bytes": 4412,
+        "gzipBytes": 1665,
+        "sha256": "bd1e18d6feab60d4a38434ab8dff278b090888620cba97e815ff2f59b9240120"
+      },
+      "dist/assets/noise-worker-Ppvt9oyD.js": {
+        "bytes": 5058,
+        "gzipBytes": 2190,
+        "sha256": "45d3c37862a2753af6094ce004c47d8e8f5b5e96cbe237107183dfcce3de70ac"
+      },
+      "dist/react/index.d.cts": {
+        "bytes": 824,
+        "gzipBytes": 317,
+        "sha256": "bb6974e298ef8808dc1cdceb83e85ce169eb322879d98fbf9b309c5444204e12"
+      },
+      "dist/react/index.d.ts": {
+        "bytes": 824,
+        "gzipBytes": 317,
+        "sha256": "bb6974e298ef8808dc1cdceb83e85ce169eb322879d98fbf9b309c5444204e12"
+      },
+      "dist/core/index.d.cts": {
+        "bytes": 5592,
+        "gzipBytes": 1280,
+        "sha256": "c4cd19581a958093cf4b90490b578f42b2aea48b5180641b3ca212ec8a5f0d39"
+      },
+      "dist/core/index.cjs": {
+        "bytes": 30660,
+        "gzipBytes": 6642,
+        "sha256": "4072d0248b4001bf318519c953c973f1d27c9fff6e3b3b30f8299229dc227fa6"
+      },
+      "dist/core/index.js": {
+        "bytes": 38812,
+        "gzipBytes": 7510,
+        "sha256": "8529660e2233efca55c684d7992d5d081a6e0f72a47cb20b5714333482b30fe8"
+      },
+      "dist/core/index.d.ts": {
+        "bytes": 5592,
+        "gzipBytes": 1280,
+        "sha256": "c4cd19581a958093cf4b90490b578f42b2aea48b5180641b3ca212ec8a5f0d39"
+      },
+      "dist/effects/audio/noise-worker.d.ts": {
+        "bytes": 11,
+        "gzipBytes": 31,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/effects/audio/index.d.cts": {
+        "bytes": 269,
+        "gzipBytes": 183,
+        "sha256": "4101211752f3e640562e21ce6d227505b4ece93c717d88350693a2d38b00616c"
+      },
+      "dist/effects/audio/backend.d.ts": {
+        "bytes": 535,
+        "gzipBytes": 316,
+        "sha256": "b85a91c44979a5ffa95a948effe74c71276fe0caa8dc123f9e39233f7c5ac483"
+      },
+      "dist/effects/audio/runtime.d.cts": {
+        "bytes": 1475,
+        "gzipBytes": 546,
+        "sha256": "32b5d4557762f684ace99f3c3c668e1a901b44e2bf75536435cae37195476078"
+      },
+      "dist/effects/audio/index.cjs": {
+        "bytes": 195,
+        "gzipBytes": 166,
+        "sha256": "4b8c9b245bb356a1ce4458a469051f1f44f8ee64083e7ce1886ac74805b2b247"
+      },
+      "dist/effects/audio/raw-audio-runtime.d.cts": {
+        "bytes": 756,
+        "gzipBytes": 408,
+        "sha256": "e646a4f02b44ed112e766dc8a1b621e54d73b6276c7a4d8adaa3037595e7bbda"
+      },
+      "dist/effects/audio/noise-worklet.d.cts": {
+        "bytes": 11,
+        "gzipBytes": 31,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/effects/audio/raw-audio-pump.d.cts": {
+        "bytes": 887,
+        "gzipBytes": 471,
+        "sha256": "8cfd76fbe5be2841fedf315e478aa951cafe6d90d851b1303dde49be40aaf117"
+      },
+      "dist/effects/audio/index.js": {
+        "bytes": 206,
+        "gzipBytes": 172,
+        "sha256": "c7255b408b0bef5809a2d09ad6323f25b2b5301ff67bb1bdee284aaa44131f35"
+      },
+      "dist/effects/audio/index.d.ts": {
+        "bytes": 269,
+        "gzipBytes": 183,
+        "sha256": "4101211752f3e640562e21ce6d227505b4ece93c717d88350693a2d38b00616c"
+      },
+      "dist/effects/audio/runtime.d.ts": {
+        "bytes": 1475,
+        "gzipBytes": 546,
+        "sha256": "32b5d4557762f684ace99f3c3c668e1a901b44e2bf75536435cae37195476078"
+      },
+      "dist/effects/audio/raw-audio-types.d.ts": {
+        "bytes": 1066,
+        "gzipBytes": 416,
+        "sha256": "6e20a6e10f1fb8c90650f82a5d47859221fb7a4d86b04ebf03596598f8a95754"
+      },
+      "dist/effects/audio/raw-audio-pump.d.ts": {
+        "bytes": 887,
+        "gzipBytes": 471,
+        "sha256": "8cfd76fbe5be2841fedf315e478aa951cafe6d90d851b1303dde49be40aaf117"
+      },
+      "dist/effects/audio/noise-worker.d.cts": {
+        "bytes": 11,
+        "gzipBytes": 31,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/effects/audio/noise-worklet.d.ts": {
+        "bytes": 11,
+        "gzipBytes": 31,
+        "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+      },
+      "dist/effects/audio/raw-audio-types.d.cts": {
+        "bytes": 1066,
+        "gzipBytes": 416,
+        "sha256": "6e20a6e10f1fb8c90650f82a5d47859221fb7a4d86b04ebf03596598f8a95754"
+      },
+      "dist/effects/audio/raw-audio-runtime.d.ts": {
+        "bytes": 756,
+        "gzipBytes": 408,
+        "sha256": "e646a4f02b44ed112e766dc8a1b621e54d73b6276c7a4d8adaa3037595e7bbda"
+      },
+      "dist/effects/audio/backend.d.cts": {
+        "bytes": 535,
+        "gzipBytes": 316,
+        "sha256": "b85a91c44979a5ffa95a948effe74c71276fe0caa8dc123f9e39233f7c5ac483"
+      },
+      "dist/effects/video/index.d.cts": {
+        "bytes": 1090,
+        "gzipBytes": 427,
+        "sha256": "fbef87c1a72205110bee5cc89b0003d33ab9f7b754da89cbfb17aa7bb5a9b0d8"
+      },
+      "dist/effects/video/runtime.d.cts": {
+        "bytes": 776,
+        "gzipBytes": 352,
+        "sha256": "345aefe3bebff050ab6272ec648be17a64935fb4634d456cbfbd94232c562fc7"
+      },
+      "dist/effects/video/index.cjs": {
+        "bytes": 347,
+        "gzipBytes": 224,
+        "sha256": "f72691a6ecd415eeb7b4caf6db4c5b0b9cf0c834d46e7a75f66438e462272382"
+      },
+      "dist/effects/video/index.js": {
+        "bytes": 370,
+        "gzipBytes": 230,
+        "sha256": "d67ef9ae5b88a250b0917b10bda64a78186c65cfcd52c63683e7aed74a8d4efc"
+      },
+      "dist/effects/video/index.d.ts": {
+        "bytes": 1090,
+        "gzipBytes": 427,
+        "sha256": "fbef87c1a72205110bee5cc89b0003d33ab9f7b754da89cbfb17aa7bb5a9b0d8"
+      },
+      "dist/effects/video/runtime.d.ts": {
+        "bytes": 776,
+        "gzipBytes": 352,
+        "sha256": "345aefe3bebff050ab6272ec648be17a64935fb4634d456cbfbd94232c562fc7"
+      },
+      "dist/effects/audio/backends/rnnoise-kernel.d.cts": {
+        "bytes": 527,
+        "gzipBytes": 334,
+        "sha256": "9fcd9ed698e540560e7930176151e322274ba8ba5fc576985cf52ebf73486381"
+      },
+      "dist/effects/audio/backends/rnnoise.d.ts": {
+        "bytes": 208,
+        "gzipBytes": 165,
+        "sha256": "0796da9f7524f1620eabd85e4c89ade690357303cfa296424b5242f2293e267c"
+      },
+      "dist/effects/audio/backends/rnnoise.d.cts": {
+        "bytes": 208,
+        "gzipBytes": 165,
+        "sha256": "0796da9f7524f1620eabd85e4c89ade690357303cfa296424b5242f2293e267c"
+      },
+      "dist/effects/audio/backends/rnnoise-kernel.d.ts": {
+        "bytes": 527,
+        "gzipBytes": 334,
+        "sha256": "9fcd9ed698e540560e7930176151e322274ba8ba5fc576985cf52ebf73486381"
+      }
+    }
+  },
+  "defaultBrowserSmoke": {
+    "stats": {
+      "startTime": "2026-11-21T01:08:17.155Z",
+      "duration": 239293.234,
+      "expected": 34,
+      "skipped": 18,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "errors": []
+  },
+  "enabledBrowserEvidence": {
+    "stats": {
+      "startTime": "2026-11-21T01:30:57.030Z",
+      "duration": 10678.367,
+      "expected": 6,
+      "skipped": 4,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "evidence": [
+      {
+        "status": "passed",
+        "name": "raw-worker-kernel.json",
+        "result": {
+          "differentBits": 0,
+          "written": 57600,
+          "expected": 57600,
+          "timestampsContinuous": true,
+          "frames": 120,
+          "closed": false,
+          "faults": [
+            "Raw audio input ended."
+          ]
+        }
+      },
+      {
+        "status": "passed",
+        "name": "raw-worker-lifecycle.json",
+        "result": {
+          "messages": [
+            {
+              "type": "prepared"
+            },
+            {
+              "type": "timing",
+              "processingMs": 2.199999988079071
+            },
+            {
+              "type": "timing",
+              "processingMs": 4.699999988079071
+            },
+            {
+              "type": "timing",
+              "processingMs": 1.4000000357627869
+            },
+            {
+              "type": "ready",
+              "startupDiscontinuities": 0,
+              "startupPartialSamplesDiscarded": 0
+            },
+            {
+              "type": "timing",
+              "processingMs": 2.099999964237213
+            },
+            {
+              "type": "timing",
+              "processingMs": 1
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.6000000238418579
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.5
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.5999999642372131
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.40000003576278687
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.6000000238418579
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.5
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.3999999761581421
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.3999999761581421
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.6000000238418579
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.3999999761581421
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.6000000238418579
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.5
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.6000000238418579
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.5
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.3999999761581421
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.5
+            },
+            {
+              "type": "timing",
+              "processingMs": 0.5
+            },
+            {
+              "type": "diagnostics",
+              "sourceSamples": 10560,
+              "submittedSamples": 10560,
+              "writtenSamples": 10560,
+              "frameCount": 22,
+              "timestampJitterEvents": 18,
+              "minClockDriftUs": -20800,
+              "maxClockDriftUs": 8200,
+              "startupDiscontinuities": 0,
+              "startupPartialSamplesDiscarded": 0
+            },
+            {
+              "type": "fault",
+              "faultKind": "failed",
+              "message": "Raw audio input ended."
+            },
+            {
+              "type": "stopped"
+            }
+          ],
+          "constructors": {
+            "processor": "function",
+            "generator": "function"
+          },
+          "metrics": {
+            "frames": 22,
+            "p50FrameProcessingMs": 0.5,
+            "p95FrameProcessingMs": 2.199999988079071,
+            "maxFrameProcessingMs": 4.699999988079071
+          },
+          "faults": [],
+          "cloneLive": true,
+          "inputLive": true,
+          "outputEnded": true,
+          "abortName": "AbortError",
+          "settings": {
+            "sampleRate": 48000,
+            "channelCount": 1
+          },
+          "isolated": false
+        }
+      },
+      {
+        "status": "passed",
+        "name": "packaged-worker-session.json",
+        "result": {
+          "added": "success",
+          "updated": "success",
+          "retry": "success",
+          "bypass": "success",
+          "removed": "success",
+          "sameTrack": true,
+          "overload": {
+            "status": "degraded",
+            "original": true,
+            "cloneLive": true,
+            "message": "Raw audio stalled for 100 ms."
+          },
+          "contentionStatus": "active",
+          "workerCount": 1,
+          "acquisitions": 1,
+          "faultStatus": "failed",
+          "fallbackOriginal": true,
+          "cloneLiveAfterFault": true,
+          "bypassOriginal": true
+        }
+      },
+      {
+        "status": "passed",
+        "name": "raw-worker-csp.json",
+        "result": {
+          "added": "failed",
+          "error": "Raw audio Worker execution failed.",
+          "originalWhileLoading": true,
+          "originalAfterFailure": true,
+          "cloneLive": true,
+          "sourceLive": true,
+          "violations": [
+            "worker-src"
+          ]
+        }
+      },
+      {
+        "status": "passed",
+        "name": "raw-worker-hard-termination.json",
+        "result": {
+          "added": "success",
+          "workerCount": 1,
+          "cloneLiveBefore": true,
+          "cloneLiveAfterHardTermination": true,
+          "sourceLive": true,
+          "originalRestored": true,
+          "status": "degraded",
+          "error": "Raw audio Worker stopped making progress for 100 ms."
+        }
+      },
+      {
+        "status": "passed",
+        "name": "raw-worker-lifecycle.json",
+        "result": {
+          "constructors": {
+            "processor": "undefined",
+            "generator": "undefined"
+          },
+          "unsupported": true
+        }
+      }
+    ]
+  },
+  "hardTermination": [
+    {
+      "added": "success",
+      "workerCount": 1,
+      "cloneLiveBefore": true,
+      "cloneLiveAfterHardTermination": true,
+      "sourceLive": true,
+      "originalRestored": true,
+      "status": "degraded",
+      "error": "Raw audio Worker stopped making progress for 100 ms."
+    }
+  ],
+  "missingRuntimeChecks": [
+    {
+      "name": "msedge",
+      "launch": "unavailable in this Linux/WSL environment",
+      "error": "Error: browserType.launch: Chromium distribution 'msedge' is not found at /opt/microsoft/msedge/msedge\nRun \"npx playwright install msedge\"",
+      "capabilities": "unmeasured; no product-unsupported claim"
+    },
+    {
+      "name": "webkit",
+      "launch": "unavailable in this Linux/WSL environment",
+      "error": "Error: browserType.launch: Executable doesn't exist at /home/kounoike/.cache/ms-playwright/webkit-2336/pw_run.sh\n\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557\n\u2551 Looks like Playwright was just installed or updated.       \u2551",
+      "capabilities": "unmeasured; no product-unsupported claim"
+    }
+  ]
+}
