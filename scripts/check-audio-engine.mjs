@@ -28,6 +28,11 @@ engine.engine_dispose();
 assert.equal(engine.engine_process(), -1);
 const assets = JSON.parse(await readFile("supply-chain/assets.json", "utf8"));
 assert(assets.assets.some((asset) => asset.name === "rnnoise-wasm" && asset.sha256 === manifest.artifact.sha256));
+for (const asset of assets.assets.filter((item) => item.sourceFiles !== undefined)) {
+  const sources = await Promise.all(asset.sourceFiles.map((path) => readFile(path)));
+  const digest = createHash("sha256").update(Buffer.concat(sources)).digest("hex");
+  assert.equal(asset.sourceRevision, `sha256:${digest}`, `${asset.name} source inventory is stale.`);
+}
 const backend = await readFile("src/effects/audio/backends/rnnoise.ts", "utf8");
 assert(backend.includes(manifest.artifact.sha256), "Runtime digest must match the reviewed asset.");
 assert(gzipSync(bytes).length <= 5 * 1024 * 1024, "Entire compressed module exceeds the model-asset budget.");

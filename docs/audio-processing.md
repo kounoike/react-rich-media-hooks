@@ -5,6 +5,13 @@ backend boundary. Additional engines remain TASK-1.26 (evaluation) and
 TASK-1.27 (an approved implementation). No public engine selector, generic
 plugin SDK or stable common WASM ABI is provided.
 
+Decision-11 additionally authorizes a private, default-off raw-audio Worker
+qualification route using the same C engine. Normal builds retain Worklet
+processing; enabled builds retain it for ineligible inputs. See the
+[Worker implementation, gating and current qualification](measurements/audio/private-worker.md).
+This is not a public selector or a new browser-support promise.
+
+
 ## Build and provenance
 
 Normal JavaScript builds use the tracked native asset; package consumers and
@@ -307,9 +314,10 @@ remains opt-in, outside packaged assets; the current C WASM is unchanged.
 The owner has rejected fallback-only adoption or closure. Further profile-selected
 Zig/SIMD and disposable Worker/SAB/raw-track trials are documented in
 [the current route research](measurements/audio/route-prototypes.md). The C
-production artifact and Decision-10 remain in force; no new support-policy
-change, public API or Worker route is adopted. AC3 and Draft PR #32 remain open
-for manual review.
+production artifact and Decision-10 remained in force at that research checkpoint;
+no public API or Worker route had been adopted. Decision-11 subsequently
+authorized the default-off Worker direction described above. AC3 and Draft
+PR #32 remain open for manual review.
 
 
 The expanded research preserves the C production engine. In the additional
@@ -320,5 +328,6 @@ measured81.3125 ms despite checked-kernel p95 1 ms and no guard fallback. These
 are experimental/embedding results, not release support. The broader120-cell
 quality corpus retains one strong-level numeric failure, and human listening
 is PENDING. The [current comparison](measurements/audio/route-prototypes.md)
-records alternatives and the approval needed before any Worker or SIMD
-production adoption; fallback-only closure remains rejected by the owner.
+records the alternatives before Worker authorization. Decision-11 now permits
+the gated C Worker implementation; SIMD adoption and release qualification
+remain unapproved, and fallback-only closure remains rejected by the owner.

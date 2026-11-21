@@ -501,7 +501,11 @@ export async function routes({
               return {};
             },
           };
-        } else if (name.startsWith("current")) {
+        } else if (name === "private-raw-c") {
+          const raw = await import(new URL("/src/effects/audio/raw-audio-runtime.ts", location.origin));
+          const p = await raw.createRawAudioNoiseProcessor(input, "strong", { onFault: (e) => fault(e.message) });
+          route = { track: p.track, metrics: () => ({...p.getMetrics(), diagnostics: p.getDiagnostics()}), close: async () => { p.dispose(); await sleep(200); return { diagnostics: p.getDiagnostics() }; } };
+        } else if (name.startsWith("current") || name === "private-session-c") {
           const selected =
             modules[
               name.endsWith("next-generic")
@@ -557,6 +561,9 @@ export async function routes({
             effects: [effects.noiseReduction({ level: "strong" })],
           });
           if (result.status !== "success") throw Error(result.error?.message ?? result.status);
+          if (name === "private-session-c" && (typeof globalThis.MediaStreamTrackGenerator !== "function" || !(session.getOutput("audio").track instanceof globalThis.MediaStreamTrackGenerator))) {
+            throw Error("Private raw route is ineligible or its build gate is disabled; do not qualify a Worklet as raw.");
+          }
           route = {
             track: session.getOutput("audio").track,
             metrics: () => session.getSnapshot().processors.audio,

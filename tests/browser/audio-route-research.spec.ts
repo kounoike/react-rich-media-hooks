@@ -28,6 +28,8 @@ test("records disposable denoising route evidence", async ({ page, browser }) =>
       next: { path: ".cache/audio-optimized/zig-simd128.wasm" },
       "next-generic": { path: ".cache/audio-optimized/zig-generic.wasm" },
     };
+  if (process.env.AUDIO_ROUTE_PRIVATE === "1")
+    config.artifacts = { c: { path: "src/effects/audio/assets/rnnoise.wasm" } };
   const artifacts: Record<string, string> = {};
   const identities: Record<string, string> = {};
   if (mode === "profile" || mode === "routes" || mode === "worklet" || mode === "comparison") {
@@ -81,6 +83,12 @@ test("records disposable denoising route evidence", async ({ page, browser }) =>
   }
   await page.goto("/tests/browser/research.html");
   await page.getByRole("button", { name: "Start research" }).click();
+  if (process.env.AUDIO_ROUTE_PRIVATE === "1")
+    await page.evaluate(async () => {
+      await import(
+        new URL("/experiments/audio-routes/private-worker-setup.mjs", location.origin).href
+      );
+    });
   const result = await page.evaluate(
     async ({ method, options }) => {
       const research = await import(
@@ -108,11 +116,16 @@ test("records disposable denoising route evidence", async ({ page, browser }) =>
       },
     },
   );
+  const privateWorkers =
+    process.env.AUDIO_ROUTE_PRIVATE === "1"
+      ? JSON.parse(await page.evaluate<string>("JSON.stringify(window.privateWorkerEvidence)"))
+      : undefined;
   await test.info().attach(`audio-route-${mode}.json`, {
     body: Buffer.from(
       JSON.stringify(
         {
           identities,
+          privateWorkers,
           actualBrowserVersion: browser.version(),
           hostPlatform: process.platform,
           ...result,

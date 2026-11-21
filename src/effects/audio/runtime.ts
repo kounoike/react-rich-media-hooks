@@ -22,7 +22,7 @@ export interface AudioNoiseProcessor {
   dispose(): void;
 }
 
-interface ProcessorOptions {
+export interface ProcessorOptions {
   readonly signal?: AbortSignal;
   readonly onFault?: (error: AudioNoiseProcessorError) => void;
   readonly startupTimeoutMs?: number;
@@ -363,6 +363,19 @@ export const createAudioNoiseProcessor = async (
   processorOptions: ProcessorOptions = {},
 ): Promise<AudioNoiseProcessor> => {
   assertNotAborted(processorOptions.signal);
+  if (import.meta.env.VITE_RNNOISE_RAW_WORKER === "1") {
+    const { rawAudioEligible, createRawAudioNoiseProcessor, RawAudioIneligibleError } =
+      await import("./raw-audio-runtime.js");
+    assertNotAborted(processorOptions.signal);
+    if (rawAudioEligible(inputTrack)) {
+      try {
+        return await createRawAudioNoiseProcessor(inputTrack, initialLevel, processorOptions);
+      } catch (cause) {
+        if (!(cause instanceof RawAudioIneligibleError)) throw cause;
+      }
+      assertNotAborted(processorOptions.signal);
+    }
+  }
   const { rnnoiseBackend } = await import("./backends/rnnoise.js");
   return createWorkletAudioNoiseProcessor(
     inputTrack,

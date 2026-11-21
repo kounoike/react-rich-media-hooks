@@ -21,6 +21,8 @@ def evaluate(expression):
     return json.loads(wrapper['result']['result'])
 
 header=evaluate('JSON.stringify((()=>{if(document.querySelector("#task112-status").textContent!=="Complete"||!window.nativeResearchResult)throw Error("Native research is not complete");const{windows,...rest}=window.nativeResearchResult;return{...rest,windowCount:windows.length};})())')
+private=evaluate('JSON.stringify({privateWorkers:window.privateWorkerEvidence??[],windowHeapSamples:window.privateMemoryEvidence??[]})')
+header.update(private)
 windows=[]
 for offset in range(0,header.pop('windowCount'),4):
     windows.extend(evaluate(f'JSON.stringify(window.nativeResearchResult.windows.slice({offset},{offset+4}))'))

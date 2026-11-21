@@ -33,6 +33,23 @@
         "src/effects/audio/backends/rnnoise-kernel.ts"
       ],
       "notes": "First-party bundled worklet; native RNNoise is the separately pinned WASM asset. Source revision hashes the concatenated source files in the listed order."
+    },
+    {
+      "name": "rnnoise-raw-worker",
+      "kind": "worker",
+      "version": "0.2-abi1",
+      "source": "https://github.com/kounoike/react-rich-media-hooks/tree/main/src/effects/audio",
+      "sourceRevision": "sha256:0026db028181a6663b26f687156f9b52943454b7937f7d22886051d2bb6eb7f9",
+      "sha256": "0026db028181a6663b26f687156f9b52943454b7937f7d22886051d2bb6eb7f9",
+      "license": "MIT",
+      "owner": "repository maintainers",
+      "compatiblePackageVersion": "0.1.x",
+      "sourceFiles": [
+        "src/effects/audio/noise-worker.ts",
+        "src/effects/audio/raw-audio-pump.ts",
+        "src/effects/audio/backends/rnnoise-kernel.ts"
+      ],
+      "notes": "First-party private qualification Worker; default-off VITE_RNNOISE_RAW_WORKER build gate. Transferable streams, no SAB requirement; unchanged separately pinned C WASM. Source digest is concatenated files in listed order; generated asset filename is content hashed by Vite."
     }
   ],
   "requiredFieldsWhenAdded": [

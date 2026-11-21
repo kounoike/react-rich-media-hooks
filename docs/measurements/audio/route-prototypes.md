@@ -565,3 +565,13 @@ windows, and passively observes existing checked-kernel messages. It does not
 warm an extra Worker or change the audio-thread guard. Attach the observed
 values to the completed local result before export; do not treat the observer
 as a full callback profiler or claim unmeasured process-memory stability.
+
+
+## Subsequent authorized implementation
+
+After this comparative checkpoint, the owner approved the private raw C Worker
+direction. Accepted Decision-11 supersedes only the relevant Worklet-only and
+no-extra-Worker clauses of Decisions10/8. The historical experiments and their
+limitations above remain unchanged. See [the gated implementation and its
+separate evidence](private-worker.md); no experimental SIMD artifact is adopted,
+and neither release support, fallback-only closure nor merge is authorized.
