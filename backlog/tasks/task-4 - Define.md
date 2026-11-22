@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-11-22 11:40'
-updated_date: '2026-11-22 12:00'
+updated_date: '2026-11-22 12:08'
 labels:
   - media
   - api
@@ -24,6 +24,9 @@ references:
   - decision-2
   - >-
     https://github.com/kounoike/react-rich-media-hooks/blob/f92bd88de5374d96991bd509b31c5f04fbbd5d24/backlog/decisions/decision-12%20-%20Qualify-audio-latency-targets-through-approved-scenarios-and-baseline-evidence.md
+  - 'https://github.com/kounoike/react-rich-media-hooks/pull/34'
+  - >-
+    https://github.com/kounoike/react-rich-media-hooks/pull/34#issuecomment-7078867233
 documentation:
   - docs/media-processing-observability-proposal.md
 modified_files:
@@ -59,6 +62,10 @@ Review and document a shared application-observable status and statistics contra
 5. Commit and push the scoped task branch, then report evidence and manual-review requirements to the coordinator.
 
 6. Follow-up Dispatch ctx_2b93eae5bf44: publish or reuse the single TASK-4 Draft PR from e4d34ae; obtain current-head CI and an independent review-agent check; address only scoped documentation findings; record publication and review evidence, then finalize and report.
+
+7. Preparation authorized by msg_8341cf409cef after the published-head CI and independent review: document slices P0-P8 and owner gates G0-G5 in proposal section 10; do not create tasks, duplicate workers/PRs, accepted Decisions or production changes in this scoped PR.
+8. Correct independent review R1-R3/C1-C2, run isolated type/link/scope validation and current-head CI, and ask the same reviewer to verify the final document and preparation boundary.
+9. Record final PR/head/CI/review evidence and the implementation-preparation outcome in TASK-4; return Done only for the documentation/preparation scope, retaining exact adoption and implementation gates.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -80,6 +87,13 @@ Completion ID: task-4-ctx_7786b1f72c8d-design. Outcome: succeeded. Acceptance cr
 Automatic-lane evidence: manual review required (unresolved public-contract proposals and >300 changed lines); no Decision file changes, no published API changes, no compatibility changes and no distribution changes. No agent/workflow improvement was identified: Agent improvement PR: none. Coordinator owns the one task Draft PR after validating this clean pushed branch; worker is not opening a duplicate PR.
 
 PR publication follow-up authorized by the coordinator under task_657876311db8 / Dispatch ctx_2b93eae5bf44, superseding the previous coordinator-owned publication handoff for this follow-up only. Confirmed no PR on task-4-observability-contract before creation. Existing design AC evidence is retained; the record is temporarily In Progress for the explicitly requested publication, current-head CI and review-agent verification. No implementation, public API, historical Decision, threshold or support scope change is authorized.
+
+Published the single Draft PR #34 at https://github.com/kounoike/react-rich-media-hooks/pull/34 from fdae36e7086d2c1e06098ff79b336d1d3e438ae7; verified Draft state, exact branch/head and real newline bytes in the body. CI validation run 45020092701 is queued for that head (Node 22.23.2/24.19.0 quality and Chromium/Firefox smoke). Independent read-only review agent will review the same scoped documentation; final-head evidence will be linked before handoff. No merge or contract acceptance is authorized.
+
+Follow-up steering received via coordinator message msg_8341cf409cef: owner approved the observer/statistics design direction and selected implementation preparation, after completing PR #34 current-head CI/review. Scope is preparation only: decompose the public observer contract, audio/video adapters, aggregation, recovery, React/SSR, validation/docs and compatibility/rollout; record outstanding owner decisions before any public API/runtime/threshold/support or Decision adoption change. Retain this single documentation PR and current worker; do not create duplicate PRs/workers. The material public names/measurement/default details remain proposals until the precise adoption boundary is recorded. Current published head fdae36e7086d2c1e06098ff79b336d1d3e438ae7 has all four CI checks successful in run 45020092701; independent read-only review ctx_8da075a66147 is still in progress.
+
+Independent review ctx_8da075a66147 completed on fdae36e: no P0/P1; three P2 contract inconsistencies (R1 deferred effect configuration without capture; R2 inaccessible metadata when quantiles unavailable; R3 overload episode source lost after coalescing), plus C1 startup fallback double-count wording and C2 no-effect history wording. Addressed in the proposal: explicit off/bypassed+none deferred row; always-present Distribution metadata with unavailable quantile summaries and capacity-exceeded accounting; source+reason episode breakdown; clarified fallback entry condition and epoch totals after effect removal. These are documentation corrections only.
+Preparation boundary recorded before any adoption/implementation: section 10 decomposes P0 contract/accepted-Decision freeze, P1 observer API, P2 aggregation, P3 state/recovery, P4 video adapter, P5 audio adapter gated by separately integrated TASK-1.12, P6 React/SSR, P7 tests/docs/privacy and P8 experimental rollout. G0-G5 list precise additional owner decisions; no new Backlog tasks/Dispatches/PRs are created. Design direction is owner-approved for preparation, but final declarations/defaults, Decision-12 protocol and numeric/support changes are not silently adopted. Existing Decisions and production/API files remain unchanged. Final current-head CI and same-agent re-review will follow the scoped commit.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

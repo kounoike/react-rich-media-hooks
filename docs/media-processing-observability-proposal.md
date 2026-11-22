@@ -6,6 +6,13 @@ Approval of this documentation does not approve its public names, defaults,
 measurement policy, thresholds, or release support. No production source,
 exports, dependencies, benchmarks, existing Decisions or acceptance limits change.
 
+Preparation update (2026-11-22): the owner approved the observer/statistics design
+direction and selected implementation preparation, conveyed by coordinator
+message `msg_8341cf409cef` in TASK-4. Section 10 records the work breakdown and
+adoption boundary. Exact public declarations, measurement/default policies and
+any numerical/support revision remain proposals; this document does not adopt
+an accepted Decision or authorize production implementation.
+
 ## 1. Evidence and existing authority
 
 The mainline audit is pinned to `5c81f030d73a0d688bb41bdf92e9e7e9e16df02c`.
@@ -28,10 +35,12 @@ this branch or claims about the mainline package.
 
 Decisions were searched before this proposal. Decision-2 governs the retained
 ownership/lifecycle semantics; Decision-12 is a **proposed** audio measurement
-prerequisite, not authority to replace a metric or number. TASK-4 adopts no new
-significant choice and supersedes no Decision. After owner selection, record a
-new accepted Decision through Backlog before dependent public implementation;
-name any exact clauses it supersedes and preserve accepted history.
+prerequisite, not authority to replace a metric or number. This documentation PR
+changes no accepted Decision and supersedes none. The implementation-preparation
+approval is recorded above; before dependent public implementation, freeze its
+exact adoption boundary and record the approved choice in a new accepted
+Decision through Backlog. Name any exact clauses it supersedes and preserve
+accepted history.
 
 ## 2. Review alternatives and recommendations
 
@@ -65,7 +74,7 @@ type Route = "none" | "original" | "processed";
 type UnavailableReason =
   | "disabled" | "unsupported" | "not-instrumented" | "not-applicable"
   | "warming-up" | "insufficient-samples" | "clock-unmapped"
-  | "baseline-missing" | "baseline-mismatch" | "interrupted";
+  | "baseline-missing" | "baseline-mismatch" | "interrupted" | "capacity-exceeded";
 type Measure<T> =
   | { readonly availability: "available"; readonly value: T; readonly methodId: string }
   | { readonly availability: "unavailable"; readonly reason: UnavailableReason };
@@ -116,22 +125,26 @@ interface Window {
   readonly complete: boolean;
   readonly coverage: "complete" | "partial" | "unknown";
 }
-interface Distribution {
-  readonly metricId: string; // versioned endpoints + estimator, never just "latency"
-  readonly sampleUnit: "model-frame" | "render-quantum" | "video-frame" | "matched-frame" | "correlation-window";
-  readonly clock: "local-monotonic" | "audio-sample" | "mapped-media";
-  readonly window: Window;
+interface Quantiles {
   readonly p50Ms: number;
   readonly p95Ms: number;
   readonly p99Ms: number;
   readonly maxMs: number;
+}
+interface Distribution {
+  readonly metricId: string; // versioned endpoints + estimator, never just "latency"
+  readonly methodId: string; // provenance retained even when quantiles are unavailable
+  readonly sampleUnit: "model-frame" | "render-quantum" | "video-frame" | "matched-frame" | "correlation-window";
+  readonly clock: "local-monotonic" | "audio-sample" | "mapped-media" | "unmapped";
+  readonly window: Window;
+  readonly quantiles: Measure<Quantiles>;
   readonly timerResolutionMs: Measure<number>;
   readonly uncertaintyMs: Measure<number>;
 }
 interface LatencyComparison {
-  readonly processed: Measure<Distribution>;
-  readonly baseline: Measure<Distribution>;
-  readonly added: Measure<Distribution>;
+  readonly processed: Distribution;
+  readonly baseline: Distribution;
+  readonly added: Distribution;
   readonly baselineId: string | null; // ephemeral trial reference, no device ID
   readonly estimator: "legacy-original-median-v1" | "paired-window-delta-v1";
 }
@@ -146,6 +159,7 @@ interface CommonCounters<K extends MediaKind> {
   readonly successfulRecoveries: Counter;
   readonly measurementSamplesOmitted: Counter;
   readonly episodesByReason: readonly {
+    readonly source: "runtime-guard" | "observation-policy" | "lifecycle";
     readonly reason: ReasonByKind[K];
     readonly overloadEpisodes: Counter;
     readonly fallbackEntries: Counter;
@@ -154,8 +168,8 @@ interface CommonCounters<K extends MediaKind> {
 interface AudioStatistics {
   readonly kind: "audio";
   readonly window: Window;
-  readonly modelFrameCompute: Measure<Distribution>;
-  readonly renderQuantumCompute: Measure<Distribution>;
+  readonly modelFrameCompute: Distribution;
+  readonly renderQuantumCompute: Distribution;
   readonly outputLatency: LatencyComparison;
   readonly lateBlocks: Measure<Counter>;
   readonly missedBlocks: Measure<Counter>;
@@ -168,7 +182,7 @@ interface AudioStatistics {
 interface VideoStatistics {
   readonly kind: "video";
   readonly window: Window;
-  readonly processing: Measure<Distribution>;
+  readonly processing: Distribution;
   readonly outputLatency: LatencyComparison;
   readonly inputFramesObserved: Measure<number>;
   readonly outputFramesObserved: Measure<number>;
@@ -206,8 +220,14 @@ an owner-reviewed per-effect instance projection; this proposal does not pretend
 that crop and a whole segmentation chain have the same statistics boundary.
 Enabled domain envelopes always expose their episode counters, including while
 unsupported or on original-media fallback; individual unmeasurable fields remain
-unavailable. With no configured effect, relevant measurements are not applicable
-and event counts are measured zero over the enabled interval only.
+unavailable. With no configured effect, relevant quantiles are not applicable
+and no new processor episodes occur in that interval; accumulated `sinceEnabled`
+history survives effect removal and stop/start until the epoch ends.
+Distribution metadata is always present independently of numerical availability:
+method, units/clock, metric-specific counts, exclusions and coverage are retained
+even when quantiles are unavailable. If instrumentation/reference is absent,
+zero attempted/accepted means no observations, with unknown coverage and an
+unavailable summary; it never asserts measured zero media latency or loss.
 
 ## 4. State machine, reasons and recovery
 
@@ -222,10 +242,11 @@ With collection disabled or insufficient required evidence, assessment is
 | Trigger / transition | Status, route, reason | Recovery and notification |
 | --- | --- | --- |
 | Construct, no configured effect | `off`, `none` before capture or `original` with live input; `no-effect` | No acquisition/collector; no failure or fallback episode |
-| Enable or replace effect | `loading`, actual retained `original` or prior `processed` route; `requested` | New generation; previous output remains usable when possible; publish immediately |
+| Configure before capture or after stop, without live input | Retain `off` or `bypassed`, route `none`; `requested` / `explicit-bypass` | Store configuration for a later start; no acquisition, processor startup or fallback episode |
+| Enable or replace effect against live input | `loading`, actual retained `original` or prior `processed` route; `requested` | New generation; previous output remains usable when possible; publish immediately |
 | First usable processed output | `active`, `processed`, `ready` | Atomic output replacement and state update; new measurement segment, assessment initially not evaluated |
 | Soft policy violation while processing continues | `active`, `processed`, assessment `degraded`; effect-specific reason | Statistical hysteresis below; no automatic bypass/retry from observation policy |
-| Existing runtime overload guard fires | `degraded`, `original` if live input; e.g. audio `native-frame-budget`, video `source-rate` | Immediate fallback; one overload episode and one fallback entry; no debounce or automatic restart |
+| Existing runtime overload guard fires | `degraded`, `original` if live input; e.g. audio `native-frame-budget`, video `source-rate` | Immediate fallback; one runtime-guard overload episode; fallback entry only if this begins a new fallback interval (not a second entry while already loading-original); no debounce or automatic restart |
 | Unsupported capability / failed asset / processor fault | `unsupported` or `failed`, `original` if live, otherwise `none`; typed cause | Preserve existing operation error/result. Failure is distinct from whether fallback succeeded |
 | Explicit bypass or remove | `bypassed` or `off`, `original` if live; `explicit-bypass` / `removed` | Dispose processor, preserve unrelated media; user bypass does not increment fault fallback |
 | Cancel current setup | Restore previous settled state/route, `cancelled`; no failure | Tagged cancellation; invalidate late setup messages; provisional metrics discarded with reason |
@@ -331,7 +352,11 @@ window is diagnostic, not the three-run/ten-minute qualification protocol.
 Candidate bounded storage: at most 8,192 duration samples per metric per segment
 and one completed aggregate per domain; retain no raw media. If the capacity is
 exceeded, count omitted samples, mark partial coverage and make that full-window
-percentile unavailable rather than silently reporting a biased retained subset.
+quantile summary unavailable with `capacity-exceeded` rather than silently
+reporting a biased retained subset. Keep that metric's window/method metadata:
+for 8,193 otherwise valid attempts, 8,192 accepted and one excluded with
+`capacity-exceeded`, partial coverage and unavailable quantiles. The common
+omission counter increments too; the metric-specific exclusions locate the loss.
 A reviewed histogram/sketch would need a new method ID and published error
 bounds. Never average per-window p95s to obtain a longer-window p95; combine
 compatible raw samples or an approved mergeable estimator. No cross-device,
@@ -435,8 +460,12 @@ count or zero drops. These fields never merge with audio late/missed blocks.
 - `overloadEpisodes`: increment once on entry to a runtime overload fault or a
   distinct soft overload episode, with its typed reason; distinguish those
   sources in presentation. It counts episodes, not over-budget frames/windows;
-  `episodesByReason` provides the bounded typed breakdown so coalescing cannot
-  erase a cause. Sum of reason counters equals the corresponding total.
+  `episodesByReason` provides the bounded typed breakdown by **source and reason**
+  so coalescing cannot erase either. The same reason may be used by a runtime
+  guard and an observation policy; their rows remain distinct. `lifecycle`
+  identifies loading/capability/failure fallback entries that are not overload
+  guard episodes. Each event increments exactly one source/reason row; sum of
+  all breakdown counters equals the corresponding total, without double counting.
 - `fallbackEntries`: increment once when a configured effect routes to original
   due to loading, unsupported, overload or failure; include the typed cause.
   Initial loading-original selection counts once even if it was already the
@@ -541,8 +570,11 @@ function describeAudio(observer: CandidateObserver): string {
   if (snapshot.statistics.mode === "disabled") return `${health.status}; statistics off`;
   const audio = snapshot.statistics.audio;
   const latency = audio.outputLatency.added;
-  if (latency.availability === "unavailable") return `Added delay unknown: ${latency.reason}`;
-  const { p95Ms, window, metricId } = latency.value;
+  const { window, metricId, quantiles } = latency;
+  if (quantiles.availability === "unavailable") {
+    return `Added delay unknown: ${quantiles.reason}; attempted=${window.attempted}`;
+  }
+  const { p95Ms } = quantiles.value;
   return `${p95Ms.toFixed(1)} ms added p95; n=${window.accepted}; ${metricId}`;
 }
 // Audio late/missed blocks and video dropped/stale frames remain separate UI rows.
@@ -614,3 +646,58 @@ local and pinned Git paths, check immutable API/runtime/threshold scope by diff,
 run the repository's required quality gate, and record exact results in TASK-4.
 No fresh media benchmark, physical-device claim or Decision-12 study is needed
 or authorized by this documentation work.
+
+## 10. Implementation preparation after design-direction approval
+
+The owner selected implementation preparation through `msg_8341cf409cef` after
+PR #34 publication; its first head `fdae36e` passed all four CI jobs and received
+an independent agent review. That review identified three specification
+inconsistencies (deferred configuration, unavailable-distribution metadata and
+episode source classification), corrected in this document before final-head
+verification. Approval authorizes this decomposition and design clarification,
+not new production code, measurement trials, exact exports, new numerical
+policies or changed Decisions. These are proposed work packages, **not newly
+created Backlog tasks or Dispatches**. No additional worker or PR is needed to
+prepare them; implementation assignments must be created separately only when
+their adoption/dependency gates are satisfied.
+
+### Delivery slices and dependencies
+
+| Slice | Concrete deliverable and boundary | Evidence required before integration | Dependencies |
+| --- | --- | --- | --- |
+| P0 — Freeze adoption boundary | Review the remaining choices below, inspect current Decisions again and record the approved observer contract in a new accepted Backlog Decision with a substantive title, related tasks and any exact Supersedes clauses. Keep Decision-12 and numerical/support decisions separate; do not edit historical accepted records | Owner confirmation of exact API and policies, accepted Decision metadata/body, compatibility/migration checklist; no inferred approval from this implementation plan | Preparation only now; adoption outside the two-file PR scope |
+| P1 — Common observer contract and lifecycle | Implement the selected framework-neutral optional observer/factory and immutable snapshot/cache/subscription ownership at the approved export location. Define exact enable/disable/dispose results, per-observer epochs on one bounded session collector, typed reason/source mapping and schema/version behavior. Preserve existing session status/output subscriptions and no-acquisition semantics | Strict consumer/type fixtures, unavailable-quantile narrowing with metadata still readable, cross-kind reason rejection, no new notifications for ordinary session-only consumers, clone/session ownership tests | P0; no import or merge of the audio candidate |
+| P2 — Aggregation core | Pure bounded per-metric aggregation: monotonic half-open windows, segment splits, exact quantiles, independent metadata and numerical availability, omissions/capacity, source/reason counter totals, epoch offsets, saturation and signed comparisons. Keep runtime-instrumented metrics separate from legacy/paired analysis adapters | Deterministic fake-clock tests for empty/small/tail samples, 8,193-attempt overflow metadata, preserved historical counters after effect removal, independent observer enable/disable, quantile non-averaging and source classification | P0 and P1 contract; no media acquisition or native backend work |
+| P3 — State, route and recovery projection | Map lifecycle events to the approved projection, including pre-capture deferred configuration, live-input loading, output handoff, explicit bypass/remove, faults, cancellation/supersession, stop/dispose and retry verification. Add internal typed event evidence rather than parsing existing human messages | Table-driven transition/race tests; startup-original fault does not double-count fallback; stale generations cannot publish; soft warning and runtime guard sharing one reason retain separate source totals; recovery does not reacquire unrelated media | P1/P2; existing runtime guard algorithms and thresholds unchanged |
+| P4 — Video crop observation adapter | Instrument only available callback/draw/submission durations and unique observed boundaries at bounded cost. Export callback gaps with their actual scope; mark exact source drops/stale output age/output delay unavailable without identities, mapping and an approved budget. Preserve rAF fallback and output dimensions/handoff | Crop lifecycle/rAF/metadata tests, invalid clocks/sequence reset, source freeze and duplicate presentation tests, collection off/on cost comparison under the same crop profile; no marker/pixel readback in normal processing | P1/P2/P3; mainline TASK-1.11/Decision-7 remains the baseline |
+| P5 — Audio observation adapters | Integrate after an independently approved/mainline audio implementation is available. Treat model frames, full render quanta, raw Worker writes, reference lag and continuity as different boundaries; retain private route gating. Adapter fields remain unavailable when current private timings cannot justify them | Pinned/fake backend contract tests for variable quanta, native-call-only evidence, unknown missed deadlines, silence vs missing input, source-clock jitter, Worker stall and interruption; no PCM retention or changed processing/safety behavior | P1/P2/P3 plus explicit TASK-1.12 integration/dependency choice; do not copy `f92bd88` implementation into this PR |
+| P6 — React/SSR notifications | Thin opt-in store adapter, cached server/hydration snapshot, no render-time construction/clock access, immediate lifecycle readability and separately bounded statistics ticks. Shared measurement work must not multiply with listeners, while observers retain independent enable epochs | React 18.2/19 Strict Mode subscribe/remount/rerender tests, server imports without browser globals, hydration parity, fake-timer cadence/hysteresis, throwing/reentrant listeners, no post-dispose ticks or resource control | P1/P2/P3; P4/P5 for realistic composed fixtures, not for SSR unit isolation |
+| P7 — Consumer documentation and contract validation | Replace provisional examples only after exports are approved; document unknown metrics, factual original/processed routes, privacy-safe local export and application-owned output attachment. Implement section 9 contract/privacy/packaging tests and audio/video composed-load checks | Current/new consumer fixtures, no telemetry/media/device identity in observation payload, frozen package/API compatibility and bundle checks, readable available/unavailable/counter examples; qualification remains separate from observer tests | P4/P6; audio-specific claims additionally depend on P5 and TASK-1.12 qualification |
+| P8 — Controlled experimental rollout | Opt-in experimental exposure with agreed package/schema/asset versioning, documented rollback by disabling observation, known gaps and explicit promotion criteria. No default-on switch or support promotion from field presence | Current-head CI/review, approved collector CPU/memory/message budget, off/on A/B and retained-resource evidence on agreed reference rows; legacy measurement outputs and failed cells retained | P7 and applicable P5 evidence; separate release/owner approval under Decision-6 |
+
+P2 and P3 may be developed as isolated pure fixtures after the contract is
+accepted; P4 and P5 are independent adapter work once those shared boundaries
+settle. Audio integration must not block an honest video-only experimental
+observer that marks audio unavailable, **if that staged exposure is explicitly
+approved**. Conversely, video success never supplies missing audio AC3 evidence.
+Do not turn these slices into dispatchable work until their task records and
+dependencies can reference the adopted contract and a real integration base.
+
+### Additional owner choices before implementation
+
+| Gate | What is already authorized | Exact choice still required / consequence of absence |
+| --- | --- | --- |
+| G0 — Adoption and public compatibility | Shared observer/statistics design direction and this preparation work | Final factory/entry-point and type names; API options and activation/settlement behavior; whether prototype is experimental; compatibility and migration handling for new discriminants; accepted Decision before dependent code. This PR does not add that Decision because its authorized files remain the proposal and TASK-4 record |
+| G1 — Collection and policy defaults | Separation of immediate lifecycle visibility from optional aggregates; preserve disabled semantics and existing media guards | Freeze or revise candidate 5-second windows, <=1 Hz statistics invalidation, 8,192-sample capacity, 2-bad/3-good windows and 0.8 recovery ratio; pick required metric scopes and warning limits or explicitly ship assessment not evaluated. These are observation choices, never a new 40 ms or video acceptance rule |
+| G2 — Cost and retention | Bounded local aggregates, no default media/identity collection or upload | Quantitative collector CPU/callback, memory and message budgets; reference rows and off/on regression rule; ownership of collection requests and per-observer epoch reset/retention. Unmeasurable or over-budget collectors cannot be promoted by omitting overhead evidence |
+| G3 — Audio measurement process | Keep legacy results and Decision-12 proposed, with 40 ms/quality/continuity gates unchanged | Scenario/consumer, reference devices, pairing/clock/uncertainty protocol and study resources remain Decision-12 choices. Runtime compute/counter instrumentation may be planned, but no new end-to-end estimator or qualification trial is authorized by observation design approval |
+| G4 — Integration and staged scope | Mainline video evidence plus pinned unmerged audio research can inform design | Choose the actual accepted audio integration commit and task dependency; explicitly approve any video-first experimental surface with audio unavailable. Preserve private Worker gating, mainline unsupported behavior until audio integration, and current browser/support rows |
+| G5 — Rollout and promotion | Preparation may specify experimental opt-in and compatibility validation | Owner decides release classification, exposure/promotion criteria and reference coverage under Decision-6. No default-on collection, release-support claim, numeric target revision or API implementation follows from documentation integration |
+
+Exit from preparation is a reviewable contract-freeze packet: selected G0–G5
+values or explicitly deferred portions, the accepted Decision and exact related
+tasks to be created, slice-specific acceptance criteria and test commands, an
+integration base, and a release/migration plan. Until that packet is approved,
+stop at this documentation/task plan; retain the current 40 ms, quality,
+continuity, fallback, ownership, SSR/React and support contracts. Approval of
+observer design is not approval of Decision-12, new backends or relaxed gates.
