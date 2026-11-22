@@ -1,11 +1,11 @@
 ---
 id: TASK-4
 title: Define and document shared media-processing health and statistics contract
-status: In Progress
+status: Done
 assignee:
   - '@codex'
 created_date: '2026-11-22 11:40'
-updated_date: '2026-11-22 12:08'
+updated_date: '2026-11-22 12:13'
 labels:
   - media
   - api
@@ -27,6 +27,8 @@ references:
   - 'https://github.com/kounoike/react-rich-media-hooks/pull/34'
   - >-
     https://github.com/kounoike/react-rich-media-hooks/pull/34#issuecomment-7078867233
+  - >-
+    https://github.com/kounoike/react-rich-media-hooks/pull/34#issuecomment-7078955575
 documentation:
   - docs/media-processing-observability-proposal.md
 modified_files:
@@ -94,10 +96,16 @@ Follow-up steering received via coordinator message msg_8341cf409cef: owner appr
 
 Independent review ctx_8da075a66147 completed on fdae36e: no P0/P1; three P2 contract inconsistencies (R1 deferred effect configuration without capture; R2 inaccessible metadata when quantiles unavailable; R3 overload episode source lost after coalescing), plus C1 startup fallback double-count wording and C2 no-effect history wording. Addressed in the proposal: explicit off/bypassed+none deferred row; always-present Distribution metadata with unavailable quantile summaries and capacity-exceeded accounting; source+reason episode breakdown; clarified fallback entry condition and epoch totals after effect removal. These are documentation corrections only.
 Preparation boundary recorded before any adoption/implementation: section 10 decomposes P0 contract/accepted-Decision freeze, P1 observer API, P2 aggregation, P3 state/recovery, P4 video adapter, P5 audio adapter gated by separately integrated TASK-1.12, P6 React/SSR, P7 tests/docs/privacy and P8 experimental rollout. G0-G5 list precise additional owner decisions; no new Backlog tasks/Dispatches/PRs are created. Design direction is owner-approved for preparation, but final declarations/defaults, Decision-12 protocol and numeric/support changes are not silently adopted. Existing Decisions and production/API files remain unchanged. Final current-head CI and same-agent re-review will follow the scoped commit.
+
+Publication and preparation acceptance evidence (2026-11-22): single Draft PR https://github.com/kounoike/react-rich-media-hooks/pull/34; design/preparation head 8bb18e0653c5534cfacdd925d6e1857433a74d8a, proposal blob 7e57ef3f2266bb31a96c5e74692aa739605935f9. Current-head CI run 45020807829 succeeded for Quality Node 22.23.2/24.19.0 and Browser smoke Chromium/Firefox. gh pr checks 34 --watch --interval 10 --fail-fast returned success. Initial publication head fdae36e also passed all four jobs in run 45020092701.
+Independent re-review ctx_fe0451c4f003 confirmed all R1-R3/C1-C2 resolved and no new concrete issues, and verified P0-P8/G0-G5 preparation and adoption boundaries. Published review evidence: https://github.com/kounoike/react-rich-media-hooks/pull/34#issuecomment-7078955575. This is independent agent evidence, not a GitHub approval or authorization to merge/implement.
+All design ACs remain proven, and the explicitly authorized implementation-preparation deliverable is complete: P0-P8 identify concrete deliverables, dependency order and acceptance evidence; G0-G5 identify exact API/adoption, defaults/assessment, overhead/retention, Decision-12 protocol, audio integration/staged scope and release choices. No new Backlog tasks, accepted Decisions, duplicate PRs or production changes were created. Owner approval of direction/preparation does not silently resolve those choices.
+Isolated documentation type/link/scope validation rerun after fixes passed (4 strict TS fences, 2 negative type cases, 15 local links, 8 pinned Git paths; source status union unchanged). Whitespace/scope validation passed. Final publication bookkeeping changes only this task record; the final exact head, its own CI and any metadata-only review confirmation are maintained in the linked status-evidence comment https://github.com/kounoike/react-rich-media-hooks/pull/34#issuecomment-7078867233 so committing the evidence cannot create an infinite self-referential head update. The reviewed proposal blob must remain identical during that final check.
+Completion ID: task-4-ctx_2b93eae5bf44-publication-preparation. Design/preparation acceptance criteria remaining: none. Unresolved owner decisions: G0-G5 exact adoption/default/cost/integration/rollout choices; Decision-12 and TASK-1.12 AC3 remain separately unresolved. Manual lane required (>300 lines and public-contract adoption pending). Decision changes: none. Public API changes: none. Compatibility changes: none. Distribution changes: none. Agent improvement PR: none. PR remains Draft, no merge or cleanup; final current-head CI/review reconciliation is required before worker completion.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Documented the shared audio/video health and statistics owner-review proposal, audited mainline and pinned unmerged audio evidence, and made measurement availability, transitions/recovery, notification policy, React/SSR/default-off behavior, privacy, compatibility and future validation explicit. All five documentation acceptance criteria are evidenced; pnpm quality:gate, isolated strict TypeScript examples/negative assertions, 15 local links, 8 pinned Git paths, unchanged-contract diff and git diff --check pass. No public API, runtime code, Decision, existing quality threshold or support promise changed; the proposed contract and Decision-12 choices require owner review before implementation.
+Published the single TASK-4 Draft PR #34, corrected all independent review findings, and documented owner-authorized implementation preparation through P0-P8 delivery slices and G0-G5 adoption gates. The design/preparation head 8bb18e0 passed all four current-head CI jobs and independent re-review with no remaining findings; strict documentation types/negative cases, references, whitespace and unchanged-contract scope also pass. TASK-4 is complete for documentation/publication/preparation only; final exact-head evidence is linked from the task, no implementation/API/Decision/threshold/support changes or merge are authorized, and precise adoption plus Decision-12/audio AC3 choices remain separate.
 <!-- SECTION:FINAL_SUMMARY:END -->
