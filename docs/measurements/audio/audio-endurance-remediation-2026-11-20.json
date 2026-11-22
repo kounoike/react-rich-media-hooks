@@ -1,0 +1,562 @@
+[
+  {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+    "initialSettings": {
+      "autoGainControl": true,
+      "channelCount": 1,
+      "deviceId": "default",
+      "echoCancellation": true,
+      "groupId": "a7e98e09282d9ec107cf58ad7f1fa64cb227e0b4404543fd2fd9788aaaaabef3",
+      "latency": 0.01,
+      "noiseSuppression": false,
+      "sampleRate": 48000,
+      "sampleSize": 16,
+      "voiceIsolation": false
+    },
+    "durationMs": 600170.6999999881,
+    "acquisitions": 1,
+    "setups": [
+      {
+        "status": "success",
+        "ms": 214
+      },
+      {
+        "status": "success",
+        "ms": 153.9000000357628
+      },
+      {
+        "status": "success",
+        "ms": 166.39999997615814
+      },
+      {
+        "status": "success",
+        "ms": 151.39999997615814
+      },
+      {
+        "status": "success",
+        "ms": 156.30000001192093
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      }
+    ],
+    "phases": {
+      "active": 1747,
+      "degraded": 473
+    },
+    "transitions": [
+      {
+        "ms": 151.19999998807907,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 165,
+        "status": "off",
+        "original": false
+      },
+      {
+        "ms": 166.10000002384186,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 166.10000002384186,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 379.60000002384186,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 379.60000002384186,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 380,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 533.9000000357628,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 534,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 534.3000000119209,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 700.6999999880791,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 700.8000000119209,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 701,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 852.3000000119209,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 852.4000000357628,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 852.6999999880791,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 1008.9000000357628,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 248499.19999998808,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 301119.3000000119,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 301293.5,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 457136.6999999881,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 481196.3000000119,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 481351.8000000119,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 490354.10000002384,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 541048.8000000119,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 541201.8000000119,
+        "status": "active",
+        "original": false
+      }
+    ],
+    "counts": {
+      "samples": 28800000,
+      "quanta": 225000,
+      "missing": 0,
+      "invalid": 0,
+      "zero": 131
+    },
+    "outputChanges": 7,
+    "contentionTicks": 2220,
+    "originalOnExit": false,
+    "cloneLiveAfterDispose": true,
+    "originalEnded": true,
+    "contextClosed": true,
+    "browserProject": "chromium",
+    "testStatus": "passed"
+  },
+  {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0",
+    "initialSettings": {
+      "autoGainControl": false,
+      "channelCount": 1,
+      "deviceId": "No8cyE29ssb3obKyHtkPyxQ5dievDhruzKvfyJ/4sRA=",
+      "echoCancellation": false,
+      "groupId": "wlR20EGtEAejNC0ogh7IreCG8JhyT+NqV9JY5ozqZK8=",
+      "noiseSuppression": false
+    },
+    "durationMs": 600160,
+    "acquisitions": 1,
+    "setups": [
+      {
+        "status": "success",
+        "ms": 183
+      },
+      {
+        "status": "success",
+        "ms": 130
+      },
+      {
+        "status": "success",
+        "ms": 154
+      },
+      {
+        "status": "success",
+        "ms": 157
+      },
+      {
+        "status": "success",
+        "ms": 155
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      },
+      {
+        "status": "success",
+        "ms": 0
+      }
+    ],
+    "phases": {
+      "degraded": 2219
+    },
+    "transitions": [
+      {
+        "ms": 426,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 438,
+        "status": "off",
+        "original": false
+      },
+      {
+        "ms": 439,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 439,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 621,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 622,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 622,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 752,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 752,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 752,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 906,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 906,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 907,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 1064,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 1064,
+        "status": "off",
+        "original": true
+      },
+      {
+        "ms": 1064,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 1219,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 1226,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 61483,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 61597,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 61617,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 121494,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 121674,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 121699,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 181309,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 181428,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 181448,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 241337,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 241466,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 241486,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 301372,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 301500,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 301520,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 361431,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 361569,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 361589,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 421488,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 421611,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 421631,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 481536,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 481647,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 481667,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 541547,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 541658,
+        "status": "active",
+        "original": false
+      },
+      {
+        "ms": 541678,
+        "status": "degraded",
+        "original": true
+      },
+      {
+        "ms": 601307,
+        "status": "loading",
+        "original": true
+      },
+      {
+        "ms": 601446,
+        "status": "active",
+        "original": false
+      }
+    ],
+    "counts": {
+      "samples": 28800000,
+      "quanta": 225000,
+      "missing": 0,
+      "invalid": 0,
+      "zero": 0
+    },
+    "outputChanges": 20,
+    "contentionTicks": 2219,
+    "originalOnExit": false,
+    "cloneLiveAfterDispose": true,
+    "originalEnded": true,
+    "contextClosed": true,
+    "browserProject": "firefox",
+    "testStatus": "passed"
+  }
+]

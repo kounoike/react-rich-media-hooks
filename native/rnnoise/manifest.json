@@ -1,0 +1,34 @@
+{
+  "engine": "RNNoise",
+  "version": "0.2",
+  "abiVersion": 1,
+  "zigVersion": "0.15.2",
+  "source": {
+    "url": "https://codeload.github.com/xiph/rnnoise/tar.gz/904a876dce1f9ab8860c0a5000ed151f9f6eef58",
+    "revision": "904a876dce1f9ab8860c0a5000ed151f9f6eef58",
+    "sha256": "975488a6b6ed404b176f9e7a72b418470e50b1e7596f875eb7799f5b785e3ebf"
+  },
+  "model": {
+    "url": "https://media.xiph.org/rnnoise/models/rnnoise_data-0b50c45.tar.gz",
+    "revision": "0b50c45",
+    "sha256": "4ac81c5c0884ec4bd5907026aaae16209b7b76cd9d7f71af582094a2f98f4b43"
+  },
+  "artifact": {
+    "path": "src/effects/audio/assets/rnnoise.wasm",
+    "sha256": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+    "memoryBytes": 8388608,
+    "stackBytes": 262144
+  },
+  "cSources": [
+    "denoise.c",
+    "rnn.c",
+    "pitch.c",
+    "kiss_fft.c",
+    "celt_lpc.c",
+    "nnet.c",
+    "nnet_default.c",
+    "parse_lpcnet_weights.c",
+    "rnnoise_data.c",
+    "rnnoise_tables.c"
+  ]
+}

@@ -1,0 +1,2572 @@
+{
+  "scope": "Earlier actual-host matched loopback screens, 8 windows/case; no 60-window or ten-minute claim; keep failed/fallback cells",
+  "reports": [
+    {
+      "identities": {
+        "c": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+        "zig": "9bcb89465935ccca0e2c375cd4fb2b96c6340a94ee40821626dab517f91253b3",
+        "next": "da72f53a3586a9066b3cb61434921d4bef31da9a64a1cf166381541cf4c7925f",
+        "next-generic": "9a15deaf80ccea05800c8f292cf1f89f8d4bc75b5ec88dc91965011a0d46106c"
+      },
+      "protocol": "audio-routes-v1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+      "isolated": true,
+      "definition": "original captured-track reference in independent observer context; source, processor and observer contexts form a DAG; graph-inclusive standard output difference, no graph subtraction",
+      "minimumLagMs": -300,
+      "knownDelayMs": [-30, 0, 30, 60],
+      "captureRate": 16000,
+      "sampleRate": 48000,
+      "history": [
+        {
+          "frame": 772352,
+          "status": "active",
+          "original": true,
+          "phase": "known-60",
+          "reason": "original baseline"
+        },
+        {
+          "frame": 1021824,
+          "status": "active",
+          "original": false,
+          "phase": "rnnoise-current-c",
+          "reason": "processed ready"
+        },
+        {
+          "frame": 1461504,
+          "status": "off",
+          "original": true,
+          "phase": "rnnoise-current-c",
+          "reason": "case cleanup"
+        },
+        {
+          "frame": 1469824,
+          "status": "active",
+          "original": false,
+          "phase": "rnnoise-current-next",
+          "reason": "processed ready"
+        },
+        {
+          "frame": 1908992,
+          "status": "off",
+          "original": true,
+          "phase": "rnnoise-current-next",
+          "reason": "case cleanup"
+        },
+        {
+          "frame": 1918464,
+          "status": "active",
+          "original": false,
+          "phase": "rnnoise-current-warm-next",
+          "reason": "processed ready"
+        },
+        {
+          "frame": 2358144,
+          "status": "off",
+          "original": true,
+          "phase": "rnnoise-current-warm-next",
+          "reason": "case cleanup"
+        },
+        {
+          "frame": 2361472,
+          "status": "active",
+          "original": false,
+          "phase": "rnnoise-sab-c",
+          "reason": "processed ready"
+        },
+        {
+          "frame": 2363136,
+          "status": "degraded",
+          "original": true,
+          "phase": "rnnoise-sab-c",
+          "reason": "output ring underrun"
+        },
+        {
+          "frame": 2800640,
+          "status": "off",
+          "original": true,
+          "phase": "rnnoise-sab-c",
+          "reason": "case cleanup"
+        },
+        {
+          "frame": 2803456,
+          "status": "active",
+          "original": false,
+          "phase": "rnnoise-sab-next",
+          "reason": "processed ready"
+        },
+        {
+          "frame": 2803456,
+          "status": "degraded",
+          "original": true,
+          "phase": "rnnoise-sab-next",
+          "reason": "output ring underrun"
+        },
+        {
+          "frame": 3243136,
+          "status": "off",
+          "original": true,
+          "phase": "rnnoise-sab-next",
+          "reason": "case cleanup"
+        }
+      ],
+      "results": [
+        {
+          "name": "current-c",
+          "readyMs": 159.96000003814697,
+          "durationMs": 9311.54500001669,
+          "fault": null,
+          "continuity": {
+            "samples": 432384,
+            "missingReference": 0,
+            "missingOutput": 0,
+            "nonfinite": 0,
+            "zeroQuanta": 25,
+            "frameGaps": 3,
+            "frame": 432384,
+            "dropped": 0
+          },
+          "activeSeconds": 9.008,
+          "metrics": {
+            "status": "active",
+            "effects": ["noise-reduction"]
+          },
+          "closed": {},
+          "cloneLiveAfterClose": true,
+          "inputLiveBeforeOwnStop": false,
+          "contentionTicks": 0,
+          "outputOriginalAfterFault": false,
+          "qualification": {
+            "sixtyAcceptedProcessedWindows": false,
+            "addedP95Within40Ms": false,
+            "denoisingActive600Seconds": false,
+            "observedStable600SecondsWithoutMissingFrames": false,
+            "cloneSurvives150MsAfterClose": false,
+            "humanListening": "PENDING",
+            "physicalDeviceQualification": "PENDING"
+          }
+        },
+        {
+          "name": "current-next",
+          "readyMs": 173.4099999666214,
+          "durationMs": 9333.5,
+          "fault": null,
+          "continuity": {
+            "samples": 433024,
+            "missingReference": 0,
+            "missingOutput": 3,
+            "nonfinite": 0,
+            "zeroQuanta": 21,
+            "frameGaps": 0,
+            "frame": 433024,
+            "dropped": 0
+          },
+          "activeSeconds": 9.021333333333333,
+          "metrics": {
+            "status": "active",
+            "effects": ["noise-reduction"]
+          },
+          "closed": {},
+          "cloneLiveAfterClose": true,
+          "inputLiveBeforeOwnStop": false,
+          "contentionTicks": 0,
+          "outputOriginalAfterFault": false,
+          "qualification": {
+            "sixtyAcceptedProcessedWindows": false,
+            "addedP95Within40Ms": false,
+            "denoisingActive600Seconds": false,
+            "observedStable600SecondsWithoutMissingFrames": false,
+            "cloneSurvives150MsAfterClose": false,
+            "humanListening": "PENDING",
+            "physicalDeviceQualification": "PENDING"
+          }
+        },
+        {
+          "name": "current-warm-next",
+          "readyMs": 196.37999999523163,
+          "durationMs": 9347.180000007153,
+          "fault": null,
+          "continuity": {
+            "samples": 432512,
+            "missingReference": 0,
+            "missingOutput": 0,
+            "nonfinite": 0,
+            "zeroQuanta": 29,
+            "frameGaps": 0,
+            "frame": 432512,
+            "dropped": 0
+          },
+          "activeSeconds": 9.010666666666667,
+          "metrics": {
+            "status": "active",
+            "effects": ["noise-reduction"]
+          },
+          "closed": {},
+          "cloneLiveAfterClose": true,
+          "inputLiveBeforeOwnStop": false,
+          "contentionTicks": 0,
+          "outputOriginalAfterFault": false,
+          "qualification": {
+            "sixtyAcceptedProcessedWindows": false,
+            "addedP95Within40Ms": false,
+            "denoisingActive600Seconds": false,
+            "observedStable600SecondsWithoutMissingFrames": false,
+            "cloneSurvives150MsAfterClose": false,
+            "humanListening": "PENDING",
+            "physicalDeviceQualification": "PENDING"
+          }
+        },
+        {
+          "name": "sab-c",
+          "readyMs": 71.67500001192093,
+          "durationMs": 9218.365000009537,
+          "fault": "output ring underrun",
+          "continuity": {
+            "samples": 432000,
+            "missingReference": 0,
+            "missingOutput": 0,
+            "nonfinite": 0,
+            "zeroQuanta": 35,
+            "frameGaps": 0,
+            "frame": 432000,
+            "dropped": 0
+          },
+          "activeSeconds": 9,
+          "metrics": {
+            "control": [
+              0, 3456, 3360, 3360, 2304, 0, 0, 0, 1, 7, 1, 0, 1120, 704, 26, 0, 0, 0, 1664, 3328,
+              2304, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0
+            ]
+          },
+          "closed": {
+            "control": [
+              1, 3456, 3360, 3360, 2304, 0, 1, 0, 1, 7, 1, 0, 1120, 704, 26, 0, 0, 0, 1664, 3328,
+              2304, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0
+            ],
+            "stats": {
+              "protocol": "audio-routes-v1",
+              "type": "stopped",
+              "frames": 7,
+              "warmupMs": 34.264999985694885,
+              "warmupFrames": 80,
+              "engineMs": {
+                "count": 7,
+                "p50": 0.07999998331069946,
+                "p95": 0.7300000190734863,
+                "p99": 0.7300000190734863,
+                "max": 0.7300000190734863
+              }
+            },
+            "workerAcknowledged": true,
+            "contextClosed": true
+          },
+          "cloneLiveAfterClose": true,
+          "inputLiveBeforeOwnStop": true,
+          "contentionTicks": 0,
+          "outputOriginalAfterFault": true,
+          "qualification": {
+            "sixtyAcceptedProcessedWindows": false,
+            "addedP95Within40Ms": false,
+            "denoisingActive600Seconds": false,
+            "observedStable600SecondsWithoutMissingFrames": false,
+            "cloneSurvives150MsAfterClose": false,
+            "humanListening": "PENDING",
+            "physicalDeviceQualification": "PENDING"
+          }
+        },
+        {
+          "name": "sab-next",
+          "readyMs": 63.394999980926514,
+          "durationMs": 9218.514999985695,
+          "fault": "output ring underrun",
+          "continuity": {
+            "samples": 432512,
+            "missingReference": 0,
+            "missingOutput": 0,
+            "nonfinite": 0,
+            "zeroQuanta": 26,
+            "frameGaps": 0,
+            "frame": 432512,
+            "dropped": 0
+          },
+          "activeSeconds": 9.010666666666667,
+          "metrics": {
+            "control": [
+              0, 2048, 1920, 1920, 896, 0, 0, 0, 1, 4, 1, 0, 1024, 704, 15, 0, 1000, 0, 1664, 1920,
+              896, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0
+            ]
+          },
+          "closed": {
+            "control": [
+              1, 2048, 1920, 1920, 896, 0, 1, 0, 1, 4, 1, 0, 1024, 704, 15, 0, 1000, 0, 1664, 1920,
+              896, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0
+            ],
+            "stats": {
+              "protocol": "audio-routes-v1",
+              "type": "stopped",
+              "frames": 4,
+              "warmupMs": 17.384999990463257,
+              "warmupFrames": 80,
+              "engineMs": {
+                "count": 4,
+                "p50": 0.10500001907348633,
+                "p95": 0.4099999666213989,
+                "p99": 0.4099999666213989,
+                "max": 0.4099999666213989
+              }
+            },
+            "workerAcknowledged": true,
+            "contextClosed": true
+          },
+          "cloneLiveAfterClose": true,
+          "inputLiveBeforeOwnStop": true,
+          "contentionTicks": 0,
+          "outputOriginalAfterFault": true,
+          "qualification": {
+            "sixtyAcceptedProcessedWindows": false,
+            "addedP95Within40Ms": false,
+            "denoisingActive600Seconds": false,
+            "observedStable600SecondsWithoutMissingFrames": false,
+            "cloneSurvives150MsAfterClose": false,
+            "humanListening": "PENDING",
+            "physicalDeviceQualification": "PENDING"
+          }
+        }
+      ],
+      "counts": {
+        "type": "counts",
+        "samples": 3240832,
+        "missingReference": 1,
+        "missingOutput": 8,
+        "nonfinite": 0,
+        "zeroQuanta": 392,
+        "frameGaps": 8,
+        "dropped": 0
+      },
+      "method": "exact 16000-sample/48000-frame producer windows; -300..300ms normalized correlation; reject low energy, peak<0.3, discontinuity, collector drops, and state/output transitions within +/-256 frames; native qualification rejects whole-phase fallback; nearest-rank percentiles",
+      "calibrated": true,
+      "knownDelayControls": {
+        "-30": {
+          "windows": 3,
+          "maxErrorMs": 0.0,
+          "passed": true
+        },
+        "0": {
+          "windows": 3,
+          "maxErrorMs": 0.0,
+          "passed": true
+        },
+        "30": {
+          "windows": 3,
+          "maxErrorMs": 0.0,
+          "passed": true
+        },
+        "60": {
+          "windows": 2,
+          "maxErrorMs": 0.0,
+          "passed": true
+        }
+      },
+      "baselineMedianMs": -9.3125,
+      "phases": {
+        "known--30": {
+          "latencyMs": {
+            "count": 3,
+            "p50": -30.0,
+            "p95": -30.0,
+            "p99": -30.0,
+            "max": -30.0
+          },
+          "excludedWindows": 0,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": null
+        },
+        "known-0": {
+          "latencyMs": {
+            "count": 3,
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "excludedWindows": 0,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": null
+        },
+        "known-30": {
+          "latencyMs": {
+            "count": 3,
+            "p50": 30.0,
+            "p95": 30.0,
+            "p99": 30.0,
+            "max": 30.0
+          },
+          "excludedWindows": 0,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": null
+        },
+        "known-60": {
+          "latencyMs": {
+            "count": 2,
+            "p50": 60.0,
+            "p95": 60.0,
+            "p99": 60.0,
+            "max": 60.0
+          },
+          "excludedWindows": 1,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": null
+        },
+        "original": {
+          "latencyMs": {
+            "count": 4,
+            "p50": -9.3125,
+            "p95": -9.3125,
+            "p99": -9.3125,
+            "max": -9.3125
+          },
+          "excludedWindows": 0,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": {
+            "count": 4,
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          }
+        },
+        "rnnoise-current-c": {
+          "latencyMs": {
+            "count": 7,
+            "p50": 67.3125,
+            "p95": 67.3125,
+            "p99": 67.3125,
+            "max": 67.3125
+          },
+          "excludedWindows": 1,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": {
+            "count": 7,
+            "p50": 76.625,
+            "p95": 76.625,
+            "p99": 76.625,
+            "max": 76.625
+          }
+        },
+        "rnnoise-current-next": {
+          "latencyMs": {
+            "count": 8,
+            "p50": 70.625,
+            "p95": 70.6875,
+            "p99": 70.6875,
+            "max": 70.6875
+          },
+          "excludedWindows": 0,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": {
+            "count": 8,
+            "p50": 79.9375,
+            "p95": 80.0,
+            "p99": 80.0,
+            "max": 80.0
+          }
+        },
+        "rnnoise-current-warm-next": {
+          "latencyMs": {
+            "count": 8,
+            "p50": 58.6875,
+            "p95": 58.6875,
+            "p99": 58.6875,
+            "max": 58.6875
+          },
+          "excludedWindows": 0,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": {
+            "count": 8,
+            "p50": 68.0,
+            "p95": 68.0,
+            "p99": 68.0,
+            "max": 68.0
+          }
+        },
+        "rnnoise-sab-c": {
+          "latencyMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null
+          },
+          "excludedWindows": 8,
+          "fallbackDuringCapture": true,
+          "qualifiedProbe": false,
+          "incrementalMs": null
+        },
+        "rnnoise-sab-next": {
+          "latencyMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null
+          },
+          "excludedWindows": 8,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": false,
+          "incrementalMs": null
+        }
+      },
+      "profiles": [],
+      "windows": [
+        {
+          "type": "window",
+          "phase": "known--30",
+          "sequence": 0,
+          "startFrame": 50304,
+          "endFrame": 98304,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9962195869583667,
+          "lagMs": -30.0
+        },
+        {
+          "type": "window",
+          "phase": "known--30",
+          "sequence": 1,
+          "startFrame": 98304,
+          "endFrame": 146304,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.998637546404844,
+          "lagMs": -30.0
+        },
+        {
+          "type": "window",
+          "phase": "known--30",
+          "sequence": 2,
+          "startFrame": 146304,
+          "endFrame": 194304,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9966207787028044,
+          "lagMs": -30.0
+        },
+        {
+          "type": "window",
+          "phase": "known-0",
+          "sequence": 3,
+          "startFrame": 242817,
+          "endFrame": 290817,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0
+        },
+        {
+          "type": "window",
+          "phase": "known-0",
+          "sequence": 4,
+          "startFrame": 290817,
+          "endFrame": 338817,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0
+        },
+        {
+          "type": "window",
+          "phase": "known-0",
+          "sequence": 5,
+          "startFrame": 338817,
+          "endFrame": 386817,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999998,
+          "lagMs": 0.0
+        },
+        {
+          "type": "window",
+          "phase": "known-30",
+          "sequence": 6,
+          "startFrame": 434817,
+          "endFrame": 482817,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9998096373703413,
+          "lagMs": 30.0
+        },
+        {
+          "type": "window",
+          "phase": "known-30",
+          "sequence": 7,
+          "startFrame": 482817,
+          "endFrame": 530817,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9996772040011844,
+          "lagMs": 30.0
+        },
+        {
+          "type": "window",
+          "phase": "known-30",
+          "sequence": 8,
+          "startFrame": 530817,
+          "endFrame": 578817,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9919208600793845,
+          "lagMs": 30.0
+        },
+        {
+          "type": "window",
+          "phase": "known-60",
+          "sequence": 9,
+          "startFrame": 627330,
+          "endFrame": 675333,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": false,
+          "processed": false,
+          "excluded": "incomplete-or-discontinuous-one-second-window"
+        },
+        {
+          "type": "window",
+          "phase": "known-60",
+          "sequence": 10,
+          "startFrame": 675333,
+          "endFrame": 723333,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9786721031803602,
+          "lagMs": 60.0
+        },
+        {
+          "type": "window",
+          "phase": "known-60",
+          "sequence": 11,
+          "startFrame": 723333,
+          "endFrame": 771333,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9950876165040786,
+          "lagMs": 60.0
+        },
+        {
+          "type": "window",
+          "phase": "original",
+          "sequence": 12,
+          "startFrame": 820866,
+          "endFrame": 868866,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9843006376592212,
+          "lagMs": -19.3125
+        },
+        {
+          "type": "window",
+          "phase": "original",
+          "sequence": 13,
+          "startFrame": 868866,
+          "endFrame": 916866,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.915348860059115,
+          "lagMs": -9.3125
+        },
+        {
+          "type": "window",
+          "phase": "original",
+          "sequence": 14,
+          "startFrame": 916866,
+          "endFrame": 964866,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9587027279925133,
+          "lagMs": -9.3125
+        },
+        {
+          "type": "window",
+          "phase": "original",
+          "sequence": 15,
+          "startFrame": 964866,
+          "endFrame": 1012866,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9911069969609886,
+          "lagMs": -9.3125
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 16,
+          "startFrame": 1069824,
+          "endFrame": 1117824,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9910446857443215,
+          "lagMs": 67.3125,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 17,
+          "startFrame": 1117824,
+          "endFrame": 1165824,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9838308624358243,
+          "lagMs": 67.3125,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 18,
+          "startFrame": 1165824,
+          "endFrame": 1213824,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9722666802962621,
+          "lagMs": 67.3125,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 19,
+          "startFrame": 1213824,
+          "endFrame": 1261824,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9547411655789259,
+          "lagMs": 67.3125,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 20,
+          "startFrame": 1261824,
+          "endFrame": 1309824,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.939818529918113,
+          "lagMs": 67.3125,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 21,
+          "startFrame": 1309824,
+          "endFrame": 1357824,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9413290952695549,
+          "lagMs": 67.3125,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 22,
+          "startFrame": 1357824,
+          "endFrame": 1405824,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9578200134823233,
+          "lagMs": 67.3125,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 23,
+          "startFrame": 1405824,
+          "endFrame": 1453830,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": false,
+          "processed": false,
+          "excluded": "incomplete-or-discontinuous-one-second-window"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 24,
+          "startFrame": 1517826,
+          "endFrame": 1565826,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.921562214922119,
+          "lagMs": 50.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 25,
+          "startFrame": 1565826,
+          "endFrame": 1613826,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9349108618244334,
+          "lagMs": 50.625,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 26,
+          "startFrame": 1613826,
+          "endFrame": 1661826,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.5088064148054369,
+          "lagMs": 60.625,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 27,
+          "startFrame": 1661826,
+          "endFrame": 1709826,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9748458344276382,
+          "lagMs": 70.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 28,
+          "startFrame": 1709826,
+          "endFrame": 1757826,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9414985229544099,
+          "lagMs": 70.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 29,
+          "startFrame": 1757826,
+          "endFrame": 1805826,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.8334319546002943,
+          "lagMs": 70.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 30,
+          "startFrame": 1805826,
+          "endFrame": 1853826,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.8319204770716578,
+          "lagMs": 70.625,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 31,
+          "startFrame": 1853826,
+          "endFrame": 1901826,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9799894645492417,
+          "lagMs": 70.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 32,
+          "startFrame": 1966464,
+          "endFrame": 2014464,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.7921879370408252,
+          "lagMs": 48.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 33,
+          "startFrame": 2014464,
+          "endFrame": 2062464,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9818905465203468,
+          "lagMs": 58.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 34,
+          "startFrame": 2062464,
+          "endFrame": 2110464,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9786661318211686,
+          "lagMs": 58.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 35,
+          "startFrame": 2110464,
+          "endFrame": 2158464,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9698715973969851,
+          "lagMs": 58.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 36,
+          "startFrame": 2158464,
+          "endFrame": 2206464,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9519112954288815,
+          "lagMs": 58.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 37,
+          "startFrame": 2206464,
+          "endFrame": 2254464,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9344355260043631,
+          "lagMs": 58.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 38,
+          "startFrame": 2254464,
+          "endFrame": 2302464,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9318887005526806,
+          "lagMs": 58.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 39,
+          "startFrame": 2302464,
+          "endFrame": 2350464,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": true,
+          "correlation": 0.9482023657911545,
+          "lagMs": 58.6875,
+          "path": "processed"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 40,
+          "startFrame": 2409474,
+          "endFrame": 2457474,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9876263062122113,
+          "lagMs": -5.3125,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 41,
+          "startFrame": 2457474,
+          "endFrame": 2505474,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9890450461758235,
+          "lagMs": -5.3125,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 42,
+          "startFrame": 2505474,
+          "endFrame": 2553474,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9932925124638723,
+          "lagMs": -5.3125,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 43,
+          "startFrame": 2553474,
+          "endFrame": 2601474,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.8063460921936912,
+          "lagMs": -5.3125,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 44,
+          "startFrame": 2601474,
+          "endFrame": 2649474,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9932502255253147,
+          "lagMs": 4.6875,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 45,
+          "startFrame": 2649474,
+          "endFrame": 2697474,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9926813007290616,
+          "lagMs": 4.6875,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 46,
+          "startFrame": 2697474,
+          "endFrame": 2745474,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9862861137495134,
+          "lagMs": 4.6875,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 47,
+          "startFrame": 2745474,
+          "endFrame": 2793474,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9885336790888478,
+          "lagMs": 4.6875,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 48,
+          "startFrame": 2851458,
+          "endFrame": 2899458,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9913396039066371,
+          "lagMs": -1.3125,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 49,
+          "startFrame": 2899458,
+          "endFrame": 2947458,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9928354287148725,
+          "lagMs": -1.3125,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 50,
+          "startFrame": 2947458,
+          "endFrame": 2995458,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9921871385088906,
+          "lagMs": -1.3125,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 51,
+          "startFrame": 2995458,
+          "endFrame": 3043458,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9898909307869393,
+          "lagMs": -1.3125,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 52,
+          "startFrame": 3043458,
+          "endFrame": 3091458,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9909288764065514,
+          "lagMs": -1.3125,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 53,
+          "startFrame": 3091458,
+          "endFrame": 3139458,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9927268694551696,
+          "lagMs": -1.3125,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 54,
+          "startFrame": 3139458,
+          "endFrame": 3187458,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9928374739746625,
+          "lagMs": -1.3125,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 55,
+          "startFrame": 3187458,
+          "endFrame": 3235458,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9930179918288723,
+          "lagMs": -1.3125,
+          "path": "original-fallback"
+        }
+      ]
+    },
+    {
+      "identities": {
+        "c": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+        "zig": "9bcb89465935ccca0e2c375cd4fb2b96c6340a94ee40821626dab517f91253b3",
+        "next": "da72f53a3586a9066b3cb61434921d4bef31da9a64a1cf166381541cf4c7925f",
+        "next-generic": "9a15deaf80ccea05800c8f292cf1f89f8d4bc75b5ec88dc91965011a0d46106c"
+      },
+      "protocol": "audio-routes-v1",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0",
+      "isolated": true,
+      "definition": "original captured-track reference in independent observer context; source, processor and observer contexts form a DAG; graph-inclusive standard output difference, no graph subtraction",
+      "minimumLagMs": -300,
+      "knownDelayMs": [-30, 0, 30, 60],
+      "captureRate": 16000,
+      "sampleRate": 48000,
+      "history": [
+        {
+          "frame": 776576,
+          "status": "active",
+          "original": true,
+          "phase": "known-60",
+          "reason": "original baseline"
+        },
+        {
+          "frame": 1025536,
+          "status": "degraded",
+          "original": true,
+          "phase": "rnnoise-current-c",
+          "reason": "RNNoise exceeded the 2.67 ms render budget for two consecutive processed frames."
+        },
+        {
+          "frame": 1466496,
+          "status": "off",
+          "original": true,
+          "phase": "rnnoise-current-c",
+          "reason": "case cleanup"
+        },
+        {
+          "frame": 1474048,
+          "status": "active",
+          "original": false,
+          "phase": "rnnoise-current-next",
+          "reason": "processed ready"
+        },
+        {
+          "frame": 1495040,
+          "status": "degraded",
+          "original": true,
+          "phase": "rnnoise-current-next",
+          "reason": "RNNoise exceeded the 2.67 ms render budget for two consecutive processed frames."
+        },
+        {
+          "frame": 1915008,
+          "status": "off",
+          "original": true,
+          "phase": "rnnoise-current-next",
+          "reason": "case cleanup"
+        },
+        {
+          "frame": 1931520,
+          "status": "active",
+          "original": false,
+          "phase": "rnnoise-current-warm-next",
+          "reason": "processed ready"
+        },
+        {
+          "frame": 1972096,
+          "status": "degraded",
+          "original": true,
+          "phase": "rnnoise-current-warm-next",
+          "reason": "RNNoise exceeded the 2.67 ms render budget for two consecutive processed frames."
+        },
+        {
+          "frame": 2372608,
+          "status": "off",
+          "original": true,
+          "phase": "rnnoise-current-warm-next",
+          "reason": "case cleanup"
+        },
+        {
+          "frame": 2398080,
+          "status": "degraded",
+          "original": true,
+          "phase": "rnnoise-sab-c",
+          "reason": "output ring underrun"
+        },
+        {
+          "frame": 2840576,
+          "status": "off",
+          "original": true,
+          "phase": "rnnoise-sab-c",
+          "reason": "case cleanup"
+        },
+        {
+          "frame": 2854016,
+          "status": "degraded",
+          "original": true,
+          "phase": "rnnoise-sab-next",
+          "reason": "output ring underrun"
+        },
+        {
+          "frame": 3296512,
+          "status": "off",
+          "original": true,
+          "phase": "rnnoise-sab-next",
+          "reason": "case cleanup"
+        }
+      ],
+      "results": [
+        {
+          "name": "current-c",
+          "readyMs": 162.73999999999796,
+          "durationMs": 9366.559999999998,
+          "fault": "RNNoise exceeded the 2.67 ms render budget for two consecutive processed frames.",
+          "continuity": {
+            "samples": 433536,
+            "missingReference": 0,
+            "missingOutput": 0,
+            "nonfinite": 0,
+            "zeroQuanta": 0,
+            "frameGaps": 0,
+            "frame": 433536,
+            "dropped": 0
+          },
+          "activeSeconds": 9.032,
+          "metrics": {
+            "status": "degraded",
+            "effects": ["noise-reduction"]
+          },
+          "closed": {},
+          "cloneLiveAfterClose": false,
+          "inputLiveBeforeOwnStop": false,
+          "contentionTicks": 0,
+          "outputOriginalAfterFault": true,
+          "qualification": {
+            "sixtyAcceptedProcessedWindows": false,
+            "addedP95Within40Ms": false,
+            "denoisingActive600Seconds": false,
+            "observedStable600SecondsWithoutMissingFrames": false,
+            "cloneSurvives150MsAfterClose": false,
+            "humanListening": "PENDING",
+            "physicalDeviceQualification": "PENDING"
+          }
+        },
+        {
+          "name": "current-next",
+          "readyMs": 136.61999999999898,
+          "durationMs": 9343.099999999999,
+          "fault": "RNNoise exceeded the 2.67 ms render budget for two consecutive processed frames.",
+          "continuity": {
+            "samples": 433536,
+            "missingReference": 0,
+            "missingOutput": 0,
+            "nonfinite": 0,
+            "zeroQuanta": 0,
+            "frameGaps": 0,
+            "frame": 433536,
+            "dropped": 0
+          },
+          "activeSeconds": 9.032,
+          "metrics": {
+            "status": "degraded",
+            "effects": ["noise-reduction"]
+          },
+          "closed": {},
+          "cloneLiveAfterClose": true,
+          "inputLiveBeforeOwnStop": false,
+          "contentionTicks": 0,
+          "outputOriginalAfterFault": true,
+          "qualification": {
+            "sixtyAcceptedProcessedWindows": false,
+            "addedP95Within40Ms": false,
+            "denoisingActive600Seconds": false,
+            "observedStable600SecondsWithoutMissingFrames": false,
+            "cloneSurvives150MsAfterClose": false,
+            "humanListening": "PENDING",
+            "physicalDeviceQualification": "PENDING"
+          }
+        },
+        {
+          "name": "current-warm-next",
+          "readyMs": 323.59999999999854,
+          "durationMs": 9531.239999999998,
+          "fault": "RNNoise exceeded the 2.67 ms render budget for two consecutive processed frames.",
+          "continuity": {
+            "samples": 433536,
+            "missingReference": 0,
+            "missingOutput": 0,
+            "nonfinite": 0,
+            "zeroQuanta": 0,
+            "frameGaps": 0,
+            "frame": 433536,
+            "dropped": 0
+          },
+          "activeSeconds": 9.032,
+          "metrics": {
+            "status": "degraded",
+            "effects": ["noise-reduction"]
+          },
+          "closed": {},
+          "cloneLiveAfterClose": true,
+          "inputLiveBeforeOwnStop": false,
+          "contentionTicks": 0,
+          "outputOriginalAfterFault": true,
+          "qualification": {
+            "sixtyAcceptedProcessedWindows": false,
+            "addedP95Within40Ms": false,
+            "denoisingActive600Seconds": false,
+            "observedStable600SecondsWithoutMissingFrames": false,
+            "cloneSurvives150MsAfterClose": false,
+            "humanListening": "PENDING",
+            "physicalDeviceQualification": "PENDING"
+          }
+        },
+        {
+          "name": "sab-c",
+          "readyMs": 505.6000000000058,
+          "durationMs": 9750.160000000003,
+          "fault": "output ring underrun",
+          "continuity": {
+            "samples": 433408,
+            "missingReference": 0,
+            "missingOutput": 0,
+            "nonfinite": 0,
+            "zeroQuanta": 0,
+            "frameGaps": 0,
+            "frame": 433408,
+            "dropped": 0
+          },
+          "activeSeconds": 9.029333333333334,
+          "metrics": {
+            "control": [
+              0, 1664, 1440, 1440, 384, 0, 0, 0, 1, 3, 1, 0, 1056, 800, 12, 0, 1000, 2304, 3456,
+              1536, 384, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            ]
+          },
+          "closed": {
+            "control": [
+              1, 1664, 1440, 1440, 384, 0, 1, 0, 1, 3, 1, 0, 1056, 800, 12, 0, 1000, 2304, 3456,
+              1536, 384, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            ],
+            "stats": {
+              "protocol": "audio-routes-v1",
+              "type": "stopped",
+              "frames": 3,
+              "warmupMs": 408.46000000000004,
+              "warmupFrames": 80,
+              "engineMs": {
+                "count": 3,
+                "p50": 6.699999999999989,
+                "p95": 10.340000000000032,
+                "p99": 10.340000000000032,
+                "max": 10.340000000000032
+              }
+            },
+            "workerAcknowledged": true,
+            "contextClosed": true
+          },
+          "cloneLiveAfterClose": true,
+          "inputLiveBeforeOwnStop": true,
+          "contentionTicks": 0,
+          "outputOriginalAfterFault": true,
+          "qualification": {
+            "sixtyAcceptedProcessedWindows": false,
+            "addedP95Within40Ms": false,
+            "denoisingActive600Seconds": false,
+            "observedStable600SecondsWithoutMissingFrames": false,
+            "cloneSurvives150MsAfterClose": false,
+            "humanListening": "PENDING",
+            "physicalDeviceQualification": "PENDING"
+          }
+        },
+        {
+          "name": "sab-next",
+          "readyMs": 255.23999999999796,
+          "durationMs": 9497.780000000006,
+          "fault": "output ring underrun",
+          "continuity": {
+            "samples": 433536,
+            "missingReference": 0,
+            "missingOutput": 0,
+            "nonfinite": 0,
+            "zeroQuanta": 0,
+            "frameGaps": 0,
+            "frame": 433536,
+            "dropped": 0
+          },
+          "activeSeconds": 9.032,
+          "metrics": {
+            "control": [
+              0, 1664, 1440, 1440, 384, 0, 0, 0, 1, 3, 1, 0, 1056, 704, 12, 0, 1000, 2432, 3584,
+              1536, 384, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            ]
+          },
+          "closed": {
+            "control": [
+              1, 1664, 1440, 1440, 384, 0, 1, 0, 1, 3, 1, 0, 1056, 704, 12, 0, 1000, 2432, 3584,
+              1536, 384, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            ],
+            "stats": {
+              "protocol": "audio-routes-v1",
+              "type": "stopped",
+              "frames": 3,
+              "warmupMs": 155.38,
+              "warmupFrames": 80,
+              "engineMs": {
+                "count": 3,
+                "p50": 1.8799999999999955,
+                "p95": 1.9799999999999898,
+                "p99": 1.9799999999999898,
+                "max": 1.9799999999999898
+              }
+            },
+            "workerAcknowledged": true,
+            "contextClosed": true
+          },
+          "cloneLiveAfterClose": true,
+          "inputLiveBeforeOwnStop": true,
+          "contentionTicks": 0,
+          "outputOriginalAfterFault": true,
+          "qualification": {
+            "sixtyAcceptedProcessedWindows": false,
+            "addedP95Within40Ms": false,
+            "denoisingActive600Seconds": false,
+            "observedStable600SecondsWithoutMissingFrames": false,
+            "cloneSurvives150MsAfterClose": false,
+            "humanListening": "PENDING",
+            "physicalDeviceQualification": "PENDING"
+          }
+        }
+      ],
+      "counts": {
+        "type": "counts",
+        "samples": 3289472,
+        "missingReference": 11,
+        "missingOutput": 45,
+        "nonfinite": 0,
+        "zeroQuanta": 45,
+        "frameGaps": 0,
+        "dropped": 0
+      },
+      "method": "exact 16000-sample/48000-frame producer windows; -300..300ms normalized correlation; reject low energy, peak<0.3, discontinuity, collector drops, and state/output transitions within +/-256 frames; native qualification rejects whole-phase fallback; nearest-rank percentiles",
+      "calibrated": true,
+      "knownDelayControls": {
+        "-30": {
+          "windows": 3,
+          "maxErrorMs": 0.0,
+          "passed": true
+        },
+        "0": {
+          "windows": 3,
+          "maxErrorMs": 0.0,
+          "passed": true
+        },
+        "30": {
+          "windows": 3,
+          "maxErrorMs": 0.0,
+          "passed": true
+        },
+        "60": {
+          "windows": 3,
+          "maxErrorMs": 0.0,
+          "passed": true
+        }
+      },
+      "baselineMedianMs": 0.0,
+      "phases": {
+        "known--30": {
+          "latencyMs": {
+            "count": 3,
+            "p50": -30.0,
+            "p95": -30.0,
+            "p99": -30.0,
+            "max": -30.0
+          },
+          "excludedWindows": 0,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": null
+        },
+        "known-0": {
+          "latencyMs": {
+            "count": 3,
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "excludedWindows": 0,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": null
+        },
+        "known-30": {
+          "latencyMs": {
+            "count": 3,
+            "p50": 30.0,
+            "p95": 30.0,
+            "p99": 30.0,
+            "max": 30.0
+          },
+          "excludedWindows": 0,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": null
+        },
+        "known-60": {
+          "latencyMs": {
+            "count": 3,
+            "p50": 60.0,
+            "p95": 60.0,
+            "p99": 60.0,
+            "max": 60.0
+          },
+          "excludedWindows": 0,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": null
+        },
+        "original": {
+          "latencyMs": {
+            "count": 4,
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          },
+          "excludedWindows": 0,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": true,
+          "incrementalMs": {
+            "count": 4,
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "max": 0.0
+          }
+        },
+        "rnnoise-current-c": {
+          "latencyMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null
+          },
+          "excludedWindows": 8,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": false,
+          "incrementalMs": null
+        },
+        "rnnoise-current-next": {
+          "latencyMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null
+          },
+          "excludedWindows": 8,
+          "fallbackDuringCapture": true,
+          "qualifiedProbe": false,
+          "incrementalMs": null
+        },
+        "rnnoise-current-warm-next": {
+          "latencyMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null
+          },
+          "excludedWindows": 8,
+          "fallbackDuringCapture": true,
+          "qualifiedProbe": false,
+          "incrementalMs": null
+        },
+        "rnnoise-sab-c": {
+          "latencyMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null
+          },
+          "excludedWindows": 8,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": false,
+          "incrementalMs": null
+        },
+        "rnnoise-sab-next": {
+          "latencyMs": {
+            "count": 0,
+            "p50": null,
+            "p95": null,
+            "p99": null,
+            "max": null
+          },
+          "excludedWindows": 8,
+          "fallbackDuringCapture": false,
+          "qualifiedProbe": false,
+          "incrementalMs": null
+        }
+      },
+      "profiles": [],
+      "windows": [
+        {
+          "type": "window",
+          "phase": "known--30",
+          "sequence": 0,
+          "startFrame": 56577,
+          "endFrame": 104577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9810270751897388,
+          "lagMs": -30.0
+        },
+        {
+          "type": "window",
+          "phase": "known--30",
+          "sequence": 1,
+          "startFrame": 104577,
+          "endFrame": 152577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9091310816725543,
+          "lagMs": -30.0
+        },
+        {
+          "type": "window",
+          "phase": "known--30",
+          "sequence": 2,
+          "startFrame": 152577,
+          "endFrame": 200577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9275909970287928,
+          "lagMs": -30.0
+        },
+        {
+          "type": "window",
+          "phase": "known-0",
+          "sequence": 3,
+          "startFrame": 248577,
+          "endFrame": 296577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0
+        },
+        {
+          "type": "window",
+          "phase": "known-0",
+          "sequence": 4,
+          "startFrame": 296577,
+          "endFrame": 344577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0
+        },
+        {
+          "type": "window",
+          "phase": "known-0",
+          "sequence": 5,
+          "startFrame": 344577,
+          "endFrame": 392577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0
+        },
+        {
+          "type": "window",
+          "phase": "known-30",
+          "sequence": 6,
+          "startFrame": 440577,
+          "endFrame": 488577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9806655361621336,
+          "lagMs": 30.0
+        },
+        {
+          "type": "window",
+          "phase": "known-30",
+          "sequence": 7,
+          "startFrame": 488577,
+          "endFrame": 536577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9959993117470771,
+          "lagMs": 30.0
+        },
+        {
+          "type": "window",
+          "phase": "known-30",
+          "sequence": 8,
+          "startFrame": 536577,
+          "endFrame": 584577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9734981119194417,
+          "lagMs": 30.0
+        },
+        {
+          "type": "window",
+          "phase": "known-60",
+          "sequence": 9,
+          "startFrame": 632577,
+          "endFrame": 680577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.8674937836369132,
+          "lagMs": 60.0
+        },
+        {
+          "type": "window",
+          "phase": "known-60",
+          "sequence": 10,
+          "startFrame": 680577,
+          "endFrame": 728577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.8593722406294023,
+          "lagMs": 60.0
+        },
+        {
+          "type": "window",
+          "phase": "known-60",
+          "sequence": 11,
+          "startFrame": 728577,
+          "endFrame": 776577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9837799418255282,
+          "lagMs": 60.0
+        },
+        {
+          "type": "window",
+          "phase": "original",
+          "sequence": 12,
+          "startFrame": 824577,
+          "endFrame": 872577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0
+        },
+        {
+          "type": "window",
+          "phase": "original",
+          "sequence": 13,
+          "startFrame": 872577,
+          "endFrame": 920577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000004,
+          "lagMs": 0.0
+        },
+        {
+          "type": "window",
+          "phase": "original",
+          "sequence": 14,
+          "startFrame": 920577,
+          "endFrame": 968577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0
+        },
+        {
+          "type": "window",
+          "phase": "original",
+          "sequence": 15,
+          "startFrame": 968577,
+          "endFrame": 1016577,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999998,
+          "lagMs": 0.0
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 16,
+          "startFrame": 1075074,
+          "endFrame": 1123074,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999998,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 17,
+          "startFrame": 1123074,
+          "endFrame": 1171074,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999997,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 18,
+          "startFrame": 1171074,
+          "endFrame": 1219074,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999998,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 19,
+          "startFrame": 1219074,
+          "endFrame": 1267074,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 20,
+          "startFrame": 1267074,
+          "endFrame": 1315074,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 21,
+          "startFrame": 1315074,
+          "endFrame": 1363074,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 22,
+          "startFrame": 1363074,
+          "endFrame": 1411074,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-c",
+          "sequence": 23,
+          "startFrame": 1411074,
+          "endFrame": 1459074,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 24,
+          "startFrame": 1522944,
+          "endFrame": 1570944,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 25,
+          "startFrame": 1570944,
+          "endFrame": 1618944,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999998,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 26,
+          "startFrame": 1618944,
+          "endFrame": 1666944,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 27,
+          "startFrame": 1666944,
+          "endFrame": 1714944,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 28,
+          "startFrame": 1714944,
+          "endFrame": 1762944,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000004,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 29,
+          "startFrame": 1762944,
+          "endFrame": 1810944,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000004,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 30,
+          "startFrame": 1810944,
+          "endFrame": 1858944,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999999,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-next",
+          "sequence": 31,
+          "startFrame": 1858944,
+          "endFrame": 1906944,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 32,
+          "startFrame": 1980417,
+          "endFrame": 2028417,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 33,
+          "startFrame": 2028417,
+          "endFrame": 2076417,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 34,
+          "startFrame": 2076417,
+          "endFrame": 2124417,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 35,
+          "startFrame": 2124417,
+          "endFrame": 2172417,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 36,
+          "startFrame": 2172417,
+          "endFrame": 2220417,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 37,
+          "startFrame": 2220417,
+          "endFrame": 2268417,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 38,
+          "startFrame": 2268417,
+          "endFrame": 2316417,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-current-warm-next",
+          "sequence": 39,
+          "startFrame": 2316417,
+          "endFrame": 2364417,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999996,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 40,
+          "startFrame": 2447490,
+          "endFrame": 2495490,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999998,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 41,
+          "startFrame": 2495490,
+          "endFrame": 2543490,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999998,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 42,
+          "startFrame": 2543490,
+          "endFrame": 2591490,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999998,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 43,
+          "startFrame": 2591490,
+          "endFrame": 2639490,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 44,
+          "startFrame": 2639490,
+          "endFrame": 2687490,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 45,
+          "startFrame": 2687490,
+          "endFrame": 2735490,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999997,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 46,
+          "startFrame": 2735490,
+          "endFrame": 2783490,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999999,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-c",
+          "sequence": 47,
+          "startFrame": 2783490,
+          "endFrame": 2831490,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 48,
+          "startFrame": 2903553,
+          "endFrame": 2951553,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999996,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 49,
+          "startFrame": 2951553,
+          "endFrame": 2999553,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000004,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 50,
+          "startFrame": 2999553,
+          "endFrame": 3047553,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 51,
+          "startFrame": 3047553,
+          "endFrame": 3095553,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 52,
+          "startFrame": 3095553,
+          "endFrame": 3143553,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 53,
+          "startFrame": 3143553,
+          "endFrame": 3191553,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000004,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 54,
+          "startFrame": 3191553,
+          "endFrame": 3239553,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 1.0000000000000002,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        },
+        {
+          "type": "window",
+          "phase": "rnnoise-sab-next",
+          "sequence": 55,
+          "startFrame": 3239553,
+          "endFrame": 3287553,
+          "droppedWindows": 0,
+          "encoding": "base64-f32le",
+          "accepted": true,
+          "processed": false,
+          "correlation": 0.9999999999999999,
+          "lagMs": 0.0,
+          "path": "original-fallback"
+        }
+      ]
+    }
+  ]
+}

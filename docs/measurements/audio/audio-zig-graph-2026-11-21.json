@@ -1,0 +1,1036 @@
+[
+  {
+    "identities": {
+      "generic": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+      "input": "686a58782ad5aac0c9349761674aa7bce9e4cc5a4feae67d0eb1b178145cf9bd"
+    },
+    "servedSources": {
+      "diagnosticModuleSha256": "340f5a97634793f5480372660489f67b035abd5cc50a87c5ff8eafa2fa58bf69",
+      "kernelModuleSha256": "6f82aa76e88ece81053c1f1e4c57595e51e23f8d6929e32da68174fd4c0d179c"
+    },
+    "measurementStage": "graph",
+    "addedLatencyDefinition": "processed lag minus this run original-track median; includes graph/model/staging; no graph subtraction; fallback never qualifies",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+    "sampleRate": 48000,
+    "captureRate": 16000,
+    "acquisitions": 1,
+    "browserReportedBaseLatencyMs": 11.625,
+    "history": [
+      {
+        "frame": 17920,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 17920,
+        "status": "off",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 17920,
+        "status": "off",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 17920,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-0"
+      },
+      {
+        "frame": 20096,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "known-0"
+      },
+      {
+        "frame": 210944,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-0"
+      },
+      {
+        "frame": 210944,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-30"
+      },
+      {
+        "frame": 404096,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-30"
+      },
+      {
+        "frame": 404096,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-60"
+      },
+      {
+        "frame": 597120,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-60"
+      },
+      {
+        "frame": 597120,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "original"
+      },
+      {
+        "frame": 837632,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "original"
+      },
+      {
+        "frame": 837632,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "graph-0"
+      },
+      {
+        "frame": 1078144,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "graph-0"
+      },
+      {
+        "frame": 1078144,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "graph-1440"
+      },
+      {
+        "frame": 1319168,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "graph-1440"
+      },
+      {
+        "frame": 1319168,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      },
+      {
+        "frame": 1319168,
+        "status": "loading",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      },
+      {
+        "frame": 1326976,
+        "status": "failed",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      }
+    ],
+    "operations": [],
+    "featureErrors": {},
+    "numericalComparison": {},
+    "unsupportedFallback": {
+      "result": "failed",
+      "original": true,
+      "inputLive": true,
+      "message": "SIMD128 unavailable in controlled rejection probe",
+      "simulated": true
+    },
+    "producerWindowFrames": 48000,
+    "productionWorklet": "noise-worklet-L0m6AlGp.js",
+    "fixture": "same cached speech PCM, 48kHz mono; native generic module or experimental SIMD module injected at private AudioWorklet construction, no public selector",
+    "method": "exact 16000-sample/48000-frame producer windows; 0..300ms normalized correlation; reject low energy, peak<0.3, discontinuity, collector drops, and state/output transitions within +/-256 frames; native qualification rejects whole-phase fallback; nearest-rank percentiles",
+    "calibrated": true,
+    "knownDelayControls": {
+      "0": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      },
+      "30": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      },
+      "60": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      }
+    },
+    "baselineMedianMs": 21.3125,
+    "phases": {
+      "known-0": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "known-30": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 30.0,
+          "p95": 30.0,
+          "p99": 30.0,
+          "max": 30.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "known-60": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 60.0,
+          "p95": 60.0,
+          "p99": 60.0,
+          "max": 60.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "original": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 21.3125,
+          "p95": 21.3125,
+          "p99": 21.3125,
+          "max": 21.3125
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "graph-0": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 68.0,
+          "p95": 68.0,
+          "p99": 68.0,
+          "max": 68.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 46.6875,
+          "p95": 46.6875,
+          "p99": 46.6875,
+          "max": 46.6875
+        }
+      },
+      "graph-1440": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 108.0,
+          "p95": 108.0,
+          "p99": 108.0,
+          "max": 108.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 86.6875,
+          "p95": 86.6875,
+          "p99": 86.6875,
+          "max": 86.6875
+        }
+      }
+    },
+    "profiles": [],
+    "windows": [
+      {
+        "phase": "known-0",
+        "sequence": 0,
+        "startFrame": 65922,
+        "endFrame": 113922,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-0",
+        "sequence": 1,
+        "startFrame": 113922,
+        "endFrame": 161922,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-0",
+        "sequence": 2,
+        "startFrame": 161922,
+        "endFrame": 209922,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 3,
+        "startFrame": 258945,
+        "endFrame": 306945,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9995029835198475,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 4,
+        "startFrame": 306945,
+        "endFrame": 354945,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9884096288460724,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 5,
+        "startFrame": 354945,
+        "endFrame": 402945,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9651068422969411,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 6,
+        "startFrame": 452097,
+        "endFrame": 500097,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9788392417551869,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 7,
+        "startFrame": 500097,
+        "endFrame": 548097,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9943775766795795,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 8,
+        "startFrame": 548097,
+        "endFrame": 596097,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9587825020724919,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "original",
+        "sequence": 9,
+        "startFrame": 645120,
+        "endFrame": 693120,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9320269998218422,
+        "lagMs": 21.3125
+      },
+      {
+        "phase": "original",
+        "sequence": 10,
+        "startFrame": 693120,
+        "endFrame": 741120,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9311972963415255,
+        "lagMs": 21.3125
+      },
+      {
+        "phase": "original",
+        "sequence": 11,
+        "startFrame": 741120,
+        "endFrame": 789120,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.985638864677916,
+        "lagMs": 21.3125
+      },
+      {
+        "phase": "original",
+        "sequence": 12,
+        "startFrame": 789120,
+        "endFrame": 837120,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.984847688203183,
+        "lagMs": 21.3125
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 13,
+        "startFrame": 885633,
+        "endFrame": 933633,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.8693895521612526,
+        "lagMs": 68.0
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 14,
+        "startFrame": 933633,
+        "endFrame": 981633,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.42635363872502346,
+        "lagMs": 68.0
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 15,
+        "startFrame": 981633,
+        "endFrame": 1029633,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.8492479966080557,
+        "lagMs": 68.0
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 16,
+        "startFrame": 1029633,
+        "endFrame": 1077633,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9551189355350841,
+        "lagMs": 68.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 17,
+        "startFrame": 1126146,
+        "endFrame": 1174146,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9484367265573542,
+        "lagMs": 98.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 18,
+        "startFrame": 1174146,
+        "endFrame": 1222146,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.457633545282032,
+        "lagMs": 108.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 19,
+        "startFrame": 1222146,
+        "endFrame": 1270146,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.6263057383109804,
+        "lagMs": 108.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 20,
+        "startFrame": 1270146,
+        "endFrame": 1318146,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9853684700079183,
+        "lagMs": 108.0
+      }
+    ]
+  },
+  {
+    "identities": {
+      "generic": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+      "input": "686a58782ad5aac0c9349761674aa7bce9e4cc5a4feae67d0eb1b178145cf9bd"
+    },
+    "servedSources": {
+      "diagnosticModuleSha256": "340f5a97634793f5480372660489f67b035abd5cc50a87c5ff8eafa2fa58bf69",
+      "kernelModuleSha256": "6f82aa76e88ece81053c1f1e4c57595e51e23f8d6929e32da68174fd4c0d179c"
+    },
+    "measurementStage": "graph",
+    "addedLatencyDefinition": "processed lag minus this run original-track median; includes graph/model/staging; no graph subtraction; fallback never qualifies",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0",
+    "sampleRate": 48000,
+    "captureRate": 16000,
+    "acquisitions": 1,
+    "browserReportedBaseLatencyMs": 0,
+    "history": [
+      {
+        "frame": 20736,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 20736,
+        "status": "off",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 20736,
+        "status": "off",
+        "original": false,
+        "reason": "session-transition",
+        "phase": "setup"
+      },
+      {
+        "frame": 20736,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-0"
+      },
+      {
+        "frame": 20736,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "known-0"
+      },
+      {
+        "frame": 212736,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-0"
+      },
+      {
+        "frame": 212736,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-30"
+      },
+      {
+        "frame": 404736,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-30"
+      },
+      {
+        "frame": 404736,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "known-60"
+      },
+      {
+        "frame": 596736,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "known-60"
+      },
+      {
+        "frame": 596736,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "original"
+      },
+      {
+        "frame": 836736,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "original"
+      },
+      {
+        "frame": 842112,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "graph-0"
+      },
+      {
+        "frame": 1082624,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "graph-0"
+      },
+      {
+        "frame": 1088128,
+        "status": "off",
+        "original": true,
+        "reason": "phase-start",
+        "phase": "graph-1440"
+      },
+      {
+        "frame": 1328640,
+        "status": "off",
+        "original": true,
+        "reason": "phase-end",
+        "phase": "graph-1440"
+      },
+      {
+        "frame": 1328640,
+        "status": "off",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      },
+      {
+        "frame": 1328640,
+        "status": "loading",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      },
+      {
+        "frame": 1333120,
+        "status": "failed",
+        "original": true,
+        "reason": "session-transition",
+        "phase": "unsupported-simd"
+      }
+    ],
+    "operations": [],
+    "featureErrors": {},
+    "numericalComparison": {},
+    "unsupportedFallback": {
+      "result": "failed",
+      "original": true,
+      "inputLive": true,
+      "message": "SIMD128 unavailable in controlled rejection probe",
+      "simulated": true
+    },
+    "producerWindowFrames": 48000,
+    "productionWorklet": "noise-worklet-L0m6AlGp.js",
+    "fixture": "same cached speech PCM, 48kHz mono; native generic module or experimental SIMD module injected at private AudioWorklet construction, no public selector",
+    "method": "exact 16000-sample/48000-frame producer windows; 0..300ms normalized correlation; reject low energy, peak<0.3, discontinuity, collector drops, and state/output transitions within +/-256 frames; native qualification rejects whole-phase fallback; nearest-rank percentiles",
+    "calibrated": true,
+    "knownDelayControls": {
+      "0": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      },
+      "30": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      },
+      "60": {
+        "windows": 3,
+        "maxErrorMs": 0.0,
+        "passed": true
+      }
+    },
+    "baselineMedianMs": 0.0,
+    "phases": {
+      "known-0": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "known-30": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 30.0,
+          "p95": 30.0,
+          "p99": 30.0,
+          "max": 30.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "known-60": {
+        "latencyMs": {
+          "count": 3,
+          "p50": 60.0,
+          "p95": 60.0,
+          "p99": 60.0,
+          "max": 60.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": null
+      },
+      "original": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "graph-0": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0,
+          "max": 0.0
+        }
+      },
+      "graph-1440": {
+        "latencyMs": {
+          "count": 4,
+          "p50": 30.0,
+          "p95": 30.0,
+          "p99": 30.0,
+          "max": 30.0
+        },
+        "excludedWindows": 0,
+        "fallbackDuringCapture": false,
+        "qualifiedProbe": true,
+        "incrementalMs": {
+          "count": 4,
+          "p50": 30.0,
+          "p95": 30.0,
+          "p99": 30.0,
+          "max": 30.0
+        }
+      }
+    },
+    "profiles": [],
+    "windows": [
+      {
+        "phase": "known-0",
+        "sequence": 0,
+        "startFrame": 68736,
+        "endFrame": 116736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-0",
+        "sequence": 1,
+        "startFrame": 116736,
+        "endFrame": 164736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-0",
+        "sequence": 2,
+        "startFrame": 164736,
+        "endFrame": 212736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 3,
+        "startFrame": 260736,
+        "endFrame": 308736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9994620049282549,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 4,
+        "startFrame": 308736,
+        "endFrame": 356736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9863833116580251,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-30",
+        "sequence": 5,
+        "startFrame": 356736,
+        "endFrame": 404736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9607082727919039,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 6,
+        "startFrame": 452736,
+        "endFrame": 500736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9930485319359882,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 7,
+        "startFrame": 500736,
+        "endFrame": 548736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9965188027928124,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "known-60",
+        "sequence": 8,
+        "startFrame": 548736,
+        "endFrame": 596736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9653902569193675,
+        "lagMs": 60.0
+      },
+      {
+        "phase": "original",
+        "sequence": 9,
+        "startFrame": 644736,
+        "endFrame": 692736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "original",
+        "sequence": 10,
+        "startFrame": 692736,
+        "endFrame": 740736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "original",
+        "sequence": 11,
+        "startFrame": 740736,
+        "endFrame": 788736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "original",
+        "sequence": 12,
+        "startFrame": 788736,
+        "endFrame": 836736,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9999999999999998,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 13,
+        "startFrame": 890625,
+        "endFrame": 938625,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 14,
+        "startFrame": 938625,
+        "endFrame": 986625,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 15,
+        "startFrame": 986625,
+        "endFrame": 1034625,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "graph-0",
+        "sequence": 16,
+        "startFrame": 1034625,
+        "endFrame": 1082625,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 1.0,
+        "lagMs": 0.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 17,
+        "startFrame": 1136640,
+        "endFrame": 1184640,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9789513117560503,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 18,
+        "startFrame": 1184640,
+        "endFrame": 1232640,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.995286472618412,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 19,
+        "startFrame": 1232640,
+        "endFrame": 1280640,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9894576121772065,
+        "lagMs": 30.0
+      },
+      {
+        "phase": "graph-1440",
+        "sequence": 20,
+        "startFrame": 1280640,
+        "endFrame": 1328640,
+        "droppedWindows": 0,
+        "accepted": true,
+        "processed": false,
+        "correlation": 0.9888073785519327,
+        "lagMs": 30.0
+      }
+    ]
+  }
+]

@@ -1,0 +1,142 @@
+[
+  {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+    "acquisitions": 1,
+    "addedStatus": "success",
+    "finalStatus": "degraded",
+    "error": "RNNoise exceeded the 2.67 ms render budget for two consecutive processed frames.",
+    "browserReportedBaseLatencyMs": 11.625,
+    "captureRate": 16000,
+    "source": "/tmp/task-1-12-post-rebase-chromium.json",
+    "method": "0..300ms normalized cross-correlation on paired 16kHz one-second windows; reject peak <0.3; subtract median original-track baseline; synthetic loopback only",
+    "measurements": [
+      {
+        "phase": "baseline",
+        "correlation": 0.9994038073352661,
+        "lagMs": 12.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9985853302217372,
+        "lagMs": 12.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9794695771601163,
+        "lagMs": 12.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9864538185064183,
+        "lagMs": 12.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9978978829577699,
+        "lagMs": 12.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9997588656877107,
+        "lagMs": 12.0,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.7770236928100351,
+        "lagMs": 95.3125,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.5935389969840925,
+        "lagMs": 105.3125,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.9793219831081699,
+        "lagMs": 105.3125,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.9914504997119801,
+        "lagMs": 105.3125,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.31320038290593677,
+        "lagMs": 105.3125,
+        "accepted": true
+      }
+    ],
+    "qualifiedLoopbackEstimate": false,
+    "baselineMedianMs": 12.0,
+    "incrementalP50Ms": null,
+    "incrementalP95Ms": null,
+    "baseCommit": "5c81f030d73a0d688bb41bdf92e9e7e9e16df02c",
+    "runtimeSourceCommit": "1f5015a95c34fc32924c29a7505538da1010e62f"
+  },
+  {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0",
+    "acquisitions": 1,
+    "addedStatus": "success",
+    "finalStatus": "degraded",
+    "error": "RNNoise exceeded the 2.67 ms render budget for two consecutive processed frames.",
+    "browserReportedBaseLatencyMs": 0,
+    "captureRate": 16000,
+    "source": "/tmp/task-1-12-post-rebase-firefox.json",
+    "method": "0..300ms normalized cross-correlation on paired 16kHz one-second windows; reject peak <0.3; subtract median original-track baseline; synthetic loopback only",
+    "measurements": [
+      {
+        "phase": "baseline",
+        "correlation": 0.9999939419339119,
+        "lagMs": 0.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9999999999999996,
+        "lagMs": 0.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9999999999999997,
+        "lagMs": 0.0,
+        "accepted": true
+      }
+    ],
+    "qualifiedLoopbackEstimate": false,
+    "baselineMedianMs": 0.0,
+    "incrementalP50Ms": null,
+    "incrementalP95Ms": null,
+    "baseCommit": "5c81f030d73a0d688bb41bdf92e9e7e9e16df02c",
+    "runtimeSourceCommit": "1f5015a95c34fc32924c29a7505538da1010e62f"
+  }
+]

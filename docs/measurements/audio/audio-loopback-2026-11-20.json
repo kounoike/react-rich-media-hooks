@@ -1,0 +1,149 @@
+[
+  {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+    "acquisitions": 1,
+    "addedStatus": "success",
+    "finalStatus": "active",
+    "browserReportedBaseLatencyMs": 11.625,
+    "captureRate": 16000,
+    "source": ".artifacts/audio-loopback-chromium.json",
+    "method": "0..300ms normalized cross-correlation on paired 16kHz one-second windows; reject peak <0.3; subtract median original-track baseline; synthetic loopback only",
+    "measurements": [
+      {
+        "phase": "baseline",
+        "correlation": 0.9923797421822975,
+        "lagMs": 21.3125,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9905478000005244,
+        "lagMs": 21.3125,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9598401701788777,
+        "lagMs": 21.3125,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9699088939547159,
+        "lagMs": 21.3125,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9837009166417129,
+        "lagMs": 21.3125,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9931443737708311,
+        "lagMs": 21.3125,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.6753598314326147,
+        "lagMs": 98.0,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.8004377353229539,
+        "lagMs": 98.0,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.9884791031853869,
+        "lagMs": 98.0,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.9955080884213386,
+        "lagMs": 98.0,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.9568304185750489,
+        "lagMs": 98.0,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.8747509642565623,
+        "lagMs": 98.0,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.8373493328515536,
+        "lagMs": 98.0,
+        "accepted": true
+      },
+      {
+        "phase": "processed",
+        "correlation": 0.9697067288550035,
+        "lagMs": 98.0,
+        "accepted": true
+      }
+    ],
+    "qualifiedLoopbackEstimate": true,
+    "baselineMedianMs": 21.3125,
+    "incrementalP50Ms": 76.6875,
+    "incrementalP95Ms": 76.6875
+  },
+  {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0",
+    "acquisitions": 1,
+    "addedStatus": "success",
+    "finalStatus": "degraded",
+    "error": "RNNoise exceeded the 2.67 ms render budget for two consecutive processed frames.",
+    "browserReportedBaseLatencyMs": 0,
+    "captureRate": 16000,
+    "source": ".artifacts/audio-loopback-firefox.json",
+    "method": "0..300ms normalized cross-correlation on paired 16kHz one-second windows; reject peak <0.3; subtract median original-track baseline; synthetic loopback only",
+    "measurements": [
+      {
+        "phase": "baseline",
+        "correlation": 0.9999955261707942,
+        "lagMs": 0.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 0.9999999999999996,
+        "lagMs": 0.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 1.0,
+        "lagMs": 0.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "accepted": true
+      },
+      {
+        "phase": "baseline",
+        "correlation": 1.0000000000000002,
+        "lagMs": 0.0,
+        "accepted": true
+      }
+    ],
+    "qualifiedLoopbackEstimate": false,
+    "baselineMedianMs": 0.0,
+    "incrementalP50Ms": null,
+    "incrementalP95Ms": null
+  }
+]

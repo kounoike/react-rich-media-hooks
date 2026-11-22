@@ -106,7 +106,7 @@
     "test:browser:release": "playwright test --project=chromium --project=firefox --project=msedge --project=webkit",
     "video-crop:reference": "node scripts/video-crop-reference-device.mjs",
     "video-crop:benchmark": "pnpm build && vite --host 127.0.0.1 --port 4173 --strictPort",
-    "build": "vite build && tsc -p tsconfig.build.json && node scripts/copy-cjs-declarations.mjs",
+    "build": "pnpm audio:check && vite build && tsc -p tsconfig.build.json && node scripts/copy-cjs-declarations.mjs && node scripts/copy-audio-notices.mjs",
     "package:pack": "node scripts/pack-package.mjs",
     "package:check": "pnpm typecheck && pnpm build && node scripts/validate-package.mjs",
     "release:manifest": "node scripts/release-manifest.mjs",
@@ -117,7 +117,9 @@
     "config:check": "node scripts/check-config.mjs && hk validate --deny-warnings && actionlint -shellcheck= -pyflakes= && pnpm run supply-chain:check",
     "zig:check": "node scripts/check-zig.mjs",
     "quality:gate": "hk check --all",
-    "hooks:install": "hk install --mise"
+    "hooks:install": "hk install --mise",
+    "audio:check": "node scripts/check-audio-engine.mjs",
+    "audio:rebuild": "node scripts/build-audio-engine.mjs"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.5",

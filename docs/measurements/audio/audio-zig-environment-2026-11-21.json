@@ -1,0 +1,29 @@
+{
+  "dateUtc": "2026-11-20T16:07:26.598932+00:00",
+  "dateLocal": "2026-11-21 Asia/Tokyo",
+  "runId": "run_4c34d4390ca9",
+  "dispatchId": "ctx_ec9fc37c5590",
+  "orchestrationTaskId": "task_2fce64540a6b",
+  "baseMain": "5c81f030d73a0d688bb41bdf92e9e7e9e16df02c",
+  "parentHead": "93993e5b2b686cda1d8da1a7ee92cbecffc3f93a",
+  "host": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "logicalCpus": 24,
+  "zigVersion": "0.15.2",
+  "playwrightVersion": "1.62.1",
+  "node": "v24.19.0",
+  "conditions": "Separate graph and compute invocations; sequential Chromium/Firefox, one worker; same local speech, 48kHz mono, strong wet-only; no competing build/benchmark during capture; fixed production guards/deadline; source frozen after protocol ac3-zig-v2; no production source/artifact edits",
+  "sourcesSha256": {
+    "experiments/rnnoise-zig/kernels.zig": "372d6154dffdfc917285d3e662e4b347ba082bc6656ae8cf19884258cf04e06a",
+    "scripts/experiment-audio-zig.mjs": "09bfeb9270b3a87395724289d770d9e165e9fe41447203fd1a75117510b0a780",
+    "scripts/compare-audio-zig.mjs": "8442da308f190c2e52f4f53a5c0f345d37bb4c15004f145c3123163ea2abeadc",
+    "tests/browser/audio-ac3.spec.ts": "96f573fe798bc1e5261ffee2ae5b234502fcf39c8dd6690f19fa5dc2fda6fae0",
+    "tests/browser/audio-diagnostic-worklet.ts": "1383b8d5171b7c8e044a3604a55e2023eb04f59e1506373022ab77f55c566a3e",
+    "scripts/audio_latency_analysis.py": "e6842a41205fe5beb9367108f1f55be6f555ae787474a1ee9c9142a9e0fac13e"
+  },
+  "rawReportSha256": {
+    "graph-chromium": "49cebaf048c56ec3ceb385d2e07786bf82dc464f62fb926fabf68acba233294a",
+    "graph-firefox": "44346f9d6f345af679d319201e9d0f857986e7fd6c0944d2a4f2c6fb276349e0",
+    "compute-chromium": "2b74c84994ea4e5e7266fc6c92278b8b2e61ae567e8d4868c58e9885ad25fb59",
+    "compute-firefox": "b2ec1aa4cf67fed1797d9e406ab54aa9fc5e619575988f4cfb8e0ad43399c642"
+  }
+}

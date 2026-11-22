@@ -1,0 +1,179 @@
+{
+  "scope": "Actual Linux/WSL Chromium/Firefox, identical480-sample streaming input/no graph or latency inference",
+  "browsers": [
+    {
+      "identities": {
+        "c": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+        "zig": "9bcb89465935ccca0e2c375cd4fb2b96c6340a94ee40821626dab517f91253b3",
+        "next": "da72f53a3586a9066b3cb61434921d4bef31da9a64a1cf166381541cf4c7925f",
+        "next-generic": "9a15deaf80ccea05800c8f292cf1f89f8d4bc75b5ec88dc91965011a0d46106c",
+        "input": "cb0a291b17fffa822a95c6abf1ffeb02da69552395a7a897df73a1880c653ee2",
+        "source:experiments/audio-routes/research.mjs": "a3430c45a7060ed307387efc4af9fe64809737570d3ed9cfd206a6c7b8e01eb3",
+        "served:experiments/audio-routes/research.mjs": "bb25bf46fcf27661c95d1a40699ef8028bea3839f01cac1a59fdbca9672d095d",
+        "source:experiments/audio-routes/inference-worker.mjs": "87659a92093092de53bfb6841ca4599bde1139809164a99e5cc9271de040c01f",
+        "served:experiments/audio-routes/inference-worker.mjs": "09f0669c8cfbd241b2665d6ffd4a6f90c162e650807aaa1879415a5fe1df15f9",
+        "source:experiments/audio-routes/observer-worklet.mjs": "7a194da929bd8c60ab321423641b3f616c224fbe36f1fb48b53bdbbd7e7a997e",
+        "served:experiments/audio-routes/observer-worklet.mjs": "1945a4a8fca5ef83e7d5cd4e5f4ac86aa8b6f4e29cf7386496b1146584ebca84",
+        "source:experiments/audio-routes/ring-worklet.mjs": "2b7420613cfa98d5cd487520f64db218b26edbfe9c4aa271bc5d3401f5d69abd",
+        "served:experiments/audio-routes/ring-worklet.mjs": "77098821a08e3cbcec4081ac312124f1c91c4cfbe6013c267e635326e7eb9f96"
+      },
+      "actualBrowserVersion": "151.0.7922.34",
+      "hostPlatform": "linux",
+      "protocol": "audio-routes-v6",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.7922.34 Safari/537.36",
+      "comparison": "Identical 480-sample streaming frames, fresh state per artifact; no delay compensation, cross-correlation, tolerance consumption or audio graph",
+      "variants": [
+        {
+          "name": "c",
+          "frames": 492,
+          "samples": 236160,
+          "differentBits": 0,
+          "normalizedPeakDifference": 0,
+          "normalizedRmsDifference": 0,
+          "probabilityMaxAbsDifference": 0,
+          "fixedMemoryEnforced": true,
+          "memoryBytes": 8388608,
+          "imports": [],
+          "counters": {}
+        },
+        {
+          "name": "zig",
+          "frames": 492,
+          "samples": 236160,
+          "differentBits": 0,
+          "normalizedPeakDifference": 0,
+          "normalizedRmsDifference": 0,
+          "probabilityMaxAbsDifference": 0,
+          "fixedMemoryEnforced": true,
+          "memoryBytes": 8388608,
+          "imports": [],
+          "counters": {
+            "denseFloat": 1968,
+            "sparseFloat": 2952
+          }
+        },
+        {
+          "name": "next",
+          "frames": 492,
+          "samples": 236160,
+          "differentBits": 0,
+          "normalizedPeakDifference": 0,
+          "normalizedRmsDifference": 0,
+          "probabilityMaxAbsDifference": 0,
+          "fixedMemoryEnforced": true,
+          "memoryBytes": 8388608,
+          "imports": [],
+          "counters": {
+            "denseFloat": 1968,
+            "sparseFloat": 2952,
+            "fftRadix4": 4428
+          }
+        },
+        {
+          "name": "next-generic",
+          "frames": 492,
+          "samples": 236160,
+          "differentBits": 0,
+          "normalizedPeakDifference": 0,
+          "normalizedRmsDifference": 0,
+          "probabilityMaxAbsDifference": 0,
+          "fixedMemoryEnforced": true,
+          "memoryBytes": 8388608,
+          "imports": [],
+          "counters": {
+            "denseFloat": 1968,
+            "sparseFloat": 2952,
+            "fftRadix4": 4428
+          }
+        }
+      ]
+    },
+    {
+      "identities": {
+        "c": "43acc555d5612d3bc59ac3dac5a387059fd33c473d3282f871c8c9475a854b56",
+        "zig": "9bcb89465935ccca0e2c375cd4fb2b96c6340a94ee40821626dab517f91253b3",
+        "next": "da72f53a3586a9066b3cb61434921d4bef31da9a64a1cf166381541cf4c7925f",
+        "next-generic": "9a15deaf80ccea05800c8f292cf1f89f8d4bc75b5ec88dc91965011a0d46106c",
+        "input": "cb0a291b17fffa822a95c6abf1ffeb02da69552395a7a897df73a1880c653ee2",
+        "source:experiments/audio-routes/research.mjs": "a3430c45a7060ed307387efc4af9fe64809737570d3ed9cfd206a6c7b8e01eb3",
+        "served:experiments/audio-routes/research.mjs": "bb25bf46fcf27661c95d1a40699ef8028bea3839f01cac1a59fdbca9672d095d",
+        "source:experiments/audio-routes/inference-worker.mjs": "87659a92093092de53bfb6841ca4599bde1139809164a99e5cc9271de040c01f",
+        "served:experiments/audio-routes/inference-worker.mjs": "09f0669c8cfbd241b2665d6ffd4a6f90c162e650807aaa1879415a5fe1df15f9",
+        "source:experiments/audio-routes/observer-worklet.mjs": "7a194da929bd8c60ab321423641b3f616c224fbe36f1fb48b53bdbbd7e7a997e",
+        "served:experiments/audio-routes/observer-worklet.mjs": "1945a4a8fca5ef83e7d5cd4e5f4ac86aa8b6f4e29cf7386496b1146584ebca84",
+        "source:experiments/audio-routes/ring-worklet.mjs": "2b7420613cfa98d5cd487520f64db218b26edbfe9c4aa271bc5d3401f5d69abd",
+        "served:experiments/audio-routes/ring-worklet.mjs": "77098821a08e3cbcec4081ac312124f1c91c4cfbe6013c267e635326e7eb9f96"
+      },
+      "actualBrowserVersion": "153.0",
+      "hostPlatform": "linux",
+      "protocol": "audio-routes-v6",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:153.0) Gecko/20100101 Firefox/153.0",
+      "comparison": "Identical 480-sample streaming frames, fresh state per artifact; no delay compensation, cross-correlation, tolerance consumption or audio graph",
+      "variants": [
+        {
+          "name": "c",
+          "frames": 492,
+          "samples": 236160,
+          "differentBits": 0,
+          "normalizedPeakDifference": 0,
+          "normalizedRmsDifference": 0,
+          "probabilityMaxAbsDifference": 0,
+          "fixedMemoryEnforced": true,
+          "memoryBytes": 8388608,
+          "imports": [],
+          "counters": {}
+        },
+        {
+          "name": "zig",
+          "frames": 492,
+          "samples": 236160,
+          "differentBits": 0,
+          "normalizedPeakDifference": 0,
+          "normalizedRmsDifference": 0,
+          "probabilityMaxAbsDifference": 0,
+          "fixedMemoryEnforced": true,
+          "memoryBytes": 8388608,
+          "imports": [],
+          "counters": {
+            "denseFloat": 1968,
+            "sparseFloat": 2952
+          }
+        },
+        {
+          "name": "next",
+          "frames": 492,
+          "samples": 236160,
+          "differentBits": 0,
+          "normalizedPeakDifference": 0,
+          "normalizedRmsDifference": 0,
+          "probabilityMaxAbsDifference": 0,
+          "fixedMemoryEnforced": true,
+          "memoryBytes": 8388608,
+          "imports": [],
+          "counters": {
+            "denseFloat": 1968,
+            "sparseFloat": 2952,
+            "fftRadix4": 4428
+          }
+        },
+        {
+          "name": "next-generic",
+          "frames": 492,
+          "samples": 236160,
+          "differentBits": 0,
+          "normalizedPeakDifference": 0,
+          "normalizedRmsDifference": 0,
+          "probabilityMaxAbsDifference": 0,
+          "fixedMemoryEnforced": true,
+          "memoryBytes": 8388608,
+          "imports": [],
+          "counters": {
+            "denseFloat": 1968,
+            "sparseFloat": 2952,
+            "fftRadix4": 4428
+          }
+        }
+      ]
+    }
+  ]
+}
