@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-08-13 20:31'
-updated_date: '2026-11-21 01:39'
+updated_date: '2026-11-22 01:57'
 labels: []
 dependencies:
   - TASK-1.5
@@ -17,9 +17,13 @@ references:
   - >-
     backlog/decisions/decision-11 -
     Adopt-a-private-feature-gated-raw-audio-Worker-route-with-unchanged-C-RNNoise.md
+  - >-
+    backlog/decisions/decision-12 -
+    Qualify-audio-latency-targets-through-approved-scenarios-and-baseline-evidence.md
 documentation:
   - docs/audio-processing.md
   - docs/measurements/audio/private-worker.md
+  - docs/measurements/audio/latency-target-provenance.md
 parent_task_id: TASK-1
 priority: medium
 type: feature
@@ -43,10 +47,11 @@ Prove that a user-approved representative audio transformation can compose with 
 ## Implementation Plan
 
 <!-- SECTION:PLAN:BEGIN -->
-1. Record owner-approved private raw-audio Worker scope in a new accepted Decision superseding only Decision-10/8 no-extra-Worker and exclusive Worklet inference clauses; preserve historical decisions.
-2. Implement a default-off private build gate, runtime capability and 48 kHz mono eligibility checks, unchanged C/ABI, bounded transferable streams, usable-output readiness, semantic level/dry alignment, fault/cancellation and clone-safe shutdown. Retain Worklet for ineligible tracks and observable original-media fallback on route failures. No SAB route or resampling adoption.
-3. Add focused real-kernel and lifecycle tests, actual built-browser journeys and reproducible graph/control/latency/endurance measurements using unchanged thresholds and signed baseline policy. Record absent/unmeasured matrix cells and pending human review.
-4. Run shared gates, native artifact/import/memory and packed SSR checks; update task and existing Draft PR32 with results, commit and push. Keep AC3 open unless every gate is evidenced; no merge or worktree deletion.
+0. Owner-approved prerequisite before further latency optimization/qualification: audit the provenance and meaning of the 40 ms target in Decision-1, doc-1, audio doc-5, verification doc-6, TASK-1.12, scripts/evidence and history. Preserve every existing result under its original gate and metric.
+1. Document the authority chain, external-source applicability, missing numerical/product/user-research rationale, and any metric-definition drift with exact paths/commits.
+2. Propose scenario definitions, baseline-relative and absolute metrics, p50/p95/p99, reference browser/device matrix, contention, quality/continuity guardrails and an evidence/approval process for retaining or changing the target. Prepare any material Decision as proposed only.
+3. Validate references/history and unchanged metric outputs using read-only/reproducible checks; update TASK-1.12 notes and existing Draft PR32 with scoped documentation/Backlog changes, commit and push. Keep AC3 open, production/CI/PR behavior and the 40 ms gate unchanged.
+4. Stop for owner review of the proposed scenarios/protocol and later numerical decision; do not resume optimization/qualification, adopt a new threshold, alter production code or merge under this Dispatch.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -187,10 +192,18 @@ Actual hard-termination browser test PASSED: terminating the active Worker prese
 All scoped implementation and reproducible qualification work is delivered under accepted Decision-11 without public API/dependency/C/ABI changes. AC1/2/4 remain verified; AC3 remains open for failing final native/WSL latency and continuity cells, 119/120 numeric quality, pending blinded human review, standalone/device and whole-browser memory qualification. No further architecture change, SIMD adoption, fallback-only closure or merge is authorized. Agent improvement PR: none. Only owned diagnostic tabs/server processes were closed; all old worktrees/raw evidence remain preserved.
 
 Final review evidence: full shared quality gate passes on the final code (76 unit tests; 86 JSON/YAML inventories; supply-chain, Pkl/actionlint, Zig, native/source asset digests, fixed memory/ABI/imports/size, packed React18/19 ESM/CJS/SSR/types and lifecycle policy). Six enabled browser cases pass with four explicit capability/build skips; actual hard Worker termination preserves output clones and restores original media. Final report audit contains no PCM channel arrays, device/group IDs or blind key; full raw reports remain ignored/local with committed hashes. Decision-11 required sections are populated, body-only supersession/task links resolve, exact CLI frontmatter matches its saved snapshot, historical Decisions8/9/10 remain unchanged, and git diff --check passes. Final JSON/configuration and pushed current-head CI evidence follow in PR32; Task stays In Progress with AC3 open.
+
+Owner-approved prerequisite in Dispatch ctx_67b4804e3bf2 (orchestration task task_0d9330a3e37a): investigate and design the latency-target revision process before further optimization/qualification, documentation/Backlog only. No new task, production/measurement/CI behavior change, threshold relaxation or AC3 completion is authorized. Resolve duplicate doc IDs by exact path; audio doc-5 and verification doc-6 are the intended sources, distinct from video/API documents with the same IDs.
+
+Provenance audit: 7251bc3 (PR2) introduces the accepted doc-1 40 ms audio hypothesis; TASK-1.1 retains an earlier unapproved 20 ms no-op proposal, followed by the user-requested first-party effect scope and approval of the revised contract. The inspected source/history/PR2 body, comment and reviews provide no numerical derivation or user-study evidence for 40 ms. Doc-1 explicitly calls numeric targets falsifiable initial hypotheses, so this is a documented approved provisional gate with undocumented numerical rationale, not an external standard and not permission to relax it. Metric clarification is material: doc-1/doc-5/doc-6 refer to browser-reported baseline, while the current scripts subtract same-run original-track median lag. Prepare a proposed-only Decision and repository audit/protocol for owner review. Backlog CLI1.50.1 decision create/list cannot populate body sections (confirmed version/decision/create help); create proposed metadata via CLI, fill only permitted body sections, preserve exact frontmatter, and verify links/sections before commit.
+
+Prepared proposed-only Decision-12 and docs/measurements/audio/latency-target-provenance.md: authority/history trace, external-source boundary audit, legacy versus proposed paired estimands, p50/p95/p99/sample-size limitations, scenario/reference/contention/study gates and alternatives. Recommendation is process alternative B (scenario/protocol evidence first, retain40 meanwhile), not a larger number. No accepted Decision, canonical doc, old report, code, script, CI policy or PR state/behavior is changed. Next owner review must select S1 consumer, S2 inclusion/exclusion, actual device/browser tiers and resources, and metric/preregistration; later evidence supports a separate retain/change-T decision.
+
+Read-only validation completed: all 13 existing signed-latency/continuity analyzer regressions pass; replay of the hashed local final native and WSL raw reports matches committed baselineMedianMs, calibrated controls and every phase field exactly. Old values remain -6/41.3125ms (native) and -12/42.6875ms (WSL), both FAIL40; no old report or analyzer was rewritten. Proposed Decision-12 frontmatter matches the CLI snapshot and remains proposed; all required sections and local links resolve; git diff --check passes. Audited external primary sources distinguish total one-way/network and destination/audio-subsystem latency from denoiser-added p95; no evidence supports substituting 150/400ms or rounding the gate to50/60ms. Blockers for selecting a defensible numeric target are owner-selected scenario/consumer/metric and physical matrix, study resources and user evidence, not authorization to silently loosen40.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Implemented the owner-approved default-off raw-audio Worker under accepted Decision-11 with unchanged C RNNoise, usable-output readiness, bounded framing/backpressure, aligned levels, typed fallback and clone-safe cancellation/forced termination. Verified 76 unit tests, 13 measurement regressions, default browser smoke and 6 enabled-browser cases plus packed React 18/19 SSR consumers; final native added p95 41.3125 ms and WSL 42.6875 ms fail 40 ms, with continuity/quality/listening/matrix/memory gaps retained. Keep AC3 open, TASK-1.12 In Progress and PR #32 Draft/manual; no merge, SIMD adoption or worktree deletion.
+Audited Decision-1/doc-1/audio doc-5/verification doc-6, TASK-1.12, scripts, raw evidence, reachable history and PR2: 40ms is an approved documented provisional hypothesis, with no numerical derivation or user-study validation found in the audited record. Documented the browser-baseline versus original-track-median ambiguity and proposed scenario/paired-metric/reference/contention/quality/continuity/evidence gates in proposed Decision-12; no threshold, code, CI, PR behavior or old verdict changed. Thirteen analyzer regressions and exact legacy replays pass; retain AC3 open and request owner review of process/scenarios/matrix before further optimization/qualification, with a later separate numeric decision.
 <!-- SECTION:FINAL_SUMMARY:END -->
