@@ -1,11 +1,11 @@
 ---
 id: TASK-4
 title: Define and document shared media-processing health and statistics contract
-status: Done
+status: In Progress
 assignee:
   - '@codex'
 created_date: '2026-11-22 11:40'
-updated_date: '2026-11-22 11:57'
+updated_date: '2026-11-22 12:00'
 labels:
   - media
   - api
@@ -57,6 +57,8 @@ Review and document a shared application-observable status and statistics contra
 3. Relate the proposal to applicable Decision-2 and pinned proposed Decision-12; adopt no new architecture or public-contract choice. A later owner-selected choice requires a new accepted Backlog Decision before implementation.
 4. Validate document links, proposal types/examples, unchanged public/runtime/distribution files and repository quality gate; record acceptance evidence and unresolved owner decisions.
 5. Commit and push the scoped task branch, then report evidence and manual-review requirements to the coordinator.
+
+6. Follow-up Dispatch ctx_2b93eae5bf44: publish or reuse the single TASK-4 Draft PR from e4d34ae; obtain current-head CI and an independent review-agent check; address only scoped documentation findings; record publication and review evidence, then finalize and report.
 <!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
@@ -76,6 +78,8 @@ AC5: sections 1-2/8 retain existing authority, alternatives/tradeoffs and explic
 Validation: pnpm quality:gate passed (configuration inventory 37 JSON/YAML files, hk/actionlint/supply-chain, Zig no-source check, format/lint, 21 unit tests across 4 files, typecheck/build, packed ESM/CJS/SSR/TypeScript consumers on React 18.2.0 and 19.1.1, lifecycle policy). python3 .artifacts/task-4-validation/validate.py passed: 4 TS fences compiled with pnpm exec tsc --ignoreConfig --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --skipLibCheck; 2 negative type assertions, 15 local links, 8 pinned Git paths and exact status union checked. git diff --check passed. Source/tests/scripts/dependency/CI/workflow/Backlog Decision/canonical Backlog doc diff against 5c81f03 is empty. No media experiment was run; remote CI and PR review are not claimed.
 Completion ID: task-4-ctx_7786b1f72c8d-design. Outcome: succeeded. Acceptance criteria remaining: none for the design/documentation spike. Unresolved owner decisions: optional observer API/placement, final vocabulary/compatibility, collection budget/retention, window/cadence/hysteresis defaults and metric-specific warning policy; Decision-12 scenario/reference/protocol selection and any later numerical/support choice remain separate.
 Automatic-lane evidence: manual review required (unresolved public-contract proposals and >300 changed lines); no Decision file changes, no published API changes, no compatibility changes and no distribution changes. No agent/workflow improvement was identified: Agent improvement PR: none. Coordinator owns the one task Draft PR after validating this clean pushed branch; worker is not opening a duplicate PR.
+
+PR publication follow-up authorized by the coordinator under task_657876311db8 / Dispatch ctx_2b93eae5bf44, superseding the previous coordinator-owned publication handoff for this follow-up only. Confirmed no PR on task-4-observability-contract before creation. Existing design AC evidence is retained; the record is temporarily In Progress for the explicitly requested publication, current-head CI and review-agent verification. No implementation, public API, historical Decision, threshold or support scope change is authorized.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
